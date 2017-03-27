@@ -151,7 +151,7 @@ use mdm\admin\components\Helper;
         </li>
         <!--/ End navigation - personas -->
          <!--/ End navigation - mail -->
-        <?php //if(Helper::checkRoute('/pago/*')){?>
+        <?php if(Helper::checkRoute('/pago/*')){?>
         <li class="submenu <?= (Yii::$app->controller->id == 'blog') ? 'active' : '' ?>">
             <a href="javascript:void(0);">
                 <span class="icon"><i class="fa fa-medkit"></i></span>

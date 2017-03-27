@@ -1,0 +1,229 @@
+<?php
+
+namespace app\controllers;
+
+use Yii;
+use app\models\Textos;
+use app\models\TextosSearch;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+use yii\helpers\Url;
+
+/**
+ * TextosController implements the CRUD actions for Textos model.
+ */
+class TextosController extends Controller
+{
+ //   public $layout = 'lay-admin-footer-fixed';
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+//            'verbs' => [
+//                'class' => VerbFilter::className(),
+//                'actions' => [
+//                    'delete' => ['POST'],
+//                ],
+//            ],
+        ];
+    }
+
+    /**
+     * Lists all Textos models.
+     * @return mixed
+     */
+    public function actionIndex()
+    {
+        $searchModel = new TextosSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Displays a single Textos model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionView($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+    
+    public function duplicateModel($id)
+    {
+        $model = $this->findModel($id);
+        // clean up data for new entry
+        $model->id = null;   // clear the primary key value
+      //  $model->filename = null;  // list what should be cleared here
+        $model->isNewRecord = true;    // it's a new record
+        return $model;
+    }
+
+    /**
+     * Creates a new Textos model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreate($id=null)
+    {
+        $model = null;
+        
+        if (Yii::$app->request->isAjax) {
+            $model = new Textos(); 
+            if (isset($_POST['Informe'])){
+                $model->material = $_POST['Informe']['material'];
+                $model->tecnica = $_POST['Informe']['tecnica'];
+                $model->micro = $_POST['Informe']['microscopia'];
+                $model->macro = $_POST['Informe']['macroscopia'];
+                $model->diagnos = $_POST['Informe']['diagnostico'];
+                $model->observ = $_POST['Informe']['observaciones'];
+                $model->estudio_id = $_POST['Informe']['Estudio_id'];
+                $model->codigo = $_POST['codigo'];
+            } 
+            if (isset($_POST['Textos'])){
+                $model->material = $_POST['Textos']['material'];
+                $model->tecnica = $_POST['Textos']['tecnica'];
+                $model->micro = $_POST['Textos']['micro'];
+                $model->macro = $_POST['Textos']['macro'];
+                $model->diagnos = $_POST['Textos']['diagnos'];
+                $model->observ = $_POST['Textos']['observ'];
+                $model->estudio_id = $_POST['Textos']['estudio_id'];
+                $model->codigo = $_POST['Textos']['codigo'];
+            } 
+            
+            if ($model->save()) {
+                $data = $this->renderAjax('_form_pop', [
+                'model' => $model
+            ]); 
+            }           
+            
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return [
+                'rdo' => 'ok',
+                'data' => $data,
+            ];
+            return;
+        }
+        if ($id === null || isset($_POST['Textos']))
+            $model = new Textos();
+        else
+            $model = $this->duplicateModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('create', [
+                'model' => $model
+            ]);
+        }
+    }
+    
+    public function actionCopy($id=null)
+    {
+        $model = null;
+        if ($id === null || isset($_POST['Textos']))
+            $model = new Textos();
+        else
+            $model = $this->duplicateModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->renderAjax('copy', [
+                'model' => $model
+            ]);
+        }
+    }
+
+    /**
+     * Updates an existing Textos model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    /**
+     * Deletes an existing Textos model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionDelete($id)
+    {
+        try {
+            if($this->findModel($id)->delete()){
+                if (Yii::$app->getRequest()->isAjax) {
+                    $dataProvider = new ActiveDataProvider([
+                        'query' => Textos::find()
+                    ]);
+                    $searchModel = new TextosSearch();
+                    return $this->renderAjax('index', [
+                       'dataProvider' => $dataProvider,
+                       'searchModel' => $searchModel
+                    ]);
+                }
+            }
+        } catch (\yii\db\IntegrityException $exc) {
+
+        }        
+       
+        return $this->redirect(['index']);
+    }
+
+    /**
+     * Finds the Textos model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Textos the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Textos::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+    
+    public function actionTree($estudio){
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $model = new Textos();
+        $estudio = 'B';
+        $query = "SELECT * FROM Textos where `codigo` LIKE '".$estudio."%' ";
+        $result = \app\models\Textos::findBySql($query)->all();
+        //var_dump($result); die();
+        $tree = new \app\controllers\AutoTextTreeController();
+        foreach ($result as $row){
+            $url = Url::to(['',  'id' => '1', 'idtexto'=> $row['id']]);
+            $tree->merge($row['codigo'], $url);
+        }
+        return $this->render('create', [
+                'model' => $model,'item'=> date('H:i:s')
+            ]);
+
+        die();
+        
+    }
+}

@@ -1,0 +1,161 @@
+<?php
+
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+use kartik\widgets\FileInput;
+use yii\helpers\Url;
+use yii\helpers\Helper;
+
+/* @var $this yii\web\View */
+/* @var $model app\models\Laboratorio */
+/* @var $form yii\widgets\ActiveForm */
+    use app\assets\admin\dashboard\DashboardAsset;
+    DashboardAsset::register($this);
+?>
+
+
+    <div class="panel-body no-padding">
+        <?php $form = ActiveForm::begin([            
+            'options' => [
+                'class' => 'form-horizontal mt-10',
+                'id' => 'create-localidad-form',
+                'options'=>['enctype'=>'multipart/form-data']
+                
+             ]
+        ]); ?>
+
+    <?= $form->field($model, 'nombre', ['template' => "{label}
+            <div class='col-md-7'>{input}</div>
+            {hint}
+            {error}",
+            'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
+    ])->textInput(['maxlength' => true]) ?>   
+        
+    <?= $form->field($model, 'descripcion', ['template' => "{label}
+            <div class='col-md-7'>{input}</div>
+            {hint}
+            {error}",
+            'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
+    ])->textInput(['maxlength' => true]) ?>
+        
+    <?= $form->field($model, 'admin', ['template' => "{label}
+            <div class='col-md-7'>{input}</div>
+            {hint}
+            {error}",
+            'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
+    ])->textInput(['maxlength' => true]) ?> 
+    
+    <?= $form->field($model, 'web', ['template' => "{label}
+            <div class='col-md-7'>{input}</div>
+            {hint}
+            {error}",
+            'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
+    ])->textInput(['maxlength' => true]) ?>  
+        
+    <?= $form->field($model, 'telefono', ['template' => "{label}
+            <div class='col-md-7'>{input}</div>
+            {hint}
+            {error}",
+            'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
+    ])->textInput(['maxlength' => true]) ?>  
+        
+    <?= $form->field($model, 'direccion', ['template' => "{label}
+            <div class='col-md-7'>{input}</div>
+            {hint}
+            {error}",
+            'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
+    ])->textInput(['maxlength' => true]) ?>  
+          
+        
+    <?= $form->field($model, 'mail', ['template' => "{label}
+            <div class='col-md-7'>{input}</div>
+            {hint}
+            {error}",
+            'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
+    ])->textInput(['maxlength' => true]) ?>   
+   
+    <?= $form->field($model, 'info_mail', ['template' => "{label}
+            <div class='col-md-7'>{input}</div>
+            {hint}
+            {error}",
+            'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
+    ])->textInput(['maxlength' => true]) ?>  
+    <div class="col-md-3  control-label"><p>Cargar Logo</p></div>     
+    <div class="col-md-7  ">   
+        <?php 
+        echo FileInput::widget([
+                        'model' => $model,
+                        'attribute' => 'files[]',
+
+        //         		'name' => 'files[]',
+
+                        'options'=>[
+                                        'multiple'=>false,
+                                        'accept'=>'image/*',
+                                        'id'=>"idFile",
+
+                        ],
+                        'pluginOptions' => [
+                                        'uploadUrl' => Url::to(['/laboratorio/logo']),
+                                        'layoutTemplates'=>[
+                                                'preview'=>'<div class="file-preview {class}">' .
+                                                '    {close}' .
+                                                '    <div class="{dropClass}">' .
+                                                '    <div class="file-preview-thumbnails">' .
+                                                '    </div>'.
+                                                '    <div class="clearfix"></div>' .
+                                                '    <div class="file-preview-status text-center text-success"></div>' .
+                                                '    </div>' .
+                                                '</div>',
+                                             ],										
+                        ],
+
+                  ]);
+        ?>
+	
+    </div>
+    <div class="col-md-3  control-label" style="margin-top:5px; "><p>Firma Digital</p></div>     
+    <div class="col-md-7  ">   
+        <?php 
+        echo FileInput::widget([
+                        'model' => $model,
+                        'attribute' => 'files[]',
+
+        //         		'name' => 'files[]',
+
+                        'options'=>[
+                                        'multiple'=>false,
+                                        'accept'=>'image/*',
+                                        'id'=>"idFile2",
+
+                        ],
+                        'pluginOptions' => [
+                                        'uploadUrl' => Url::to(['/laboratorio/firmadigital']),
+                                        'layoutTemplates'=>[
+                                                'preview'=>'<div class="file-preview {class}">' .
+                                                '    {close}' .
+                                                '    <div class="{dropClass}">' .
+                                                '    <div class="file-preview-thumbnails">' .
+                                                '    </div>'.
+                                                '    <div class="clearfix"></div>' .
+                                                '    <div class="file-preview-status text-center text-success"></div>' .
+                                                '    </div>' .
+                                                '</div>',
+                                             ],										
+                        ],
+
+                  ]);
+        ?>
+												    </div>
+    </div>
+
+    <div class="form-footer">
+        <div style="text-align: right;">
+            <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+        </div>         
+    </div>
+
+    <?php ActiveForm::end(); ?>
+
+

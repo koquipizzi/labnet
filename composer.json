@@ -27,7 +27,7 @@
         "insolita/yii2-adminlte-widgets": "^2.0",
         "needim/noty": "^2.4",
         "xj/yii2-bootbox-widget": "^1.0",
-        "mdmsoft/yii2-admin": "^3.2"
+        "mdmsoft/yii2-admin": "2.x-dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

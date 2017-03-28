@@ -173,7 +173,7 @@ use mdm\admin\components\Helper;
                 </ul>
             
         </li>
-         <?php //} ?>
+         <?php } ?>
         <!-- Start navigation - pages -->
         <li class="submenu <?= (Yii::$app->controller->id == 'page') ? 'active' : '' ?>">
             <a href="javascript:void(0);">

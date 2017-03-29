@@ -32,7 +32,7 @@ class InformetempController extends \yii\web\Controller
             $tanda = $_POST['InformeTemp']['tanda'];
         else $tanda =  time();
             $model->tanda = $tanda;
-        //    var_dump($model); die();
+            var_dump($model); die();
         try {
 
             if ($model->load(Yii::$app->request->post()) && $model->save())

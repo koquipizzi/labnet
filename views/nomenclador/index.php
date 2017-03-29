@@ -61,19 +61,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'descripcion',
             'valor',
             'coseguro',
-//        //    'Prestadoras_id',
-//            [
-//                'label' => 'Prestadora',
-//                'format' => 'raw',
-//                'contentOptions' =>['class' => 'table_class','style'=>'width:20%;'],
-//                'value' => function ($data, $url) { var_dump($data); die();
-//                                if ($data != NULL)
-//                                    return Html::a($data->prestadoras->descripcion, FALSE, ['class' => 'verPrestadora', 'value'=>'index.php?r=prestadoras/view&id='.$data->Prestadoras_id]);
-//                },
-//            ],
 
             ['class' => 'yii\grid\ActionColumn',
-            'template' => '{view}{edit}{delete}',
+            'template' => '{view} {edit} {delete}',
             'contentOptions' =>['class' => 'table_class','style'=>'width:15%;'],
             'buttons' => [
 

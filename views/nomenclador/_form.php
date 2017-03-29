@@ -9,10 +9,6 @@ use app\models\Prestadoras;
 /* @var $this yii\web\View */
 /* @var $model app\models\Nomenclador */
 /* @var $form yii\widgets\ActiveForm */
-
-use app\assets\admin\dashboard\DashboardAsset;
-    DashboardAsset::register($this);
-
 ?>
 
 <div class="nomenclador-form">

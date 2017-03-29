@@ -322,8 +322,36 @@ class ProtocoloController extends Controller
         $fecha = date_create ();
         $fecha = date_format ( $fecha, 'd-m-Y H:i:s' );
         $modelSecuencia->fecha=date("Y-m-d");
+        $estudios = $_POST['InformeTemp']['Estudio_id'];
 
         if ($mdlProtocolo->load(Yii::$app->request->post())) {
+
+        }
+        else {
+            $anio= date("Y");
+            $mdlProtocolo->fecha_entrada= $fechaEntrada;
+            $secuencia=sprintf("%06d", $modelSecuencia->secuencia);
+            $secuencia = 334454;
+            $mdlProtocolo->nro_secuencia=$secuencia;
+            $mdlProtocolo->anio=$anio;
+            $mdlProtocolo->letra="A";
+            return $this->render('_form_protocolo', [
+                            'paciente' => $paciente,
+                            'prestadora'=> $prestadora,
+                            'pacprest' => $pacprest,
+                            'model' => $mdlProtocolo,
+                            'searchModel' =>$searchModel ,
+                            'Estudio' => $Estudio,
+                            'dataProvider' => $dataProvider,
+                            'informe'=>$informetemp,
+                            'nomenclador'=>$nomenclador,
+                            "tanda"=>$tanda,
+                             ]);
+
+        }
+       // var_dump($estudios); die();
+
+     /*   if ($mdlProtocolo->load(Yii::$app->request->post())) {
             $modelSecuencia->save();
             $secuencia=sprintf("%06d", $modelSecuencia->secuencia);
             $mdlProtocolo->nro_secuencia=$secuencia;
@@ -408,7 +436,7 @@ class ProtocoloController extends Controller
                             'nomenclador'=>$nomenclador,
                             "tanda"=>$tanda,
                              ]);
-        }
+        }*/
     }
         
 

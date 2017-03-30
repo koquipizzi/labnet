@@ -14,6 +14,9 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
 <div class="box box-info">
             <div class="box-header with-border">
+             <div class="pull-right">
+                    <?= Html::a('<i class="fa fa-arrow-left"></i> Volver', ['medico/index'],['class'=>'btn btn-primary']) ?>
+                </div>          
               <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
             </div>
             <?= $this->render('_form', [

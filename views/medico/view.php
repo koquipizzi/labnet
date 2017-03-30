@@ -10,7 +10,14 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Medicos'), 'url' => 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-        <?= DetailView::widget([
+<div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+                <div class="pull-right">
+                    <?= Html::a('<i class="fa fa-pencil"></i> Editar Médico', ['medico/update', 'id'=>$model->id], ['class'=>'btn btn-primary']) ?>
+                </div>                                                          <!-- como le paso el id a update ? -->
+            </div>
+              <?= DetailView::widget([
             'model' => $model,
             'attributes' => 
                         [
@@ -25,10 +32,14 @@ $this->params['breadcrumbs'][] = $this->title;
                              [
                             'label'=>'Localidad',
                             'value'=>$model->getLocalidadTexto(),
-                            ],
+                            ], 
                              ],
                      ]) 
-        ?>
+        ?>                  
+</div>            
+       
+
+       
 
     <!--div class="form-footer">
         <div style="text-align: right;">

@@ -84,7 +84,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_add_forms.js', ['depends' => [
                             'multiple' => false,
                             'placeholder' => 'Choose item'
                         ],
-                            'items' => $data,
+                        'items' => $data,
                         'settings' => [
                             'width' => '100%',
                         ],

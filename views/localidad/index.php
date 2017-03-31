@@ -9,43 +9,30 @@ use yii\bootstrap\Modal;
 /* @var $searchModel app\models\LocalidadSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Localidads');
+$this->title = Yii::t('app', 'Localidad');
 $this->params['breadcrumbs'][] = $this->title;
-
-    Modal::begin([
-            'id' => 'activity-modal',             
-        ]);
-        echo "<div id='modalContent'></div>";
-       
-?> 
-<?php Modal::end();
-
-//use app\assets\admin\dashboard\DashboardAsset;
-//DashboardAsset::register($this);
-
 $this->registerJsFile('@web/assets/admin/js/cipat_modal_localidad.js');
-?>
-    <!-- Start body content -->
+?> 
+    <!-- Start bodheader content -->
  <section id="page-content">
     <div class="header-content">
-        <h2><i class="fa fa-home"></i>LABnet <span><?= Html::encode($this->title) ?></span></h2>   
+        <h2><i class="fa fa-home"></i>LABnet <span><?=Html::encode($this->title) ?></span></h2>   
     </div><!-- /.header-content -->
-    
-    <div class="body-content animated fadeIn" >    
-    <div class="prestadoras-index">
-        <div class="panel_titulo">
-            <div class="panel-heading">
-                <div class="pull-left">
-                    <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
-                </div>
-                <div class="pull-right">
-                    <?= Html::button('Nueva Localidad', ['value' => Url::to(['localidad/create_pop']), 'title' => 'Nueva Localidad', 'class' => 'loadMainContent btn btn-success btn-sm']); ?>
-                </div>   
-                <div class="clearfix"></div>
+
+   
+    <div class="header-content">
+            <div class="pull-left">
+                <h3 class="panel-title">Listado de <?= Html::encode($this->title) ?></h3>
             </div>
+            <div class="pull-right">
+                <?= Html::a('<i class="fa fa-plus-circle"></i> Nueva Localidad', ['localidad/create'], ['class'=>'btn btn-primary']) ?>
+            </div>   
+            <div class="clearfix"></div>
         </div>
 
-    <?php Pjax::begin(['id' => 'localidad', 'enablePushState' => FALSE]); ?> 
+
+    <?php Pjax::begin(['id' => 'localidad', 'enablePushState' => FALSE]); ?>
+    
     <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
@@ -66,27 +53,27 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_localidad.js');
                 'caracteristica_telefonica',
 
                 ['class' => 'yii\grid\ActionColumn', 
-                'template' => '{view}{edit}{delete}',
+                'template' => '{view} {edit} {delete}',
                 'buttons' => [
 
                 //view button
                 'view' => function ($url, $model) {
-                    return Html::a('<span class="fa fa-eye "></span>', false, [
+                    return Html::a('<span class="fa fa-eye "></span>', $url, [
                                 'title' => Yii::t('app', 'View'),
                                 'class'=>'btn btn-success btn-xs ver', 
                                 'value'=> "$url",
                     ]);
                 },
                  'edit' => function ($url, $model) {
-                    return Html::a('<span class="fa fa-pencil"></span>', false, [
+                    return Html::a('<span class="fa fa-pencil"></span>', $url, [
                                 'title' => Yii::t('app', 'Editar'),
-                                'class'=>'btn btn-info btn-xs editar', 
+                                'class'=>'btn btn-info btn-xs ',    
                                 'value'=> "$url",
                     ]);
                 },
 
                 'delete' => function ($url, $model) {
-                return  Html::a('<span  class="fa fa-trash"></span>', false, 
+                return  Html::a('<span  class="fa fa-trash"></span>', $url, 
                         [
                           'class'=>'btn btn-danger btn-xs',       
                           'onclick' => "bootbox.dialog({
@@ -149,10 +136,12 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_localidad.js');
                 
             ],
         ]); ?>
+
     <?php
       
     Pjax::end(); ?>
-        </div>  
+
+    </div>  
         
     </div>   
 

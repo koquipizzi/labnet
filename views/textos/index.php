@@ -10,8 +10,8 @@ use yii\bootstrap\Modal;
 /* @var $searchModel app\models\TextosSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-use app\assets\admin\dashboard\DashboardAsset;
-DashboardAsset::register($this);
+//use app\assets\admin\dashboard\DashboardAsset;
+//DashboardAsset::register($this);
 
 $this->title = Yii::t('app', 'AutoTextos');
 $this->params['breadcrumbs'][] = $this->title;

@@ -13,11 +13,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <section id="page-content">
-<?php     
-    use app\assets\admin\dashboard\DashboardAsset;
-    DashboardAsset::register($this);
-?>
     <div class="header-content">
+    <div class="pull-right">
+                    <?= Html::a('<i class="fa fa-arrow-left""></i> Volver', ['textos/index'], ['class'=>'btn btn-primary']) ?>
+    </div>  
         <h2><i class="fa fa-home"></i>Cipat <span><?= Html::encode($this->title) ?></span></h2>        
     </div><!-- /.header-content -->
    
@@ -28,13 +27,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="panel-heading">
                                    <div class="pull-left">
                                        <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
-                                   </div>
-                                   <div class="pull-right">
-                                       <button class="btn btn-sm" data-action="collapse" data-container="body" data-toggle="tooltip" data-placement="top" data-title="Collapse"><i class="fa fa-angle-up"></i></button>
-                                       <button class="btn btn-sm" data-action="remove" data-container="body" data-toggle="tooltip" data-placement="top" data-title="Remove"><i class="fa fa-times"></i></button>
-                                   </div>
-                    
-                                   <div class="clearfix"></div>
+                                   </div>                    
+                                     <div class="clearfix"></div>
                 </div><!-- /.panel-heading -->   
 
                 <?= $this->render('_form', [

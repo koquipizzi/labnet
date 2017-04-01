@@ -10,26 +10,14 @@ use yii\bootstrap\Modal;
 
 $this->title = Yii::t('app', 'Procedencias');
 $this->params['breadcrumbs'][] = $this->title;
+$this->registerJsFile('@web/assets/admin/js/cipat_modal_procedencia.js', ['depends' => [yii\web\AssetBundle::className()]]);
 ?>
-<?php 
-    Modal::begin([
-            'id' => 'modal',          
-            'options' => ['tabindex' => false ],
-        ]);
-        echo "<div id='modalContent'></div>";
-       
-    ?> 
-    <?php Modal::end();
-    
-    use app\assets\admin\dashboard\DashboardAsset;
-    DashboardAsset::register($this);
-    $this->registerJsFile('@web/assets/admin/js/cipat_modal_procedencia.js', ['depends' => [yii\web\AssetBundle::className()]]);
-?>
+
 <section id="page-content">
     <div class="header-content">
-        <h2><i class="fa fa-home"></i>LABnet <span><?= Html::encode($this->title) ?></span></h2>   
+        <h2><i class="fa fa-home"></i>LABnet <span><?= Html::encode($this->title) ?></span></h2>
     </div><!-- /.header-content -->
-    <div class="body-content animated fadeIn" >    
+    <div class="body-content animated fadeIn" >
     <div class="procedencia-index">
         <div class="panel_titulo">
             <div class="panel-heading">
@@ -38,12 +26,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="pull-right">
                     <?= Html::button('Nueva Procedencia', ['value' => Url::to(['procedencia/create']), 'title' => 'Nueva Procedencia', 'class' => 'loadMainContentProcedencia btn btn-success btn-sm']); ?>
-                </div>   
+                </div>
                 <div class="clearfix"></div>
             </div>
         </div>
 
-    <?php Pjax::begin(['id'=>'procedencias', 'enablePushState' => FALSE]); ?>    <?= GridView::widget([
+    <?php Pjax::begin(['id'=>'procedencias', 'enablePushState' => FALSE]); ?>
+     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'options'=>array('class'=>'table table-striped table-lilac'),
         'filterModel' => $searchModel,
@@ -55,45 +44,45 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($data, $url) { //var_dump($data); die();
                               return Html::a($data->descripcion, FALSE, ['class' => 'editar', 'value'=>'index.php?r=procedencia/update&id='.$data->id]);
                           },
-            ], 
-            'telefono',                     
+            ],
+            'telefono',
             'domicilio',
             'mail',
             [
-                'label' => 'Localidad',   
+                'label' => 'Localidad',
                 'value' => 'localidadTexto',
-            ],   
+            ],
 //            [
 //                'label' => 'Observaciones',
-//                'attribute'=>'informacion_adicional', 
+//                'attribute'=>'informacion_adicional',
 //                'contentOptions' => ['style' => 'width:30%;'],
 //            ],
             ['class' => 'yii\grid\ActionColumn',
-            'template' => '{view}{edit}{delete}',
+            'template' => '{view} {edit} {delete}',
             'buttons' => [
 
             //view button
             'view' => function ($url, $model) {
-                return Html::a('<span class="fa fa-eye "></span>', FALSE, [
+                return Html::a('<span class="fa fa-eye "></span>', $url, [
                             'title' => Yii::t('app', 'View'),
                             'class'=>'btn btn-success ver btn-xs',
                             'value'=> "$url",
                 ]);
             },
             'edit' => function ($url, $model) {
-                return Html::a('<span class="fa fa-pencil"></span>', FALSE, [
+                return Html::a('<span class="fa fa-pencil"></span>', $url, [
                             'title' => Yii::t('app', 'Editahhhhhsr'),
-                            'class'=>'btn btn-info editar btn-xs',   
+                            'class'=>'btn btn-info editar btn-xs',
                             'value'=> "$url",
                 ]);
             },
              'delete' => function ($url, $model) {
-                return Html::a('<span class="fa fa-trash"></span>', FALSE, [
+                return Html::a('<span class="fa fa-trash"></span>', $url, [
                             'title' => Yii::t('app', 'Borrar'),
                             'class'=>'btn btn-danger borrar btn-xs',
                             'value'=> "$url",
                 ]);
-            },        
+            },
         ],
         'urlCreator' => function ($action, $model, $key, $index) {
             if ($action === 'view') {
@@ -114,8 +103,8 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 <?php Pjax::end(); ?></div>
     </div>
+
     <!-- Start footer content -->
     <?php echo $this->render('/shares/_footer_admin') ;?>
     <!--/ End footer content -->
 </section>
-

@@ -16,7 +16,6 @@ use yii\data\ArrayDataProvider;
  */
 class PrestadorasController extends Controller
 {
-    public $layout = 'lay-admin-footer-fixed';
     /**
      * @inheritdoc
      */
@@ -78,7 +77,7 @@ class PrestadorasController extends Controller
     if (!$model) {
         // Handle the case when model with given id does not exist
     }
-    return $this->renderAjax('view', ['id' => $model->id,  'model' => $this->findModel($id)]);
+    return $this->render('view', ['id' => $model->id,  'model' => $this->findModel($id)]);
     die();
     }
 

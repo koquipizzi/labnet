@@ -21,7 +21,7 @@ use yii\widgets\Pjax;
                                 //    'nomencladores',
 
                                     ['class' => 'yii\grid\ActionColumn',
-                                    'template' => '{delete}',
+                                 //   'template' => '{delete}',
                                     'buttons' => [
                                     //view button
 

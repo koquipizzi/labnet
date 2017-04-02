@@ -44,7 +44,7 @@ class InformeTemp extends \yii\db\ActiveRecord
         return [
             [['Estudio_id'], 'required'],
             [['citologia'], 'string', 'max' => 1024],
-            [['Estudio_id', 'Protocolo_id', 'edad'], 'integer'],
+            [['Estudio_id', 'Protocolo_id', 'edad','tanda'], 'integer'],
             [['descripcion'], 'string', 'max' => 255],
             [['metodo', 'resultado'], 'string', 'max' => 1024],
             [['titulo'], 'string', 'max' => 255],

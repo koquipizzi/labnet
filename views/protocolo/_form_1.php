@@ -263,12 +263,12 @@ if (!$session->isActive)
                             [ 'class' => ' chosen-container chosen-container-single chosen-container-active' ]       
                     );
 
-                 /*   echo $form->field($informe, 'descripcion', ['template' => "{label}
+                   echo $form->field($informe, 'descripcion', ['template' => "{label}
                     <div class='col-md-8'>{input}</div>
                     {hint}
                     {error}",
                     'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
-                 ])->textInput(['maxlength' => true]); */
+                 ])->textInput(['maxlength' => true]); 
 
                     echo $form2->field($informe, 'observaciones', ['template' => "{label}
                     <div class='col-md-8'>{input}</div>
@@ -282,7 +282,7 @@ if (!$session->isActive)
                     <?php        
                         echo $form2->field($nomenclador, 'servicio',
                             ['template' => "{label}
-                            <div class='input-group col-md-8' style='padding-left:10px; padding-right:10px; margin-bottom:-4px;' >                
+                            <div class='input-group col-md-8'  >                
                             {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],                
                             ]
                             )->widget(Widget::className(), [
@@ -293,7 +293,7 @@ if (!$session->isActive)
                             ],
                                 'items' => $nomenclador->getdropNomenclador(),
                             'settings' => [
-                                'width' => '100%',
+                               
                             ],
                         ]);
                     ?>
@@ -311,10 +311,8 @@ if (!$session->isActive)
                 <div class="form-footer" style="text-align:right;">  
 
                         <?php 
-                        echo Html::a('Update', FALSE, ['class' => 'btn btn-primary addInforme']);
-                        echo 
-                         Html::a('Crear Informe', ['value' => '#', 'title' => 'Crear Informe', 'class' => ' btn btn-success btn-stroke', 'onclick' => 'send2();']); ?>
-                        <?php echo Html::Button('Cancelar',array('onclick'=>'$("#agregarEstudio").toggle();', 'class'=>'btn btn-danger btn-stroke')).'<span> </span>'; ?>
+                        echo Html::a('Agregar Informe', FALSE, ['class' => 'btn btn-primary addInforme']);
+                        ?>
                 </div>  
                  <form> 
                  <?php //ActiveForm::end(); ?>

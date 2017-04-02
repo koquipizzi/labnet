@@ -38,7 +38,7 @@ class Nomenclador extends \yii\db\ActiveRecord
             [['valor', 'coseguro','servicio'], 'required'],
             [['Prestadoras_id'], 'integer'],
             [['descripcion'], 'string', 'max' => 45],
-            [['servicio'], 'string', 'max' => 30],
+           // [['servicio'], 'string', 'max' => 30],
             [['Prestadoras_id'], 'exist', 'skipOnError' => true, 'targetClass' => Prestadoras::className(), 'targetAttribute' => ['Prestadoras_id' => 'id']],
         ];
     }

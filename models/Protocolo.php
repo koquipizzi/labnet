@@ -182,6 +182,14 @@ class Protocolo extends \yii\db\ActiveRecord
         $arr = explode('-',$fecha);
         return $arr[2].'-'.$arr[1].'-'.$arr[0];
     }
+
+
+    public function getFechaEntrada()
+    {
+        $fecha= $this->fecha_entrada;
+        $arr = explode('-',$fecha);
+        return $arr[2].'-'.$arr[1].'-'.$arr[0];
+    }
     
     public function getFechaEntregaOrdenada()
     {

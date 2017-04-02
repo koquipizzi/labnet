@@ -311,25 +311,21 @@ class ProtocoloController extends Controller
         $prestadora = \app\models\Prestadoras::findOne($pacprest_modelo->Prestadoras_id);       
         $mdlProtocolo = new Protocolo();
         $modelSecuencia= new NroSecuenciaProtocolo();
-        var_dump($modelSecuencia->secuencia); die();
+        $modelSecuencia->fecha=date("Y-m-d");
+        $modelSecuencia->save();
+        $modelSecuencia->refresh();
+        $secuencia = $modelSecuencia->secuencia;
+        $mdlProtocolo->nro_secuencia=$secuencia;   
+        $secuencia=sprintf("%06d", $secuencia);
+        $mdlProtocolo->nro_secuencia=$secuencia;
+
         $Estudio= new Estudio();
         $informetemp= new Informetemp();
         
         $fecha = date_create ();
         $fecha = date_format ( $fecha, 'd-m-Y H:i:s' );
-        $modelSecuencia->fecha=date("Y-m-d");
-
+       
         if ($mdlProtocolo->load(Yii::$app->request->post())) {
-            $modelSecuencia->save();
-            $secuencia=sprintf("%06d", $modelSecuencia->secuencia);
-            $mdlProtocolo->nro_secuencia=$secuencia;
-          //  $session = Yii::$app->session;
-            // check if a session is already open
-          //  if (!$session->isActive) 
-                // open a session
-         //       $session->open();
-            
-
             $idSession=Yii::$app->session->getId();
     //        var_dump($idSession); die();
             $tanda=Yii::$app->request->post()['tanda'];
@@ -407,7 +403,6 @@ class ProtocoloController extends Controller
             $mdlProtocolo->fecha_entrada= $fechaEntrada;
             $mdlProtocolo->anio=$anio;
             $mdlProtocolo->letra="A";
-         //   var_dump($mdlProtocolo); die();
             $informetemp->session_id = Yii::$app->session->getId();
             return $this->render('create', [
                             'model' => $mdlProtocolo,

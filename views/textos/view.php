@@ -13,6 +13,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <section id="page-content">
 
     <div class="header-content">
+    <div class="pull-right">
+                    <?= Html::a('<i class="fa fa-arrow-left""></i> Volver', ['textos/index'], ['class'=>'btn btn-primary']) ?>
+    </div>  
         <h2><i class="fa fa-home"></i>LABnet <span><?= Html::encode($this->title) ?></span></h2>
     </div><!-- /.header-content -->
 

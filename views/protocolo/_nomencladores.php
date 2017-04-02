@@ -11,13 +11,6 @@ use yii\helpers\ArrayHelper;
 
 ?>
 
-
-<?php
-    
-use app\assets\admin\dashboard\DashboardAsset;
-DashboardAsset::register($this);
-
-?>
     <style>
         #popNomenclador {
             width: 200px;
@@ -83,25 +76,25 @@ DashboardAsset::register($this);
         <div class="panel-body no-padding">
             <div class="table-responsive">
                 <?php Pjax::begin(['id' => 'nomencladores']); ?>
-                <table class="table">
+                <!--table class="table">
                     <tbody>
                     
                     <?php 
-                    $nom = $dataProvider->models;
+            /*        $nom = $dataProvider->models;
                  //    var_dump($dataProvider);die();
                     foreach ($nom as $value) {
                        // $dataEstado=Estado::find('')->asArray()->all(); 
                         $nome = app\models\Nomenclador::find()->where(['id' => $value->id_nomenclador])->one();
                       //  echo $nom[]>servicio;
                   //     var_dump($value);die();
-                    ?>
+                */    ?>
                     <tr>
                         <td>
                             <span class="pull-left text-capitalize"><?= $nome->servicio ?></span>
                         </td>
                         <td>
                             <span class="pull-right text-strong">
-                             <?php  $id_ni = (string)$value->id; 
+                             <?php  /*$id_ni = (string)$value->id; 
                                 $nom_id = "nom-".$id_ni;
                            //     yii\widgets\Pjax::begin(['id' => $nom_id, 'enablePushState' => false]);
                                 ?>    
@@ -123,18 +116,18 @@ DashboardAsset::register($this);
                                 echo $editable;                                      
                                 echo Html::a('<span class="glyphicon glyphicon-trash deleteNomenclador" id="'.$id_ni.'"></span>');   
                           
-                                
+                             */   
                                 ?>
                             <?php //yii\widgets\Pjax::end(); ?>
                             </span>
                         </td>
                     </tr>
                     <?php 
-                    }
+        //            }
                     ?>
                      
                     </tbody>
-                </table>
+                </table-->
                 <?php Pjax::end(); ?>
             </div>
         </div><!-- /.panel-body -->

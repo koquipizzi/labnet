@@ -270,7 +270,7 @@ class ProtocoloController extends Controller
                 catch (\Exception $e) {
                             $transaction->rollBack();
                             throw $e;
-                }
+                } 
                 Yii::$app->response->redirect(['protocolo/view','id' => $mdlProtocolo->id]);
             }else {
                     \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -301,6 +301,129 @@ class ProtocoloController extends Controller
         }
     }
         
+    public function actionCreate2($pacprest=null){ 
+      /*  $session = Yii::$app->session;
+        $session->open();
+         $idSession=Yii::$app->session->getId();
+            var_dump(Yii::$app->session->getId()); die();*/
+        $pacprest_modelo = \app\models\PacientePrestadora::findOne($pacprest);      
+        $paciente = Paciente::findOne($pacprest_modelo->Paciente_id);
+        $prestadora = \app\models\Prestadoras::findOne($pacprest_modelo->Prestadoras_id);       
+        $mdlProtocolo = new Protocolo();
+        $modelSecuencia= new NroSecuenciaProtocolo();
+        var_dump($modelSecuencia->secuencia); die();
+        $Estudio= new Estudio();
+        $informetemp= new Informetemp();
+        
+        $fecha = date_create ();
+        $fecha = date_format ( $fecha, 'd-m-Y H:i:s' );
+        $modelSecuencia->fecha=date("Y-m-d");
+
+        if ($mdlProtocolo->load(Yii::$app->request->post())) {
+            $modelSecuencia->save();
+            $secuencia=sprintf("%06d", $modelSecuencia->secuencia);
+            $mdlProtocolo->nro_secuencia=$secuencia;
+          //  $session = Yii::$app->session;
+            // check if a session is already open
+          //  if (!$session->isActive) 
+                // open a session
+         //       $session->open();
+            
+
+            $idSession=Yii::$app->session->getId();
+    //        var_dump($idSession); die();
+            $tanda=Yii::$app->request->post()['tanda'];
+            
+            $informesTemp=InformeTemp::find()
+            		->where([
+                     //          'session_id' => $idSession,
+                                'tanda'=>$tanda
+                     ])->all();  
+       //     var_dump($tanda);var_dump($informesTemp);
+      //      die();    
+        // var_dump($informesTemp); die();     
+            if(empty($informesTemp)===false){ //die('yyggg');
+                $connection = \Yii::$app->db;
+                $transaction = $connection->beginTransaction();
+                try {     
+                    $fechaEntrada = date("Y-m-d"); 
+                    $mdlProtocolo->fecha_entrada = $fechaEntrada;
+                    $mdlProtocolo->Paciente_prestadora_id = $pacprest;
+                    $mdlProtocolo->save();
+                 //   var_dump($mdlProtocolo); die();
+                    foreach ($informesTemp as $objeto=>$mdl){   
+                        $informe= new Informe();
+                      //  var_dump($informe); die();
+                        $workflow= new Workflow();
+                        foreach ($informe as $k=>$v){
+                            if($k != 'id'){  
+                                if ($k != 'id_old')
+                                $informe[$k]= $mdl[$k];
+                            }
+                        } //die();
+                        $edad= $mdlProtocolo->getPacienteEdad();
+                        $informe->edad= $edad;
+                        $informe->Protocolo_id= $mdlProtocolo->id;
+                        $informe->titulo= $informe->estudio->titulo;
+                        $informe->save();
+                       // var_dump($informe); die();
+                        $workflow->Informe_id= $informe->id;
+                        $workflow->Estado_id=1;//estado 1 es pendiente 
+                        $workflow->fecha_inicio = $fecha;
+                        $workflow->save();
+                        $nomencladoresPorInforme= InformeNomencladorTemporal::find()
+                        							->where([
+                                                    	   	'id_informeTemp' => $mdl->id,
+                                                      		])->all();
+
+                        foreach ($nomencladoresPorInforme as $obj=>$mdlNomenclador) {
+                            $informeNomenclador= new InformeNomenclador();
+                            $informeNomenclador->id_nomenclador=$mdlNomenclador->id_nomenclador;
+                            $informeNomenclador->id_informe=$informe->id;
+                            $informeNomenclador->save();
+                        }
+                    }                             
+                    $transaction->commit();
+                } 
+                catch (\Exception $e) {
+                            $transaction->rollBack();
+                            throw $e;
+                }
+                Yii::$app->response->redirect(['protocolo/view','id' => $mdlProtocolo->id]);
+            }else { //se deben agregar estudios 
+                    \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                     return ['rta'=>'error', 'message'=>''];die();
+                }
+        }
+        else {
+            $tanda=time();
+            Yii::$app->session->set('tanda', $tanda);
+    //        var_dump(Yii::$app->session->getId()); die();
+            $nomenclador= new Nomenclador();
+            $searchModel = new InformeTempSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $tanda);
+            $fechaEntrada= date("d-m");
+            $anio= date("Y");
+            $mdlProtocolo->fecha_entrada= $fechaEntrada;
+            $mdlProtocolo->anio=$anio;
+            $mdlProtocolo->letra="A";
+         //   var_dump($mdlProtocolo); die();
+            $informetemp->session_id = Yii::$app->session->getId();
+            return $this->render('create', [
+                            'model' => $mdlProtocolo,
+                            'searchModel' =>$searchModel ,
+                            'Estudio' => $Estudio,
+                            'dataProvider' => $dataProvider,
+                            'informe'=>$informetemp,
+                            'nomenclador'=>$nomenclador,
+                            'tanda'=>$tanda,
+                            'pacprest' => $pacprest,
+                            'paciente'=>$paciente,
+                            'prestadora'=> $prestadora
+                             ]);
+        }
+    }
+        
 
         /**
      * Creates a new Protocolo model.
@@ -310,28 +433,95 @@ class ProtocoloController extends Controller
      */
     public function actionProtocolo($pacprest=null){ 
      //   $pacprest = 74454;
-        $pacprest = \app\models\PacientePrestadora::findOne($pacprest);      
-        $paciente = Paciente::findOne($pacprest->Paciente_id);
-        $prestadora = \app\models\Prestadoras::findOne($pacprest->Prestadoras_id);
+        $pacprest_modelo = \app\models\PacientePrestadora::findOne($pacprest);      
+        $paciente = Paciente::findOne($pacprest_modelo->Paciente_id);
+        $prestadora = \app\models\Prestadoras::findOne($pacprest_modelo->Prestadoras_id);
 //       var_dump($prestadora); die();
         $mdlProtocolo = new Protocolo();
         $modelSecuencia= new NroSecuenciaProtocolo();
         $Estudio= new Estudio();
         $informetemp= new Informetemp();
         
-        $fecha = date_create ();
+        $fecha = date_create();
         $fecha = date_format ( $fecha, 'd-m-Y H:i:s' );
         $modelSecuencia->fecha=date("Y-m-d");
         $estudios = $_POST['InformeTemp']['Estudio_id'];
+        $fechaEntrada = date("Y-m-d");
 
         if ($mdlProtocolo->load(Yii::$app->request->post())) {
+            $modelSecuencia->save();
+            $secuencia=sprintf("%06d", $modelSecuencia->secuencia);
+            $mdlProtocolo->nro_secuencia=$secuencia;
+            $mdlProtocolo->Paciente_prestadora_id = $pacprest;
+            if ($mdlProtocolo->fecha_entrada == ""){
+                $mdlProtocolo->fecha_entrada = $fechaEntrada;
+            }
+            if(empty($estudios)===false){
+                $connection = \Yii::$app->db;
+                $transaction = $connection->beginTransaction();
+                try {     
+             //       $fechaEntrada = date_format($fecha, 'Y-m-d');
+                //    $mdlProtocolo->fecha_entrada = $fechaEntrada;
+                    $mdlProtocolo->save();
+                //    var_dump($mdlProtocolo); die();
+                    foreach ($estudios as $estudio_id){   
+                        $informe= new Informe();
+                        $workflow= new Workflow();
+                        $informe->Estudio_id = $estudio_id;
+                        $edad= $mdlProtocolo->getPacienteEdad();
+                        $informe->edad= $edad;
+                        $informe->Protocolo_id= $mdlProtocolo->id;
+                        $informe->titulo= $informe->estudio->titulo;
+                        $informe->save();
 
+                        $workflow->Informe_id= $informe->id;
+                        $workflow->Estado_id=1;//estado 1 es pendiente 
+                        $workflow->fecha_inicio = $fecha;
+                        $workflow->save();
+                     /*   $nomencladoresPorInforme= InformeNomencladorTemporal::find()
+                        							->where([
+                                                    	   	'id_informeTemp' => $mdl->id,
+                                                      		])->all();
+
+                        foreach ($nomencladoresPorInforme as $obj=>$mdlNomenclador) {
+                            $informeNomenclador= new InformeNomenclador();
+                            $informeNomenclador->id_nomenclador=$mdlNomenclador->id_nomenclador;
+                            $informeNomenclador->id_informe=$informe->id;
+                            $informeNomenclador->save();
+                        }*/
+                        //}
+                    }                             
+                    $transaction->commit();
+                } 
+               catch (\Exception $e) {
+                            $transaction->rollBack();
+                            throw $e;
+                }
+                $searchModel = new InformeSearch();
+                $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $mdlProtocolo->id);
+                $nomenclador= new Nomenclador();
+                $infnomenclador = new InformeNomenclador();
+                 $informetemp= new Informetemp();
+                return $this->render('_view_protocolo', [
+                            'paciente' => $paciente,
+                            'prestadora'=> $prestadora,
+                            'pacprest' => $pacprest,
+                            'model' => $mdlProtocolo,
+                            'searchModel' =>$searchModel ,
+                            'Estudio' => $Estudio,
+                            'dataProvider' => $dataProvider,
+                            'informe'=>$informetemp,
+                            'nomenclador'=>$nomenclador,
+                            'infnomenclador'=>$infnomenclador,
+                        //    'dataProviderIN'=> $dataProviderIN,
+                            "tanda"=>$tanda,
+                             ]);
+                  }
         }
         else {
             $anio= date("Y");
             $mdlProtocolo->fecha_entrada= $fechaEntrada;
             $secuencia=sprintf("%06d", $modelSecuencia->secuencia);
-            $secuencia = 334454;
             $mdlProtocolo->nro_secuencia=$secuencia;
             $mdlProtocolo->anio=$anio;
             $mdlProtocolo->letra="A";
@@ -342,13 +532,15 @@ class ProtocoloController extends Controller
                             'model' => $mdlProtocolo,
                             'searchModel' =>$searchModel ,
                             'Estudio' => $Estudio,
-                            'dataProvider' => $dataProvider,
+                       //     'dataProvider' => $dataProvider,
                             'informe'=>$informetemp,
-                            'nomenclador'=>$nomenclador,
+                    //        'nomenclador'=>$nomenclador,
                             "tanda"=>$tanda,
                              ]);
 
         }
+        
+    
        // var_dump($estudios); die();
 
      /*   if ($mdlProtocolo->load(Yii::$app->request->post())) {

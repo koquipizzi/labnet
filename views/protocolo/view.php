@@ -14,56 +14,24 @@ use \app\models\Informe;
 $this->title = $model->PacienteText.' - '.  $model->Codigo;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Protocolos'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$this->registerJsFile('@web/assets/admin/js/cipat_modal_protocolo.js', ['depends' => [yii\web\AssetBundle::className()]]);
 ?>
-<?php 
-    Modal::begin([
-            'id' => 'modal',    
-           // 'size'=>'modal-lg',
-            'options' => ['tabindex' => false ],
-        ]);
-        echo "<div id='modalContent'></div>";
-       
-    ?> 
-    <?php Modal::end();
-    
-    use app\assets\admin\dashboard\DashboardAsset;
-    DashboardAsset::register($this);
-    $this->registerJsFile('@web/assets/admin/js/cipat_modal_protocolo.js', ['depends' => [yii\web\AssetBundle::className()]]);
-    ?>
-<section id="page-content">
 
-    <div class="header-content">
-        <h2><i class="fa fa-home"></i>LABnet <span><?= Html::encode($this->title) ?></span></h2>
-    </div><!-- /.header-content -->
-
-    <!-- Start body content -->
-    <div class="body-content animated fadeIn" >
-        <div class="panel rounded shadow">
-            <div class="protocolo-view">
-                <div class="panel">
-                                <div class="panel-heading">
-                                    <div class="pull-left">
-                                        <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
-                                    </div><!-- /.pull-left -->
-                                    <div class="pull-right">
-<!--                                        <button class="btn btn-sm" data-action="expand" data-toggle="tooltip" data-placement="top" data-title="Expand" data-original-title="" title=""><i class="fa fa-expand"></i></button>
-                                        <button class="btn btn-sm" data-action="refresh" data-toggle="tooltip" data-placement="top" data-title="Refresh" data-original-title="" title=""><i class="fa fa-refresh"></i></button>
-                                        <button class="btn btn-sm" data-action="collapse" data-toggle="tooltip" data-placement="top" data-title="Collapse" data-original-title="" title=""><i class="fa fa-angle-up"></i></button>
-                                        <button class="btn btn-sm" data-action="remove" data-toggle="tooltip" data-placement="top" data-title="Remove" data-original-title="" title=""><i class="fa fa-times"></i></button>
-                                    -->
-                                    <?php                            
-                                $url = 'index.php?r=paciente/buscar';
-                                echo Html::a('<i class="fa fa-arrow-circle-left"></i> Volver', $url, [
-                                            'title' => Yii::t('app', 'Volver '),
-                                            'class'=>'btn btn-primary btn-sm', 
-                                           
-                                ]);
-                            ?>
-                                    
-                                    </div><!-- /.pull-right -->
-                                    <div class="clearfix"></div>
-                                </div><!-- /.panel-heading -->
-                                <div class="panel-body">
+<div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+                <div class="pull-right">
+                <?php                            
+                                        $url = 'index.php?r=paciente/index';
+                                        echo Html::a('<i class="fa fa-arrow-circle-left"></i> Volver', $url, [
+                                                    'title' => Yii::t('app', 'Volver a Pacientes '),
+                                                    'class'=>'btn btn-primary btn-sm', 
+                                                
+                                        ]);
+                                    ?>    
+                </div>                                                          
+            </div>
+                <div class="panel-body">
                                     <div class="row">
                                     
                                     <div class="col-md-6 col-sm-6">
@@ -90,17 +58,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ]) ?>
                                     </div>
                                     <div class="col-md-6 col-sm-6">
-                                        <?= $this->render('//protocolo/_gridInforme', [
-                                            'dataProvider' => $dataProvider,'model'=>$model,
-                                       ]) ?>  
+                                        <div class="box">
+                                            <div class="box-header">
+                                                <h3 class="box-title">Estudios</h3>
+                                            </div>
+                                            <!-- /.box-header -->
+                                            <div class="box-body no-padding">
+                                                <?= $this->render('//protocolo/_gridInforme', [
+                                                        'dataProvider' => $dataProvider,'model'=>$model,
+                                                ]) ?> 
+                                            </div>
+                                        </div>    
                                     </div>
                                     </div>
                                 </div><!-- /.panel-body -->
-                            </div>
-                
-            </div>
-        </div>
-    </div>
-</section>
-
-
+</div>           
+   

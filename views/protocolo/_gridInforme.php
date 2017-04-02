@@ -1,7 +1,7 @@
 <?php 
-use app\assets\admin\dashboard\DashboardAsset;
+//use app\assets\admin\dashboard\DashboardAsset;
 
-DashboardAsset::register($this);
+//DashboardAsset::register($this);
 
 
 use yii\grid\GridView;
@@ -18,7 +18,7 @@ use yii\widgets\Pjax;
 
           <?= GridView::widget([
                         'dataProvider' => $dataProvider,
-                        'options'=>array('class'=>'table table-striped table-lilac'),
+                        'options'=>array('class'=>'table table-condensed'),
                         'summary' => '',
                         'columns' =>
                             [

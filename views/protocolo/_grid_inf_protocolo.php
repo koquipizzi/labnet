@@ -16,8 +16,8 @@ use yii\widgets\Pjax;
                                 'dataProvider' => $dataProvider,
                                 'options'=>array('class'=>'table table-striped table-lilac'),
                                 'columns' => [
-                                    'estudio',
-                                    'descripcion',
+                               //     'estudio',
+                                    //'descripcion',
                                 //    'nomencladores',
 
                                     ['class' => 'yii\grid\ActionColumn',
@@ -39,6 +39,10 @@ use yii\widgets\Pjax;
           
                               ],
                                  ],
-                            ]); ?>
+                            ]); 
+                            
+                            
+                            ?>
+                            
 
   <?php Pjax::end(); ?>

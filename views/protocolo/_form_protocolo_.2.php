@@ -230,6 +230,11 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     
             </div>
             </div>
+          <div class="panel-body no-padding">
+
+                
+                
+            </div>
         </div>
 
 </div>

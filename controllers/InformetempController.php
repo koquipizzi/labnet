@@ -22,7 +22,8 @@ class InformetempController extends \yii\web\Controller
     }
    public function actionCreate()
     {
-//       die();
+//       die
+ //       var_dump( $_POST); die();
         $nomencladores=array();
         $model= new InformeTemp();  
         $model->session_id=Yii::$app->session->getId(); 
@@ -32,7 +33,7 @@ class InformetempController extends \yii\web\Controller
             $tanda = $_POST['InformeTemp']['tanda'];
         else $tanda =  time();
             $model->tanda = $tanda;
-            var_dump($model); die();
+        //    var_dump($model); die();
         try {
 
             if ($model->load(Yii::$app->request->post()) && $model->save())
@@ -42,7 +43,6 @@ class InformetempController extends \yii\web\Controller
                     $query = InformeTemp::find()->where(['tanda' => $tanda]);
 
                     $dataProvider = new ActiveDataProvider(['query' => $query,]);
-
                     $nomencladores= $_POST['Nomenclador']['servicio'];
                     if(!empty($nomencladores))
                     {
@@ -65,6 +65,7 @@ class InformetempController extends \yii\web\Controller
                         }
                     }
 
+                //    var_dump( $_POST); die();
                     $done =  $this->renderAjax('//protocolo/_grid',[
                                         'dataProvider'=>$dataProvider,
                                         'tanda'=>$tanda,
@@ -78,8 +79,13 @@ class InformetempController extends \yii\web\Controller
                     );
             }
         }
-        catch (ErrorException $e) {    
-                    return 'error'.$e;
+        catch (ErrorException $e) {  
+            Yii::$app->response->format = Response::FORMAT_JSON;
+                    return array(
+                   //     "data" => $done,
+                        "mensaje" => $e
+                    );  
+               //     return 'error'.$e;
         }
     }
  

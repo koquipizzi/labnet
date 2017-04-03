@@ -6,15 +6,9 @@ use kartik\widgets\FileInput;
 use yii\helpers\Url;
 use yii\helpers\Helper;
 
-/* @var $this yii\web\View */
-/* @var $model app\models\Laboratorio */
-/* @var $form yii\widgets\ActiveForm */
-    use app\assets\admin\dashboard\DashboardAsset;
-    DashboardAsset::register($this);
 ?>
 
 
-    <div class="panel-body no-padding">
         <?php $form = ActiveForm::begin([            
             'options' => [
                 'class' => 'form-horizontal mt-10',
@@ -146,11 +140,12 @@ use yii\helpers\Helper;
 
                   ]);
         ?>
-												    </div>
+												   
+                                                                                                   
     </div>
 
-    <div class="form-footer">
-        <div style="text-align: right;">
+    <div class="box-footer" >
+        <div class="pull-right box-tools">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
         </div>         

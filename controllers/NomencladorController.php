@@ -53,7 +53,7 @@ class NomencladorController extends Controller
      */
     public function actionView($id)
     {
-        return $this->renderAjax('view', [
+        return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -68,9 +68,9 @@ class NomencladorController extends Controller
         $model = new Nomenclador();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return;// $this->redirect(['view', 'id' => $model->id]);
+            $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('_form', [
+            return $this->render('create', [
                 'model' => $model,
             ]);
         }
@@ -89,7 +89,7 @@ class NomencladorController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return;// $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->renderAjax('_form', [
+            return $this->render('update', [
                 'model' => $model,
             ]);
         }
@@ -110,7 +110,7 @@ class NomencladorController extends Controller
                         'query' => Nomenclador::find()
                     ]);
                     $searchModel = new NomencladorSearch();
-                    return $this->renderAjax('index', [
+                    return $this->render('index', [
                        'dataProvider' => $dataProvider,
                         'searchModel' => $searchModel
                     ]);

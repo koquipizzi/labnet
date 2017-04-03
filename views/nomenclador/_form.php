@@ -11,8 +11,7 @@ use app\models\Prestadoras;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="nomenclador-form">
-    <div class="panel-body no-padding">
+<div class="box-body">
         <?php $form = ActiveForm::begin([           
             'options' => [
                 'class' => 'form-horizontal mt-10',
@@ -69,8 +68,8 @@ use app\models\Prestadoras;
                         ],
                     ])->error([ 'style' => ' margin-right: 30%;'])?>
 
-    <div class="form-footer">
-        <div class="col-sm-offset-3">
+   <div class="box-footer" >
+        <div class="pull-right box-tools">
             <div style="text-align: right;">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
              <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
@@ -81,5 +80,5 @@ use app\models\Prestadoras;
 
         <?php ActiveForm::end(); ?>
 
-    </div>
+    
 </div>

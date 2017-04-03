@@ -26,7 +26,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_medico.js', ['depends' =
         </div>
     
 
-<?php Pjax::begin(['id'=>'medicos', 'enablePushState' => FALSE]); ?>    <?= GridView::widget([
+    <?php Pjax::begin(['id'=>'medicos', 'enablePushState' => FALSE]); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'options'=>array('class'=>'table table-striped table-lilac'),
         'filterModel' => $searchModel,

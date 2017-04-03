@@ -34,13 +34,41 @@ use mdm\admin\components\Helper;
             [
                 'options' => ['class' => 'sidebar-menu'],
                 'items' => [
-                    ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
-                    ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],
+                    ['label' => 'LabNET', 'options' => ['class' => 'header']],
+                    ['label' => 'Nuevo Protocolo', 'icon' => 'fa fa-file-code-o', 'url' => ['/paciente/buscar']],
                     ['label' => 'Pacientes', 'icon' => 'fa fa-person', 'url' => ['/paciente']],
                     ['label' => 'Médicos', 'icon' => 'fa fa-person', 'url' => ['/medico']],
                     ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
+
+                    [
+                        'label' => 'Personas',
+                        'icon' => 'fa fa-group',
+                        'url' => '#',
+                        'items' => [
+                            ['label' => 'Pacientes', 'icon' => 'fa fa-person', 'url' => ['/paciente'],],
+                            ['label' => 'Médicos', 'icon' => 'fa fa-medic', 'url' => ['/medico'],],
+                            [
+                                'label' => 'Level One',
+                                'icon' => 'fa fa-circle-o',
+                                'url' => '#',
+                                'items' => [
+                                    ['label' => 'Level Two', 'icon' => 'fa fa-circle-o', 'url' => '#',],
+                                    [
+                                        'label' => 'Level Two',
+                                        'icon' => 'fa fa-circle-o',
+                                        'url' => '#',
+                                        'items' => [
+                                            ['label' => 'Level Three', 'icon' => 'fa fa-circle-o', 'url' => '#',],
+                                            ['label' => 'Level Three', 'icon' => 'fa fa-circle-o', 'url' => '#',],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+
                     [
                         'label' => 'Same tools',
                         'icon' => 'fa fa-share',

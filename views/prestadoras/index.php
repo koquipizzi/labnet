@@ -14,23 +14,19 @@ use app\models\Localidad;
 
 $this->title = Yii::t('app', 'Coberturas');
 $this->params['breadcrumbs'][] = $this->title;
-?>
-    <?php 
-    Modal::begin([
-            'id' => 'modal', 
-            'options' => [
-            'tabindex' => false]
-        ]);
-        echo "<div id='modalContent'></div>";
-       
-    ?> 
-    <?php Modal::end();
-    
-    use app\assets\admin\dashboard\DashboardAsset;
-    DashboardAsset::register($this);
-    $this->registerJsFile('@web/assets/admin/js/cipat_modal_prestadora.js', ['depends' => [yii\web\AssetBundle::className()]]);
+
+$this->registerJsFile('@web/assets/admin/js/cipat_modal_prestadora.js', ['depends' => [yii\web\AssetBundle::className()]]);
     ?>
 
+    <div class="header-content">
+            <div class="pull-left">
+                <h3 class="panel-title">Listado de <?= Html::encode($this->title) ?></h3>
+            </div>
+            <div class="pull-right">
+                <?= Html::a('<i class="fa fa-plus-circle"></i> Nueva Cobertura', ['prestadoras/create'], ['class'=>'btn btn-primary']) ?>
+            </div>   
+            <div class="clearfix"></div>
+        </div>
 
 
 <section id="page-content">
@@ -120,9 +116,7 @@ $this->params['breadcrumbs'][] = $this->title;
     
     </div>
     </div>
-    <!-- Start footer content -->
-    <?php echo $this->render('/shares/_footer_admin') ;?>
-    <!--/ End footer content -->
+
 </section>
 
 <style>

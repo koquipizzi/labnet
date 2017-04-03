@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'descripcion',
                         'valor',
                         'coseguro',
-           // 'Prestadoras_id',
+                        'Prestadoras_id',
                     ],
                 ]) ?>
     </div>

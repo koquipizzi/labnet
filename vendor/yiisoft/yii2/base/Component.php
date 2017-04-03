@@ -144,7 +144,7 @@ class Component extends Object
             throw new InvalidCallException('Getting write-only property: ' . get_class($this) . '::' . $name);
         }
 
-        throw new UnknownPropertyException('Getting unknown property: ' . get_class($this) . '::' . $name);
+      //  throw new UnknownPropertyException('Getting unknown property: ' . get_class($this) . '::' . $name);
     }
 
     /**

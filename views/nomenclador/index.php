@@ -10,25 +10,14 @@ use yii\bootstrap\Modal;
 
 $this->title = Yii::t('app', 'Nomencladors');
 $this->params['breadcrumbs'][] = $this->title;
+$this->registerJsFile('@web/assets/admin/js/cipat_modal_nomenclador.js');
 ?>
 <section id="page-content">
     <div class="header-content">
-        <h2><i class="fa fa-home"></i>LABnet <span><?= Html::encode($this->title) ?></span></h2>     
+        <h2><i class="fa fa-home"></i>LABnet <span><?= Html::encode($this->title) ?></span></h2>
     </div><!-- /.header-content -->
-    
-        <?php 
-    Modal::begin([
-            'id' => 'modal',             
-        ]);
-        echo "<div id='modalContent'></div>";
-       
-    ?> 
-    <?php Modal::end();
 
-    $this->registerJsFile('@web/assets/admin/js/cipat_modal_nomenclador.js');
-    ?>
-    
-<div class="body-content animated fadeIn" >    
+<div class="body-content animated fadeIn" >
     <div class="nomenclador-index">
         <div class="panel_titulo">
             <div class="panel-heading">
@@ -37,19 +26,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="pull-right">
                     <?= Html::button('Nuevo Nomenclador', ['value' => Url::to(['nomenclador/create']), 'title' => 'Nuevo Servicio en Nomenclador', 'class' => 'loadMainContentNomenclador btn btn-success btn-sm']); ?>
-                </div>   
+                </div>
                 <div class="clearfix"></div>
             </div>
         </div>
 
-<?php Pjax::begin(['id' => 'nomenclador', 'enablePushState' => FALSE]); ?>    
+<?php Pjax::begin(['id' => 'nomenclador', 'enablePushState' => FALSE]); ?>
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'options'=>array('class'=>'table table-striped table-lilac'),
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            
+
             [
                 'label' => 'Código',
                 'format' => 'raw',
@@ -69,26 +58,26 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //view button
             'view' => function ($url, $model) {
-                return Html::a('<span class="fa fa-eye "></span>', FALSE, [
+                return Html::a('<span class="fa fa-eye "></span>', $url, [
                             'title' => Yii::t('app', 'View'),
-                            'class'=>'btn btn-success ver btn-xs',    
-                            'value'=> "$url",                             
+                            'class'=>'btn btn-success ver btn-xs',
+                            'value'=> "$url",
                 ]);
             },
              'edit' => function ($url, $model) {
-                return Html::a('<span class="fa fa-pencil"></span>', FALSE, [
+                return Html::a('<span class="fa fa-pencil"></span>', $url, [
                             'title' => Yii::t('app', 'Editar'),
-                            'class'=>'btn btn-info btn-xs editar',    
-                            'value'=> "$url",      
+                            'class'=>'btn btn-info btn-xs editar',
+                            'value'=> "$url",
                 ]);
             },
              'delete' => function ($url, $model) {
-                return Html::a('<span class="fa fa-trash"></span>', FALSE, [
+                return Html::a('<span class="fa fa-trash"></span>', $url , [
                             'title' => Yii::t('app', 'Borrar'),
-                            'class'=>'btn btn-danger btn-xs borrar',   
-                            'value'=> "$url",      
+                            'class'=>'btn btn-danger btn-xs borrar',
+                            'value'=> "$url",
                 ]);
-            },        
+            },
         ],
         'urlCreator' => function ($action, $model, $key, $index) {
             if ($action === 'view') {

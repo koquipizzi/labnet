@@ -113,3 +113,9 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.select2-container-multi .select2-choices .select2-search-field input {
+    border: 1px solid red;
+    background: transparent !important;
+    
+}

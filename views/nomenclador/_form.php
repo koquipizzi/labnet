@@ -72,7 +72,7 @@ use app\models\Prestadoras;
         <div class="pull-right box-tools">
             <div style="text-align: right;">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-             <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+             <button type="button" class="btn btn-danger">Cancelar</button>
             </div>
 
         </div>

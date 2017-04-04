@@ -105,7 +105,9 @@ class SiteController extends Controller
             return $this->goBack();
         }
         
-        $this->layout = 'lay-account';
+  //      $this->layout = 'lay-account';
+          $this->layout = 'main-login';
+   //    $this->layout = '../site/login';
         return $this->render('login', [
             'model' => $model,
         ]);        

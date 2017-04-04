@@ -5,10 +5,12 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>AdminLTE 2 | Log in</title>
-   <?php  
-        app\assets\AppAsset::register($this);
-    
+  <?php
 
+    use app\assets\admin\page\SignAsset;
+    use yii\widgets\ActiveForm;
+    use yii\helpers\Html;
+    app\assets\AppAsset::register($this);
     dmstr\web\AdminLteAsset::register($this);
    // app\assets\AdminLtePluginAsset::register($this);
     dmstr\web\AdminLteAsset::register($this);
@@ -45,15 +47,33 @@
   <div class="login-box-body">
     <p class="login-box-msg">Inicie Sesión</p>
 
-    <form action="../../index2.html" method="post">
-      <div class="form-group has-feedback">
-        <input type="email" class="form-control" placeholder="Usuario">
-        <span class="glyphicon glyphicon-user form-control-feedback"></span>
-      </div>
-      <div class="form-group has-feedback">
-        <input type="password" class="form-control" placeholder="Contraseña">
-        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-      </div>
+       <?php $form = ActiveForm::begin([
+        'id' => 'login-form',
+        'options' => ['class' => 'sign-in form-horizontal shadow rounded no-overflow'],
+        'fieldConfig' => ['template'=>'']
+    ]); ?>
+                  <?= $form->field($model, 'username',[
+                'template' => '            
+                    <div class="form-group">
+                        <div class="input-group input-group-lg rounded no-overflow">
+                            {input}
+                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        </div>
+                    </div>
+                ',
+            ])->textInput(['autofocus' => true,'placeholder'=>'Nombre de Usuario']); ?>            
+            
+            <?= $form->field($model, 'password',[
+                'template' => '            
+                    <div class="form-group">
+                        <div class="input-group input-group-lg rounded no-overflow">
+                            {input}
+                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                        </div>
+                    </div>
+                ',
+            ])->passwordInput(['placeholder'=>'Contraseña']); ?>
+    
       <div class="row">
        <div class="col-xs-1">
        </div>
@@ -65,12 +85,15 @@
           </div>
         </div>
         <!-- /.col -->
+        
+        <!--</div>-->
+
         <div class="col-xs-4">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">Ingresar</button>
+            <?= Html::submitButton('Acceder', ['class' => 'btn btn-primary btn-block btn-flat', 'name' => 'login-btn']) ?>
         </div>
         <!-- /.col -->
       </div>
-    </form>
+     <?php ActiveForm::end(); ?>
     <!-- /.social-auth-links -->
   </div>
   <!-- /.login-box-body -->

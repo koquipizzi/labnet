@@ -99,13 +99,12 @@ class SiteController extends Controller
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-
+   //     var_dump(Yii::$app->user); die();
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         }
-        
-        $this->layout = 'lay-account';
+      //  $this->layout = 'lay-account';
         return $this->render('login', [
             'model' => $model,
         ]);        

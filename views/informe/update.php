@@ -41,13 +41,13 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         <div class="recent-activity">                                
 
                             <?php 
-                                    if(is_array($historialPaciente)){
+                                  /*  if(is_array($historialPaciente)){
                                         echo $this->render('/informe/historialPaciente', [
                                                 'historialPaciente'=>$historialPaciente
                                         ]) ;
                                     }else{
                                                 echo "El Paciente no tiene historial.";
-                                                  }
+                                                  }*/
                             ?>
                         </div>
                     </div>
@@ -155,9 +155,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 </section>
 <?php
 
-       
-use app\assets\admin\dashboard\DashboardAsset;
-DashboardAsset::register($this);
 $this->registerJsFile('@web/assets/admin/js/cipat_modal_informe.js', ['depends' => [yii\web\AssetBundle::className()]]);
 
 

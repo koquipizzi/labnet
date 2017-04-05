@@ -9,9 +9,6 @@ use yii\widgets\Pjax;
 use yii\widgets\DetailView;
 use kartik\popover\PopoverX;
 
-use app\assets\admin\dashboard\DashboardAsset;
-DashboardAsset::register($this);
-
 ?> 
 
     <div class="panel-body no-padding">
@@ -69,7 +66,7 @@ DashboardAsset::register($this);
                                 <div class="recent-activity-body-content">
                                     <p>  Diagnóstico: 
                                      <?php 
-                                        echo $diagnosticoAcortado; 
+                                   //    echo $diagnosticoAcortado; 
                                         echo "<span class='text-block text-muted'>";
                                         if (isset($historial['fecha_fin']))
                                             {
@@ -156,14 +153,14 @@ DashboardAsset::register($this);
                                         
                                        // right
                                         $this->registerCss(".popover-lg {min-width:600px; font-size: .8em;}");
-                                        echo PopoverX::widget([
+                                    /*    echo PopoverX::widget([
                                                                 'header' => 'Detalle del Informe',
                                                                         'placement' => PopoverX::ALIGN_RIGHT,
                                                                         'size' => PopoverX::SIZE_LARGE,
                                                                 'content' => $content ,
                                                                 'toggleButton' => ['label'=> 'ver','style'=> 'margin-left: 1em;', 'class'=>'btn btn-teal btn-xs ' ],
                                                              ]);
-                                        echo "</span>";
+                                        echo "</span>";*/
                                        ?>
 
                                     </p>

@@ -87,13 +87,13 @@ $this->registerCss(".treeview {
                             }             
 ");
 
-echo TreeView::widget([
-    'data' => $items2,
-    'size' => TreeView::SIZE_SMALL,
-    'clientOptions' => [
-        'onNodeSelected' => $onSelect,
-    ],
-]);
+//echo execut\widget\TreeView::widget([
+//    'data' => $items2,
+//    'size' => TreeView::SIZE_SMALL,
+//    'clientOptions' => [
+//        'onNodeSelected' => $onSelect,
+//    ],
+//]);
 
 ?>
 

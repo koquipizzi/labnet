@@ -155,9 +155,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 </section>
 <?php
 
-       
-use app\assets\admin\dashboard\DashboardAsset;
-DashboardAsset::register($this);
 $this->registerJsFile('@web/assets/admin/js/cipat_modal_informe.js', ['depends' => [yii\web\AssetBundle::className()]]);
 
 

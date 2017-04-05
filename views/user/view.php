@@ -10,12 +10,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<section id="page-content">
-
-    <div class="header-content">
-        <h2><i class="fa fa-home"></i>Cipat <span><?= Html::encode($this->title) ?></span></h2>
-    </div><!-- /.header-content -->
-
     <!-- Start body content -->
 <div class="box box-info">
     <div class="box-header with-border">

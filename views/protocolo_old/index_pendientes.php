@@ -16,6 +16,20 @@ $this->params['breadcrumbs'][] = $this->title;
     $this->registerJsFile('@web/assets/admin/css/components/rating.css', ['depends' => [yii\web\AssetBundle::className()]]);
     
     ?>
+                <!--div class="panel-heading">
+                    <div class="pull-left">
+                        <h3 class="panel-title">Protocolos Pendientes</h3>
+                        <i class="fa fa-tasks"></i>                   
+                        <span class="text-strong">Informes por protocolo</span>
+                    </div>
+                    <div class="pull-right">
+                        <?= Html::a('Asignados', Url::to(['protocolo/asignados']), ['class' => 'btn btn-twitter btn-stroke btn-sm']); ?>
+                        <?= Html::a('Terminados', Url::to(['protocolo/terminados']), ['class' => 'btn btn-twitter btn-stroke btn-sm']); ?>
+                        <?= Html::a('Entregados', Url::to(['protocolo/entregados']), ['class' => 'btn btn-twitter btn-stroke btn-sm']); ?>    
+                        <?= Html::button('Nuevo Protocolo', ['value' => Url::to(['paciente/']), 'title' => 'Nuevo Protocolo', 'class' => 'loadMainContentProtocolo btn btn-success btn-sm']); ?>
+                    </div>   
+                    <div class="clearfix"></div>
+                </div-->
         <div class="header-content">
             <div class="pull-left">
                 <h3 class="panel-title">Protocolos Pendientes</h3>
@@ -23,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <span class="text-strong">Informes por protocolo</span>
             </div>
             <div class="pull-right">
-                <?= Html::a('<i class="fa fa-plus-circle"></i> Nuevo Protocolo', ['paciente/'], ['class'=>'btn btn-primary']) ?>
+                <?= Html::a('<i class="fa fa-plus-circle"></i> Nuevo Protocolo', ['protocolo/create'], ['class'=>'btn btn-primary']) ?>
             </div> 
             <div class="clearfix"></div>
         </div>
@@ -44,8 +58,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'label' => 'Fecha Entrada',
                             'attribute' => 'fecha_entrada',
-                            'contentOptions' => ['style' => 'width:20%;'],
                             'format' => ['date', 'php:d/m/Y'],
+                         /*   'filter' => \yii\jui\DatePicker::widget([
+                                'model'=>$searchModel,
+                                'attribute'=>'fecha_entrada',
+                                'language' => 'es',
+                                'dateFormat' => 'dd/MM/yyyy',
+                            ]),*/
                              'filter' => DatePicker::widget([
                                     'model' => $searchModel,
                                     'attribute' => 'fecha_entrada',
@@ -58,7 +77,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'label' => 'Fecha Entrega',
-                            'contentOptions' => ['style' => 'width:20%;'],
                             'attribute' => 'fecha_entrega',
                             'format' => ['date', 'php:d/m/Y'],
                             'filter' => DatePicker::widget([
@@ -74,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'label' => 'Nro Protocolo',
                             'attribute' => 'codigo',
-                            'contentOptions' => ['style' => 'width:10%;'],
+                            'contentOptions' => ['style' => 'width:20%;'],
                         ],                                          
 
                         [ 
@@ -115,7 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     "5" => "FINALIZADO", 
                                     "6" => "ENTREGADO",
                                 );
-                                $val = " ";
+                                $val = "";
                                 $idProtocolo = $model['id'];
                                 $informes = app\models\Informe::find()->where(['=','Informe.Protocolo_id',$idProtocolo])->all();
                                 //var_dump($model['id']); die();

@@ -87,7 +87,7 @@ $this->registerCss(".treeview {
                             }             
 ");
 
-echo TreeView::widget([
+echo execut\widget\TreeView::widget([
     'data' => $items2,
     'size' => TreeView::SIZE_SMALL,
     'clientOptions' => [

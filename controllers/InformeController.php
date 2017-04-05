@@ -25,7 +25,7 @@ use kartik\mpdf\Pdf;
  * InformeController implements the CRUD actions for Informe model.
  */
 class InformeController extends Controller {
-	public $layout = 'lay-admin-footer-fixed';
+//	public $layout = 'lay-admin-footer-fixed';
 	/**
 	 * @inheritdoc
 	 */

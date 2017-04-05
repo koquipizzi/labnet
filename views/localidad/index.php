@@ -9,30 +9,23 @@ use yii\bootstrap\Modal;
 /* @var $searchModel app\models\LocalidadSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Localidad');
+$this->title = Yii::t('app', 'Localidades');
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerJsFile('@web/assets/admin/js/cipat_modal_localidad.js');
-?> 
-    <!-- Start bodheader content -->
- <section id="page-content">
-    <div class="header-content">
-        <h2><i class="fa fa-home"></i>LABnet <span><?=Html::encode($this->title) ?></span></h2>   
-    </div><!-- /.header-content -->
-
-   
+?>
     <div class="header-content">
             <div class="pull-left">
                 <h3 class="panel-title">Listado de <?= Html::encode($this->title) ?></h3>
             </div>
             <div class="pull-right">
                 <?= Html::a('<i class="fa fa-plus-circle"></i> Nueva Localidad', ['localidad/create'], ['class'=>'btn btn-primary']) ?>
-            </div>   
+            </div>
             <div class="clearfix"></div>
         </div>
 
 
     <?php Pjax::begin(['id' => 'localidad', 'enablePushState' => FALSE]); ?>
-    
+
     <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
@@ -52,7 +45,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_localidad.js');
                 'cp',
                 'caracteristica_telefonica',
 
-                ['class' => 'yii\grid\ActionColumn', 
+                ['class' => 'yii\grid\ActionColumn',
                 'template' => '{view} {edit} {delete}',
                 'buttons' => [
 
@@ -60,22 +53,22 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_localidad.js');
                 'view' => function ($url, $model) {
                     return Html::a('<span class="fa fa-eye "></span>', $url, [
                                 'title' => Yii::t('app', 'View'),
-                                'class'=>'btn btn-success btn-xs ver', 
+                                'class'=>'btn btn-success btn-xs ver',
                                 'value'=> "$url",
                     ]);
                 },
                  'edit' => function ($url, $model) {
                     return Html::a('<span class="fa fa-pencil"></span>', $url, [
                                 'title' => Yii::t('app', 'Editar'),
-                                'class'=>'btn btn-info btn-xs ',    
+                                'class'=>'btn btn-info btn-xs ',
                                 'value'=> "$url",
                     ]);
                 },
 
                 'delete' => function ($url, $model) {
-                return  Html::a('<span  class="fa fa-trash"></span>', $url, 
+                return  Html::a('<span  class="fa fa-trash"></span>', $url,
                         [
-                          'class'=>'btn btn-danger btn-xs',       
+                          'class'=>'btn btn-danger btn-xs',
                           'onclick' => "bootbox.dialog({
                               message: '¿Confirma que desea eliminar la Localidad?',
                               title: 'Sistema LABnet',
@@ -88,12 +81,12 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_localidad.js');
                                         $.ajax('$url', {
                                             type: 'POST',
                                             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                                 alert('No se puede eliminar esa entidad.');                                    
+                                                 alert('No se puede eliminar esa entidad.');
                                             }
                                         }).done(function(data) {
                                             $.pjax.reload({container: '#localidad'});
                                             var n = noty({
-                                                text: 'Entidad eliminada con éxito!',                               
+                                                text: 'Entidad eliminada con éxito!',
                                                 type: 'success',
                                                 class: 'animated pulse',
                                                 layout      : 'topRight',
@@ -103,13 +96,13 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_localidad.js');
                                                 modal: false, // si pongo true me hace el efecto de pantalla gris
                                          //       maxVisible  : 10
                                             });
-                                        });                                        
+                                        });
                                       }
                                   },
                                   cancel: {
                                       label: 'Cancelar',
-                                      className: 'btn-danger',                                     
-                                  }                                  
+                                      className: 'btn-danger',
+                                  }
                                 }
                             });
                           return false;
@@ -133,16 +126,14 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_localidad.js');
                 }
             }
                     ],
-                
+
             ],
         ]); ?>
 
     <?php
-      
+
     Pjax::end(); ?>
 
-    </div>  
-        
-    </div>   
+    </div>
 
-</section>
+    </div>

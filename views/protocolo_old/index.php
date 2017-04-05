@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
                 </div>
                 <div class="pull-right">
-                    <?= Html::button('Nuevo Protocolo', ['value' => Url::to(['paciente/']), 'title' => 'Nuevo Protocolo', 'class' => 'loadMainContentProtocolo btn btn-success btn-sm']); ?>
+                    <?= Html::button('Nuevo Protocolo', ['value' => Url::to(['protocolo/create']), 'title' => 'Nuevo Protocolo', 'class' => 'loadMainContentProtocolo btn btn-success btn-sm']); ?>
                 </div>   
                 <div class="clearfix"></div>
             </div>
@@ -210,19 +210,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                          [
                                             'label' => 'Fecha Entrada',
                                             'attribute' => 'fecha_entrada',
-                                            'contentOptions' => ['style' => 'width:20%;'],
+                                            'contentOptions' => ['style' => 'width:10%;'],
                                             'format' => ['date', 'php:d/m/Y']
                                         ],
                                         [
                                             'label' => 'Fecha Entrega',
                                             'attribute' => 'fecha_entrega',
-                                            'contentOptions' => ['style' => 'width:20%;'],
+                                            'contentOptions' => ['style' => 'width:10%;'],
                                             'format' => ['date', 'php:d/m/Y']
                                         ],
                                          [
                                             'label' => 'Nro Protocolo',
                                             'attribute' => 'codigo',
-                                            'contentOptions' => ['style' => 'width:10%;'],
+                                            'contentOptions' => ['style' => 'width:20%;'],
                                         ],                                                    
                                         [
                                             'label' => 'Paciente',
@@ -232,12 +232,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                         [
                                             'label' => 'Documento',
                                             'attribute'=>'nro_documento', 
-                                            'contentOptions' => ['style' => 'width:10%;'],
+                                            'contentOptions' => ['style' => 'width:20%;'],
                                         ],                                                    
                                         [ 
                                             'label' => 'Informes',
                                             'format' => 'raw',
-                                            'contentOptions' => ['style' => 'width:20%;'],
+                                            'contentOptions' => ['style' => 'width:30%;'],
                                             'value'=>function ($model, $key, $index, $widget) { 
                                                 $estados = array( 
                                                     "1" => "danger", 

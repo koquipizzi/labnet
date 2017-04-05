@@ -4,32 +4,17 @@ use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use yii\grid\GridView;
+use kartik\widgets\DatePicker;
 
 $this->title = Yii::t('app', 'Protocolos');
 $this->params['breadcrumbs'][] = $this->title;
-?>
-<?php 
-    Modal::begin([
-            'id' => 'modal',    
-           // 'size'=>'modal-lg',
-            'options' => ['tabindex' => false ],
-        ]);
-        echo "<div id='modalContent'></div>";
-       
-    ?> 
-    <?php Modal::end();
-    
-    use app\assets\admin\dashboard\DashboardAsset;
-    DashboardAsset::register($this);
+
     $this->registerJsFile('@web/assets/admin/js/cipat_modal_protocolo.js', ['depends' => [yii\web\AssetBundle::className()]]);
     $this->registerJsFile('@web/assets/global/plugins/bower_components/peity/jquery.peity.min.js', ['depends' => [yii\web\AssetBundle::className()]]);
     $this->registerJsFile('@web/assets/admin/css/components/rating.css', ['depends' => [yii\web\AssetBundle::className()]]);
     
     ?>
-<section id="page-content">
-    <div class="header-content">
-        <h2><i class="fa fa-home"></i>LABnet <span><?= Html::encode($this->title) ?></span></h2>  
-    </div><!-- /.header-content -->
+
     <div class="body-content animated fadeIn" >    
         <div class="protocolo-index">    
             <div class="panel_titulo">
@@ -52,11 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <!-- Start tabs content -->
             <div style="margin-top: 10px;">
                 <?php
-                $this->registerCss(".hasDatepicker {                                    
-                                    width:90px;}");
                 Pjax::begin(['id' => 'asignados', 'enablePushState' => false]);
                 echo GridView::widget([
-//                                    'id'=>'asignados',
                     'dataProvider' => $dataProvider_asignados,
                     'options' => array('class' => 'table table-striped table-lilac'),
                     'filterModel' => $searchModelAsig,
@@ -65,24 +47,30 @@ $this->params['breadcrumbs'][] = $this->title;
                             'label' => 'Fecha Entrada',
                             'attribute' => 'fecha_entrada',
                             'format' => ['date', 'php:d/m/Y'],
-                            'filter' => \yii\jui\DatePicker::widget([
-                                'model'=>$searchModelAsig,
-                                'attribute'=>'fecha_entrada',
-                                'language' => 'es',
-                                'dateFormat' => 'dd/MM/yyyy',
-                            ]),
+                             'filter' => DatePicker::widget([
+                                    'model' => $searchModelAsig,
+                                    'attribute' => 'fecha_entrada',
+                                    'pluginOptions' => [
+                                           'autoclose'=>true,
+                                           'format' => 'dd-mm-yyyy',
+                                           'startView' => 'date',
+                                       ]
+                               ] )
 
                         ],
                         [
                             'label' => 'Fecha Entrega',
                             'attribute' => 'fecha_entrega',
                             'format' => ['date', 'php:d/m/Y'],
-                            'filter' => \yii\jui\DatePicker::widget([
-                                'model'=>$searchModelAsig,
-                                'attribute'=>'fecha_entrega',
-                                'language' => 'es',
-                                'dateFormat' => 'dd/MM/yyyy',
-                            ]),
+                             'filter' => DatePicker::widget([
+                                    'model' => $searchModelAsig,
+                                    'attribute' => 'fecha_entrada',
+                                    'pluginOptions' => [
+                                           'autoclose'=>true,
+                                           'format' => 'dd-mm-yyyy',
+                                           'startView' => 'date',
+                                       ]
+                               ] )
                         ],
                         [
                             'label' => 'Nro Protocolo',
@@ -159,10 +147,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div><!-- /.panel -->
     <!--/ End double tabs -->
 
-    <!-- Start footer content -->
-    <?php echo $this->render('/shares/_footer_admin'); ?>
-    <!--/ End footer content -->
-</section>
+
 
 <style>
     .summary{

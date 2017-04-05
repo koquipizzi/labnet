@@ -41,13 +41,13 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         <div class="recent-activity">                                
 
                             <?php 
-                                    if(is_array($historialPaciente)){
+                                  /*  if(is_array($historialPaciente)){
                                         echo $this->render('/informe/historialPaciente', [
                                                 'historialPaciente'=>$historialPaciente
                                         ]) ;
                                     }else{
                                                 echo "El Paciente no tiene historial.";
-                                                  }
+                                                  }*/
                             ?>
                         </div>
                     </div>

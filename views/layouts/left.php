@@ -42,9 +42,11 @@ use mdm\admin\components\Helper;
                     ['label' => 'Nuevo Protocolo', 'icon' => 'fa fa-file-code-o', 'url' => ['/paciente/buscar']],
                     ['label' => 'PROTOCOLOS', 'options' => ['class' => 'header']],
                     ['label' => 'Activos', 'icon' => 'edit', 'url' => ['/protocolos']],
-                    ['label' => 'Médicos', 'icon' => 'user-md', 'url' => ['/medico']],
-                    ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],
-                    ['label' => 'Todos', 'icon' => 'folder', 'url' => ['/protocolo']],
+                    ['label' => 'Asignados a mi', 'icon' => 'user', 'url' => ['/protocolos/asignados']],
+                    ['label' => 'Terminados', 'icon' => 'book', 'url' => ['/protocolos/terminados']],
+                    ['label' => 'Entregados', 'icon' => 'user', 'url' => ['/protocolos/entregados']],
+                    ['label' => 'Todos', 'icon' => 'folder', 'url' => ['/protocolos/all']],
+                    ['label' => 'ENTIDADES', 'options' => ['class' => 'header']],
                  //   ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
 
                     [
@@ -92,32 +94,7 @@ use mdm\admin\components\Helper;
                     ],
 
 
-               /*     [
-                        'label' => 'Same tools',
-                        'icon' => 'fa fa-share',
-                        'url' => '#',
-                        'items' => [
-                            ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii'],],
-                            ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug'],],
-                            [
-                                'label' => 'Level One',
-                                'icon' => 'fa fa-circle-o',
-                                'url' => '#',
-                                'items' => [
-                                    ['label' => 'Level Two', 'icon' => 'fa fa-circle-o', 'url' => '#',],
-                                    [
-                                        'label' => 'Level Two',
-                                        'icon' => 'fa fa-circle-o',
-                                        'url' => '#',
-                                        'items' => [
-                                            ['label' => 'Level Three', 'icon' => 'fa fa-circle-o', 'url' => '#',],
-                                            ['label' => 'Level Three', 'icon' => 'fa fa-circle-o', 'url' => '#',],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],*/
+              
                 ],
             ]
         ) ?>

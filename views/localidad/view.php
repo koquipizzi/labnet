@@ -17,7 +17,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= Html::a('<i class="fa fa-pencil"></i> Volver', ['localidad/index'], ['class'=>'btn btn-primary']) ?>
                 </div>
             </div>
-            <?= DetailView::widget(['model' => $model,'attributes' => [
+            
+            <?= DetailView::widget([
+              'model' => $model,'attributes' => [
                 'nombre',
                 'cp',
                 'caracteristica_telefonica'

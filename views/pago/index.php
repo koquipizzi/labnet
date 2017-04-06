@@ -13,38 +13,12 @@ use vova07\select2\Widget;
 
 $this->title = Yii::t('app', 'Protocolos Pagos');
 $this->params['breadcrumbs'][] = $this->title;
+$this->registerJsFile('@web/assets/admin/js/cipat_modal_contable.js', ['depends' => [yii\web\AssetBundle::className()]]);
 ?>
-<?php 
-    Modal::begin([
-            'id' => 'modal',          
-            'options' => ['tabindex' => false ],  
-         //   'clientOptions' => ['backdrop' => false],
-        ]);
-        echo "<div id='modalContent'>"
-    . "<!--img class='mr-15' src='@web/assets/global/img/loader/general/3.gif' -->"
-                . "</div>";
-       
-            
 
-        
-?> 
-<?php Modal::end(); ?>
-
-  <?php 
-  use app\assets\admin\dashboard\DashboardAsset;
-    DashboardAsset::register($this);
-    $this->registerJsFile('@web/assets/admin/js/cipat_modal_contable.js', ['depends' => [yii\web\AssetBundle::className()]]);
-     ?>
-
-
-<section id="page-content">
-    <div class="header-content">
-        <h2><i class="fa fa-home"></i>Cipat <span><?= Html::encode($this->title) ?></span></h2>   
-    </div><!-- /.header-content -->
-<div class="body-content animated fadeIn" >    
-<div class="estudio-index">
-    
-    <h3><?= Html::encode($this->title) ?></h3>
+<div class="body-content animated fadeIn" >
+  <div class="estudio-index">
+      <h3><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p style="float:right;">
@@ -55,24 +29,24 @@ $this->params['breadcrumbs'][] = $this->title;
            echo GridView::widget([
            'dataProvider' => $dataProvider,
            'options'=>array('class'=>'table table-striped table-lilac'),
-           'filterModel' => $searchModel,    
+           'filterModel' => $searchModel,
            'columns' => [
                                 [
                                   'label' => 'Fecha Entrada',
                                   'attribute' => 'fecha_entrada',
                                   'value' => 'fecha_entrada',
                                   'format' => ['date', 'php:d/m/Y'],
-                                  'filter' => \yii\jui\DatePicker::widget([
-                                      'model'=>$searchModel,
-                                      'attribute'=>'fecha_entrada',
-                                      'language' => 'es',
-                                      'dateFormat' => 'dd/MM/yyyy',
-                                  ]),
+                                  //'filter' => \yii\jui\DatePicker::widget([
+                                  //    'model'=>$searchModel,
+                                    //  'attribute'=>'fecha_entrada',
+                                    //  'language' => 'es',
+                                    //  'dateFormat' => 'dd/MM/yyyy',
+                                //  ]),
                                    'contentOptions' => ['style' => 'width:10%;'],
-                                ],   
+                                ],
                                 [
                                     'label' => 'Numero Formulario',
-                                    'attribute'=>'nro_formulario', 
+                                    'attribute'=>'nro_formulario',
                                     'value' => function ($model, $key, $index, $widget){
                                             if(isset($model["nro_formulario"])){
                                                   return $model["nro_formulario"];
@@ -83,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                      },
                                     'contentOptions' => ['style' => 'width:10%;'],
-                                ],                                                
+                                ],
                                 [
                                      'label' => 'Prestadora',
                                      'attribute' => 'Prestadoras_id',
@@ -94,21 +68,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                      },
                                      'filter' => Html::activeDropDownList($searchModel, 'Prestadoras_id', ArrayHelper::map(Prestadoras::find()->asArray()->all(), 'id', 'descripcion'),['class'=>'form-control','prompt' => 'Seleccionar Prestadora']),
                                      'contentOptions' => ['style' => 'width:20%;'],
-                                 ], 
+                                 ],
                                 [
                                     'label' => 'Importe',
-                                    'attribute'=>'importe', 
+                                    'attribute'=>'importe',
                                     'contentOptions' => ['style' => 'width:20%;'],
                                 ],
 
                        ],
 
-            ]); 
+            ]);
    ?>
-                                    
+
     <?php Pjax::end(); ?></div>
     </div>
-</section>
+
 
 <style>
     .summary{

@@ -88,7 +88,8 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'mdm\admin\models\User',
+           // 'identityClass' => 'mdm\admin\models\User',
+           'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
@@ -128,6 +129,7 @@ $config = [
         'class' => 'mdm\admin\components\AccessControl',
 		'allowActions' => [
 			'admin/*', // add or remove allowed actions to this list
+            'protocolo/*',
 		]
     ],
     'params' => $params,

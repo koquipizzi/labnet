@@ -180,6 +180,7 @@ class InformeController extends Controller {
             }else{
                     $model=$this->findModel(Yii::$app->request->post('Informe_id'));
             }
+			
             $nominf = new InformeNomenclador();
             if (isset($_POST['hasEditable'])) {
                     \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -198,17 +199,19 @@ class InformeController extends Controller {
             }
             if ($model) {
                     $modelp = $model->protocolo;
-            }
+            } 
+	//		die();
             $searchModel = new InformeNomencladorSearch();
             $informeNomenclador = new InformeNomenclador();
             $searchModel->id_informe = $model->id;
             $dataProvider = $searchModel->search([]);
             $informe=$this->findModel( $model->id );
-            $historialPaciente=$informe->getHistorialUsuario();
+        //    $historialPaciente=$informe->getHistorialUsuario();
+			$historialPaciente='';
             if (is_null($model->titulo)) {
                  $model->titulo = $model->estudio->titulo;
              }
-
+	//die();
             // View to Render
             //Obtener fotos
             $dataproviderMultimedia = new ArrayDataProvider([

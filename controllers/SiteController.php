@@ -58,8 +58,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
-	//$this->redirect(['/admin/dashboard/index']);
+     //   return $this->render('index');
+	$this->redirect(['/protocolo/index']);
     }
 
     /**

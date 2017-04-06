@@ -55,8 +55,9 @@ foreach ($result as $row){
 }
 
 $items2 = $tree->getTree();
+//var_dump($items2); die();
 
-$items = [
+/*$items = [
     [
         'text' => 'Parent 1',
         'href' => Url::to(['', 'page' => 'parent1']),
@@ -77,7 +78,7 @@ $items = [
             ],
         ],
     ],
-];
+];*/
 
 $this->registerCss(".treeview {
                                 float:left;
@@ -87,13 +88,13 @@ $this->registerCss(".treeview {
                             }             
 ");
 
-//echo execut\widget\TreeView::widget([
-//    'data' => $items2,
-//    'size' => TreeView::SIZE_SMALL,
-//    'clientOptions' => [
-//        'onNodeSelected' => $onSelect,
-//    ],
-//]);
+echo execut\widget\TreeView::widget([
+    'data' => $items2,
+    'size' => TreeView::SIZE_SMALL,
+    'clientOptions' => [
+        'onNodeSelected' => $onSelect,
+    ],
+]);
 
 ?>
 
@@ -101,36 +102,20 @@ $this->registerCss(".treeview {
     <div class="col-md-12">
 
         <!-- Start double tabs -->
-        <div class="panel panel-tab panel-tab-double rounded shadow">
-                    <div class="ribbon-wrapper">
-                          <?php if($model->estado_actual===Workflow::estadoEntregado()){
-                                      echo ' <div class="ribbon  ribbon-shadow">'. "$model->workflowLastStateName".' </div>';
-                                  }else{
-                                         echo ' <div class="ribbon ribbon-teals ribbon-shadow">'. "$model->workflowLastStateName".' </div>';
-                                     } 
-                               ?>
-                    </div>
+        <div class="panel panel-tab panel-tab-double rounded shadow">                
             <!-- Start tabs heading -->
             <div class="panel-heading panel-labnet no-padding">
                 <ul class="nav nav-tabs">
                     <li class="active">
                         <a href="#tab2-1" data-toggle="tab">
-                            <i class="fa fa-file-text"></i>
-                            <div>
-                                <span class="text-strong">Detalle </span>
-                                <span>Carga de detalle del estudio</span>
-                            </div>
+                            <i class="fa fa-file-text"></i>   
+                                <span>Carga de detalle del estudio</span>     
                         </a>
                     </li>
                     <li>
                         <a href="#tab2-2" data-toggle="tab">
-
                             <i class="fa fa-image"></i>
-                            <div>
-                                <span class="text-strong">Multimedia</span>
-                                <span>Adjuntar imágenes</span>
-
-                            </div>
+                                <span>Multimedia</span>
                         </a>
                     </li>  
 

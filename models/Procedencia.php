@@ -38,7 +38,7 @@ class Procedencia extends \yii\db\ActiveRecord
             [['Localidad_id','descripcion','domicilio'], 'required'],
             [['Localidad_id'], 'integer'],
             [['descripcion', 'domicilio', 'mail'], 'string', 'max' => 33],
-            [['telefono'], 'string'],          
+            [['telefono'], 'string'],
             [['mail'], 'email'],
             [['informacion_adicional'], 'string', 'max' => 254],
             [['Localidad_id'], 'exist', 'skipOnError' => true, 'targetClass' => Localidad::className(), 'targetAttribute' => ['Localidad_id' => 'id']],
@@ -84,9 +84,9 @@ class Procedencia extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Tarifas::className(), ['Procedencia_id' => 'id']);
     }
-    
+
     public function getLocalidadTexto()
-    {       
+    {
         $localidad = $this->hasOne(Localidad::className(), ['id' => 'Localidad_id'])->one();
         if ($localidad)
             return $localidad->nombre;

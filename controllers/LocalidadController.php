@@ -45,7 +45,7 @@ class LocalidadController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        
+
         ]);
     }
 
@@ -56,14 +56,14 @@ class LocalidadController extends Controller
      */
     public function actionView($id)
     {
-        return $this->renderAjax('view', [
+        return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
 
-       
-    
-    
+
+
+
     /**
      * Creates a new Localidad model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -81,18 +81,18 @@ class LocalidadController extends Controller
             ]);
         }
     }
-    
+
     public function actionCreate_pop()
     {
         $model = new Localidad();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {                    
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
                      $dataProvider = new ActiveDataProvider([
                         'query' => Localidad::find()
                     ]);
                     $searchModel = new LocalidadSearch();
                     return;
-        } else {           
+        } else {
             return $this->renderAjax('_form', [
                         'model' => $model
             ]);
@@ -120,7 +120,7 @@ class LocalidadController extends Controller
                     ]);
             //return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->renderAjax('_form', [
+            return $this->render('update', [
                 'model' => $model,
             ]);
         }
@@ -133,7 +133,7 @@ class LocalidadController extends Controller
      * @return mixed
      */
     public function actionDelete($id) {
-        
+
         try {
             if($this->findModel($id)->delete()){
                 if (Yii::$app->getRequest()->isAjax) {
@@ -156,12 +156,12 @@ class LocalidadController extends Controller
 //                    'title' => 'Error de Borrado',
 //                    'positonY' => 'top',
 //                    'positonX' => 'left'
-//                ]                    
+//                ]
 //            );
            // return $this->redirect(redirect(['index']);
-           
-        }        
-       
+
+        }
+
         return $this->redirect(['index']);
     }
 
@@ -185,45 +185,45 @@ class LocalidadController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    
+
     public function actionPrint()
-    {   
+    {
        // $model = $this->findModel($id);
        $dataProvider = new ActiveDataProvider([
                         'query' => Localidad::find()
-                      
+
                     ]);
 //        $this->render('print', [
-//            'model' => $model, 
-//            'dataProvider' => $multimediaProvider,            
+//            'model' => $model,
+//            'dataProvider' => $multimediaProvider,
 //        ]);
         $pdf = new Pdf([
-            'mode' => Pdf::MODE_CORE, 
+            'mode' => Pdf::MODE_CORE,
             // A4 paper format
-            'format' => Pdf::FORMAT_A4, 
+            'format' => Pdf::FORMAT_A4,
             // portrait orientation
-            'orientation' => Pdf::ORIENT_PORTRAIT, 
+            'orientation' => Pdf::ORIENT_PORTRAIT,
             // stream to browser inline
-            'destination' => Pdf::DEST_BROWSER,  
+            'destination' => Pdf::DEST_BROWSER,
             'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
             // any css to be embedded if required
-            'cssInline' => '* {font-size:14px}', 
+            'cssInline' => '* {font-size:14px}',
              // set mPDF properties on the fly
 
             'content' => $this->renderPartial('print', [
                              //   'searchModel' => $searchModel,
-                               // 'model' => $model, 
-                                'dataProvider' => $dataProvider,      
+                               // 'model' => $model,
+                                'dataProvider' => $dataProvider,
                             ]),
             'options' => [
-                'title' => 'Acervo'               
+                'title' => 'Acervo'
             ],
             'methods' => [
                 'SetHeader' => ['Gestión de Colecciones'],
                 'SetFooter' => ['|Página {PAGENO}|'],
             ]
         ]);
-        
+
         return $pdf->render();
     }
 }

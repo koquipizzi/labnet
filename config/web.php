@@ -6,8 +6,8 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'language'=>'es', // spanish  
-    'params' => $params, 
+    'language'=>'es', // spanish
+    'params' => $params,
     'modules' => [
          'gii' => array(
             'class' => 'system.gii.GiiModule',
@@ -23,12 +23,12 @@ $config = [
             'displaySettings' => [
                 Module::FORMAT_DATE => 'dd/MM/yyyy',
                 Module::FORMAT_TIME => 'hh:mm:ss a',
-                Module::FORMAT_DATETIME => 'dd/MM/yyyy hh:mm:ss a', 
+                Module::FORMAT_DATETIME => 'dd/MM/yyyy hh:mm:ss a',
             ],
 
             //format settings for saving each date attribute (PHP format example)
             'saveSettings' => [
-                Module::FORMAT_DATE => 'php:Y-m-d', 
+                Module::FORMAT_DATE => 'php:Y-m-d',
                 Module::FORMAT_TIME => 'php:H:i:s',
                 Module::FORMAT_DATETIME => 'php:Y-m-d H:i:s',
             ],
@@ -39,7 +39,7 @@ $config = [
             'saveTimezone' => 'America/Argentina/Buenos_Aires',
 
             // automatically use kartik\widgets for each of the above formats
-            'autoWidget' => true,           
+            'autoWidget' => true,
 
             // use ajax conversion for processing dates from display format to save format.
             'ajaxConversion' => true,
@@ -57,7 +57,7 @@ $config = [
                             'app/error' => 'error.php',
                         ],
                     ],
-                    'yii' => [  
+                    'yii' => [
                         'class' => 'yii\i18n\PhpMessageSource',
                         'sourceLanguage' => 'es-ES',
                         'basePath' => '@app/common/messages',
@@ -75,10 +75,10 @@ $config = [
                     '@app/views' => '@vendor/dmstr/yii2-adminlte-asset/example-views/yiisoft/yii2-app'
                 ],
             ],
-        ],     
-        */   
+        ],
+        */
         'authManager' => [
-             'class' => 'yii\rbac\DbManager', // or use 'yii\rbac\PhpManager' 
+             'class' => 'yii\rbac\DbManager', // or use 'yii\rbac\PhpManager'
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -88,7 +88,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'mdm\admin\models\User',
+            'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
@@ -111,7 +111,7 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
-        
+
         'urlManager' => [
             //'enablePrettyUrl' => true,
             'class' => 'yii\web\UrlManager',
@@ -135,7 +135,7 @@ $config = [
         //'@asset'=> dirname(dirname(dirname(dirname(rtrim(dirname($_SERVER['PHP_SELF']), '\\/'))))).'/assets/'
         '@asset'=> rtrim(dirname($_SERVER['PHP_SELF']), '\\/').'/assets/',
    //     '@mdm/admin' => rtrim(dirname($_SERVER['PHP_SELF']), '\\/').'/vendor/mdmsoft/yii2-admin/',
-    ]   
+    ]
 ];
 
 if (YII_ENV_DEV) {

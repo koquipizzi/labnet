@@ -13,7 +13,7 @@ use vova07\select2\Widget;
 
 <div class="procedencia-form">
     <div class="panel-body no-padding">
-        <?php $form = ActiveForm::begin([  'id'=>'create-procedencia-form',         
+        <?php $form = ActiveForm::begin([  'id'=>'create-procedencia-form',
             'options' => [
                 'class' => 'form-horizontal mt-10',
                 'enableAjaxValidation' => true,
@@ -34,17 +34,17 @@ use vova07\select2\Widget;
                                             {error}",
                     'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
     ])->textInput(['maxlength' => true])->error([ 'style' => ' margin-right: 30%;'])?>
-        
+
         <?= $form->field($model, 'mail', ['template' => "{label}
                                             <div class='col-md-7'>{input}</div>
                                             {hint}
                                             {error}",
                     'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
     ])->textInput()->error([ 'style' => ' margin-right: 30%;'])?>
-    
+
         <?php
-            $data=ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');   
-            
+            $data=ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
+
             echo $form->field($model, 'Localidad_id',
                         ['template' => "{label}
                         <div class='col-md-7'>{input}</div>
@@ -52,7 +52,7 @@ use vova07\select2\Widget;
                         {error}",  'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
                             ]
                         )->widget(Widget::className(), [
-                        'options' => [                           
+                        'options' => [
                             'placeholder' => 'Choose item'
                         ],
                             'items' => $data,
@@ -60,7 +60,7 @@ use vova07\select2\Widget;
                             'width' => '100%',
                         ],
                 ]);
-                    
+
                     ?>
         <?= $form->field($model, 'telefono', ['template' => "{label}
             <div class='col-md-7'>{input}</div>
@@ -78,8 +78,8 @@ use vova07\select2\Widget;
     <div class="form-footer">
         <div style="text-align: right;">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-        </div>         
+        <button type="button" class="btn btn-danger">Restablecer</button>
+        </div>
     </div>
 
         <?php ActiveForm::end(); ?>

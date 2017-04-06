@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'view' => function ($url, $model) {
                     return Html::a('<span class="fa fa-eye "></span>', $url, [
                                 'title' => Yii::t('app', 'View'),
-                                'class'=>'btn  btn-xs ver',
+                                'class'=>'btn btn-success btn-xs ',
                                 'value'=> "$url",
                     ]);
                 },

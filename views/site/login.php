@@ -49,7 +49,6 @@
 
        <?php $form = ActiveForm::begin([
         'id' => 'login-form',
-        'options' => ['class' => 'sign-in form-horizontal shadow rounded no-overflow'],
         'fieldConfig' => ['template'=>'']
     ]); ?>
                   <?= $form->field($model, 'username',[
@@ -66,7 +65,7 @@
             <?= $form->field($model, 'password',[
                 'template' => '            
                     <div class="form-group">
-                        <div class="input-group input-group-lg rounded no-overflow">
+                        <div class="input-group input-group-lg rounded ">
                             {input}
                             <span class="input-group-addon"><i class="fa fa-lock"></i></span>
                         </div>

@@ -39,7 +39,7 @@ use mdm\admin\components\Helper;
                     ['label' => 'LabNET', 'options' => ['class' => 'header']],
                     ['label' => 'Nuevo Protocolo', 'icon' => 'fa fa-file-code-o', 'url' => ['/paciente/buscar']],
                     ['label' => 'PROTOCOLOS', 'options' => ['class' => 'header']],
-                    ['label' => 'Activos', 'icon' => 'edit', 'url' => ['/protocolos']],
+                    ['label' => 'Activos', 'icon' => 'edit', 'url' => ['/protocolo']],
                     ['label' => 'Asignados a mi', 'icon' => 'user', 'url' => ['/protocolos/asignados']],
                     ['label' => 'Terminados', 'icon' => 'book', 'url' => ['/protocolos/terminados']],
                     ['label' => 'Entregados', 'icon' => 'user', 'url' => ['/protocolos/entregados']],

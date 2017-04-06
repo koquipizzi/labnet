@@ -3,13 +3,7 @@
 use app\models\Informe;
 
 ?>
-    <div class="panel">
-        <div class="panel-heading">
-            <h3 class="panel-title text-center">Protocolo N°: <b><?= $model->codigo ?></b></h3>
-        </div><!-- /.panel-heading -->
-        <div class="panel-body no-padding">
-            <div class="table-responsive">
-                <table class="table">
+                <table class="table table-striped">
                     <tbody>
                     <tr>
                         <td>
@@ -56,27 +50,8 @@ use app\models\Informe;
                             <span class="pull-left text-strong"><?= $model->facturarA->descripcion ?></span>
                         </td>
                     </tr>
-<!--                                                    <tr>
-                        <td>
-                            <span class="pull-left text-capitalize">Pending transactions:</span>
-                            <span class="pull-right text-strong fg-teals">$<span class="counter">34.11</span></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span class="pull-left text-capitalize">Reserves &amp; holds:</span>
-                            <span class="pull-right text-strong">$<span class="counter">0.00</span></span>
-                        </td>
-                    </tr>-->
                     </tbody>
                 </table>
-            </div>
-        </div><!-- /.panel-body -->
-    </div>
+ 
 
-<?php
-            echo $this->render('//protocolo/_nomencladores', [
-                'model' => $model, 'informe'=>$informe,  'dataProvider'=> $dataProvider, 'modeloInformeNomenclador' => $modeloInformeNomenclador]) 
-
-?>
 

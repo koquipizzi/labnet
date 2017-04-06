@@ -12,11 +12,9 @@ use mdm\admin\components\Helper;
                 <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
             </div>
             <div class="pull-left info">
-<<<<<<< HEAD
                 <p><?php // $user = \app\models\User::find()->where(['=', 'id', Yii::$app->user->id])->one(); echo $user->username;  ?></p>
-=======
                 <p><?php //$user = \app\models\User::find()->where(['=', 'id', Yii::$app->user->id])->one(); echo $user->username;  ?></p>
->>>>>>> 39f06d3018250355f6d0e5a15f2073ce06ba3012
+
 
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
@@ -85,16 +83,16 @@ use mdm\admin\components\Helper;
                         'url' => '#',
                         'items' => [
                             ['label' => 'Nomenclador', 'icon' => 'book', 'url' => ['/nomenclador'],],
-                            ['label' => 'Coberturas', 'icon' => 'user-md', 'url' => ['/prestadoras'],],
-                            ['label' => 'Entidades Facturables', 'icon' => 'user', 'url' => ['/user'],],
-                            ['label' => 'Procedencias', 'icon' => '', 'url' => ['/user'],],
+                            ['label' => 'Coberturas', 'icon' => 'user-md', 'url' => ['/'],],
+                            ['label' => 'Entidades Facturables', 'icon' => 'user', 'url' => ['/'],],
+                            ['label' => 'Procedencias', 'icon' => '', 'url' => ['/procedencia'],],
                             ['label' => 'AutoTextos', 'icon' => 'file-text', 'url' => ['/textos'],],
                             ['label' => 'Localidades', 'icon' => 'map-marker', 'url' => ['/localidad'],],
                         ],
                     ],
 
 
-              
+
                 ],
             ]
         ) ?>

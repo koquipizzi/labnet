@@ -9,15 +9,7 @@ use yii\widgets\Pjax;
 $this->title = Yii::t('app', 'Usuarios');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
-<section id="page-content">
-    <div class="header-content">
-        <h2><i class="fa fa-home"></i>Cipat <span><?= Html::encode($this->title) ?></span></h2>
-    </div><!-- /.header-content -->
-    <div class="body-content animated fadeIn" >
-    <div class="user-index">
-        <div class="panel_titulo">
-            <div class="panel-heading">
+     <div class="header-content">
                 <div class="pull-left">
                     <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
                 </div>
@@ -25,8 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= Html::a(Yii::t('app', 'Create User'), ['create'], ['class' => 'btn btn-success']) ?>
                 </div>
                 <div class="clearfix"></div>
-            </div>
-        </div>
+
 
     <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -78,7 +69,6 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 <?php Pjax::end(); ?></div>
     </div>
-</section>
 
 <style>
     .summary{

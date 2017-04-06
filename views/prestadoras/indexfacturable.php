@@ -14,26 +14,8 @@ use app\models\Localidad;
 
 $this->title = Yii::t('app', 'Entidades Facturables');
 $this->params['breadcrumbs'][] = $this->title;
-?>
-<?php
-Modal::begin([
-    'id' => 'modal',
-    'options' => [
-        'tabindex' => false]
-]);
-echo "<div id='modalContent'></div>";
-
-?>
-<?php Modal::end();
-
-use app\assets\admin\dashboard\DashboardAsset;
-DashboardAsset::register($this);
-
-
 $this->registerJsFile('@web/assets/admin/js/cipat_modal_facturable.js', ['depends' => [yii\web\AssetBundle::className()]]);
 ?>
-
-
 
 <section id="page-content">
     <div class="header-content">
@@ -49,7 +31,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_facturable.js', ['depend
                     </div>
                     <div class="pull-right">
                         <?= Html::button('Nueva Entidad Facturable', ['value' => Url::to(['prestadoras/createfacturable']), 'title' => 'Nuevo Facturable', 'class' => 'loadMainContentPrestadora btn btn-success btn-sm']); ?>
-                    </div>   
+                    </div>
                     <div class="clearfix"></div>
                 </div>
             </div>
@@ -64,12 +46,12 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_facturable.js', ['depend
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
                     'descripcion',
-                    [                
-                        'attribute'=>'telefono', 
+                    [
+                        'attribute'=>'telefono',
                         'contentOptions' => ['style' => 'width:10%;'],
-                    ],    
+                    ],
                     'email:email',
-                    
+
                     ['class' => 'yii\grid\ActionColumn',
                         'template' => '{view}{edit}{delete}',
                         'buttons' => [
@@ -135,6 +117,3 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_facturable.js', ['depend
 
 
 </style>
-
-
-

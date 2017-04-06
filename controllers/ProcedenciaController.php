@@ -52,7 +52,7 @@ class ProcedenciaController extends Controller
      */
     public function actionView($id)
     {
-        return $this->renderAjax('view', [
+        return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -70,7 +70,7 @@ class ProcedenciaController extends Controller
            // return $this->redirect(['view', 'id' => $model->id]);
            return;
         } else {
-            return $this->renderAjax('_form', [
+            return $this->render('create', [
                 'model' => $model,
             ]);
         }
@@ -89,7 +89,7 @@ class ProcedenciaController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return;// $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->renderAjax('_form', [
+            return $this->render('update', [
                 'model' => $model,
             ]);
         }
@@ -102,7 +102,7 @@ class ProcedenciaController extends Controller
      * @return mixed
      */
     public function actionDelete($id) {
-        
+
         try {
             if($this->findModel($id)->delete()){
                 if (Yii::$app->getRequest()->isAjax) {
@@ -112,8 +112,8 @@ class ProcedenciaController extends Controller
         } catch (\yii\db\IntegrityException $exc) {
             return 'error';
                         //notificar catch
-        }        
-       
+        }
+
         return $this->redirect(['index']);
     }
 

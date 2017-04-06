@@ -1,5 +1,5 @@
 <?php
-use mdm\admin\components\Helper; 
+use mdm\admin\components\Helper;
 ?>
 
 <aside class="main-sidebar">
@@ -12,7 +12,11 @@ use mdm\admin\components\Helper;
                 <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
             </div>
             <div class="pull-left info">
+<<<<<<< HEAD
+                <p><?php // $user = \app\models\User::find()->where(['=', 'id', Yii::$app->user->id])->one(); echo $user->username;  ?></p>
+=======
                 <p><?php //$user = \app\models\User::find()->where(['=', 'id', Yii::$app->user->id])->one(); echo $user->username;  ?></p>
+>>>>>>> 39f06d3018250355f6d0e5a15f2073ce06ba3012
 
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
@@ -38,9 +42,11 @@ use mdm\admin\components\Helper;
                     ['label' => 'Nuevo Protocolo', 'icon' => 'fa fa-file-code-o', 'url' => ['/paciente/buscar']],
                     ['label' => 'PROTOCOLOS', 'options' => ['class' => 'header']],
                     ['label' => 'Activos', 'icon' => 'edit', 'url' => ['/protocolos']],
-                    ['label' => 'Médicos', 'icon' => 'user-md', 'url' => ['/medico']],
-                    ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],
-                    ['label' => 'Todos', 'icon' => 'folder', 'url' => ['/protocolo']],
+                    ['label' => 'Asignados a mi', 'icon' => 'user', 'url' => ['/protocolos/asignados']],
+                    ['label' => 'Terminados', 'icon' => 'book', 'url' => ['/protocolos/terminados']],
+                    ['label' => 'Entregados', 'icon' => 'user', 'url' => ['/protocolos/entregados']],
+                    ['label' => 'Todos', 'icon' => 'folder', 'url' => ['/protocolos/all']],
+                    ['label' => 'ENTIDADES', 'options' => ['class' => 'header']],
                  //   ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
 
                     [
@@ -88,32 +94,7 @@ use mdm\admin\components\Helper;
                     ],
 
 
-               /*     [
-                        'label' => 'Same tools',
-                        'icon' => 'fa fa-share',
-                        'url' => '#',
-                        'items' => [
-                            ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii'],],
-                            ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug'],],
-                            [
-                                'label' => 'Level One',
-                                'icon' => 'fa fa-circle-o',
-                                'url' => '#',
-                                'items' => [
-                                    ['label' => 'Level Two', 'icon' => 'fa fa-circle-o', 'url' => '#',],
-                                    [
-                                        'label' => 'Level Two',
-                                        'icon' => 'fa fa-circle-o',
-                                        'url' => '#',
-                                        'items' => [
-                                            ['label' => 'Level Three', 'icon' => 'fa fa-circle-o', 'url' => '#',],
-                                            ['label' => 'Level Three', 'icon' => 'fa fa-circle-o', 'url' => '#',],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],*/
+              
                 ],
             ]
         ) ?>
@@ -121,7 +102,7 @@ use mdm\admin\components\Helper;
     </section>
 
      <ul class="sidebar-menu">
-        
+
         <!-- Start category apps -->
         <li class="sidebar-category">
             <span>Laboratorio</span>
@@ -132,19 +113,19 @@ use mdm\admin\components\Helper;
 <!--        <li class="submenu <?= (Yii::$app->controller->id == 'blog') ? 'active' : '' ?>">
             <a href="javascript:void(0);">
                 <span class="icon"><i class="fa fa-globe"></i></span>
-                <span class="text">Pendientes</span>            
+                <span class="text">Pendientes</span>
             </a>
         </li> -->
-        <?php use yii\helpers\Url; ?> 
+        <?php use yii\helpers\Url; ?>
         <li class="submenu <?= (Yii::$app->controller->id == 'blog') ? 'active' : '' ?>">
             <a href="<?= Url::to(['/paciente/buscar','new' => 1]) ?>" >
                 <span class="icon"><i class="fa fa-server"></i></span>
-                <span class="text">Nuevo Protocolo</span>            
+                <span class="text">Nuevo Protocolo</span>
             </a>
-        </li> 
+        </li>
         <!-- Start navigation - blog -->
 
-        
+
                 <!-- Start navigation - blog -->
         <li class="submenu <?= (Yii::$app->controller->id == 'blog') ? 'active' : '' ?>">
             <a href="javascript:void(0);">
@@ -165,10 +146,10 @@ use mdm\admin\components\Helper;
                 </li>
                 <li class="<?= (Yii::$app->controller->action->id == 'list') ? 'active' : '' ?>">
                     <a href="<?= Yii::$app->getUrlManager()->createUrl('/protocolo/entregados') ?>">Entregados</a>
-                </li>                
+                </li>
                 <li class="<?= (Yii::$app->controller->action->id == 'list') ? 'active' : '' ?>">
                     <a href="<?= Yii::$app->getUrlManager()->createUrl('/protocolo/all') ?>">Todos</a>
-                </li>                
+                </li>
             </ul>
         </li>
         <!--/ End navigation - blog -->
@@ -188,12 +169,12 @@ use mdm\admin\components\Helper;
                 </li>
                 <li class="<?= (Yii::$app->controller->action->id == 'single') ? 'active' : '' ?>">
                     <a href="<?= Yii::$app->getUrlManager()->createUrl('/medico') ?>">Médicos</a>
-                </li>              
+                </li>
                 <li class="<?= (Yii::$app->controller->action->id == 'inbox') ? 'active' : '' ?>"><a href="<?= Yii::$app->getUrlManager()->createUrl('/user') ?>">Usuarios</a></li>
-                <li class="<?= (Yii::$app->controller->action->id == 'compose') ? 'active' : '' ?>"><a href="<?= Yii::$app->getUrlManager()->createUrl('/admin/mail/compose') ?>">Administrativos</a></li>                           
+                <li class="<?= (Yii::$app->controller->action->id == 'compose') ? 'active' : '' ?>"><a href="<?= Yii::$app->getUrlManager()->createUrl('/admin/mail/compose') ?>">Administrativos</a></li>
                 <li class="<?= (Yii::$app->controller->action->id == 'single') ? 'active' : '' ?>">
                     <a href="<?= Yii::$app->getUrlManager()->createUrl('/admin') ?>">Administrar Usuarios</a>
-                </li>  
+                </li>
             </ul>
         </li>
         <!--/ End navigation - personas -->
@@ -206,19 +187,19 @@ use mdm\admin\components\Helper;
                 <span class="arrow"></span>
                 <?= (Yii::$app->controller->id == 'blog') ? '<span class="selected"></span>' : '' ?>
             </a>
-            
+
                 <ul>
                     <li class="<?= (Yii::$app->controller->action->id == 'grid') ? 'active' : '' ?>">
                         <a href="<?= Yii::$app->getUrlManager()->createUrl('/pago/index') ?>">Todos</a>
-                    </li> 
+                    </li>
                      <li class="<?= (Yii::$app->controller->action->id == 'grid') ? 'active' : '' ?>">
                         <a href="<?= Yii::$app->getUrlManager()->createUrl('/pago/impagos') ?>">Impagos</a>
-                    </li> 
+                    </li>
                      <li class="<?= (Yii::$app->controller->action->id == 'grid') ? 'active' : '' ?>">
                         <a href="<?= Yii::$app->getUrlManager()->createUrl('/pago/create') ?>">Nuevo Pago</a>
-                    </li>                 
+                    </li>
                 </ul>
-            
+
         </li>
          <?php } ?>
         <!-- Start navigation - pages -->
@@ -237,12 +218,12 @@ use mdm\admin\components\Helper;
                  <li class="<?= (Yii::$app->controller->action->id == 'invoice') ? 'active' : '' ?>"><a href="<?= Yii::$app->getUrlManager()->createUrl('/textos') ?>">AutoTextos</a></li>
                 <li class="<?= (Yii::$app->controller->action->id == 'invoice') ? 'active' : '' ?>"><a href="<?= Yii::$app->getUrlManager()->createUrl('/localidad') ?>">Localidad</a></li>
 
-                
-                
+
+
                 <?php $searchSubs = ['searchcourse']?>
 
 
-       
+
 
     </ul><!-- /.sidebar-menu -->
 

@@ -11,7 +11,7 @@ use kartik\rating\StarRating;
 ?>
 
     <div class="panel-body no-padding">
-        <?php $form = ActiveForm::begin([            
+        <?php $form = ActiveForm::begin([
             'options' => [
                 'class' => 'form-horizontal mt-10',
                 'id' => 'create-localidad-form',
@@ -39,12 +39,12 @@ use kartik\rating\StarRating;
             {error}",
             'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
     ])->textInput(['maxlength' => true]) ?>
-        
+
     <div class="form-footer">
         <div style="text-align: right;">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-        </div>         
+        <button type="reset" class="btn btn-danger" >Restablecer</button>
+        </div>
     </div>
 
         <?php ActiveForm::end(); ?>

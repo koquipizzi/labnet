@@ -15,14 +15,10 @@ use yii\bootstrap\Modal;
 
 $this->title = Yii::t('app', 'AutoTextos');
 $this->params['breadcrumbs'][] = $this->title;
-
 ?>
- <section id="page-content">
-    <div class="header-content">
-        <h2><i class="fa fa-home"></i>LABnet <span><?= Html::encode($this->title) ?></span></h2>   
-    </div><!-- /.header-content -->
-    
-    <div class="body-content animated fadeIn" >    
+
+
+    <div class="body-content animated fadeIn" >
     <div class="prestadoras-index">
         <div class="panel_titulo">
             <div class="panel-heading">
@@ -31,12 +27,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="pull-right">
                     <?= Html::a(Yii::t('app', 'Nuevo AutoTexto'), ['create'], ['class' => 'btn btn-success']) ?>
-                </div>   
+                </div>
                 <div class="clearfix"></div>
             </div>
         </div>
     <p>
-        
+
     </p>
 <?php Pjax::begin(['id'=>'autotextos']); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -50,38 +46,38 @@ $this->params['breadcrumbs'][] = $this->title;
             'material:ntext',
             'diagnos:ntext',
          //   'macro:ntext',
-            ['class' => 'yii\grid\ActionColumn', 
-                'template' => '{view}{edit}{copy}{delete}',
+            ['class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {edit} {copy} {delete}',
                 'buttons' => [
 
                 //view button
                 'view' => function ($url, $model) {
                     return Html::a('<span class="fa fa-eye "></span>', $url, [
                                 'title' => Yii::t('app', 'View'),
-                                'class'=>'btn  btn-xs ver', 
+                                'class'=>'btn  btn-xs ver',
                                 'value'=> "$url",
                     ]);
                 },
                 'edit' => function ($url, $model) {
                     return Html::a('<span class="fa fa-pencil"></span>', $url, [
                                 'title' => Yii::t('app', 'Editar'),
-                                'class'=>'btn  btn-xs editar', 
+                                'class'=>'btn  btn-xs editar',
                                 'value'=> "$url",
                     ]);
                 },
-                        
+
                 'copy' => function ($url, $model) {
                     return Html::a('<span class="fa fa-copy"></span>', $url, [
                                 'title' => Yii::t('app', 'Copiar'),
-                                'class'=>'btn btn-xs copiar', 
+                                'class'=>'btn btn-xs copiar',
                                 'value'=> "$url",
                     ]);
-                },        
+                },
 
                 'delete' => function ($url, $model) {
-                return  Html::a('<span  class="fa fa-trash"></span>', false, 
+                return  Html::a('<span  class="fa fa-trash"></span>', $url,
                         [
-                          'class'=>'btn btn-xs',       
+                          'class'=>'btn btn-xs',
                           'onclick' => "bootbox.dialog({
                               message: '¿Confirma que desea eliminar el AutoTexto?',
                               title: 'Sistema LABnet',
@@ -94,12 +90,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                         $.ajax('$url', {
                                             type: 'POST',
                                             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                                // alert('No se puede eliminarfff esa entidad.');                                    
+                                                // alert('No se puede eliminarfff esa entidad.');
                                             }
                                         }).done(function(data) {
                                             $.pjax.reload({container: '#autotextos'});
                                             var n = noty({
-                                                text: 'Entidad eliminada con éxito!',                               
+                                                text: 'Entidad eliminada con éxito!',
                                                 type: 'success',
                                                 class: 'animated pulse',
                                                 layout      : 'topRight',
@@ -109,13 +105,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 modal: false, // si pongo true me hace el efecto de pantalla gris
                                          //       maxVisible  : 10
                                             });
-                                        });                                        
+                                        });
                                       }
                                   },
                                   cancel: {
                                       label: 'Cancelar',
-                                      className: 'btn-danger',                                     
-                                  }                                  
+                                      className: 'btn-danger',
+                                  }
                                 }
                             });
                           return false;
@@ -143,16 +139,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             }
                     ],
-                
+
             ],
         ]);  ?>
+
 <?php Pjax::end(); ?></div>
-   
-        
-    </div>   
+
+
+    </div>
 
    <!-- Start footer content -->
     <?php echo $this->render('/shares/_footer_admin') ;?>
     <!--/ End footer content -->
-</section>
-

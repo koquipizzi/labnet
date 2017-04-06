@@ -12,7 +12,7 @@ use app\models\Prestadoras;
 ?>
 
 <div class="box-body">
-        <?php $form = ActiveForm::begin([           
+        <?php $form = ActiveForm::begin([
             'options' => [
                 'class' => 'form-horizontal mt-10',
                 'id' => 'create-nomenclador-form',
@@ -20,7 +20,7 @@ use app\models\Prestadoras;
                 'data-pjax' => '',
              ]
         ]); ?>
-        
+
             <?= $form->field($model, 'servicio',['template' => "{label}
                 <div class='col-md-7'>{input}</div>
                 {hint}
@@ -72,7 +72,7 @@ use app\models\Prestadoras;
         <div class="pull-right box-tools">
             <div style="text-align: right;">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-             <button type="button" class="btn btn-danger">Cancelar</button>
+             <button type="reset" class="btn btn-danger">Restablecer</button>
             </div>
 
         </div>
@@ -80,5 +80,5 @@ use app\models\Prestadoras;
 
         <?php ActiveForm::end(); ?>
 
-    
+
 </div>

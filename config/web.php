@@ -128,6 +128,7 @@ $config = [
         'class' => 'mdm\admin\components\AccessControl',
 		'allowActions' => [
 			'admin/*', // add or remove allowed actions to this list
+            'protocolo/*',
 		]
     ],
     'params' => $params,

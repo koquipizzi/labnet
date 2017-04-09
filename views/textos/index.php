@@ -61,15 +61,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'edit' => function ($url, $model) {
                     return Html::a('<span class="fa fa-pencil"></span>', $url, [
                                 'title' => Yii::t('app', 'Editar'),
-                                'class'=>'btn  btn-xs editar',
+                                'class'=>'btn btn-info btn-xs ',
                                 'value'=> "$url",
                     ]);
                 },
 
-                'copy' => function ($url, $model) {
+                'copy' => function ($url, $model) { //no tengo que pasarle un id a la funcion ?
                     return Html::a('<span class="fa fa-copy"></span>', $url, [
                                 'title' => Yii::t('app', 'Copiar'),
-                                'class'=>'btn btn-xs copiar',
+                                'class'=>'btn btn-info btn-xs',
                                 'value'=> "$url",
                     ]);
                 },
@@ -77,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'delete' => function ($url, $model) {
                 return  Html::a('<span  class="fa fa-trash"></span>', $url,
                         [
-                          'class'=>'btn btn-xs',
+                          'class'=>'btn btn-danger btn-xs',
                           'onclick' => "bootbox.dialog({
                               message: '¿Confirma que desea eliminar el AutoTexto?',
                               title: 'Sistema LABnet',

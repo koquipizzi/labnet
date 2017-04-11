@@ -31,14 +31,11 @@ $this->params['breadcrumbs'][] = $this->title;
             <!-- Start tabs content -->
             <div style="margin-top: 10px;">
                 <?php 
-            //    $this->registerCss(".hasDatepicker {                                    
-            //                        width:90px;}");
-
                 Pjax::begin(['id' => 'pendientes', 'enablePushState' => false]) ?> 
                 <?php  
                 echo GridView::widget([
                     'dataProvider' => $dataProvider,
-                    'options'=>array('class'=>'table table-striped table-lilac'),
+                    'options'=>array('class'=>'table table-striped'),
                     'filterModel' => $searchModel,   
                     'columns' => [//'id', 
                         [

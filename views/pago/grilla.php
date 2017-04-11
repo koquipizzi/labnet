@@ -1,6 +1,8 @@
 <?php
-use kartik\grid\GridView;
+//use kartik\grid\GridView;
 use yii\helpers\Html;
+use yii\grid\GridView;
+use kartik\widgets\DatePicker;
 
     echo GridView::widget([
         'id'=>"gridFacturable",
@@ -25,13 +27,23 @@ use yii\helpers\Html;
                 'attribute' => 'fecha_entrada',
                 'value' => 'fecha_entrada',
                 'format' => ['date', 'php:d/m/Y'],
-                'filter' => \yii\jui\DatePicker::widget([
+             /*   'filter' => \yii\jui\DatePicker::widget([
                     'model'=>$searchModel,
                     'attribute'=>'fecha_entrada',
                     'language' => 'es',
                     'dateFormat' => 'dd/MM/yyyy',
 
-                ]),
+                ]),*/
+                  'filter' => DatePicker::widget([
+                                                'model' => $searchModel,
+                                                'attribute' => 'fecha_entrada',
+                                                'pluginOptions' => [
+                                                    'autoclose'=>true,
+                                                    'format' => 'dd/mm/yyyy',
+                                                    'startView' => 'date',
+                                                ]
+                                        ] ),
+
             'contentOptions' => ['style' => 'width:5%;'],
             ],
 

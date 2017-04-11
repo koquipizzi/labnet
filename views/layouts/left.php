@@ -32,7 +32,7 @@ use mdm\admin\components\Helper;
         </form>
         <!-- /.search form -->
 
-        <?= dmstr\widgets\Menu::widget(
+        <?php echo dmstr\widgets\Menu::widget(
             [
                 'options' => ['class' => 'sidebar-menu'],
                 'items' => [
@@ -40,10 +40,10 @@ use mdm\admin\components\Helper;
                     ['label' => 'Nuevo Protocolo', 'icon' => 'fa fa-file-code-o', 'url' => ['/paciente/buscar']],
                     ['label' => 'PROTOCOLOS', 'options' => ['class' => 'header']],
                     ['label' => 'Activos', 'icon' => 'edit', 'url' => ['/protocolo']],
-                    ['label' => 'Asignados a mi', 'icon' => 'user', 'url' => ['/protocolos/asignados']],
-                    ['label' => 'Terminados', 'icon' => 'book', 'url' => ['/protocolos/terminados']],
-                    ['label' => 'Entregados', 'icon' => 'user', 'url' => ['/protocolos/entregados']],
-                    ['label' => 'Todos', 'icon' => 'folder', 'url' => ['/protocolos/all']],
+                    ['label' => 'Asignados a mi', 'icon' => 'user', 'url' => ['/protocolo/asignados']],
+                    ['label' => 'Terminados', 'icon' => 'book', 'url' => ['/protocolo/terminados']],
+                    ['label' => 'Entregados', 'icon' => 'user', 'url' => ['/protocolo/entregados']],
+                    ['label' => 'Todos', 'icon' => 'folder', 'url' => ['/protocolo/all']],
                     ['label' => 'ENTIDADES', 'options' => ['class' => 'header']],
                  //   ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
 
@@ -77,6 +77,20 @@ use mdm\admin\components\Helper;
                         ],
                     ],
                     //end personas
+          //          if(Helper::checkRoute('/pago/*')) {
+                        [
+                        'label' => 'Pagos',
+                        'icon' => 'usd',
+                        'url' => '#',
+                        'items' => [
+                            ['label' => 'Pagos', 'icon' => 'shopping-bag', 'url' => ['/pago/index'],],
+                            ['label' => 'Impagos', 'icon' => 'exclamation', 'url' => ['/pago/impagos'],],
+                            ['label' => 'Nuevo Pago', 'icon' => 'plus', 'url' => ['/pago/create'],],
+                            ],
+                        ],
+          //          }
+
+
                      [
                         'label' => 'Configuración',
                         'icon' => 'cogs',
@@ -99,7 +113,8 @@ use mdm\admin\components\Helper;
 
     </section>
 
-     <ul class="sidebar-menu">
+   <?php
+   /*  <ul class="sidebar-menu">
 
         <!-- Start category apps -->
         <li class="sidebar-category">
@@ -224,5 +239,6 @@ use mdm\admin\components\Helper;
 
 
     </ul><!-- /.sidebar-menu -->
+    */ ?>
 
 </aside>

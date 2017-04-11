@@ -6,16 +6,18 @@ use yii\grid\GridView;
 ?>
 
 
-<h3>Imágenes del informe</h3>
+    <h3>Imágenes del informe
+        <span>
+        <?php echo Html::a('<i class="fa fa-retweet"></i>', ['refresh', 'id' => $model->id], ['class' => 'refresh btn btn-success']); ?>
+        </span>
+    </h3>
     <div class="col-sm-12">
                  <?php
-
-           
                  $images = [];
                  foreach ($dataproviderMultimedia->getModels() as $img)
                  {  
                      ?>
-                  <div style="width: 151px; left: 0px; top: 0px;" class="cbp-item">
+                  <div style="width: 151px; float:left;" class="cbp-item">
 				<div class="cbp-item-wrapper">
                             <!--<a class="cbp-caption cbp-lightbox" data-title="Glamour female<br>by John Kribo" href="http://img.djavaui.com/?create=1200x900,e5599d?f=ffffff">-->
                                  <?php

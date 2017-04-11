@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'yii\grid\DataColumn', 
             'format' => 'raw',
             'value' => function ($data) {
-              $url ='index.php?r=protocolo/protocolo&pacprest='.$data['pacprest'];
+              $url ='index.php?r=protocolo/create2&pacprest='.$data['pacprest'];
               return Html::a('<i class="fa fa-file"></i> Crear Protocolo', $url, [
                                 'title' => Yii::t('app', 'View'),
                                 'class'=>'btn  btn-xs ver', 

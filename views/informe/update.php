@@ -148,15 +148,13 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                     
                      <div class="col-md-3">
                          <button type="button" class="btn btn-primary btn-sm text pull-right" data-toggle="tooltip" title="" data-original-title="Date range">
-                        <i class="fa fa-file-pdf-o"></i></button>
-                        <button type="button" class="btn btn-primary btn-sm pull-right" data-widget="collapse" data-toggle="tooltip" title="" style="margin-right: 5px;" data-original-title="Collapse">
-                        <i class="fa fa-minus"></i></button>
-                        <button class="btn btn-primary mostrarTree" title="Agregar texto"><i class="fa fa-edit"></i></button>
-                        <button class="btn btn-circle btn-teal guardarTexto" value="<?= Url::to(['textos/copy']) ?>"><i class="fa fa-copy"></i></button>
-                         
-                                <?php $url = ['informe/printreducido', 'id' => $model->id , 'estudio' => $model->Estudio_id];
+                            <i class="fa fa-file-pdf-o"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm mostrarTree pull-right" title="Agregar texto"><i class="fa fa-edit"></i></button>
+                        <button class="btn btn-primary btn-sm guardarTexto pull-right" value="<?= Url::to(['textos/copy']) ?>"><i class="fa fa-copy"></i></button>
+                        <?php $url = ['informe/printreducido', 'id' => $model->id , 'estudio' => $model->Estudio_id];
                               echo  Html::button("<i class='fa fa-list-alt'></i>",
-                                    ['class'=>'btn btn-primary',
+                                    ['class'=>'btn btn-primary btn-sm pull-right',
                                         'onclick'=>"window.location.href = '" . \Yii::$app->urlManager->createUrl(['/informe/printreducido','id'=>$model->id, 'estudio' => $model->Estudio_id ]) . "';",
                                         'data-toggle'=>'tooltip',
                                         'title'=>Yii::t('app', 'Informe Reducido'),

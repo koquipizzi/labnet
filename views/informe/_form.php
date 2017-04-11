@@ -100,7 +100,19 @@ echo execut\widget\TreeView::widget([
 
 <div class="row">
     <div class="col-md-12">
-
+        <?php 
+            if ($model->estado_actual== Workflow::estadoEntregado()) { 
+                \insolita\wgadminlte\LteBox::begin([
+                    'type'=>\insolita\wgadminlte\LteConst::COLOR_MAROON,
+                    'tooltip'=>'Useful information!',
+                    'title'=>'Atención!',
+                    'isTile'=>true
+                ]); 
+                echo "<i>El presente informe se encuentra entregado. ";
+                echo "NO PUEDE MODIFICARSE.</i>";
+                \insolita\wgadminlte\LteBox::end();
+             } 
+             ?>
         <!-- Start double tabs -->
         <div class="panel panel-tab panel-tab-double rounded shadow">                
             <!-- Start tabs heading -->
@@ -356,11 +368,9 @@ echo execut\widget\TreeView::widget([
 
 
                     <div class="tab-pane fade" id="tab2-2">
-                        <h4>Seleccionar imágenes</h4>
+                        <h4> Seleccionar imágenes  </h4>
                         <p>
                         <div style="margin-top: 5px;">
-
-
                             <div class="panel-body no-padding">
                                 <div class="row">
                                     <div class="col-sm-4">   
@@ -368,13 +378,13 @@ echo execut\widget\TreeView::widget([
                                         echo FileInput::widget([
                                             'model' => $model,
                                             'attribute' => 'files[]',
-                                            //         		'name' => 'files[]',
                                             'options' => [
                                                 'multiple' => true,
                                                 'accept' => 'image/*',
                                                 'id' => "idFile",
                                             ],
                                             'pluginOptions' => [
+                                             //   'elCaptionText' => '#galeriar',
                                                 'uploadUrl' => Url::to(['/informe/update']),
                                                 'uploadExtraData' => [
                                                     'Informe_id' => $model->id,
@@ -398,9 +408,8 @@ echo execut\widget\TreeView::widget([
                                         ]);
                                         ?>
                                     </div>
-                                </div>
-
-                                <?php Pjax::begin(['id' => 'galeriar', 'enablePushState' => FALSE]); ?>    
+                                </div> 
+                                <?php Pjax::begin(['id' => 'galeriar']); ?>    
                                 <div class="content-galeria">
                                     <?=
                                     $this->render('galeria_1', [

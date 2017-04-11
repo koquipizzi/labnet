@@ -166,6 +166,20 @@ class InformeController extends Controller {
             
         }
         
+
+		public function actionRefresh($id=null) {
+			 $model = $this->findModel ( $id );
+			 $dataproviderMultimedia = new ArrayDataProvider([
+                            'allModels' => Multimedia::findAll(['Informe_id'=>$model->id]),
+            ]);
+			$gal =  $this->renderAjax('galeria_1', [
+                                        'model' => $model,
+                                        'dataproviderMultimedia' => $dataproviderMultimedia,
+                                    ]);
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+			return ['rta'=>'ok', 'galeria'=>$gal];
+            die();
+		}
 	/**
 	 * Updates an existing Informe model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
@@ -211,7 +225,6 @@ class InformeController extends Controller {
             if (is_null($model->titulo)) {
                  $model->titulo = $model->estudio->titulo;
              }
-	//die();
             // View to Render
             //Obtener fotos
             $dataproviderMultimedia = new ArrayDataProvider([
@@ -260,16 +273,7 @@ class InformeController extends Controller {
             if(isset($file)){
                 $this->multimediaUpload();
                 $id=$model->id;
-                
-    //            return json_encode($file);
-                return true;
-//                return $this->renderAjax('galeria_1',[
-//                                        'model' => $model,
-//                                        'dataproviderMultimedia'=>$dataproviderMultimedia,
-//
-//                            ]);
-//#tab2-2
-                           
+               return true;
             }
         }
         if ($model->estudio->nombre === 'PAP') {
@@ -323,16 +327,16 @@ class InformeController extends Controller {
 		$files = UploadedFile::getInstances($model,'files');
 		$upload_ok = TRUE;
 		$filesUploads = 0;
-                $idInforme=$model->id;
+        $idInforme=$model->id;
                 
-                //secuencia identifica a cada foto que pertenece a un informe determinado
-                $secuencia_id=Multimedia::find("secuencia_id")->where(['Informe_id'=>$idInforme])->orderBy('secuencia_id desc')->one();
-                $secuencia=$secuencia_id['secuencia_id'];
-                if(!isset($secuencia)){
-                   $secuencia=1;
-               }else{
-                    $secuencia++;
-               }
+        //secuencia identifica a cada foto que pertenece a un informe determinado
+        $secuencia_id=Multimedia::find("secuencia_id")->where(['Informe_id'=>$idInforme])->orderBy('secuencia_id desc')->one();
+        $secuencia=$secuencia_id['secuencia_id'];
+        if(!isset($secuencia)){
+        	$secuencia=1;
+        }else{
+            $secuencia++;
+        }
                      
 		foreach ($files as $file) {
                     
@@ -342,12 +346,10 @@ class InformeController extends Controller {
 			$multimedia->tipoMultimedia_id = 1; // Tipo Imagen
 			$multimedia->secuencia_id= $secuencia;
 			//pathname : opt/lampp/htdocs/labNet/cipatlab/basic/web/uploads/
-                        $pathname=$multimedia->getImageFilePath().$model->Protocolo_id."/".$model->id."/";
-//                        $pathFolder : uploads/138/
-                        $pathFolder=$multimedia->getUrlImageFolder().$model->Protocolo_id."/".$model->id."/";          
-// 			
-                        
-                        /*si no existe, se crea una carpeta con el id del protocolo */
+            $pathname=$multimedia->getImageFilePath().$model->Protocolo_id."/".$model->id."/";
+			//$pathFolder : uploads/138/
+           $pathFolder=$multimedia->getUrlImageFolder().$model->Protocolo_id."/".$model->id."/";                
+            /*si no existe, se crea una carpeta con el id del protocolo */
 			if (!file_exists($pathname)) {
 				BaseFileHelper::createDirectory ( $pathname, $mode = 0755, $recursive = true );
 			}
@@ -358,15 +360,15 @@ class InformeController extends Controller {
 			$filename = "I_".$model->id."_$secuencia"."_".$name.".{$ext}";
                      //   $filename_thumbnail = "thumb_I_".$model->id."_$secuencia"."_".$name.".{$ext}";
 			$multimedia->path =$pathname. $filename;
-                        if ($file->saveAs($multimedia->path, true)){
-                                $multimedia->webPath = $multimedia->getUrlImageFolder().$model->Protocolo_id."/".$model->id."/".$filename;
+            	if ($file->saveAs($multimedia->path, true)){
+                	$multimedia->webPath = $multimedia->getUrlImageFolder().$model->Protocolo_id."/".$model->id."/".$filename;
 				$multimedia->save();
 			}
 			else{
 				$upload_ok = FALSE;
 			}
 			$upload_ok = $upload_ok && TRUE;
-                        $secuencia++;
+                    $secuencia++;
 		}
 	
         }
@@ -677,7 +679,7 @@ class InformeController extends Controller {
 				'content' => $this->renderPartial ( $vista, [ 
 						'model' => $model,
 						'modelp' => $modelp,
-                                                'laboratorio' => $laboratorio,
+                        'laboratorio' => $laboratorio,
 				] ),
 				'options' => [ 
 						'title' => 'Informe PAP' 
@@ -692,7 +694,7 @@ class InformeController extends Controller {
 	}
         
         
-                 public function actionPrintinfreducido($id) {
+    public function actionPrintinfreducido($id) {
                 //Datos generales del Laboratorio
                 $laboratorio = Laboratorio::find()->where(['id' => 1])->one();
                 

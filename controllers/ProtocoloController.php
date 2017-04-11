@@ -59,7 +59,7 @@ class ProtocoloController extends Controller
       //  $dataProviderEntregados = $searchModel->search_entregados(Yii::$app->request->queryParams);
         $loggedUserId = Yii::$app->user->id;
       //  $dataProvider_asignados = $searchModelAsig->search_asignados($loggedUserId);
-        $dataProviderTodosLosProtocolos= $searchModel->searchAll(Yii::$app->request->queryParams);
+     //   $dataProviderTodosLosProtocolos= $searchModel->searchAll(Yii::$app->request->queryParams);
         //pendientes 
      //   $query = Protocolo::find()->where(['status' => 1]);
 
@@ -85,7 +85,6 @@ class ProtocoloController extends Controller
         $searchModelAsig = new ProtocoloSearch();
         $loggedUserId = Yii::$app->user->id;
         $dataProvider_asignados = $searchModelAsig->search_asignados($loggedUserId,Yii::$app->request->queryParams);
-
 
         return $this->render('index_asignados', [
             'searchModelAsig' => $searchModelAsig,
@@ -144,7 +143,7 @@ class ProtocoloController extends Controller
      */
     public function actionAll()
     {
-  $count = Yii::$app->db->createCommand('SELECT COUNT(*) FROM Protocolo ')->queryScalar();
+        $count = Yii::$app->db->createCommand('SELECT COUNT(*) FROM Protocolo ')->queryScalar();
 
         $provider = new SqlDataProvider([
             'sql' => 'SELECT * FROM Protocolo ',

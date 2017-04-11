@@ -57,7 +57,7 @@ class TextosController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
-    
+
     public function duplicateModel($id)
     {
         $model = $this->findModel($id);
@@ -76,9 +76,9 @@ class TextosController extends Controller
     public function actionCreate($id=null)
     {
         $model = null;
-        
+
         if (Yii::$app->request->isAjax) {
-            $model = new Textos(); 
+            $model = new Textos();
             if (isset($_POST['Informe'])){
                 $model->material = $_POST['Informe']['material'];
                 $model->tecnica = $_POST['Informe']['tecnica'];
@@ -88,7 +88,7 @@ class TextosController extends Controller
                 $model->observ = $_POST['Informe']['observaciones'];
                 $model->estudio_id = $_POST['Informe']['Estudio_id'];
                 $model->codigo = $_POST['codigo'];
-            } 
+            }
             if (isset($_POST['Textos'])){
                 $model->material = $_POST['Textos']['material'];
                 $model->tecnica = $_POST['Textos']['tecnica'];
@@ -98,14 +98,14 @@ class TextosController extends Controller
                 $model->observ = $_POST['Textos']['observ'];
                 $model->estudio_id = $_POST['Textos']['estudio_id'];
                 $model->codigo = $_POST['Textos']['codigo'];
-            } 
-            
+            }
+
             if ($model->save()) {
                 $data = $this->renderAjax('_form_pop', [
                 'model' => $model
-            ]); 
-            }           
-            
+            ]);
+            }
+
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             return [
                 'rdo' => 'ok',
@@ -126,10 +126,10 @@ class TextosController extends Controller
             ]);
         }
     }
-    
+
     public function actionCopy($id=null)
     {
-        $model = null;
+        
         if ($id === null || isset($_POST['Textos']))
             $model = new Textos();
         else
@@ -138,7 +138,7 @@ class TextosController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->renderAjax('copy', [
+            return $this->render('copy',[
                 'model' => $model
             ]);
         }
@@ -178,7 +178,7 @@ class TextosController extends Controller
                         'query' => Textos::find()
                     ]);
                     $searchModel = new TextosSearch();
-                    return $this->renderAjax('index', [
+                    return $this->render('index', [
                        'dataProvider' => $dataProvider,
                        'searchModel' => $searchModel
                     ]);
@@ -186,8 +186,8 @@ class TextosController extends Controller
             }
         } catch (\yii\db\IntegrityException $exc) {
 
-        }        
-       
+        }
+
         return $this->redirect(['index']);
     }
 
@@ -206,7 +206,7 @@ class TextosController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    
+
     public function actionTree($estudio){
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model = new Textos();
@@ -224,6 +224,6 @@ class TextosController extends Controller
             ]);
 
         die();
-        
+
     }
 }

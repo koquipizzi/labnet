@@ -50,6 +50,13 @@ class Informe extends \yii\db\ActiveRecord
         return 'Informe';
     }
 
+    public function behaviors()
+    {
+        return [
+            'bedezign\yii2\audit\AuditTrailBehavior'
+        ];
+    }
+
     /**
      * @inheritdoc
      */

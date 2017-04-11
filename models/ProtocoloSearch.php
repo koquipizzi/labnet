@@ -156,12 +156,14 @@ class ProtocoloSearch extends Protocolo
      */
     public function searchAll($params)
     {
-       $consulta = "
-                    Select Protocolo.id,
-                           any_value (Informe.id) as Informe_id,
-                           Paciente.nombre,
-                           Paciente.nro_documento,
-                           Protocolo.fecha_entrada,
+       $query = "
+                    Select 
+                            Protocolo.id,
+                            concat(SUBSTRING(Protocolo.anio,-2),Protocolo.letra,'-', LPAD(Protocolo.nro_secuencia, 6, 0)) as codigo , 
+                            Informe.id as Informe_id,
+                            Paciente.nombre as nombre ,
+                            Paciente.nro_documento,
+                            Protocolo.fecha_entrada,
                             Protocolo.fecha_entrega,
                             Protocolo.nro_secuencia,
                             Protocolo.anio,Protocolo.letra
@@ -169,9 +171,44 @@ class ProtocoloSearch extends Protocolo
                             left JOIN Informe ON (Protocolo.id = Informe.Protocolo_id)
                             left  JOIN Paciente_prestadora ON (Protocolo.Paciente_prestadora_id = Paciente_prestadora.id)
                             left JOIN Paciente ON (Paciente_prestadora.Paciente_id = Paciente.id)                    
-                    group by Protocolo.id
-                    order by Protocolo.id desc";
+                    group by Protocolo.id";
+                 
+           if (isset($params['ProtocoloSearch']['nro_secuencia']) && ($params['ProtocoloSearch']['nro_secuencia'] <> "") )
+            $query = $query." and Protocolo.nro_secuencia = ".$params['ProtocoloSearch']['nro_secuencia'];
         
+        if (isset($params['ProtocoloSearch']['nombre']) && ($params['ProtocoloSearch']['nombre'] <> "") )
+            $query = $query." and Paciente.nombre like '%".$params['ProtocoloSearch']['nombre']."%'";
+        
+       
+        if (isset($params['ProtocoloSearch']['nro_documento']) && ($params['ProtocoloSearch']['nro_documento'] <> "") )
+            $query = $query." and Paciente.nro_documento like '%".$params['ProtocoloSearch']['nro_documento']."%'";
+          
+        if (isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "") ){
+            $str =  $params['ProtocoloSearch']['fecha_entrega']; 
+            $dia = substr($str,0,2);
+            $mes = substr($str,3,2);
+            $anio = substr($str,6,4);
+            $time = $anio."-".$mes."-".$dia;
+            $query = $query." and Protocolo.fecha_entrega like '".$time."%'";
+        }
+        
+        if (isset($params['ProtocoloSearch']['fecha_entrada']) && ($params['ProtocoloSearch']['fecha_entrada'] <> "") ){
+            $str =  $params['ProtocoloSearch']['fecha_entrada']; 
+            $dia = substr($str,0,2);
+            $mes = substr($str,3,2);
+            $anio = substr($str,6,4);
+            $time = $anio."-".$mes."-".$dia;
+            $query = $query." and Protocolo.fecha_entrada like '".$time."%'";
+        }
+        
+        if (isset($params['ProtocoloSearch']['codigo']) && ($params['ProtocoloSearch']['codigo'] <> "") )
+            {
+                $nro = ltrim($params['ProtocoloSearch']['codigo'], '0');
+                $query = $query." and (Protocolo.anio like '%".$params['ProtocoloSearch']['codigo']."%'"
+                    . "or Protocolo.letra like '%".$params['ProtocoloSearch']['codigo']."%'"
+                    . "or Protocolo.nro_secuencia like '%".$nro."%')";
+            }
+            
         $consultaCant = "Select Count(Protocolo.id) as total From Protocolo";
      // return total items count for this sql query
        // $itemsCount = \Yii::$app->db->createCommand($consulta)->queryScalar();
@@ -181,16 +218,27 @@ class ProtocoloSearch extends Protocolo
         $itemsCount = (int)$results[0]["total"];  
 
         // build a SqlDataProvider with a pagination with 10 items for page
-        
+    //   var_dump($query);die(); 
 
         $dataProvider = new \yii\data\SqlDataProvider([
-            'sql' => $consulta,
+            'sql' => $query,
+            'sort'=> ['defaultOrder' => ['Paciente.nombre'=> SORT_ASC]], 
             'totalCount' => $itemsCount,
             'pagination' => [
                     'pageSize' => 50,
             ],
         ]);
 
+        $dataProvider->setSort([
+        'attributes' => [
+           // 'id',
+            'nombre',
+            'nro_documento' => [
+                'asc' => ['Paciente.nro_documento' => SORT_ASC],
+                'desc' => ['Paciente.nro_documento' => SORT_DESC],
+            ]
+        ]
+        ]);
 //        var_dump($dataProvider); die();
         // get the user records in the current page
   //      $models = $dataProvider->getModels();      
@@ -258,8 +306,6 @@ class ProtocoloSearch extends Protocolo
                             WHERE Workflow.Estado_id = 4
                             GROUP BY Workflow.Informe_id
                     ) as Workflow_Q ON (Informe.id = Workflow_Q.Informe_id);";
-     // return total items count for this sql query
-       // $itemsCount = \Yii::$app->db->createCommand($consulta)->queryScalar();
         
         $command =  \Yii::$app->db->createCommand($consultaCant);
         $results = $command->queryAll();
@@ -284,6 +330,7 @@ class ProtocoloSearch extends Protocolo
                         Paciente.nro_documento,                        
                         Workflow_Q.fecha_inicio,
                         Workflow_Q.workflow_id,
+                        Workflow_Q.Estado_id,
                         Informe.id as informe_id,
                         Informe.Estudio_id,
                         Paciente.nombre as nombre,
@@ -294,7 +341,8 @@ class ProtocoloSearch extends Protocolo
                             Select
                                     Workflow.Informe_id,
                                     max(Workflow.fecha_inicio) as fecha_inicio,
-                                    max(Workflow.id) as workflow_id
+                                    max(Workflow.id) as workflow_id,
+                                    Workflow.Estado_id
                             From Workflow 
                             WHERE Workflow.Estado_id = 5
                             GROUP BY Workflow.Informe_id
@@ -302,7 +350,7 @@ class ProtocoloSearch extends Protocolo
                      LEFT JOIN `Paciente_prestadora` pp ON `Protocolo`.`Paciente_prestadora_id` = pp.`id`
                     LEFT JOIN `Paciente` ON pp.`Paciente_id` = `Paciente`.`id`
                     JOIN Estudio ON (Informe.Estudio_id = Estudio.id)
-                    where Informe.estado_actual = 5";
+                    where Workflow_Q.Estado_id = 5";
         
         if (isset($params['ProtocoloSearch']['nro_secuencia']) && ($params['ProtocoloSearch']['nro_secuencia'] <> "") )
             $query = $query." and Protocolo.nro_secuencia = ".$params['ProtocoloSearch']['nro_secuencia'];
@@ -376,7 +424,6 @@ class ProtocoloSearch extends Protocolo
         if (isset($id))
             $loggedUserId = $id;
         else $loggedUserId = 2;
-//var_dump($params); die();
     
         $consulta = "Select concat(SUBSTRING(Protocolo.anio,-2),Protocolo.letra,'-', LPAD(Protocolo.nro_secuencia, 6, 0)) as codigo , 
                         Protocolo.id,
@@ -387,8 +434,9 @@ class ProtocoloSearch extends Protocolo
                         Protocolo.nro_secuencia,
                         Protocolo.anio,Protocolo.letra,
                         Workflow_Q.workflow_id,
+                        Workflow_Q.Estado_id,
                         Informe.Estudio_id as estudio,
-                        Paciente.nombre,
+                        Paciente.nombre as nombre,
                         Informe.estado_actual as lastEstado,
                         Paciente.nro_documento,
                         Estudio.nombre as nombre_estudio
@@ -401,25 +449,26 @@ class ProtocoloSearch extends Protocolo
                             Select
                                     Workflow.Informe_id,
                                     max(Workflow.fecha_inicio) as fecha_inicio,
-                                    max(Workflow.id) as workflow_id
+                                    max(Workflow.id) as workflow_id,
+                                    Workflow.Estado_id
                             From Workflow 
                             WHERE Workflow.Responsable_id = ".$loggedUserId."
                             AND Workflow.fecha_fin is NULL
                             GROUP BY Workflow.Informe_id
                     ) as Workflow_Q ON (Informe.id = Workflow_Q.Informe_id)
-                    where Informe.estado_actual <  5 ";
+                    where Workflow_Q.Estado_id <  5 ";
                 //    order by Protocolo.id desc;";
         
         if (isset($params['ProtocoloSearch']['nro_secuencia']) && ($params['ProtocoloSearch']['nro_secuencia'] <> "") )
             $consulta = $consulta." and Protocolo.nro_secuencia = ".$params['ProtocoloSearch']['nro_secuencia'];
         
         if (isset($params['ProtocoloSearch']['nombre']) && ($params['ProtocoloSearch']['nombre'] <> "") )
-            $consulta = $consulta." and Paciente.nombre like '".$params['ProtocoloSearch']['nombre']."%'";
+            $consulta = $consulta." and Paciente.nombre like '%".$params['ProtocoloSearch']['nombre']."%'";
         
         if (isset($params['ProtocoloSearch']['nro_documento']) && ($params['ProtocoloSearch']['nro_documento'] <> "") )
             $consulta = $consulta." and Paciente.nro_documento like '%".$params['ProtocoloSearch']['nro_documento']."%'";
         
-                if (isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "") ){
+        if (isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "") ){
             $str =  $params['ProtocoloSearch']['fecha_entrega']; 
             $dia = substr($str,0,2);
             $mes = substr($str,3,2);
@@ -446,23 +495,41 @@ class ProtocoloSearch extends Protocolo
                // die($query);
             }
             
-        $consulta = $consulta." order by Protocolo.id desc";        
+       
         $consultaCant = "select count(tt.id) as total from ( ".$consulta." ) as tt";
+    //    $consulta = $consulta." order by Paciente.nro_documento";        
     
         $command =  \Yii::$app->db->createCommand($consultaCant);
         $results = $command->queryAll();
         $itemsCount = (int)$results[0]["total"];       
 
-
+    //    var_dump($consulta); die();
         $dataProvider_asignados = new \yii\data\SqlDataProvider([
             'sql' => $consulta,
+            'sort'=> ['defaultOrder' => ['fecha_entrega'=> SORT_ASC]], 
             'totalCount' => $itemsCount,
             'pagination' => [
                     'pageSize' => 50,
             ],
         ]);
 
-         if (!($this->load($params) && $this->validate())) {
+
+        $dataProvider_asignados->setSort([
+            'attributes' => [
+        //     'id',
+        'fecha_entrega',
+                'nombre'=> [
+                    'asc' => ['Paciente.nombre' => SORT_ASC],
+                    'desc' => ['Paciente.nombre' => SORT_DESC],
+                ],
+                'nro_documento' => [
+                    'asc' => ['Paciente.nro_documento' => SORT_ASC],
+                    'desc' => ['Paciente.nro_documento' => SORT_DESC],
+                ]
+            ]
+        ]);
+
+        if (!($this->load($params) && $this->validate())) {
                 return $dataProvider_asignados;
             }
         return $dataProvider_asignados;
@@ -492,8 +559,7 @@ class ProtocoloSearch extends Protocolo
                             From Workflow 
                             WHERE Workflow.Estado_id = 6
                             GROUP BY Workflow.Informe_id
-                    ) as Workflow_Q ON (Informe.id = Workflow_Q.Informe_id)
-                    order by Protocolo.id desc;";
+                    ) as Workflow_Q ON (Informe.id = Workflow_Q.Informe_id)";
         
         $consultaCant = "Select
                         count(Protocolo.id) as total                        
@@ -558,7 +624,7 @@ class ProtocoloSearch extends Protocolo
                      LEFT JOIN `Paciente_prestadora` pp ON `Protocolo`.`Paciente_prestadora_id` = pp.`id`
                     LEFT JOIN `Paciente` ON pp.`Paciente_id` = `Paciente`.`id`
                     JOIN Estudio ON (Informe.Estudio_id = Estudio.id)
-                    where Informe.estado_actual = 6";
+                   ";
         
         if (isset($params['ProtocoloSearch']['nro_secuencia']) && ($params['ProtocoloSearch']['nro_secuencia'] <> "") )
             $query = $query." and Protocolo.nro_secuencia = ".$params['ProtocoloSearch']['nro_secuencia'];
@@ -603,8 +669,8 @@ class ProtocoloSearch extends Protocolo
         
         $consultaCant = $consultaCant.$query." ) as tt";
         
-        $order = " order by Protocolo.id desc;";
-        $query = $query.$order;
+ //       $order = " order by Protocolo.id desc;";
+///$query = $query.$order;
         
         $command =  \Yii::$app->db->createCommand($consultaCant);
         $results = $command->queryAll();
@@ -612,10 +678,22 @@ class ProtocoloSearch extends Protocolo
 
         $dataProvider = new \yii\data\SqlDataProvider([
             'sql' => $query,
+            'sort'=> ['defaultOrder' => ['nombre'=> SORT_ASC]], 
             'totalCount' => $itemsCount,
             'pagination' => [
-                    'pageSize' => 20,
+                    'pageSize' => 100,
             ],
+        ]);
+
+        $dataProvider->setSort([
+            'attributes' => [
+            // 'id',
+                'nombre',
+                'nro_documento' => [
+                    'asc' => ['Paciente.nro_documento' => SORT_ASC],
+                    'desc' => ['Paciente.nro_documento' => SORT_DESC],
+                ]
+            ]
         ]);
         
         if (!($this->load($params) && $this->validate())) {

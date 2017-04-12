@@ -1305,7 +1305,8 @@ a:focus {
   box-shadow: none;
 }
 .form-group.has-error .help-block {
-  color: #dd4b39;
+ /* color: #dd4b39;*/
+ clear: both;
 }
 /* Input group */
 .input-group .input-group-addon {

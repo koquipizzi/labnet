@@ -17,13 +17,15 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_contable.js', ['depends'
 ?>
 
 <div class="body-content animated fadeIn" >
-  <div class="estudio-index">
-      <h3><?= Html::encode($this->title) ?></h3>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
+   
     <p style="float:right;">
         <?= Html::a(Yii::t('app', 'Nuevo Pago'), ['create'], ['class' => 'btn btn-success btn-sm']) ?>
     </p>
+
+    <div class="pull-left">
+      <h3 class="panel-title">Listado de <?= Html::encode($this->title) ?></h3>
+    </div>
+
     <?php Pjax::begin(['id'=>'trab_prot', 'enablePushState' => FALSE]); ?>
     <?php
            echo GridView::widget([

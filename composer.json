@@ -31,7 +31,10 @@
         "kartik-v/yii2-popover-x": "*",
         "execut/yii2-widget-bootstraptreeview": "dev-master",
         "kartik-v/yii2-editable": "@dev",
-        "kartik-v/yii2-mpdf": "dev-master"
+        "kartik-v/yii2-mpdf": "dev-master",
+        "kartik-v/yii2-grid": "@dev",
+        "bedezign/yii2-audit": "^1.0",
+        "bubasuma/yii2-simplechat": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

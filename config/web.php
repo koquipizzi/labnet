@@ -5,7 +5,7 @@ $params = require(__DIR__ . '/params.php');
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'audit', 'simplechat'],
     'language'=>'es', // spanish
     'params' => $params,
     'modules' => [
@@ -14,6 +14,17 @@ $config = [
             'password' => '1234',
             'generatorPaths' => array('bootstrap.gii.bootstrap'),
          ),
+         'audit' => [
+            'class' => 'bedezign\yii2\audit\Audit',
+		//	'panelsMerge' => [
+		//		'app/views' => [
+		//			'class' => '@app\views\panels\ViewsPanel',
+		//		],
+		//	],
+		],
+        'simplechat' => [
+            'class' => 'bubasuma\simplechat\Module',
+        ],
          'admin' => [
            'class' => 'mdm\admin\Module',
            'layout' => 'left-menu', // defaults to null, using the application's layout without the menu
@@ -129,6 +140,7 @@ $config = [
 		'allowActions' => [
 			'admin/*', // add or remove allowed actions to this list
             'protocolo/*',
+            'audit/*',
 		]
     ],
     'params' => $params,

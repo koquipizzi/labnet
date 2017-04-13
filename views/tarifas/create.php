@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                        <h3 class="panel-title"><?= Html::encode($this->title) ?><code></code></h3>
                                    </div>
                                    <div class="pull-right">
-                                       <?= Html::a('<i class="fa fa-pencil"></i> Volver', ['tarifa/index'], ['class'=>'btn btn-primary']) ?>
+                                       <?= Html::a('<i class="fa fa-arrow-left"></i> Volver', ['tarifa/index'], ['class'=>'btn btn-primary']) ?>
                                    </div>
                                    <div class="clearfix"></div>
                 </div><!-- /.panel-heading -->

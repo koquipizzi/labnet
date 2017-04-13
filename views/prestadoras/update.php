@@ -11,30 +11,15 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Prestadoras'), 'url'
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
-
-<section id="page-content">
-
-    <div class="header-content">
-        <h2><i class="fa fa-home"></i>Cipat <span><?= Html::encode($this->title) ?></span></h2>
-    </div><!-- /.header-content -->
-
-    <!-- Start body content -->
-    <div class="body-content animated fadeIn" >
-        <div class="panel rounded shadow">
-            <div class="prestadoras-update">
-                <div class="panel-heading">
-                                   <div class="pull-left">
-                                       <h3 class="panel-title"><?= Html::encode($this->title) ?><code></code></h3>
-                                   </div>
-                                   <div class="clearfix"></div>
-                </div><!-- /.panel-heading -->
-
-
+<div class="box box-info">
+    <div class="box-header with-border">
+             <div class="pull-right">
+                    <?= Html::a('<i class="fa fa-arrow-left"></i> Volver', ['paciente/index'],['class'=>'btn btn-primary']) ?>
+            </div>
+              <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+    </div>
                 <?= $this->render('_form', [
                     'model' => $model,
                 ]) ?>
 
-            </div>
-        </div>
-    </div>
-</section>
+</div>

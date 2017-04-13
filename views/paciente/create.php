@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-header">
               <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
               <div class="pull-right">
-                            <?= Html::a('<i class="fa fa-pencil"></i> Volver', ['paciente/index'], ['class'=>'btn btn-primary']) ?>
+                            <?= Html::a('<i class="fa fa-arrow-left"></i> Volver', ['paciente/index'], ['class'=>'btn btn-primary']) ?>
               </div>
             </div>
             <?= $this->render('_form', [

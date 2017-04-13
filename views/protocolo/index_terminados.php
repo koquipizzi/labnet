@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <span class="text-strong"> Informes</span>
             </div>
             <div class="pull-right">
-                <?= Html::a('<i class="fa fa-plus-circle"></i> Nuevo Protocolo', ['paciente/'], ['class'=>'btn btn-success']) ?>
+                <?= Html::a('<i class="fa fa-plus-circle"></i> Nuevo Protocolo', ['paciente/buscar'], ['class'=>'btn btn-success']) ?>
                 <?= Html::a('<i class="fa fa-pause-circle"></i> Protocolos Pendientes', ['protocolo/'], ['class'=>'btn btn-primary']) ?>
                 <?= Html::a('<i class="fa fa-stop-circle"></i> Protocolos Terminados', ['protocolo/terminados'], ['class'=>'btn btn-primary']) ?>
                 <?= Html::a('<i class="fa fa-list"></i> Protocolos Todos', ['protocolo/all'], ['class'=>'btn btn-primary']) ?>
@@ -50,14 +50,14 @@ $this->params['breadcrumbs'][] = $this->title;
                
                                 echo GridView::widget([
                                 'dataProvider' => $dataProvider_terminados,
-                                'options'=>array('class'=>'table table-striped table-lilac'),
+                                'options'=>array('class'=>'table table-striped'),
                                 'filterModel' => $searchModel,    
                                 'columns' =>    [
                                      //   'value'=>'estudio',
                                      [
                                         'label' => 'Fecha Entrada',
                                         'attribute' => 'fecha_entrada',
-                                        'contentOptions' => ['style' => 'width:10%;'],
+                                        'contentOptions' => ['style' => 'width:15%;'],
                                         'format' => ['date', 'php:d/m/Y'],
                                         'filter' => DatePicker::widget([
                                                 'model' => $searchModel,
@@ -88,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     [
                                         'label' => 'Nro Protocolo',
                                         'attribute' => 'codigo',
-                                        'contentOptions' => ['style' => 'width:15%;'],
+                                        'contentOptions' => ['style' => 'width:10%;'],
                                     ],                                    
                                     [
                                         'label' => 'Paciente',
@@ -112,7 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'format' => 'raw',
                                         'contentOptions' => ['style' => 'width:10%;'],
                                         'value'=> function ($model) { 
-                                            return $model['nombre_estudio'];                                                        
+                                            return '<a class="label label-default rounded protoClass2">'.$model['nombre_estudio'].'</a>';                                                        
                                         }
                                     ],
                                     [ 

@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <span class="text-strong">Informes por protocolo</span>
             </div>
             <div class="pull-right">
-                <?= Html::a('<i class="fa fa-plus-circle"></i> Nuevo Protocolo', ['paciente/'], ['class'=>'btn btn-primary']) ?>
+                <?= Html::a('<i class="fa fa-plus-circle"></i> Nuevo Protocolo', ['paciente/buscar'], ['class'=>'btn btn-primary']) ?>
             </div> 
             <div class="clearfix"></div>
         </div>
@@ -128,7 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'data-id'=> "$inf->id",  
                                             'data-protocolo'=> "$inf->Protocolo_id",  
                                 ]);
-                                $val = $val."<span></span>";}
+                                $val = $val."<br /><span></span>";}
                                 return $val;
                             },
                         ],                   

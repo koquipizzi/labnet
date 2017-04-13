@@ -4,6 +4,7 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
+use kartik\widgets\DatePicker;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\MedicoSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -34,31 +35,51 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'options'=>array('class'=>'table table-striped table-lilac'),
                                     'filterModel' => $searchModel,        
                                     'columns' => [
-                                        [
+                                         [
+                                            'label' => 'Fecha Entrada',
                                             'attribute' => 'fecha_entrada',
-                                            'contentOptions' => ['style' => 'width:10%;'],
-                                            'format' => ['date', 'php:d/m/Y']
+                                            'contentOptions' => ['style' => 'width:15%;'],
+                                            'format' => ['date', 'php:d/m/Y'],
+                                            'filter' => DatePicker::widget([
+                                                    'model' => $searchModel,
+                                                    'attribute' => 'fecha_entrada',
+                                                    'pluginOptions' => [
+                                                        'autoclose'=>true,
+                                                        'format' => 'dd-mm-yyyy',
+                                                        'startView' => 'date',
+                                                    ]
+                                            ] )
                                         ],
                                         [
+                                            'label' => 'Fecha Entrega',
+                                            'contentOptions' => ['style' => 'width:15%;'],
                                             'attribute' => 'fecha_entrega',
-                                            'contentOptions' => ['style' => 'width:10%;'],
-                                            'format' => ['date', 'php:d/m/Y']
+                                            'format' => ['date', 'php:d/m/Y'],
+                                            'filter' => DatePicker::widget([
+                                                    'model' => $searchModel,
+                                                    'attribute' => 'fecha_entrega',
+                                                    'pluginOptions' => [
+                                                        'autoclose'=>true,
+                                                        'format' => 'dd-mm-yyyy',
+                                                        'startView' => 'date',
+                                                    ]
+                                            ] )
                                         ],
                                        
                                         [
                                                     'label' => 'Protocolo',
                                                     'attribute' => 'codigo',
-                                                    'contentOptions' => ['style' => 'width:15%;'],
+                                                    'contentOptions' => ['style' => 'width:10%;'],
                                         ],                                        
                                         [
                                             'label' => 'Paciente',
                                             'attribute'=>'nombre', 
-                                            'contentOptions' => ['style' => 'width:20%;'],
+                                            'contentOptions' => ['style' => 'width:30%;'],
                                         ],
                                         [
                                             'label' => 'Documento',
                                             'attribute'=>'nro_documento', 
-                                            'contentOptions' => ['style' => 'width:20%;'],
+                                            'contentOptions' => ['style' => 'width:10%;'],
                                         ],
 //                                        [
 //                                                'label'=>'Fecha de Entrega',
@@ -79,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         [ 
                                             'label' => 'Informes',
                                             'format' => 'raw',
-                                            'contentOptions' => ['style' => 'width:30%;'],
+                                            'contentOptions' => ['style' => 'width:20%;'],
                                             'value'=>function ($model, $key, $index, $widget) { 
                                                 $estados = array( 
                                                     "1" => "danger", 
@@ -96,7 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 foreach ($informes as $inf){
                                                    // $val = $val.$inf->estudio->nombre." "; 
                                                     $estado = $inf->workflowLastState; 
-                                                    $clase = " label-".$estados[$estado];
+                                                    $clase = " label-default";
 //                                                    if ($estado == 4)
 //                                                        $clase = " label-success";
 //                                                    else {
@@ -113,7 +134,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                             'data-id'=> "$inf->id",  
                                                             'data-protocolo'=> "$inf->Protocolo_id",  
                                                 ]);
-                                                $val = $val."<span></span>";}
+                                                $val = $val."<br/><span></span>";}
                                                 return $val;
                                             },
                                         ],                 

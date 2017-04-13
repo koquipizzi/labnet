@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use yii\grid\GridView;
 use mdm\admin\components\Helper;
+use kartik\widgets\DatePicker;
 $this->title = Yii::t('app', 'Protocolos');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -53,34 +54,40 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'filterModel' => $searchModel,    
                                             'columns' =>    [
                                                 
-                                                 //   'value'=>'estudio',
-                                        /*        [
+                                                     [
                                                     'label' => 'Fecha Entrada',
                                                     'attribute' => 'fecha_entrada',
+                                                    'contentOptions' => ['style' => 'width:15%;'],
                                                     'format' => ['date', 'php:d/m/Y'],
-                                                    'filter' => \yii\jui\DatePicker::widget([
-                                                        'model'=>$searchModel,
-                                                        'attribute'=>'fecha_entrada',
-                                                        'language' => 'es',
-                                                        'dateFormat' => 'dd/MM/yyyy',
-                                                    ]),
-
+                                                    'filter' => DatePicker::widget([
+                                                            'model' => $searchModel,
+                                                            'attribute' => 'fecha_entrada',
+                                                            'pluginOptions' => [
+                                                                'autoclose'=>true,
+                                                                'format' => 'dd-mm-yyyy',
+                                                                'startView' => 'date',
+                                                            ]
+                                                    ] )
                                                 ],
                                                 [
                                                     'label' => 'Fecha Entrega',
+                                                    'contentOptions' => ['style' => 'width:15%;'],
                                                     'attribute' => 'fecha_entrega',
                                                     'format' => ['date', 'php:d/m/Y'],
-                                                    'filter' => \yii\jui\DatePicker::widget([
-                                                        'model'=>$searchModel,
-                                                        'attribute'=>'fecha_entrega',
-                                                        'language' => 'es',
-                                                        'dateFormat' => 'dd/MM/yyyy',
-                                                    ]),
-                                                ],*/
+                                                    'filter' => DatePicker::widget([
+                                                            'model' => $searchModel,
+                                                            'attribute' => 'fecha_entrega',
+                                                            'pluginOptions' => [
+                                                                'autoclose'=>true,
+                                                                'format' => 'dd-mm-yyyy',
+                                                                'startView' => 'date',
+                                                            ]
+                                                    ] )
+                                                ],
                                                  [
                                                     'label' => 'Nro Protocolo',
                                                     'attribute' => 'codigo',
-                                                    'contentOptions' => ['style' => 'width:20%;'],
+                                                    'contentOptions' => ['style' => 'width:10%;'],
                                                 ],     
                                                 
                                                 [ 
@@ -98,20 +105,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 [
                                                     'label' => 'Documento',
                                                     'attribute'=>'nro_documento', 
-                                                    'contentOptions' => ['style' => 'width:20%;'],
+                                                    'contentOptions' => ['style' => 'width:10%;'],
                                                 ],
                                                 [
                                                     'label' => 'Informe',
                                                     'format' => 'raw',
-                                                    'contentOptions' => ['style' => 'width:20%;'],
+                                                    'contentOptions' => ['style' => 'width:10%;'],
                                                     'value'=> function ($model) { 
-                                                        return $model['nombre_estudio'];                                                        
+                                                        return '<a class="label label-default rounded protoClass2">'.$model['nombre_estudio'].'</a>';                                                     
                                                     }
                                                 ],
                                                 [ 
                                                     'label' => 'Acciones',
                                                     'format' => 'raw',
-                                                    'contentOptions' => ['style' => 'width:30%;'],
+                                                    'contentOptions' => ['style' => 'width:20%;'],
                                                     'value'=> function ($model) { 
                                                     //llevatr esto al metodo
                                                                 

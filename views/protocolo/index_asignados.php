@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <span class="text-strong"> Informes</span>
             </div>
             <div class="pull-right">
-                <?= Html::a('<i class="fa fa-plus-circle"></i> Nuevo Protocolo', ['paciente/'], ['class'=>'btn btn-success']) ?>
+                <?= Html::a('<i class="fa fa-plus-circle"></i> Nuevo Protocolo', ['paciente/buscar'], ['class'=>'btn btn-success']) ?>
                 <?= Html::a('<i class="fa fa-pause-circle"></i> Protocolos Pendientes', ['protocolo/'], ['class'=>'btn btn-primary']) ?>
                 <?= Html::a('<i class="fa fa-stop-circle"></i> Protocolos Terminados', ['protocolo/terminados'], ['class'=>'btn btn-primary']) ?>
                 <?= Html::a('<i class="fa fa-list"></i> Protocolos Todos', ['protocolo/all'], ['class'=>'btn btn-primary']) ?>
@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'label' => 'Fecha Entrada',
                             'attribute' => 'fecha_entrada',
-                            'contentOptions' => ['style' => 'width:10%;'],
+                            'contentOptions' => ['style' => 'width:15%;'],
                             'format' => ['date', 'php:d/m/Y'],
                              'filter' => DatePicker::widget([
                                     'model' => $searchModelAsig,
@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'label' => 'Fecha Entrega',
                             'attribute' => 'fecha_entrega',
-                            'contentOptions' => ['style' => 'width:10%;'],
+                            'contentOptions' => ['style' => 'width:15%;'],
                             'format' => ['date', 'php:d/m/Y'],
                              'filter' => DatePicker::widget([
                                     'model' => $searchModelAsig,
@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             "3" => "success",
                             "4" => "warning",
                             "5" => "primary",
-                            "6" => "lilac",
+                            "6" => "default",
                         );
                         $estadosLeyenda = array(
                             "1" => "INFORME PENDIENTE",
@@ -129,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'data-id' => $model['informe_id'],
                                     'data-protocolo' => $model['id'],
                         ]);
-                        $val = $val . "<span></span>";
+                        $val = $val . "<br /><span></span>";
                         return $val;
                     },
                         ],

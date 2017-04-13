@@ -152,18 +152,26 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         </button>
                         <button class="btn btn-primary btn-sm mostrarTree pull-right" title="Agregar texto"><i class="fa fa-edit"></i></button>
                         <button class="btn btn-primary btn-sm guardarTexto pull-right" value="<?= Url::to(['textos/copy']) ?>"><i class="fa fa-copy"></i></button>
-                        <?php $url = ['informe/printreducido', 'id' => $model->id , 'estudio' => $model->Estudio_id];
-                              echo  Html::button("<i class='fa fa-list-alt'></i>",
+                        <?php   $url = ['informe/printreducido', 'id' => $model->id , 'estudio' => $model->Estudio_id];
+                                echo  Html::button("<i class='fa fa-list-alt'></i>",
                                     ['class'=>'btn btn-primary btn-sm pull-right',
                                         'onclick'=>"window.location.href = '" . \Yii::$app->urlManager->createUrl(['/informe/printreducido','id'=>$model->id, 'estudio' => $model->Estudio_id ]) . "';",
                                         'data-toggle'=>'tooltip',
                                         'title'=>Yii::t('app', 'Informe Reducido'),
                                     ]
                                 );
-                            //      echo    Html::a( "R ", $url, ["class"=>"btn btn-circle btn-teal"] );
-                                  $url = ['informe/printreducido', 'id' => $model->id , 'estudio' => $model->Estudio_id];
-                                //  echo    Html::submitButton( "<i class='fa fa-list-alt'></i>", $url, ["class"=>"fbtn btn-primary btn-sm text pull-righ"] ); 
-                                   ?>
+                           //     $url = ['informe/printreducido', 'id' => $model->id , 'estudio' => $model->Estudio_id];
+                         ?>
+                         <?php   $url = ['informe/print', 'id' => $model->id , 'estudio' => $model->Estudio_id];
+                                echo  Html::button("<i class='fa fa-file-pdf-o'></i>",
+                                    ['class'=>'btn btn-primary btn-sm pull-right',
+                                        'onclick'=>"window.location.href = '" . \Yii::$app->urlManager->createUrl(['/informe/printreducido','id'=>$model->id, 'estudio' => $model->Estudio_id ]) . "';",
+                                        'data-toggle'=>'tooltip',
+                                        'title'=>Yii::t('app', 'Informe Preliminar'),
+                                    ]
+                                );
+                                $url = ['informe/printreducido', 'id' => $model->id , 'estudio' => $model->Estudio_id];
+                         ?>
 
                                 <!--input type="text"value="<?php echo  $model->id ?>" id="id_informe" style="display:none">
                                 <input type="text"value="<?php echo $model->Estudio_id ?>" id="id_estudio" style="display:none"-->

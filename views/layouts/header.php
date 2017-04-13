@@ -230,11 +230,12 @@ Yii::$app->name = "LabNET";
 
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="user-image" alt="User Image"/>
-                        <span class="hidden-xs">Alexander Pierce</span>
+                        <!--img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="user-image" alt="User Image"/-->
+                        <img src="<?= Yii::$app->getHomeUrl().'images/photo.jpg' ?>" class="user-image"  alt="admin" >
+                        <span class="hidden-xs">Laboratorio CIPAT</span>
                     </a>
-                    <ul class="dropdown-menu">
-                        <!-- User image -->
+                    <!--ul class="dropdown-menu">
+                        <!-- User image ->
                         <li class="user-header">
                             <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle"
                                  alt="User Image"/>
@@ -244,7 +245,7 @@ Yii::$app->name = "LabNET";
                                 <small>Member since Nov. 2012</small>
                             </p>
                         </li>
-                        <!-- Menu Body -->
+                        <!-- Menu Body ->
                         <li class="user-body">
                             <div class="col-xs-4 text-center">
                                 <a href="#">Followers</a>
@@ -256,7 +257,7 @@ Yii::$app->name = "LabNET";
                                 <a href="#">Friends</a>
                             </div>
                         </li>
-                        <!-- Menu Footer-->
+                        <!-- Menu Footer->
                         <li class="user-footer">
                             <div class="pull-left">
                                 <a href="#" class="btn btn-default btn-flat">Profile</a>
@@ -269,12 +270,12 @@ Yii::$app->name = "LabNET";
                                 ) ?>
                             </div>
                         </li>
-                    </ul>
+                    </ul-->
                 </li>
 
                 <!-- User Account: style can be found in dropdown.less -->
                 <li>
-                    <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                    <a href="<?= Yii::$app->getUrlManager()->createUrl('site/logout') ?>" ><i class="fa fa-sign-out"></i></a>
                 </li>
             </ul>
         </div>

@@ -9,7 +9,8 @@ use mdm\admin\components\Helper;
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
+                <!--img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/-->
+                 <img src="<?= Yii::$app->getHomeUrl().'images/photo.jpg' ?>" alt="admin" class="img-circle">
             </div>
             <div class="pull-left info">
                 <p><?php // $user = \app\models\User::find()->where(['=', 'id', Yii::$app->user->id])->one(); echo $user->username;  ?></p>

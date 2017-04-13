@@ -25,7 +25,7 @@ use kartik\datecontrol\DateControl;
     ['depends' => [yii\web\AssetBundle::className()]]);
 ?>
 <?= Html::csrfMetaTags() ?>
-  <?php \insolita\wgadminlte\LteBox::begin([  
+  <?php /* \insolita\wgadminlte\LteBox::begin([  
              'type'=>\insolita\wgadminlte\LteConst::TYPE_INFO,
              'isSolid'=>true,
              'boxTools'=>'<button class="btn btn-success btn-xs create_button" ><i class="fa fa-plus-circle"></i> Add</button>',
@@ -34,15 +34,15 @@ use kartik\datecontrol\DateControl;
              'footer'=>'total 44 active users',
          ])?>
         ANY BOX CONTENT HERE
-    <?php \insolita\wgadminlte\LteBox::end()?>
+    <?php \insolita\wgadminlte\LteBox::end() */ ?>
 
     <?php
    // if (isset())
- echo \insolita\wgadminlte\Alert::widget([
+/* echo \insolita\wgadminlte\Alert::widget([
               'type'=>\insolita\wgadminlte\LteConst::TYPE_SUCCESS,
               'text'=>'Operation Complete',
               'closable'=>true
-          ]);
+          ]);*/
     ?>
 
 <div class="paciente-form">  

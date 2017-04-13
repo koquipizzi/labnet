@@ -451,7 +451,7 @@ echo TreeView::widget([
 // 															alert("p file");
 // 													});
                                         </script>
-                                            <?php Pjax::begin(['id' => 'galeria', 'enablePushState' => FALSE]); ?>    
+                                            <?php Pjax::begin(['id' => 'galeriar', 'enablePushState' => FALSE]); ?>    
                                         <div class="content-galeria">
                                             <?=
                                             $this->render('galeria_1', [

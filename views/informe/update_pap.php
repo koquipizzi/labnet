@@ -19,8 +19,16 @@ use kartik\popover\PopoverX;
 use kartik\widgets\ActiveForm;
 use kartik\select2\Select2;
 use xj\bootbox\BootboxAsset;
+BootboxAsset::register($this);
 
-
+    Modal::begin([
+                    'id' => 'modal',    
+                   // 'size'=>'modal-lg',
+                    'options' => ['tabindex' => false ],
+                ]);
+                echo "<div id='modalContent'></div>";      
+    Modal::end();
+    
 $this->title = Yii::t('app', 'Update {modelClass}: ', [
 		'modelClass' => 'Informe',
 ]) . $model->id;
@@ -44,6 +52,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
             </div>
         </div>
         <div class="box">
+            
             <div class="box-header with-border">
                 <h3 class="box-title">Nomencladores</h3>
                 <div class="pull-right">
@@ -99,13 +108,33 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                 ?>
             </div>
         </div>
+        <div  class="box">  
+		             <div class="box-header with-border">
+                        <h3 class="box-title">Historial Paciente</h3>
+                    </div>
+		             
+		  	        <div  id="historialPacientePanel" data-spy="scroll" data-offset="3" data-target="#historial" class="panel-body text-center" style=" position: relative;">	                                                         
+	                        <?php 
+		                            if(is_array($historialPaciente)){
+		                                echo	$this->render('/informe/historialPaciente', [
+		                                    'historialPaciente'=>$historialPaciente
+		                                ]) ;
+		                            }else{
+		                                    echo "El Paciente no tiene historial.";
+		                            }
+                                          
+	                        ?>
+                    </div>
+                            
+      		</div>
+
     </div>
     <div class="col-md-9">
         <div class="box">
             <div class="box-header with-border">
                 <div id="row">
                     <div class="col-md-3">
-                        <h3 class="box-title"><?php echo 'Estudio: '.$model->estudio->descripcion; ?></h3>
+                        <h3 class="box-title"><strong><?php echo 'Estudio: '.$model->estudio->descripcion; ?></strong></h3>
                     </div>
                      <div class="col-md-3">                       
                             <?php Pjax::begin(['id'=>'estado']); ?>                                 
@@ -146,9 +175,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         </div> 
                     
                      <div class="col-md-3">
-                         <button type="button" class="btn btn-primary btn-sm text pull-right" data-toggle="tooltip" title="" data-original-title="Date range">
-                            <i class="fa fa-file-pdf-o"></i>
-                        </button>
                         <button class="btn btn-primary btn-sm mostrarTree pull-right" title="Agregar texto"><i class="fa fa-edit"></i></button>
                         <button class="btn btn-primary btn-sm guardarTexto pull-right" value="<?= Url::to(['textos/copy']) ?>"><i class="fa fa-copy"></i></button>
                         <?php $url = ['informe/printpapreducido', 'id' => $model->id , 'estudio' => $model->Estudio_id];
@@ -186,7 +212,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         </label> 
                 <!-- botones derecha_-->
             </div>
-            <div class="box-body">
+            <div class="box-body no-padding">
                   <?= $this->render('_form_pap', [
                     'model' => $model, 
                     'edad'=>$modelp->pacienteEdad,
@@ -210,142 +236,5 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                     		
                     ]) 
                ?>
-		  <div  class="panel">  
-		         <div class="panel-heading">
-		              <div class="panel-title text-left">Historial Paciente</div>
-		        </div><!-- /.panel-heading ->
-		             
-		  	    <div  id="historialPacientePanel" data-spy="scroll" data-offset="3" data-target="#historial" class="panel-body text-center" style=" position: relative;">
-	                            
-                                <div style="text-align: left; margin-top:10px;">
-
-	                                <div class="recent-activity">                                
-	                                   <?php 
-		                         /*           if(is_array($historialPaciente)){
-		                                    echo	$this->render('/informe/historialPaciente', [
-		                                    		'historialPaciente'=>$historialPaciente
-		                                    	]) ;
-		                                    }else{
-		                                    		echo "El Paciente no tiene historial.";
-		                                  		  }
-                                          * 
-                                          */
-	                                    ?>
-	
-                                        </div>
-                                </div>
-                                    
-                            </div>
-                            
-      		</div>
-         </div>
-        
-
-        
-        <div class="col-md-9">           
-        <?php if($model->estado_actual===Workflow::estadoEntregado()){
-            echo '<div class="panel rounded shadow"> <h3>Este estudio no puede modificarse porque ya se encuentra entregado</h3></div>';
-        } ?>  
-        <!-- Start body content ->            
-        <div class="panel rounded shadow">                           
-            <div class="informe-update">
-                
-                <div class="panel-labnet">
-                  <div class="row">     
-                    <div class="col-md-4">  
-                        <div class="pull-left">
-                            <h3 class="panel-title"><?php echo 'Estudio: '.$model->estudio->descripcion; ?></h3>
-                        </div>
-                    </div>
-                    <div class="col-md-3">                       
-                                   <?php Pjax::begin(['id'=>'estado']); ?>
-                                        <h5 id="H5ultimoEstado">
-                                            <?php echo "Estado: ". $model->workflowLastStateName; ?>
-
-                                        </h5>                                   
-                                    <?php Pjax::end(); ?> 
-                           <?php if(Helper::checkRoute('/workflow/*')){?>
-                        <button type="button" class="btn btn-infor dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <span class="label label-success rounded estadoDesc">                                    
-                                            Cambiar Estado                          
-                                </span>
-                           
-                        </button>
-                           <?php }?>
-                            <ul class="dropdown-menu pull-right">
-                                    <?php 
-                                    	
-                                        $dataEstado=Estado::find()->where("autoAsignado != 'S'")->asArray()->all();    
-                                       // var_dump($dataEstado);die();
-                                        foreach ($dataEstado as $estado) //var_dump($estado['descripcion']);die();
-                                            echo "<li><a href='#".$estado['id']."' class='btn-view change-estado'  data-workflow='".$model->currentWorkflow."' data-informe='".$model->id."' data-estado='".$estado['id']."' data-estadotexto='".$estado['id']."' >".$estado['descripcion']."</a></li>";
-                                           
-                                    ?>
-<!--                                    <li><a href="#" class="btn-view">View</a></li><li><a href="#" class="btn-edit">Edit</a></li><li role="separator" class="divider"></li>
-                                <li><a href="#" class="btn-delete">Delete</a></li>->
-                            </ul>
-                           
-                    </div>
-                    <div class="col-md-3">  
-			<div class="pull-right">				
-
-                        <div class="btn-group">                        
-                            <?php Pjax::begin(['id'=>'estado']); ?>
-                                 <h5>
-                                   <?php echo "Asignado: ". $model->workflowLastAsignationUser; ?>   
-                                 </h5>                                   
-                            <?php Pjax::end(); ?>  
-                            <?php if(Helper::checkRoute('/workflow/*')){?>
-                                <button type="button" class="btn btn-infor dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    <span class="label label-success rounded estadoDesc">                                    
-                                       Asignar a                                
-                                    </span>
-                                </button>
-                            <?php }?>  
-                                <ul class="dropdown-menu pull-right">
-                                    <?php 
-                                        $dataUsuarios=User::find()->asArray()->all();    
-                                        foreach ($dataUsuarios as $usuario) 
-                                            echo "<li><a href='#".$usuario['id']."' class='btn-view change-estado' ' data-usuario='".$usuario['id']."' data-estadotexto='".$usuario['id']."' data-informe='".$model->id."' >".$usuario['username']."</a></li>";
-                                    ?>
-                            </ul>
-                        </div>                         
-                    </div>
-                </div>
-                    <div class="col-md-2">
-                        <div class="" style="margin-top: 10px;">
-                            
-                                <button class="btn btn-circle btn-teal mostrarTree" title="Agregar texto"><i class="fa fa-edit"></i></button>
-                                <button class="btn btn-circle btn-teal guardarTexto" value="<?= Url::to(['textos/copy']) ?>"><i class="fa fa-copy"></i></button>
-                                <?php $url = ['informe/printreducido', 'id' => $model->id , 'estudio' => $model->Estudio_id];
-                                  echo    Html::a( "R ", $url, ["class"=>"btn btn-circle btn-teal"] ); ?>
-                                <input type="text"value="<?php echo  $model->id ?>" id="id_informe" style="display:none">
-                                <input type="text"value="<?php echo $model->Estudio_id ?>" id="id_estudio" style="display:none">
-                                
-                        </div>
-                    </div>
-                      
-             </div>
-                    <div class="clearfix"></div>
-                </div><!-- /.panel-heading ->   
-                                
-
-
-        <?php /*echo $this->render('_form_pap', [
-            'model' => $model, 
-        	'edad'=>$modelp->pacienteEdad,
-        	'dataproviderMultimedia'=>$dataproviderMultimedia,
-        ]);*/
-        ?>
-
-
-
-            </div>
-        </div>
-            
-            </div>
-        </div>
-    </div>
-        
-</section-->
-            
+               -->
+		  

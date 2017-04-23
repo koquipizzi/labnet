@@ -6,11 +6,6 @@ use yii\grid\GridView;
 ?>
 
 
-    <h3>Imágenes del informe
-        <span>
-        <?php echo Html::a('<i class="fa fa-retweet"></i>', ['refresh', 'id' => $model->id], ['class' => 'refresh btn btn-success']); ?>
-        </span>
-    </h3>
     <div class="col-sm-12">
                  <?php
                  $images = [];

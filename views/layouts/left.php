@@ -58,7 +58,7 @@ use mdm\admin\components\Helper;
                             ['label' => 'Usuarios', 'icon' => 'user', 'url' => ['/user'],],
                             ['label' => 'Administrativos', 'icon' => 'user-circle-o', 'url' => ['/user'],],
                             ['label' => 'Admin Usuarios', 'icon' => 'group', 'url' => ['/user'],],
-                            [
+                          /*  [
                                 'label' => 'Level One',
                                 'icon' => 'fa fa-circle-o',
                                 'url' => '#',
@@ -74,12 +74,12 @@ use mdm\admin\components\Helper;
                                         ],
                                     ],
                                 ],
-                            ],
+                            ],*/
                         ],
                     ],
                     //end personas
           //          if(Helper::checkRoute('/pago/*')) {
-                        [
+                  /*      [
                         'label' => 'Pagos',
                         'icon' => 'usd',
                         'url' => '#',
@@ -88,7 +88,7 @@ use mdm\admin\components\Helper;
                             ['label' => 'Impagos', 'icon' => 'exclamation', 'url' => ['/pago/impagos'],],
                             ['label' => 'Nuevo Pago', 'icon' => 'plus', 'url' => ['/pago/create'],],
                             ],
-                        ],
+                        ], */
           //          }
 
 
@@ -98,8 +98,8 @@ use mdm\admin\components\Helper;
                         'url' => '#',
                         'items' => [
                             ['label' => 'Nomenclador', 'icon' => 'book', 'url' => ['/nomenclador'],],
-                            ['label' => 'Coberturas', 'icon' => 'user-md', 'url' => ['/'],],
-                            ['label' => 'Entidades Facturables', 'icon' => 'user', 'url' => ['/'],],
+                            ['label' => 'Coberturas', 'icon' => 'user-md', 'url' => ['/prestadoras/index'],],
+                            ['label' => 'Entidades Facturables', 'icon' => 'user', 'url' => ['/prestadoras/indexfacturable'],],
                             ['label' => 'Procedencias', 'icon' => '', 'url' => ['/procedencia'],],
                             ['label' => 'AutoTextos', 'icon' => 'file-text', 'url' => ['/textos'],],
                             ['label' => 'Localidades', 'icon' => 'map-marker', 'url' => ['/localidad'],],

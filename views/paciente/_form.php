@@ -213,7 +213,7 @@ use kartik\datecontrol\DateControl;
             ]); ?>
                 <!--div onsubmit="return false;" id="create-prestadoraTemp-form" class="form-horizontal"-->
                 <?php 
-                $dataPrestadoras=ArrayHelper::map(app\models\Prestadoras::find()->asArray()->all(), 'id', 'descripcion');
+                $dataPrestadoras=ArrayHelper::map(app\models\Prestadoras::find()->where(['cobertura'=>1])->all(), 'id', 'descripcion');
                 echo $form2->field($prestadoraTemp, 'Prestadora_id', ['template' => "{label}
                 <div class='col-md-8'>{input}</div>
                 {hint}

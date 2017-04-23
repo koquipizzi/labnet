@@ -116,23 +116,31 @@ echo execut\widget\TreeView::widget([
         <!-- Start double tabs -->
         <div class="panel panel-tab panel-tab-double rounded shadow">                
             <!-- Start tabs heading -->
-            <div class="panel-heading panel-labnet no-padding">
-                <ul class="nav nav-tabs">
-                    <li class="active">
-                        <a href="#tab2-1" data-toggle="tab">
-                            <i class="fa fa-file-text"></i>   
-                                <span>Carga de detalle del estudio</span>     
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#tab2-2" data-toggle="tab">
-                            <i class="fa fa-image"></i>
-                                <span>Multimedia</span>
-                        </a>
-                    </li>  
+                    <div class="panel-heading panel-labnet no-padding">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#tab2-1" data-toggle="tab">
+                                    <div>
+                                       <i class="fa fa-file-text"></i>
+                                        <span>Carga de detalle del estudio</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#tab2-2" data-toggle="tab">
+                                    <div>
+                                        <i class="fa fa-image"></i>
+                                        <span>Adjuntar imágenes</span>
 
-                </ul>
-            </div><!-- /.panel-heading -->
+                                    </div>
+                                </a>
+                            </li> 
+                            <li class="pull-right">
+                                <a href="#" class="text-muted mostrarTree"><i class="fa fa-edit"></i></a>
+                            </li> 
+                            
+                        </ul>
+                    </div><!-- /.panel-heading -->
             <!--/ End tabs heading -->
  <?php Pjax::begin(['id'=>'pjax-tree']); ?>
             <!-- Start tabs content -->
@@ -373,7 +381,7 @@ echo execut\widget\TreeView::widget([
                         <div style="margin-top: 5px;">
                             <div class="panel-body no-padding">
                                 <div class="row">
-                                    <div class="col-sm-4">   
+                                    <div class="col-sm-12">   
                                         <?php
                                         echo FileInput::widget([
                                             'model' => $model,
@@ -409,16 +417,22 @@ echo execut\widget\TreeView::widget([
                                         ?>
                                     </div>
                                 </div> 
-                                <?php Pjax::begin(['id' => 'galeriar']); ?>    
-                                <div class="content-galeria">
-                                    <?=
-                                    $this->render('galeria_1', [
-                                        'model' => $model,
-                                        'dataproviderMultimedia' => $dataproviderMultimedia,
-                                    ])
-                                    ?>
-                                </div>
-                                <?php Pjax::end(); ?>
+                                <h3>Imágenes del informe
+                                            <span>
+                                            <?php echo Html::a('<i class="fa fa-retweet"></i>', ['refresh', 'id' => $model->id], ['class' => 'refresh btn btn-success']); ?>
+                                            </span>
+                                        </h3>
+                                        <?php Pjax::begin(['id' => 'galeriar', 'enablePushState' => FALSE]); ?>    
+                                        <div class="content-galeria">
+                                    
+                                            <?=
+                                            $this->render('galeria_1', [
+                                                'model' => $model,
+                                                'dataproviderMultimedia' => $dataproviderMultimedia,
+                                            ])
+                                            ?>
+                                        </div>
+                                        <?php Pjax::end(); ?>
                             </div>
                             <div class="form-footer">
                                 <div class="col-sm-offset-3">

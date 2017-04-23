@@ -27,7 +27,6 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_contable.js', ['depends'
             padding-right: 1px;
         }
     </style>
-    <div class="panel">
         <div class="panel-heading">            
                 <div class="pull-left">
                     <h3 class="panel-title text-left">Nomencladores</h3>
@@ -47,7 +46,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_contable.js', ['depends'
                                 'id'=> 'popNomenclador',
                                 'toggleButton' => ['label'=>'', 'class'=>' fa fa-plus'],
                                 'header' => '<!--i class="glyphicon glyphicon-lock"></i-->Agregar nomenclador',
-                                'footer'=> Html::a('<span class="btn btn-info click"> Agregar</span>', $url)//Html::Button('Agregar', ['class'=>'btn btn-sm btn-primary click'])// .
+                                'footer'=> Html::a('<span class="btn btn-info click">Aceptar</span>', $url)//Html::Button('Agregar', ['class'=>'btn btn-sm btn-primary click'])// .
                                         // Html::resetButton('Cancelar', ['class'=>'btn btn-sm btn-default'])
                             ]);
                            // echo $form->field($model, 'id_nomenclador')->textInput(['placeholder'=>'Nomenclador...']);
@@ -180,4 +179,3 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_contable.js', ['depends'
                 
             </div>
         </div><!-- /.panel-body -->
-    </div>

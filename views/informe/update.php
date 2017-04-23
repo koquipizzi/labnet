@@ -99,8 +99,31 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                     'model' => $model, 'informe'=>$informe,  'dataProvider'=> $dataProvider, 'modeloInformeNomenclador' => $modeloInformeNomenclador]) 
                 ?>
             </div>
-        </div>
+
+
     </div>
+
+            <div  class="box">  
+		             <div class="box-header with-border">
+                        <h3 class="box-title">Historial Paciente</h3>
+                    </div>
+		             
+		  	        <div  id="historialPacientePanel" data-spy="scroll" data-offset="3" data-target="#historial" class="panel-body text-center" style=" position: relative;">	                                                         
+	                        <?php 
+		                            if(is_array($historialPaciente)){
+		                                echo	$this->render('/informe/historialPaciente', [
+		                                    'historialPaciente'=>$historialPaciente
+		                                ]) ;
+		                            }else{
+		                                    echo "El Paciente no tiene historial.";
+		                            }
+                                          
+	                        ?>
+                    </div>
+                            
+      		</div>
+
+        </div>
     <div class="col-md-9">
         <div class="box">
             <div class="box-header with-border">
@@ -188,7 +211,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         </label> 
                 <!-- botones derecha_-->
             </div>
-            <div class="box-body">
+            <div class="box-body no-padding">
                   <?= $this->render('_form', [
                     'model' => $model, 
                     'edad'=>$modelp->pacienteEdad,

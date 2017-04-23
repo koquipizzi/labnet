@@ -106,37 +106,29 @@ echo TreeView::widget([
                 <!-- Start double tabs -->
                 <div class="panel panel-tab panel-tab-double rounded shadow">
                     
-                     <div class="ribbon-wrapper">
-                          <?php if($model->estado_actual===Workflow::estadoEntregado()){
-                                      echo ' <div class="ribbon  ribbon-shadow">'. "$model->workflowLastStateName".' </div>';
-                                  }else{
-                                         echo ' <div class="ribbon ribbon-teals ribbon-shadow">'. "$model->workflowLastStateName".' </div>';
-                                     } 
-                               ?>
-                    </div>
                     <!-- Start tabs heading -->
                     <div class="panel-heading panel-labnet no-padding">
                         <ul class="nav nav-tabs">
                             <li class="active">
                                 <a href="#tab2-1" data-toggle="tab">
-                                    <i class="fa fa-file-text"></i>
                                     <div>
-                                        <span class="text-strong">Detalle </span>
+                                       <i class="fa fa-file-text"></i>
                                         <span>Carga de detalle del estudio</span>
                                     </div>
                                 </a>
                             </li>
                             <li>
                                 <a href="#tab2-2" data-toggle="tab">
-
-                                    <i class="fa fa-image"></i>
                                     <div>
-                                        <span class="text-strong">Multimedia</span>
+                                        <i class="fa fa-image"></i>
                                         <span>Adjuntar imágenes</span>
 
                                     </div>
                                 </a>
-                            </li>  
+                            </li> 
+                            <li class="pull-right">
+                                <a href="#" class="text-muted mostrarTree"><i class="fa fa-edit"></i></a>
+                            </li> 
                             
                         </ul>
                     </div><!-- /.panel-heading -->
@@ -260,9 +252,11 @@ echo TreeView::widget([
                                                                 'stars' => 4,
                                                                 'min' => 0,
                                                                 'max' => 4,
+                                                                'clearCaption' => 'No se presentan',
+                                                                'clearButtonTitle'=>'No se presentan',
                                                                 'filledStar' => '<i class="glyphicon glyphicon-plus-sign"></i>',
                                                                 'emptyStar' => '<i class="glyphicon glyphicon-plus"></i>',
-                                                                'size' => 'sx',
+                                                                'size' => 'xs',
                                                                 'starCaptions' => [
                                                                     0 => 'No se presentan',
                                                                     1 => 'Escasa cantidad',
@@ -286,9 +280,11 @@ echo TreeView::widget([
                                                                     'stars' => 4,
                                                                     'min' => 0,
                                                                     'max' => 4,
+                                                                    'clearCaption' => 'No se presentan',
+                                                                    'clearButtonTitle'=>'No se presentan',
                                                                     'filledStar' => '<i class="glyphicon glyphicon-plus-sign"></i>',
                                                                     'emptyStar' => '<i class="glyphicon glyphicon-plus"></i>',
-                                                                    'size' => 'sx',
+                                                                    'size' => 'xs',
                                                                     'starCaptions' => [
                                                                         0 => 'No se presentan',
                                                                         1 => 'Escasa cantidad',
@@ -412,7 +408,7 @@ echo TreeView::widget([
 
                                     <div class="panel-body no-padding">
                                         <div class="row">
-                                            <div class="col-sm-4">   
+                                            <div class="col-sm-12">   
                                                 <?php
                                                 echo FileInput::widget([
                                                     'model' => $model,
@@ -451,8 +447,15 @@ echo TreeView::widget([
 // 															alert("p file");
 // 													});
                                         </script>
-                                            <?php Pjax::begin(['id' => 'galeriar', 'enablePushState' => FALSE]); ?>    
+
+                                        <h3>Imágenes del informe
+                                            <span>
+                                            <?php echo Html::a('<i class="fa fa-retweet"></i>', ['refresh', 'id' => $model->id], ['class' => 'refresh btn btn-success']); ?>
+                                            </span>
+                                        </h3>
+                                        <?php Pjax::begin(['id' => 'galeriar', 'enablePushState' => FALSE]); ?>    
                                         <div class="content-galeria">
+                                    
                                             <?=
                                             $this->render('galeria_1', [
                                                 'model' => $model,

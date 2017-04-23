@@ -9,10 +9,19 @@ use app\models\Localidad;
 /* @var $this yii\web\View */
 /* @var $model app\models\Prestadoras */
 /* @var $form ActiveForm */
+$this->title = Yii::t('app', 'Nueva Cobertura/OS');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Coberturas/OS'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="prestadoras-_form">
 
-    <?php $form = ActiveForm::begin([  'id'=>'create-prestadora-form',
+<div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+              <div class="pull-right">
+                            <?= Html::a('<i class="fa fa-arrow-left"></i> Volver', ['procedencia/index'], ['class'=>'btn btn-primary']) ?>
+              </div>
+            </div>
+            <?php $form = ActiveForm::begin([  'id'=>'create-prestadora-form',
             'options' => [
                 'class' => 'form-horizontal mt-10',
                 'id'=>'create-prestadora-form',
@@ -87,13 +96,13 @@ use app\models\Localidad;
     ])->textArea(['maxlength' => true]) ?>
 
 
-    <div class="form-footer">
-        <div style="text-align: right;">
+    <div class="box-footer" >
+        <div class="pull-right box-tools">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
         </div>
     </div>
 
     <?php ActiveForm::end(); ?>
 
-</div><!-- prestadoras-_form -->
+</div>

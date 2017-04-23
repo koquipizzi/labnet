@@ -10,33 +10,25 @@ use yii\helpers\ArrayHelper;
 //agregar modelos para los combos
 use app\models\TipoPrestadora;
 use app\models\Localidad;
+use xj\bootbox\BootboxAsset;
+BootboxAsset::register($this);
 
 
 $this->title = Yii::t('app', 'Entidades Facturables');
 $this->params['breadcrumbs'][] = $this->title;
-$this->registerJsFile('@web/assets/admin/js/cipat_modal_facturable.js', ['depends' => [yii\web\AssetBundle::className()]]);
-?>
+  ?>
 
-<section id="page-content">
     <div class="header-content">
-        <h2><i class="fa fa-home"></i>LABnet <span><?= Html::encode($this->title) ?></span></h2>
-    </div><!-- /.header-content -->
-
-    <div class="body-content animated fadeIn" >
-        <div class="prestadoras-index">
-            <div class="panel_titulo">
-                <div class="panel-heading">
-                    <div class="pull-left">
-                        <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
-                    </div>
-                    <div class="pull-right">
-                        <?= Html::button('Nueva Entidad Facturable', ['value' => Url::to(['prestadoras/createfacturable']), 'title' => 'Nuevo Facturable', 'class' => 'loadMainContentPrestadora btn btn-success btn-sm']); ?>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
+            <div class="pull-left">
+                <h3 class="panel-title">Listado de <?= Html::encode($this->title) ?></h3>
             </div>
+            <div class="pull-right">
+                <?= Html::a('<i class="fa fa-plus-circle"></i> Nueva Entidad Facturable', ['prestadoras/createfacturable'], ['class'=>'btn btn-primary']) ?>
+            </div>   
+            <div class="clearfix"></div>
+        </div>
 
-            <?php Pjax::begin(['id' => 'prestadoras']); ?>
+     <?php Pjax::begin(['id' => 'prestadoras']); ?>
 
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
@@ -44,13 +36,18 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_facturable.js', ['depend
                 'filterModel' => $searchModel,
                 //  'pjax' => true,
                 'columns' => [
-                    ['class' => 'yii\grid\SerialColumn'],
+                   // [//'class' => 'yii\grid\SerialColumn'],
                     'descripcion',
                     [
                         'attribute'=>'telefono',
                         'contentOptions' => ['style' => 'width:10%;'],
                     ],
                     'email:email',
+                    'domicilio',
+                    [
+                        'label' => 'Localidad',
+                        'value' => 'localidadTexto',
+                    ],
 
                     ['class' => 'yii\grid\ActionColumn',
                         'template' => '{view}{edit}{delete}',
@@ -58,16 +55,16 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_facturable.js', ['depend
 
                             //view button
                             'view' => function ($url, $model) {
-                                return Html::a('<span class="fa fa-eye activity-view-link"></span>', false, [
+                                return Html::a('<span class="fa fa-eye activity-view-link"></span>', $url, [
                                     'title' => Yii::t('app', 'Ver'),
-                                    'class'=>'btn btn-success btn-xs ver',
+                                    'class'=>'btn btn-success btn-xs ',
                                     'value'=> "$url",
                                 ]);
                             },
                             'edit' => function ($url, $model) {
-                                return Html::a('<span class="fa fa-pencil"></span>', false, [
+                                return Html::a('<span class="fa fa-pencil"></span>', $url, [
                                     'title' => Yii::t('app', 'Editar'),
-                                    'class'=>'btn btn-info btn-xs editar',
+                                    'class'=>'btn btn-info btn-xs ',
                                     'value'=> "$url",
                                 ]);
                             },
@@ -103,13 +100,6 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_facturable.js', ['depend
 
             Pjax::end(); ?>
 
-        </div>
-    </div>
-    <!-- Start footer content -->
-    <?php echo $this->render('/shares/_footer_admin') ;?>
-    <!--/ End footer content -->
-</section>
-
 <style>
     .summary{
         float:left;
@@ -117,3 +107,9 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_facturable.js', ['depend
 
 
 </style>
+
+<?php 
+    $this->registerJsFile('@web/assets/admin/js/cipat_modal_prestadora.js',
+    ['depends' => [yii\web\AssetBundle::className()]]);
+?>
+

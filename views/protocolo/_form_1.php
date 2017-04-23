@@ -323,7 +323,11 @@ if (!$session->isActive)
                              'dataProvider' => $dataProvider,'tanda' => $tanda,'model'=>$informe,
                         ]) ?>      
                 </div>
-
+                 <?= $this->render('//protocolo/_gridInforme', [
+                                                        'dataProvider' => $dataProvider,'model'=>$model,
+                                                ]) ?> 
+                                             
+                                             
         </div> <!-- bloque derecho -->
                    
 

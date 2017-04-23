@@ -17,7 +17,6 @@ use yii\helpers\ArrayHelper;
             padding-right: 1px;
         }
     </style>
-    <div class="panel">
         <div class="panel-heading">            
                 <!--div class="pull-left">
                     <h3 class="panel-title text-left">Nomencladores</h3>
@@ -131,4 +130,3 @@ use yii\helpers\ArrayHelper;
                 <?php Pjax::end(); ?>
             </div>
         </div><!-- /.panel-body -->
-    </div>

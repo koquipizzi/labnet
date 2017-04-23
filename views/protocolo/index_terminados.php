@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'dataProvider' => $dataProvider_terminados,
                                 'options'=>array('class'=>'table table-striped'),
                                 'filterModel' => $searchModel,    
-                                'columns' =>    [
+                                'columns' =>    [ //'id',
                                      //   'value'=>'estudio',
                                      [
                                         'label' => 'Fecha Entrada',

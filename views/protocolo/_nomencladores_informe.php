@@ -10,16 +10,7 @@ use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 
 ?>
-
-    <style>
-        #popNomenclador {
-            width: 200px;
-            padding-right: 1px;
-        }
-    </style>
-    <div class="panel">
         <div class="panel-body no-padding">
-            <div class="table-responsive">
                 <?php Pjax::begin(['id' => 'nomencladores']); ?>
                 <table class="table">
                     <tbody>
@@ -74,6 +65,4 @@ use yii\helpers\ArrayHelper;
                     </tbody>
                 </table>
                 <?php Pjax::end(); ?>
-            </div>
         </div><!-- /.panel-body -->
-    </div>

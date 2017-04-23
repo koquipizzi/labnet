@@ -19,7 +19,7 @@ use app\models\Informe;
                     <tbody>
                     <tr>
                         <td>
-                            <span class="pull-left text-capitalize">Entrada</span>
+                            <span class="pull-left text-capitalize">Fecha Entrada</span>
                           </td>
                         <td>  <span class="pull-left text-strong"><?= $model->fechaEntregaOrdenada ?></span>
                         </td>
@@ -45,6 +45,14 @@ use app\models\Informe;
                          </td>
                         <td>
                             <span class="pull-left text-strong"><?= $model->medico->nombre ?></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="pull-left text-capitalize">Cobertura/OS</span>
+                         </td>
+                        <td>
+                            <span class="pull-left text-strong"><?= $model->prestadora->descripcion ?></span>
                         </td>
                     </tr>
                     <tr>

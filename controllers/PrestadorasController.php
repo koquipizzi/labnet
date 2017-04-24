@@ -92,8 +92,8 @@ class PrestadorasController extends Controller
         if (!$model) {
             // Handle the case when model with given id does not exist
         }
-        return $this->renderAjax('viewfacturable', ['id' => $model->id,  'model' => $this->findModel($id)]);
-        die();
+        return $this->render('viewfacturable', ['id' => $model->id,  'model' => $this->findModel($id)]);
+     //   die();
     }
     /**
      * Creates a new Prestadoras model.
@@ -112,12 +112,11 @@ class PrestadorasController extends Controller
                  }else{
                       $model->facturable='N';
                  }
-            $model->save();
-         
-            return;
+            $model->save();   
+            $this->redirect(['view', 'id' => $model->id]);
         }
         else {
-                 return $this->renderAjax('_form', ['model' => $model]);
+                 return $this->render('_form', ['model' => $model]);
              }
 
     }
@@ -132,7 +131,7 @@ class PrestadorasController extends Controller
             return;
         }
         else{
-                return $this->renderAjax('_formfacturable', ['model' => $model ]);
+                return $this->render('_formfacturable', ['model' => $model ]);
              }
 
     }
@@ -170,9 +169,9 @@ class PrestadorasController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return;// $this->redirect(['view', 'id' => $model->id]);
+            $this->redirect(['view', 'id' => $model->id]);
         } else { 
-            return $this->renderAjax('_form', [
+            return $this->render('_form', [
                 'model' => $model
             ]); die();
         }
@@ -191,9 +190,9 @@ class PrestadorasController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return;// $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['viewfacturable', 'id' => $model->id]);
         } else {
-            return $this->renderAjax('_formfacturable', [
+            return $this->render('_formfacturable', [
                 'model' => $model,
             ]);
         }

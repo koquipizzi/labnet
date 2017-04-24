@@ -119,3 +119,7 @@ a.desc:after {
     background: transparent !important;
     
 }
+
+b, strong {
+    font-weight: normal;
+}

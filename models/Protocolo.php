@@ -70,11 +70,11 @@ class Protocolo extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'fecha_entrada' => Yii::t('app', 'Entrada'),
-            'fecha_entrega' => Yii::t('app', 'Entrega'),
+            'fecha_entrada' => Yii::t('app', 'Fecha de Entrada'),
+            'fecha_entrega' => Yii::t('app', 'Fecha de Entrega'),
             'anio' => Yii::t('app', 'Año'),
             'letra' => Yii::t('app', 'Letra'),
-            'nro_secuencia' => Yii::t('app', 'Nro Secuencia'),
+            'nro_secuencia' => Yii::t('app', 'Nro. Secuencia'),
             'registro' => Yii::t('app', 'Registro'),
             'observaciones' => Yii::t('app', 'Observaciones'),
             'Medico_id' => Yii::t('app', 'Médico'),
@@ -199,7 +199,13 @@ class Protocolo extends \yii\db\ActiveRecord
     }
 
 
-
+    public function getCobertura()
+    {  
+    	$pacientePrestadora_id= Protocolo::find('Paciente_prestadora_id')->where("id=$this->id")->one()['Paciente_prestadora_id'];
+        $cobertura_id = PacientePrestadora::find()->where("id=$pacientePrestadora_id")->one()['Prestadoras_id'];
+        $cobertura = Prestadoras::find()->where("id=$cobertura_id")->one()['descripcion'];
+        return $cobertura;
+    }
 
 
 

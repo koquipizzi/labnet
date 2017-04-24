@@ -283,20 +283,19 @@ class Informe extends \yii\db\ActiveRecord
     	$pacientePrestadora_id= Protocolo::find('Paciente_prestadora_id')->where("id=$protocolo_id")->one()['Paciente_prestadora_id'];
     	$paciente_id=PacientePrestadora::find()->where("id=$pacientePrestadora_id")->one()['Paciente_id'];
     	$idInforme=$this->id;
-    	$informesPacientes= $this->findBySql("
-    			select DISTINCT(i.id) AS 'id_informe', i.diagnostico , i.descripcion, i.Estudio_id, w.fecha_fin, p.fecha_entrega
-		    	from Informe i JOIN Protocolo p ON(i.Protocolo_id=p.id)
-		    	JOIN Paciente_prestadora pc ON(p.Paciente_prestadora_id = pc.id)
-		    	JOIN Workflow w ON(i.id=w.Informe_id) 
-		    	where (pc.Paciente_id=$paciente_id and w.Estado_id=5 OR w.Estado_id=6) and i.id!=$idInforme
+  //     $paciente_id= 37756;
+        $informesPacientes= $this->findBySql("
+    			select DISTINCT(i.id) AS 'id_informe', i.diagnostico ,
+                i.descripcion, i.Estudio_id,  p.fecha_entrega
+                from Informe i left JOIN Protocolo p ON(i.Protocolo_id=p.id)
+                left JOIN Paciente_prestadora pc ON(p.Paciente_prestadora_id = pc.id)
+                where (pc.Paciente_id=$paciente_id )
 		    	order by p.fecha_entrega DESC
     			")->asArray()->all();
 
-//      	var_dump($informesPacientes);die();
-    	 
     	if (empty($informesPacientes))
     		return "No hay registrado ningún estudio perteneciente al paciente";
-    		else
+    	else
     		{
     			return $informesPacientes;
     		}
@@ -310,11 +309,40 @@ class Informe extends \yii\db\ActiveRecord
     {
     	return Estudio::find()->where("id=$estudio_id")->one()['nombre'];
     }
-    
-    
- 
-    
-    
-    
+
+    public function getValor($data)
+    {
+        switch($data) {
+            case (string)0:
+                return "-/++++";
+                break;
+            case (string)1:
+                return "+/++++";
+                break;
+            case (string)2:
+                return "++/++++";
+                break;
+            case (string)3:
+                return "+++/++++";
+                break;
+            case (string)4:
+                return "++++/++++";
+                break;
+            case "+":
+                return "+/++++";
+                break;
+            case "++":
+                return "++/++++";
+                break;
+            case "+++":
+                return "+++/++++";
+                break;
+            case "++++":
+                return "++++/++++";
+                break;
+
+        }
+    }
+     
     
 }

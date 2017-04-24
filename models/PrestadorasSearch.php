@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Prestadoras;
 use yii\data\ArrayDataProvider;
+use yii\data\Sort;
 
 /**
  * PrestadorasSearch represents the model behind the search form about `app\models\Prestadoras`.
@@ -54,9 +55,19 @@ class PrestadorasSearch extends Prestadoras
 
 
         // add conditions that should always apply here
+        $sort = new Sort([
+            'defaultOrder' => ['descripcion' => SORT_ASC],
+            'attributes' => [
+                'id',
+                'domicilio',
+                'descripcion',
+                'localidad'
+            ]
+        ]);
 
         $dataProvider = new ArrayDataProvider([
             'allModels' => $query,
+            'sort' => $sort,
         ]);
         $this->load($params);
 

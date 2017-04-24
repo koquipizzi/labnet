@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use app\models\Protocolo;
 use yii\db\Query;
 use yii\data\ArrayDataProvider;
+use yii\db\Expression;
 
 /**
  * ProtocoloSearch represents the model behind the search form about `app\models\Protocolo`.
@@ -116,10 +117,27 @@ class ProtocoloSearch extends Protocolo
         $results = $command->queryAll();
         $itemsCount = (int)$results[0]["total"];  
         
-       //ß $query = $query." order by Protocolo.id desc;";
+       // $query = $query." order by Protocolo.id desc;";
         $dataProvider = new \yii\data\SqlDataProvider([
             'sql' => $query,
-            'sort'=> ['defaultOrder' => ['nombre'=> SORT_ASC]], 
+             'sort' => [
+                 'defaultOrder' => ['id' => SORT_DESC],
+                'attributes' => [
+                     'nombre',
+                    'nro_documento' => [
+                        'asc' => ['Paciente.nro_documento' => SORT_ASC],
+                        'desc' => ['Paciente.nro_documento' => SORT_DESC],
+                    ],
+                    'id' => [
+                        'asc' => [new Expression('id')],
+                        'desc' => [new Expression('id DESC ')],
+                        'default' => SORT_DESC,
+                    ],
+                    
+                    
+                ],
+            ],
+            
             'totalCount' => $itemsCount,
             'key'        => 'id' ,
             'pagination' => [
@@ -127,16 +145,7 @@ class ProtocoloSearch extends Protocolo
             ],
         ]);
         
-        $dataProvider->setSort([
-        'attributes' => [
-           // 'id',
-            'nombre',
-            'nro_documento' => [
-                'asc' => ['Paciente.nro_documento' => SORT_ASC],
-                'desc' => ['Paciente.nro_documento' => SORT_DESC],
-            ]
-        ]
-        ]);
+
 
         
         if (!($this->load($params) && $this->validate())) {
@@ -222,23 +231,30 @@ class ProtocoloSearch extends Protocolo
 
         $dataProvider = new \yii\data\SqlDataProvider([
             'sql' => $query,
-            'sort'=> ['defaultOrder' => ['Paciente.nombre'=> SORT_ASC]], 
+            'sort' => [
+                 'defaultOrder' => ['id' => SORT_DESC],
+                'attributes' => [
+                     'nombre',
+                    'nro_documento' => [
+                        'asc' => ['Paciente.nro_documento' => SORT_ASC],
+                        'desc' => ['Paciente.nro_documento' => SORT_DESC],
+                    ],
+                    'id' => [
+                        'asc' => [new Expression('id')],
+                        'desc' => [new Expression('id DESC ')],
+                        'default' => SORT_DESC,
+                    ],
+                    
+                    
+                ],
+            ],
             'totalCount' => $itemsCount,
             'pagination' => [
                     'pageSize' => 50,
             ],
         ]);
 
-        $dataProvider->setSort([
-        'attributes' => [
-           // 'id',
-            'nombre',
-            'nro_documento' => [
-                'asc' => ['Paciente.nro_documento' => SORT_ASC],
-                'desc' => ['Paciente.nro_documento' => SORT_DESC],
-            ]
-        ]
-        ]);
+      
 //        var_dump($dataProvider); die();
         // get the user records in the current page
   //      $models = $dataProvider->getModels();      
@@ -404,6 +420,23 @@ class ProtocoloSearch extends Protocolo
 
         $dataProvider = new \yii\data\SqlDataProvider([
             'sql' => $query,
+            'sort' => [
+                 'defaultOrder' => ['id' => SORT_DESC],
+                'attributes' => [
+                     'nombre',
+                    'nro_documento' => [
+                        'asc' => ['Paciente.nro_documento' => SORT_ASC],
+                        'desc' => ['Paciente.nro_documento' => SORT_DESC],
+                    ],
+                    'id' => [
+                        'asc' => [new Expression('id')],
+                        'desc' => [new Expression('id DESC ')],
+                        'default' => SORT_DESC,
+                    ],
+                    
+                    
+                ],
+            ],
             'totalCount' => $itemsCount,
             'pagination' => [
                     'pageSize' => 50,
@@ -678,23 +711,30 @@ class ProtocoloSearch extends Protocolo
 
         $dataProvider = new \yii\data\SqlDataProvider([
             'sql' => $query,
-            'sort'=> ['defaultOrder' => ['nombre'=> SORT_ASC]], 
+            'sort' => [
+                 'defaultOrder' => ['id' => SORT_DESC],
+                'attributes' => [
+                     'nombre',
+                    'nro_documento' => [
+                        'asc' => ['Paciente.nro_documento' => SORT_ASC],
+                        'desc' => ['Paciente.nro_documento' => SORT_DESC],
+                    ],
+                    'id' => [
+                        'asc' => [new Expression('id')],
+                        'desc' => [new Expression('id DESC ')],
+                        'default' => SORT_DESC,
+                    ],
+                    
+                    
+                ],
+            ], 
             'totalCount' => $itemsCount,
             'pagination' => [
                     'pageSize' => 100,
             ],
         ]);
 
-        $dataProvider->setSort([
-            'attributes' => [
-            // 'id',
-                'nombre',
-                'nro_documento' => [
-                    'asc' => ['Paciente.nro_documento' => SORT_ASC],
-                    'desc' => ['Paciente.nro_documento' => SORT_DESC],
-                ]
-            ]
-        ]);
+  
         
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;

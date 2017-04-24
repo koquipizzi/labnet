@@ -127,6 +127,7 @@ class InformeController extends Controller {
                     $model->citologia = $texto->micro;
                     $model->diagnostico = $texto->diagnos;
                     $model->observaciones = $texto->observ;
+		//			var_dump($model); die();
                     break;
                 case 2: //biopsia
                     $model->material = $texto->material;
@@ -220,8 +221,8 @@ class InformeController extends Controller {
             $searchModel->id_informe = $model->id;
             $dataProvider = $searchModel->search([]);
             $informe=$this->findModel( $model->id );
-        //    $historialPaciente=$informe->getHistorialUsuario();
-			$historialPaciente='';
+            $historialPaciente=$informe->getHistorialUsuario();
+		//	$historialPaciente='';
             if (is_null($model->titulo)) {
                  $model->titulo = $model->estudio->titulo;
              }
@@ -277,8 +278,15 @@ class InformeController extends Controller {
             }
         }
         if ($model->estudio->nombre === 'PAP') {
-                    $model->leucositos=0;
-                    $model->hematies=0;
+                //    $model->leucositos= 0;
+               //     $model->hematies= 0;
+					if (isset($_GET['idtexto'])) {
+                        $textoModel = new \app\models\Textos();
+                        $texto = $textoModel->find()->where(['=', 'id', $_GET['idtexto']])->one(); //findModel($_GET['idtexto']);
+                        $this->cargarModelo($model, $texto);      
+                        $codigo = $texto->codigo;
+                        $model->save();
+                    }
                     return $this->render ( 'update_pap', [ 
                                             'model' => $model,
                                             'modelp' => $modelp,
@@ -497,6 +505,15 @@ class InformeController extends Controller {
                 
        }
       
+	   public function actionMail($id=null,$estudio=null){
+			Yii::$app->mailer->compose()
+			->setFrom('alejandra@qwavee.com')
+			->setTo('koquipizzi@gmail.com')
+			->setSubject('Message subject')
+			->setTextBody('Plain text content')
+			->setHtmlBody('<b>HTML content</b>')
+			->send();
+	   }
         
         public function actionPrintreducido($id,$estudio){
              switch ($estudio){
@@ -789,13 +806,12 @@ class InformeController extends Controller {
 		return $pdf->render ();
 	}
 	public function actionPrintinf($id) {
-                //Datos generales del Laboratorio
-                $laboratorio = Laboratorio::find()->where(['id' => 1])->one();
+        //Datos generales del Laboratorio
+        $laboratorio = Laboratorio::find()->where(['id' => 1])->one();
 		$model = $this->findModel ( $id );
 		if ($model) {
 			$modelp = $model->protocolo;
 		}
-              //  var_dump($modelp); die();
 		
 		$pdf = new Pdf ( [
 				// 'mode' => Pdf::MODE_CORE,

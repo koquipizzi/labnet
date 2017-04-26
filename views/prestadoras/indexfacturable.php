@@ -46,7 +46,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     'domicilio',
                     [
                         'label' => 'Localidad',
-                        'value' => 'localidadTexto',
+                        'attribute'=>'Localidad_id',
+                        'value' => function ($data) {
+                            return  $data['nombre'];
+                        },
+                        'filter' => Html::activeDropDownList($searchModel, 'Localidad_id', ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre'),['class'=>'form-control','prompt' => 'Localidad...']),
                     ],
 
                     ['class' => 'yii\grid\ActionColumn',
@@ -59,21 +63,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'title' => Yii::t('app', 'Ver'),
                                     'class'=>'btn btn-success btn-xs ',
                                     'value'=> "$url",
-                                ]);
+                                ])." ";
                             },
                             'edit' => function ($url, $model) {
                                 return Html::a('<span class="fa fa-pencil"></span>', $url, [
                                     'title' => Yii::t('app', 'Editar'),
                                     'class'=>'btn btn-info btn-xs ',
                                     'value'=> "$url",
-                                ]);
+                                ])." ";
                             },
                             'delete' => function ($url, $model) {
                                 return Html::a('<span class="fa fa-trash"></span>', FALSE, [
                                     'title' => Yii::t('app', 'Borrar'),
                                     'class'=>'btn btn-danger borrar btn-xs',
                                     'value'=> "$url",
-                                ]);
+                                ])." ";
                             },
                         ],
                             'urlCreator' => function ($action, $model, $key, $index) {

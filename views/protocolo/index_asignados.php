@@ -4,7 +4,7 @@ use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use yii\grid\GridView;
-use kartik\widgets\DatePicker;
+use jino5577\daterangepicker\DateRangePicker;
 
 $this->title = Yii::t('app', 'Protocolos');
 $this->params['breadcrumbs'][] = $this->title;
@@ -18,14 +18,13 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="header-content">
             <div class="pull-left">
                 <h3 class="panel-title">Protocolos asignados a mí</h3>
-                 <i class="fa fa-bookmark"></i>                   
-                <span class="text-strong"> Informes</span>
             </div>
             <div class="pull-right">
                 <?= Html::a('<i class="fa fa-plus-circle"></i> Nuevo Protocolo', ['paciente/buscar'], ['class'=>'btn btn-success']) ?>
-                <?= Html::a('<i class="fa fa-pause-circle"></i> Protocolos Pendientes', ['protocolo/'], ['class'=>'btn btn-primary']) ?>
-                <?= Html::a('<i class="fa fa-stop-circle"></i> Protocolos Terminados', ['protocolo/terminados'], ['class'=>'btn btn-primary']) ?>
-                <?= Html::a('<i class="fa fa-list"></i> Protocolos Todos', ['protocolo/all'], ['class'=>'btn btn-primary']) ?>
+                <?= Html::a('<i class="fa fa-pause-circle"></i> Pendientes', ['protocolo/'], ['class'=>'btn btn-primary']) ?>
+                <?= Html::a('<i class="fa fa-stop-circle"></i> Terminados', ['protocolo/terminados'], ['class'=>'btn btn-primary']) ?>
+                <?= Html::a('<i class="fa fa-check"></i> Entregados', ['protocolo/entregados'], ['class'=>'btn btn-primary']) ?>
+                <?= Html::a('<i class="fa fa-list"></i> Todos', ['protocolo/all'], ['class'=>'btn btn-primary']) ?>
             </div> 
             <div class="clearfix"></div>
         </div>
@@ -44,33 +43,58 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'label' => 'Fecha Entrada',
                             'attribute' => 'fecha_entrada',
-                            'contentOptions' => ['style' => 'width:15%;'],
+                            'contentOptions' => ['style' => 'width:20%;'],
                             'format' => ['date', 'php:d/m/Y'],
-                             'filter' => DatePicker::widget([
-                                    'model' => $searchModelAsig,
-                                    'attribute' => 'fecha_entrada',
-                                    'pluginOptions' => [
-                                           'autoclose'=>true,
-                                           'format' => 'dd-mm-yyyy',
-                                           'startView' => 'date',
-                                       ]
-                               ] )
-
+                            'filter' => DateRangePicker::widget([
+                            'template' => '
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                        {input}
+                                    </div>
+                                ',
+                                 'model' => $searchModelAsig, 
+                                 'locale'    => 'es-ES',
+                                'attribute' => 'fecha_entrada',
+                                'pluginOptions' => [ 
+                                    'locale'=>[
+                                        'format'=>'DD/MM/YYYY',
+                                        'separator'=>' - ',
+                                        'applyLabel' => 'Seleccionar',
+                                        'cancelLabel' => 'Cancelar',
+                                    ], 
+                                    'autoUpdateInput' => false,
+                                ] 
+                             ])  
                         ],
                         [
-                            'label' => 'Fecha Entrega',
+                            'label' => 'Fecha de Entrega',
                             'attribute' => 'fecha_entrega',
-                            'contentOptions' => ['style' => 'width:15%;'],
+                            'contentOptions' => ['style' => 'width:20%;'],
                             'format' => ['date', 'php:d/m/Y'],
-                             'filter' => DatePicker::widget([
-                                    'model' => $searchModelAsig,
-                                    'attribute' => 'fecha_entrega',
-                                    'pluginOptions' => [
-                                           'autoclose'=>true,
-                                           'format' => 'dd-mm-yyyy',
-                                           'startView' => 'date',
-                                       ]
-                               ] )
+                            'filter' => DateRangePicker::widget([
+                            'template' => '
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                        {input}
+                                    </div>
+                                ',
+                                'model' => $searchModelAsig, 
+                                'locale'    => 'es-ES',
+                                'attribute' => 'fecha_entrega',
+                                'pluginOptions' => [ 
+                                    'locale'=>[
+                                        'format'=>'DD/MM/YYYY',
+                                        'separator'=>' - ',
+                                        'applyLabel' => 'Seleccionar',
+                                        'cancelLabel' => 'Cancelar',
+                                    ], 
+                                'autoUpdateInput' => false,
+                                ] 
+                             ])  
                         ],
                         [
                             'label' => 'Nro Protocolo',

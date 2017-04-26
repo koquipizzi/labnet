@@ -128,7 +128,7 @@ class PrestadorasController extends Controller
             $model->cobertura=0;
             $model->facturable='S';
             $model->save();
-            return;
+             $this->redirect(['viewfacturable', 'id' => $model->id]);
         }
         else{
                 return $this->render('_formfacturable', ['model' => $model ]);

@@ -505,17 +505,72 @@ class InformeController extends Controller {
                 
        }
       
-	   public function actionMail($id=null,$estudio=null){
-			Yii::$app->mailer->compose()
+	   
+	public function papreducido($id) {
+        //Datos generales del Laboratorio
+        $laboratorio = Laboratorio::find()->where(['id' => 1])->one();
+                
+		$model = $this->findModel ( $id );
+		if ($model) {
+			$modelp = $model->protocolo;
+		}
+                $vista = 'print_pap_reducido';
+                $header ='Sistema LABnet';   
+               
+                
+		$pdf = new Pdf ( [
+				// 'mode' => Pdf::MODE_CORE,
+				'mode' => Pdf::MODE_BLANK,
+				// A4 paper format
+				'format' => Pdf::FORMAT_A4,
+				// portrait orientation
+				'orientation' => Pdf::ORIENT_PORTRAIT,
+				// stream to browser inline
+				'destination' => Pdf::DEST_BROWSER,
+                                'cssFile' => '@app/web/css/print/print.css',
+				'cssInline' => '* {font-size:14px;}',
+				// set mPDF properties on the fly
+				
+				'content' => $this->renderPartial ( $vista, [ 
+						'model' => $model,
+						'modelp' => $modelp,
+                        'laboratorio' => $laboratorio,
+				] ),
+				'options' => [ 
+						'title' => 'Informe PAP' 
+				],
+				'methods' => [ 
+						'SetHeader' => [ 
+								$header 
+						],
+				] 
+		] );                
+		return $pdf;
+	}
+        public function actionMail($id=null,$estudio=null){
+		   $id = 70982;
+			$pdf = $this->papreducido($id);
+			$mpdf= $pdf->api;
+
+			//$mpdf->WriteHTML($pdf->render()); //pdf is a name of view file responsible for this pdf document
+			$path = $mpdf->Output('', 'S'); 
+$attachment = new Swift_Attachment($pdf, 'filename.pdf', 'application/pdf');
+
+  
+			if (Yii::$app->mailer->compose()
 			->setFrom('alejandra@qwavee.com')
-			->setTo('koquipizzi@gmail.com')
+			->setTo('alejandra@qwavee.com')
 			->setSubject('Message subject')
 			->setTextBody('Plain text content')
 			->setHtmlBody('<b>HTML content</b>')
-			->send();
+			->attachContent($path, ['fileName' => 'Invoice #.pdf',   'contentType' => 'application/pdf'])
+			->send())
+				$this->redirect('//protocolo/index');
+			return 0;
 	   }
         
-        public function actionPrintreducido($id,$estudio){
+        
+		public function actionPrintreducido($id,$estudio){
              switch ($estudio){
                     case \app\models\Estudio::getEstudioPap(): //pap
                         $this->actionPrintpapreducido($id,$web=null);
@@ -534,6 +589,7 @@ class InformeController extends Controller {
                         break;
                 }
         }
+
         
         
         public function actionPrintpapreducido($id) {

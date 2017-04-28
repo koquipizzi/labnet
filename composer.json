@@ -27,7 +27,7 @@
         "insolita/yii2-adminlte-widgets": "^2.0",
         "needim/noty": "^2.4",
         "xj/yii2-bootbox-widget": "*",
-        "mdmsoft/yii2-admin": "2.x-dev",
+        "mdmsoft/yii2-admin": "~2.0",
         "kartik-v/yii2-popover-x": "*",
         "execut/yii2-widget-bootstraptreeview": "dev-master",
         "kartik-v/yii2-editable": "@dev",

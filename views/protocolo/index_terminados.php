@@ -6,6 +6,7 @@ use yii\bootstrap\Modal;
 use yii\grid\GridView;
 use mdm\admin\components\Helper;
 use jino5577\daterangepicker\DateRangePicker;
+use app\models\Informe;
 
 $this->title = Yii::t('app', 'Protocolos');
 $this->params['breadcrumbs'][] = $this->title;
@@ -239,7 +240,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
             </div>  
             </p>       
-
 
 
 <style>

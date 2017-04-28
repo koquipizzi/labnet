@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "user".
@@ -82,4 +83,17 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function validatePassword($password){
 	return $this->password === $password;
     }
+
+
+    public function getAvatar()
+    {
+        // your custom code
+        return Url::to($this->avatar);
+    }
+
+  //  public function getUsername()
+  //  {
+ //       return $this->Username;
+ //       // your custom code
+ //   }
 }

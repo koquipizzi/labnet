@@ -10,6 +10,7 @@ use yii\db\Query;
 use yii\data\ArrayDataProvider;
 use yii\db\Expression;
 
+
 /**
  * ProtocoloSearch represents the model behind the search form about `app\models\Protocolo`.
  */
@@ -58,23 +59,31 @@ class ProtocoloSearch extends Protocolo
     {       
    //     if (isset($params['_pjax']) && ($params['_pjax'] == '#asignados'))
    //         $this->search_asignados (null, $params);
+ 
+
         $query = 'SELECT distinct(Protocolo.id) as idp, Protocolo.* , 
                         concat(SUBSTRING(Protocolo.anio,-2),Protocolo.letra,"-", LPAD(Protocolo.nro_secuencia, 6, 0)) as codigo
-                         , Paciente.nombre, Paciente.nro_documento					
+                         , Paciente.nombre, Paciente.nro_documento,
+                           Workflow_Q.Informe_id,
+                        Workflow_Q.fecha_inicio,
+                        Workflow_Q.workflow_id,
+                        Workflow_Q.Estado_id					
                          from `Protocolo` 
                          LEFT JOIN `Informe` ON `Protocolo`.`id` = `Informe`.`Protocolo_id` 
                          LEFT JOIN `Paciente_prestadora` pp ON `Protocolo`.`Paciente_prestadora_id` = pp.`id`
                          LEFT JOIN `Paciente` ON pp.`Paciente_id` = `Paciente`.`id` 
-                         JOIN (
+                          JOIN (
                             Select
                                     Workflow.Informe_id,
                                     max(Workflow.fecha_inicio) as fecha_inicio,
-                                    max(Workflow.id) as workflow_id
+                                    max(Workflow.id) as workflow_id,
+                                    Workflow.Estado_id
                             From Workflow 
-                            WHERE Workflow.Estado_id = 1
-                            GROUP BY Workflow.Informe_id
+                            WHERE Workflow.Estado_id = 4
+                            GROUP BY Workflow.Informe_id order by fecha_inicio desc
                     ) as Workflow_Q ON (Informe.id = Workflow_Q.Informe_id)';
-   
+
+            
         if (isset($params['ProtocoloSearch']['nro_secuencia']) && ($params['ProtocoloSearch']['nro_secuencia'] <> "") )
             $query = $query." and Protocolo.nro_secuencia = ".$params['ProtocoloSearch']['nro_secuencia'];
         
@@ -85,7 +94,7 @@ class ProtocoloSearch extends Protocolo
         if (isset($params['ProtocoloSearch']['nro_documento']) && ($params['ProtocoloSearch']['nro_documento'] <> "") )
             $query = $query." and Paciente.nro_documento like '%".$params['ProtocoloSearch']['nro_documento']."%'";
           
-        if (isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "") ){
+ /*       if (isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "") ){
             $str =  $params['ProtocoloSearch']['fecha_entrega']; 
             $dia = substr($str,0,2);
             $mes = substr($str,3,2);
@@ -102,7 +111,7 @@ class ProtocoloSearch extends Protocolo
             $time = $anio."-".$mes."-".$dia;
             $query = $query." and Protocolo.fecha_entrada like '".$time."%'";
         }
-        
+  */      
         if (isset($params['ProtocoloSearch']['codigo']) && ($params['ProtocoloSearch']['codigo'] <> "") )
             {
                 $nro = ltrim($params['ProtocoloSearch']['codigo'], '0');
@@ -110,12 +119,44 @@ class ProtocoloSearch extends Protocolo
                     . "or Protocolo.letra like '%".$params['ProtocoloSearch']['codigo']."%'"
                     . "or Protocolo.nro_secuencia like '%".$nro."%')";
             }
-            
-        $consultaCant = 'SELECT count(tt.idp) as total FROM ('.$query.') as tt';
+
+        if(isset($params['ProtocoloSearch']['fecha_entrada']) && ($params['ProtocoloSearch']['fecha_entrada'] <> "")) 
+            { 
+                list($start_date, $end_date) = explode(' - ', $params['ProtocoloSearch']['fecha_entrada']); 
+       
+                $dia = substr($start_date,0,2);
+                $mes = substr($start_date,3,2);
+                $anio = substr($start_date,6,4);
+                $time = $anio."-".$mes."-".$dia;
+
+                $dia2 = substr($end_date,0,2);
+                $mes2 = substr($end_date,3,2);
+                $anio2 = substr($end_date,6,4);
+                $time2 = $anio2."-".$mes2."-".$dia2;
+                $query = $query." and  Protocolo.fecha_entrada between '".$time."' and '".$time2."'";
+            } 
         
+        if(isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "")) 
+            { 
+                list($start_date, $end_date) = explode(' - ', $params['ProtocoloSearch']['fecha_entrega']); 
+       
+                $dia = substr($start_date,0,2);
+                $mes = substr($start_date,3,2);
+                $anio = substr($start_date,6,4);
+                $time = $anio."-".$mes."-".$dia;
+
+                $dia2 = substr($end_date,0,2);
+                $mes2 = substr($end_date,3,2);
+                $anio2 = substr($end_date,6,4);
+                $time2 = $anio2."-".$mes2."-".$dia2;
+                $query = $query." and  Protocolo.fecha_entrega between '".$time."' and '".$time2."'";
+            } 
+ 
+        $consultaCant = 'SELECT count(tt.idp) as total FROM ('.$query.') as tt';
+      //  echo $consultaCant; die();
         $command =  \Yii::$app->db->createCommand($consultaCant);
         $results = $command->queryAll();
-        $itemsCount = (int)$results[0]["total"];  
+        $itemsCount =  (int)$results[0]["total"];  
         
        // $query = $query." order by Protocolo.id desc;";
         $dataProvider = new \yii\data\SqlDataProvider([
@@ -192,23 +233,6 @@ class ProtocoloSearch extends Protocolo
         if (isset($params['ProtocoloSearch']['nro_documento']) && ($params['ProtocoloSearch']['nro_documento'] <> "") )
             $query = $query." and Paciente.nro_documento like '%".$params['ProtocoloSearch']['nro_documento']."%'";
           
-        if (isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "") ){
-            $str =  $params['ProtocoloSearch']['fecha_entrega']; 
-            $dia = substr($str,0,2);
-            $mes = substr($str,3,2);
-            $anio = substr($str,6,4);
-            $time = $anio."-".$mes."-".$dia;
-            $query = $query." and Protocolo.fecha_entrega like '".$time."%'";
-        }
-        
-        if (isset($params['ProtocoloSearch']['fecha_entrada']) && ($params['ProtocoloSearch']['fecha_entrada'] <> "") ){
-            $str =  $params['ProtocoloSearch']['fecha_entrada']; 
-            $dia = substr($str,0,2);
-            $mes = substr($str,3,2);
-            $anio = substr($str,6,4);
-            $time = $anio."-".$mes."-".$dia;
-            $query = $query." and Protocolo.fecha_entrada like '".$time."%'";
-        }
         
         if (isset($params['ProtocoloSearch']['codigo']) && ($params['ProtocoloSearch']['codigo'] <> "") )
             {
@@ -217,17 +241,44 @@ class ProtocoloSearch extends Protocolo
                     . "or Protocolo.letra like '%".$params['ProtocoloSearch']['codigo']."%'"
                     . "or Protocolo.nro_secuencia like '%".$nro."%')";
             }
-            
-        $consultaCant = "Select Count(Protocolo.id) as total From Protocolo";
-     // return total items count for this sql query
-       // $itemsCount = \Yii::$app->db->createCommand($consulta)->queryScalar();
+
+         if(isset($params['ProtocoloSearch']['fecha_entrada']) && ($params['ProtocoloSearch']['fecha_entrada'] <> "")) 
+            { 
+                list($start_date, $end_date) = explode(' - ', $params['ProtocoloSearch']['fecha_entrada']); 
+       
+                $dia = substr($start_date,0,2);
+                $mes = substr($start_date,3,2);
+                $anio = substr($start_date,6,4);
+                $time = $anio."-".$mes."-".$dia;
+
+                $dia2 = substr($end_date,0,2);
+                $mes2 = substr($end_date,3,2);
+                $anio2 = substr($end_date,6,4);
+                $time2 = $anio2."-".$mes2."-".$dia2;
+                $query = $query." and  Protocolo.fecha_entrada between '".$time."' and '".$time2."'";
+            } 
         
+        if(isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "")) 
+            { 
+                list($start_date, $end_date) = explode(' - ', $params['ProtocoloSearch']['fecha_entrega']); 
+       
+                $dia = substr($start_date,0,2);
+                $mes = substr($start_date,3,2);
+                $anio = substr($start_date,6,4);
+                $time = $anio."-".$mes."-".$dia;
+
+                $dia2 = substr($end_date,0,2);
+                $mes2 = substr($end_date,3,2);
+                $anio2 = substr($end_date,6,4);
+                $time2 = $anio2."-".$mes2."-".$dia2;
+                $query = $query." and  Protocolo.fecha_entrega between '".$time."' and '".$time2."'";
+            } 
+ 
+        $consultaCant = 'SELECT count(tt.id) as total FROM ('.$query.') as tt';
+
         $command =  \Yii::$app->db->createCommand($consultaCant);
         $results = $command->queryAll();
         $itemsCount = (int)$results[0]["total"];  
-
-        // build a SqlDataProvider with a pagination with 10 items for page
-    //   var_dump($query);die(); 
 
         $dataProvider = new \yii\data\SqlDataProvider([
             'sql' => $query,
@@ -243,14 +294,12 @@ class ProtocoloSearch extends Protocolo
                         'asc' => [new Expression('id')],
                         'desc' => [new Expression('id DESC ')],
                         'default' => SORT_DESC,
-                    ],
-                    
-                    
+                    ],             
                 ],
             ],
             'totalCount' => $itemsCount,
             'pagination' => [
-                    'pageSize' => 50,
+                    'pageSize' => 100,
             ],
         ]);
 
@@ -296,14 +345,16 @@ class ProtocoloSearch extends Protocolo
                         Protocolo.nro_secuencia,
                         Workflow_Q.Informe_id,
                         Workflow_Q.fecha_inicio,
-                        Workflow_Q.workflow_id
+                        Workflow_Q.workflow_id,
+                        Workflow_Q.Estado_id
                     From Protocolo
                     JOIN Informe ON (Protocolo.id = Informe.Protocolo_id)
                     JOIN (
                             Select
                                     Workflow.Informe_id,
                                     max(Workflow.fecha_inicio) as fecha_inicio,
-                                    max(Workflow.id) as workflow_id
+                                    max(Workflow.id) as workflow_id,
+                                    Workflow.Estado_id
                             From Workflow 
                             WHERE Workflow.Estado_id = 4
                             GROUP BY Workflow.Informe_id
@@ -317,7 +368,8 @@ class ProtocoloSearch extends Protocolo
                             Select
                                     Workflow.Informe_id,
                                     max(Workflow.fecha_inicio) as fecha_inicio,
-                                    max(Workflow.id) as workflow_id
+                                    max(Workflow.id) as workflow_id,
+                                    Workflow.Estado_id
                             From Workflow 
                             WHERE Workflow.Estado_id = 4
                             GROUP BY Workflow.Informe_id
@@ -378,23 +430,37 @@ class ProtocoloSearch extends Protocolo
         if (isset($params['ProtocoloSearch']['nro_documento']) && ($params['ProtocoloSearch']['nro_documento'] <> "") )
             $query = $query." and Paciente.nro_documento like '%".$params['ProtocoloSearch']['nro_documento']."%'";
           
-        if (isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "") ){
-            $str =  $params['ProtocoloSearch']['fecha_entrega']; 
-            $dia = substr($str,0,2);
-            $mes = substr($str,3,2);
-            $anio = substr($str,6,4);
-            $time = $anio."-".$mes."-".$dia;
-            $query = $query." and Protocolo.fecha_entrega like '".$time."%'";
-        }
+      if(isset($params['ProtocoloSearch']['fecha_entrada']) && ($params['ProtocoloSearch']['fecha_entrada'] <> "")) 
+            { 
+                list($start_date, $end_date) = explode(' - ', $params['ProtocoloSearch']['fecha_entrada']); 
+       
+                $dia = substr($start_date,0,2);
+                $mes = substr($start_date,3,2);
+                $anio = substr($start_date,6,4);
+                $time = $anio."-".$mes."-".$dia;
+
+                $dia2 = substr($end_date,0,2);
+                $mes2 = substr($end_date,3,2);
+                $anio2 = substr($end_date,6,4);
+                $time2 = $anio2."-".$mes2."-".$dia2;
+                $query = $query." and  Protocolo.fecha_entrada between '".$time."' and '".$time2."'";
+            } 
         
-        if (isset($params['ProtocoloSearch']['fecha_entrada']) && ($params['ProtocoloSearch']['fecha_entrada'] <> "") ){
-            $str =  $params['ProtocoloSearch']['fecha_entrada']; 
-            $dia = substr($str,0,2);
-            $mes = substr($str,3,2);
-            $anio = substr($str,6,4);
-            $time = $anio."-".$mes."-".$dia;
-            $query = $query." and Protocolo.fecha_entrada like '".$time."%'";
-        }
+        if(isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "")) 
+            { 
+                list($start_date, $end_date) = explode(' - ', $params['ProtocoloSearch']['fecha_entrega']); 
+       
+                $dia = substr($start_date,0,2);
+                $mes = substr($start_date,3,2);
+                $anio = substr($start_date,6,4);
+                $time = $anio."-".$mes."-".$dia;
+
+                $dia2 = substr($end_date,0,2);
+                $mes2 = substr($end_date,3,2);
+                $anio2 = substr($end_date,6,4);
+                $time2 = $anio2."-".$mes2."-".$dia2;
+                $query = $query." and  Protocolo.fecha_entrega between '".$time."' and '".$time2."'";
+            } 
         
         if (isset($params['ProtocoloSearch']['codigo']) && ($params['ProtocoloSearch']['codigo'] <> "") )
             {
@@ -470,7 +536,7 @@ class ProtocoloSearch extends Protocolo
                         Workflow_Q.Estado_id,
                         Informe.Estudio_id as estudio,
                         Paciente.nombre as nombre,
-                        Informe.estado_actual as lastEstado,
+                        Workflow_Q.Estado_id as lastEstado,
                         Paciente.nro_documento,
                         Estudio.nombre as nombre_estudio
                     From Protocolo
@@ -501,24 +567,37 @@ class ProtocoloSearch extends Protocolo
         if (isset($params['ProtocoloSearch']['nro_documento']) && ($params['ProtocoloSearch']['nro_documento'] <> "") )
             $consulta = $consulta." and Paciente.nro_documento like '%".$params['ProtocoloSearch']['nro_documento']."%'";
         
-        if (isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "") ){
-            $str =  $params['ProtocoloSearch']['fecha_entrega']; 
-            $dia = substr($str,0,2);
-            $mes = substr($str,3,2);
-            $anio = substr($str,6,4);
-            $time = $anio."-".$mes."-".$dia;
-            $consulta = $consulta." and Protocolo.fecha_entrega like '".$time."%'";
-        }
+       if(isset($params['ProtocoloSearch']['fecha_entrada']) && ($params['ProtocoloSearch']['fecha_entrada'] <> "")) 
+            { 
+                list($start_date, $end_date) = explode(' - ', $params['ProtocoloSearch']['fecha_entrada']); 
+       
+                $dia = substr($start_date,0,2);
+                $mes = substr($start_date,3,2);
+                $anio = substr($start_date,6,4);
+                $time = $anio."-".$mes."-".$dia;
+
+                $dia2 = substr($end_date,0,2);
+                $mes2 = substr($end_date,3,2);
+                $anio2 = substr($end_date,6,4);
+                $time2 = $anio2."-".$mes2."-".$dia2;
+                $consulta = $consulta." and  Protocolo.fecha_entrada between '".$time."' and '".$time2."'";
+            } 
         
-        if (isset($params['ProtocoloSearch']['fecha_entrada']) && ($params['ProtocoloSearch']['fecha_entrada'] <> "") ){
-            $str =  $params['ProtocoloSearch']['fecha_entrada']; 
-            $dia = substr($str,0,2);
-            $mes = substr($str,3,2);
-            $anio = substr($str,6,4);
-            $time = $anio."-".$mes."-".$dia;
-            $consulta = $consulta." and Protocolo.fecha_entrada like '".$time."%'";
-        }
-        
+        if(isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "")) 
+            { 
+                list($start_date, $end_date) = explode(' - ', $params['ProtocoloSearch']['fecha_entrega']); 
+       
+                $dia = substr($start_date,0,2);
+                $mes = substr($start_date,3,2);
+                $anio = substr($start_date,6,4);
+                $time = $anio."-".$mes."-".$dia;
+
+                $dia2 = substr($end_date,0,2);
+                $mes2 = substr($end_date,3,2);
+                $anio2 = substr($end_date,6,4);
+                $time2 = $anio2."-".$mes2."-".$dia2;
+                $consulta = $consulta." and  Protocolo.fecha_entrega between '".$time."' and '".$time2."'";
+            }   
         if (isset($params['ProtocoloSearch']['codigo']) && ($params['ProtocoloSearch']['codigo'] <> "") )
             {
                 $nro = ltrim($params['ProtocoloSearch']['codigo'], '0');
@@ -530,13 +609,11 @@ class ProtocoloSearch extends Protocolo
             
        
         $consultaCant = "select count(tt.id) as total from ( ".$consulta." ) as tt";
-    //    $consulta = $consulta." order by Paciente.nro_documento";        
-    
+
         $command =  \Yii::$app->db->createCommand($consultaCant);
         $results = $command->queryAll();
         $itemsCount = (int)$results[0]["total"];       
 
-    //    var_dump($consulta); die();
         $dataProvider_asignados = new \yii\data\SqlDataProvider([
             'sql' => $consulta,
             'sort'=> ['defaultOrder' => ['fecha_entrega'=> SORT_ASC]], 
@@ -545,7 +622,6 @@ class ProtocoloSearch extends Protocolo
                     'pageSize' => 50,
             ],
         ]);
-
 
         $dataProvider_asignados->setSort([
             'attributes' => [
@@ -669,24 +745,37 @@ class ProtocoloSearch extends Protocolo
         if (isset($params['ProtocoloSearch']['nro_documento']) && ($params['ProtocoloSearch']['nro_documento'] <> "") )
             $query = $query." and Paciente.nro_documento like '%".$params['ProtocoloSearch']['nro_documento']."%'";
           
-        if (isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "") ){
-            $str =  $params['ProtocoloSearch']['fecha_entrega']; 
-            $dia = substr($str,0,2);
-            $mes = substr($str,3,2);
-            $anio = substr($str,6,4);
-            $time = $anio."-".$mes."-".$dia;
-            $query = $query." and Protocolo.fecha_entrega like '".$time."%'";
-        }
+      if(isset($params['ProtocoloSearch']['fecha_entrada']) && ($params['ProtocoloSearch']['fecha_entrada'] <> "")) 
+            { 
+                list($start_date, $end_date) = explode(' - ', $params['ProtocoloSearch']['fecha_entrada']); 
+       
+                $dia = substr($start_date,0,2);
+                $mes = substr($start_date,3,2);
+                $anio = substr($start_date,6,4);
+                $time = $anio."-".$mes."-".$dia;
+
+                $dia2 = substr($end_date,0,2);
+                $mes2 = substr($end_date,3,2);
+                $anio2 = substr($end_date,6,4);
+                $time2 = $anio2."-".$mes2."-".$dia2;
+                $query = $query." and  Protocolo.fecha_entrada between '".$time."' and '".$time2."'";
+            } 
         
-        if (isset($params['ProtocoloSearch']['fecha_entrada']) && ($params['ProtocoloSearch']['fecha_entrada'] <> "") ){
-            $str =  $params['ProtocoloSearch']['fecha_entrada']; 
-            $dia = substr($str,0,2);
-            $mes = substr($str,3,2);
-            $anio = substr($str,6,4);
-            $time = $anio."-".$mes."-".$dia;
-            $query = $query." and Protocolo.fecha_entrada like '".$time."%'";
-        }
-        
+        if(isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "")) 
+            { 
+                list($start_date, $end_date) = explode(' - ', $params['ProtocoloSearch']['fecha_entrega']); 
+       
+                $dia = substr($start_date,0,2);
+                $mes = substr($start_date,3,2);
+                $anio = substr($start_date,6,4);
+                $time = $anio."-".$mes."-".$dia;
+
+                $dia2 = substr($end_date,0,2);
+                $mes2 = substr($end_date,3,2);
+                $anio2 = substr($end_date,6,4);
+                $time2 = $anio2."-".$mes2."-".$dia2;
+                $query = $query." and  Protocolo.fecha_entrega between '".$time."' and '".$time2."'";
+            } 
         if (isset($params['ProtocoloSearch']['codigo']) && ($params['ProtocoloSearch']['codigo'] <> "") )
             {
                 $nro = ltrim($params['ProtocoloSearch']['codigo'], '0');

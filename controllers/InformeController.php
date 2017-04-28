@@ -76,11 +76,11 @@ class InformeController extends Controller {
 	{
             $model=$this->findModel($id);
              if ($model->estudio->nombre === 'PAP') {
-		return $this->renderAjax('view_informe_modal_pap', [
-				'model' => $model,
-		]);
+				return $this->render('view_informe_modal_pap', [
+						'model' => $model,
+			]);
              }else{
-                 return $this->renderAjax('view_informe_modal', [
+                 return $this->render('view_informe_modal', [
 				'model' => $model,
                      ]);
              }
@@ -232,7 +232,7 @@ class InformeController extends Controller {
                             'allModels' => Multimedia::findAll(['Informe_id'=>$model->id]),
             ]);
             
-        if($model->estado_actual!= Workflow::estadoEntregado()){
+        if($model->WorkflowLastState!= Workflow::estadoEntregado()){
             if ($model->load ( Yii::$app->request->post () ) && $model->save () ) {
                 if ($model->estudio->nombre === 'PAP') {
                         return $this->render ( 'update_pap', [ 
@@ -319,7 +319,25 @@ class InformeController extends Controller {
 	}
 	
         
-    
+    public function actionImprimir($id, $estudio) {
+		 switch ($estudio){
+                    case \app\models\Estudio::getEstudioPap(): //pap
+                        $this->actionPrintpap($id,$web=null);
+                        break;
+                    case \app\models\Estudio::getEstudioBiopsia(): //biopsia
+                        $this->actionPrintanatomo($id);
+                        break;
+                    case \app\models\Estudio::getEstudioMolecular(): //molecular
+                        $this->actionPrintmole($id);
+                        break;
+                    case \app\models\Estudio::getEstudioCitologia(): //citologia
+                        $this->actionPrintcito($id);
+                        break;
+                    case \app\models\Estudio::getEstudioInmuno(): //IMQ
+                         $this->actionPrintinf($id);
+                        break;
+                }
+	}
 	
 	/**
 	 * Uploda image .
@@ -458,26 +476,26 @@ class InformeController extends Controller {
                                                 '(id)' => SORT_DESC
                                 ] )->one ();
             if (! is_null ( $ultimoEstado ) ) {
-			/**
-			 * actualiza el workflow que contiene el estado pendiente
-			 */
-			$fecha = date_create ();
-			$fecha = date_format ( $fecha, 'd-m-Y H:i:s' );
-			$ultimoEstado->fecha_fin = $fecha;
-			$ultimoEstado->update ();
-			/**
-			 * crea un nuevo workflow con estado Entregado
-			 * 
-			 * @var \app\models\Workflow $workf
-			 */
-			$workf = new Workflow ();
-			$workf->Estado_id = Workflow::estadoEntregado(); 
-			$workf->Informe_id = $id;
-			$workf->Responsable_id = \Yii::$app->user->getId ();
-			$workf->fecha_inicio = $fecha;
-                        $workf->fecha_fin = $fecha;
-			$workf->save ();  
-		}
+				/**
+				* actualiza el workflow que contiene el estado pendiente
+				*/
+				$fecha = date_create ();
+				$fecha = date_format ( $fecha, 'd-m-Y H:i:s' );
+				$ultimoEstado->fecha_fin = $fecha;
+				$ultimoEstado->update ();
+				/**
+				* crea un nuevo workflow con estado Entregado
+				* 
+				* @var \app\models\Workflow $workf
+				*/
+				$workf = new Workflow ();
+				$workf->Estado_id = Workflow::estadoEntregado(); 
+				$workf->Informe_id = $id;
+				$workf->Responsable_id = \Yii::$app->user->getId ();
+				$workf->fecha_inicio = $fecha;
+							$workf->fecha_fin = $fecha;
+				$workf->save ();  
+			}
                 
             if($accion==="print" && isset($estudio)){
                 switch ($estudio){
@@ -554,7 +572,7 @@ class InformeController extends Controller {
 
 			//$mpdf->WriteHTML($pdf->render()); //pdf is a name of view file responsible for this pdf document
 			$path = $mpdf->Output('', 'S'); 
-$attachment = new Swift_Attachment($pdf, 'filename.pdf', 'application/pdf');
+			$attachment = new Swift_Attachment($pdf, 'filename.pdf', 'application/pdf');
 
   
 			if (Yii::$app->mailer->compose()

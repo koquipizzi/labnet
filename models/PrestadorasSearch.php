@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use app\models\Prestadoras;
 use yii\data\ArrayDataProvider;
 use yii\data\Sort;
-
+use yii\db\Query;
 /**
  * PrestadorasSearch represents the model behind the search form about `app\models\Prestadoras`.
  */
@@ -45,13 +45,15 @@ class PrestadorasSearch extends Prestadoras
     {
 
         if($tipoDeEntidad==="C"){
-           $query =  Prestadoras::find()->where(['cobertura'=>1])->all();
+          // $query =  Prestadoras::find()->where(['cobertura'=>1])->all();
+          $query = (new Query())->from('Prestadoras')->where(['cobertura' => 1]); 
 //         $query = (new \yii\db\Query())->select('*')->from('Prestadoras')->where(['cobertura'=>1]);
         }elseif ($tipoDeEntidad==="F"){
-            $query =  Prestadoras::find()->where(['cobertura'=>0])->all();
+     //       $query =  Prestadoras::find()->where(['cobertura'=>0])->all();
+            $query = (new Query())->from('Prestadoras')->where(['cobertura' => 0]);
 //          $query = (new \yii\db\Query())->select('*')->from('Prestadoras')->where(['cobertura'=>0]);
         }
-
+        $query->join('LEFT JOIN', 'Localidad', 'Localidad.id = Prestadoras.Localidad_id');
 
 
         // add conditions that should always apply here
@@ -61,12 +63,12 @@ class PrestadorasSearch extends Prestadoras
                 'id',
                 'domicilio',
                 'descripcion',
-                'localidad'
+                'Localidad_id'
             ]
         ]);
 
-        $dataProvider = new ArrayDataProvider([
-            'allModels' => $query,
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
             'sort' => $sort,
         ]);
         $this->load($params);
@@ -78,11 +80,11 @@ class PrestadorasSearch extends Prestadoras
         }
 
 //         grid filtering conditions
-//        $query->andFilterWhere([
+        $query->andFilterWhere([
 //          'id' => $this->id,
-//            'Localidad_id' => $this->Localidad_id,
+            'Localidad_id' => $this->Localidad_id,
 //            'Tipo_prestadora_id' => $this->Tipo_prestadora_id,
-//        ]);
+        ]);
 //
 //        $query->andFilterWhere(['like', 'descripcion', $this->descripcion])
 //            ->andFilterWhere(['like', 'telefono', $this->telefono])

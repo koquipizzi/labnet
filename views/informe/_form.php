@@ -101,7 +101,7 @@ echo execut\widget\TreeView::widget([
 <div class="row">
     <div class="col-md-12">
         <?php 
-            if ($model->estado_actual== Workflow::estadoEntregado()) { 
+            if ($model->workflowLastState== Workflow::estadoEntregado()) { 
                 \insolita\wgadminlte\LteBox::begin([
                     'type'=>\insolita\wgadminlte\LteConst::COLOR_MAROON,
                     'tooltip'=>'Useful information!',
@@ -452,6 +452,20 @@ echo execut\widget\TreeView::widget([
             <!--/ End tabs content -->
         </div><!-- /.panel -->
         <!--/ End double tabs -->
+<?php 
+  //  $model = Informe::findOne($model->id);
+//echo \yii2mod\comments\widgets\Comment::widget([
+//        'model' => $model,
+//            'entityIdAttribute' => 'id'
+//]);
+ ?>
+
+<?php echo \yii2mod\comments\widgets\Comment::widget([
+      'model' => $model,
+    //  'formId' => 'comment-form2',
+      'pjaxContainerId' => 'unique-pjax-container-id'
+]); ?>
+
 
     </div>
 </div><!-- /.row -->

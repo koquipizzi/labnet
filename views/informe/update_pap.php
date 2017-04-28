@@ -32,8 +32,9 @@ BootboxAsset::register($this);
 $this->title = Yii::t('app', 'Update {modelClass}: ', [
 		'modelClass' => 'Informe',
 ]) . $model->id;
+$this->title = 'Protocolo N°: '. $modelp->codigo;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Informes'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 //         $this->registerJs("
 //             $('#historialPacientePanel').scrollspy({ target: '#historial' })");
@@ -177,39 +178,27 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                      <div class="col-md-3">
                         <button class="btn btn-primary btn-sm mostrarTree pull-right" title="Agregar texto"><i class="fa fa-edit"></i></button>
                         <button class="btn btn-primary btn-sm guardarTexto pull-right" value="<?= Url::to(['textos/copy']) ?>"><i class="fa fa-copy"></i></button>
-                        <?php $url = ['informe/printpapreducido', 'id' => $model->id , 'estudio' => $model->Estudio_id];
-                              echo  Html::button("<i class='fa fa-list-alt'></i>",
+                        <?php  
+                                echo  Html::button("<i class='fa fa-list-alt'></i>",
                                     ['class'=>'btn btn-primary btn-sm pull-right',
-                                        'onclick'=>"window.location.href = '" . \Yii::$app->urlManager->createUrl(['/informe/printpapreducido','id'=>$model->id, 'estudio' => $model->Estudio_id ]) . "';",
+                                        'onclick'=>"window.location.href = '" . \Yii::$app->urlManager->createUrl(['/informe/printreducido','id'=>$model->id, 'estudio' => $model->Estudio_id ]) . "';",
                                         'data-toggle'=>'tooltip',
                                         'title'=>Yii::t('app', 'Informe Reducido'),
                                     ]
                                 );
-                        ?>
-
-                        <?php   $url = ['informe/print', 'id' => $model->id , 'estudio' => $model->Estudio_id];
+                         ?>
+                         <?php   $url = ['informe/print', 'id' => $model->id , 'estudio' => $model->Estudio_id];
                                 echo  Html::button("<i class='fa fa-file-pdf-o'></i>",
                                     ['class'=>'btn btn-primary btn-sm pull-right',
-                                        'onclick'=>"window.location.href = '" . \Yii::$app->urlManager->createUrl(['/informe/printpap','id'=>$model->id, 'estudio' => $model->Estudio_id ]) . "';",
+                                        'onclick'=>"window.location.href = '" . \Yii::$app->urlManager->createUrl(['/informe/imprimir','id'=>$model->id, 'estudio' => $model->Estudio_id ]) . "';",
                                         'data-toggle'=>'tooltip',
                                         'title'=>Yii::t('app', 'Informe Preliminar'),
                                     ]
                                 );
-                                $url = ['informe/printreducido', 'id' => $model->id , 'estudio' => $model->Estudio_id];
                          ?>
-                                <!--input type="text"value="<?php echo  $model->id ?>" id="id_informe" style="display:none">
-                                <input type="text"value="<?php echo $model->Estudio_id ?>" id="id_estudio" style="display:none"-->
-                    </div>
+                      </div>
                 </div>    
-                    
-                <!--div class="pull-right box-tools"> 
-                   
-                        <label>Asignado: 
-                        <!--select name="example1_length" aria-controls="example1" class="form-control input-sm">
-                            <option value="10">10</option><option value="25">25</option><option value="50">50</option>
-                            option value="100">100</option>
-                            </select--> 
-                        </label> 
+
                 <!-- botones derecha_-->
             </div>
             <div class="box-body no-padding">

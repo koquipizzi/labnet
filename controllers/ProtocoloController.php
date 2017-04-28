@@ -310,7 +310,7 @@ class ProtocoloController extends Controller
         $prestadora = \app\models\Prestadoras::findOne($pacprest_modelo->Prestadoras_id);       
         $mdlProtocolo = new Protocolo();
         $modelSecuencia= new NroSecuenciaProtocolo();
-        $modelSecuencia->fecha=date("Y-m-d");
+        $modelSecuencia->fecha= date("Y-m-d");
         $modelSecuencia->save();
         $modelSecuencia->refresh();
         $secuencia = $modelSecuencia->secuencia;
@@ -326,18 +326,14 @@ class ProtocoloController extends Controller
        
         if ($mdlProtocolo->load(Yii::$app->request->post())) {
             $idSession=Yii::$app->session->getId();
-    //        var_dump($idSession); die();
             $tanda=Yii::$app->request->post()['tanda'];
             
             $informesTemp=InformeTemp::find()
             		->where([
                      //          'session_id' => $idSession,
                                 'tanda'=>$tanda
-                     ])->all();  
-       //     var_dump($tanda);var_dump($informesTemp);
-      //      die();    
-        // var_dump($informesTemp); die();     
-            if(empty($informesTemp)===false){ //die('yyggg');
+                     ])->all();      
+            if(empty($informesTemp)===false){ 
                 $connection = \Yii::$app->db;
                 $transaction = $connection->beginTransaction();
                 try {     
@@ -393,7 +389,6 @@ class ProtocoloController extends Controller
         else {
             $tanda=time();
             Yii::$app->session->set('tanda', $tanda);
-    //        var_dump(Yii::$app->session->getId()); die();
             $nomenclador= new Nomenclador();
             $searchModel = new InformeTempSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $tanda);

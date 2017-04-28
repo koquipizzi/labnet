@@ -1,0 +1,69 @@
+/* Create your style on here */
+
+.modal-body {
+    /* position: relative; */
+     padding: 15px; 
+}
+.verLABnet{
+    padding: 10px;
+}
+.popover-lg {
+    min-width: 800px;
+}
+
+.tree-view-wrapper .tree-header {
+    /* padding-bottom: 6px; */
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-bottom: 7px;
+}
+
+@media (min-width: 768px){
+    .modal-dialog {
+        width: 920px;
+        margin: 10px auto;
+    }
+    .modal-body{
+        padding: 5px;
+    }
+    .cipat-email{
+        padding: 6px;
+        display: block;
+        width: 100%;
+    }
+}
+
+.cipat-email{
+        width: 97%;
+        padding: 6px;
+    }
+
+.table-lilac thead tr th {
+    background-color: #337ab7 !important;
+    border-color: #23527c #23527c #23527c !important;
+    color: #fff;
+}  
+
+.panel_titulo {
+    margin-bottom: 0px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.select2-container--krajee .select2-selection--single .select2-selection__placeholder {
+     color: #000; 
+}
+
+.modal-autotexto{
+    overflow-x: auto;
+    overflow-y: auto; 
+    height: 500px;
+}
+
+
+b {
+    font-weight: normal;
+}

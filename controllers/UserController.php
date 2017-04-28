@@ -141,8 +141,8 @@ class UserController extends Controller
 
     public function multimediaUpload(){
         $model = $this->findModel( $_POST['id']);
-        $width = 80;
-	    $height = 80;
+        $width = 60;
+	    $height = 60;
         $cropInfo =["x"=> "12","width"=>"100","y"=>"0","height"=> "100"];
                 
                 
@@ -159,13 +159,15 @@ class UserController extends Controller
             $uid = uniqid(time(), true);
             $fileName = $uid . '.' . $file->extension;
             $filePath = $directory . $fileName;
-
-            $image = Image::crop($file,
+//var_dump($file); die();
+           $image = Image::crop($file->tempName,
                     intval($cropInfo['width']),
                     intval($cropInfo['height']),
 					[$cropInfo['x'], $cropInfo['y']])->resize(new Box($width, $height));
+//var_dump($image); die();
 
-            if ($image->saveAs($filePath, true)) {
+
+            if ($image->save($filePath)) {
                 $path = '/images/users' . DIRECTORY_SEPARATOR . Yii::$app->session->id . DIRECTORY_SEPARATOR . $fileName;
                 $model->avatar = $path;
                 $model->save();

@@ -9,6 +9,33 @@ $config = [
     'language'=>'es', // spanish
     'params' => $params,
     'modules' => [
+           'rbac' => [
+                'class' => 'dektrium\rbac\Module'
+            ],
+            // Yii2 User
+        /*   'user' => [
+              //  'identityClass' => 'app\models\User',
+
+                'class' => 'dektrium\user\Module',
+                'controllerMap' => [
+                    'admin' => 'cinghie\yii2userextended\controllers\AdminController',
+                    'settings' => 'cinghie\yii2userextended\controllers\SettingsController'
+                ],
+                // Yii2 User Models Overrides
+                'modelMap' => [
+                    'RegistrationForm' => 'cinghie\yii2userextended\models\RegistrationForm',
+                    'Profile' => 'cinghie\yii2userextended\models\Profile',
+                    'SettingsForm' => 'cinghie\yii2userextended\models\SettingsForm',
+                    'User' => 'cinghie\yii2userextended\models\User',
+                ],
+            ],*/
+            // Yii2 User Extended
+            'userextended' => [
+                'class' => 'cinghie\yii2userextended\Module',
+                'avatarPath' => '@webroot/img/users/', // Path to your avatar files
+                'avatarURL' => '@web/img/users/', // Url to your avatar files
+                'showTitles' => true, // Set false in adminLTE
+            ],
          'gii' => array(
             'class' => 'system.gii.GiiModule',
             'password' => '1234',
@@ -22,6 +49,25 @@ $config = [
 		//		],
 		//	],
 		],
+         'comment' => [
+            'class' => 'yii2mod\comments\Module',
+            // when admin can edit comments on frontend
+            'enableInlineEdit' => false,
+            'controllerMap' => [
+                'comments' => 'yii2mod\comments\controllers\ManageController',
+                // Also you can override some controller properties in following way:
+                'comments' => [
+                    'class' => 'yii2mod\comments\controllers\ManageController',
+                    'searchClass' => [
+                        'class' => 'yii2mod\comments\models\search\CommentSearch',
+                        'pageSize' => 25
+                    ],
+                    'indexView' => 'custom path to index view file',
+                    'updateView' => 'custom path to update view file',
+                ],
+            ],
+        ],
+       
         'simplechat' => [
             'class' => 'bubasuma\simplechat\Module',
         ],
@@ -57,6 +103,14 @@ $config = [
         ]
     ],
     'components' => [
+            'view' => [
+                'theme' => [
+                    'pathMap' => [
+                        '@vendor/dektrium/rbac/views' => '@vendor/cinghie/yii2-user-extended/views',
+                        '@vendor/dektrium/user/views' => '@vendor/cinghie/yii2-user-extended/views',
+                    ],
+                ],
+            ],
             'i18n' => [
                 'translations' => [
                     'app*' => [
@@ -67,6 +121,10 @@ $config = [
                             'app' => 'app.php',
                             'app/error' => 'error.php',
                         ],
+                    ],
+                    'yii2mod.comments' => [
+                        'class' => 'yii\i18n\PhpMessageSource',
+                        'basePath' => '@yii2mod/comments/messages',
                     ],
                     'yii' => [
                         'class' => 'yii\i18n\PhpMessageSource',
@@ -110,7 +168,25 @@ $config = [
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
-            'useFileTransport' => true,
+         //   'useFileTransport' => true,
+          //  'viewPath' => '@app/mail',
+            'useFileTransport' => false,//set this property to false to send mails to real email addresses
+            //comment the following array to send mail using php's mail function
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'mail.qwavee.com',
+                'username' => 'hola@qwavee.com',
+                'password' => 'Hola!321',
+                'port' => '26',
+                'encryption' => 'tls',
+                 'streamOptions' => [
+                    'ssl' => [
+                        'allow_self_signed' => true,
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                    ],
+                ],
+            ],
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

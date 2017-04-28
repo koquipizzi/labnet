@@ -9,8 +9,8 @@ class ComposerStaticInit23d15423d5d52149b8a4c2d99e2e9690
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
-        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
+        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '180092cfc969a12e06f2132a203a3184' => __DIR__ . '/..' . '/codeception/verify/src/Codeception/function.php',
     );
 
@@ -19,12 +19,18 @@ class ComposerStaticInit23d15423d5d52149b8a4c2d99e2e9690
         array (
             'yii\\swiftmailer\\' => 16,
             'yii\\jui\\' => 8,
+            'yii\\imagine\\' => 12,
             'yii\\gii\\' => 8,
             'yii\\faker\\' => 10,
             'yii\\debug\\' => 10,
             'yii\\composer\\' => 13,
             'yii\\bootstrap\\' => 14,
             'yii\\' => 4,
+            'yii2mod\\moderation\\' => 19,
+            'yii2mod\\enum\\' => 13,
+            'yii2mod\\editable\\' => 17,
+            'yii2mod\\comments\\' => 17,
+            'yii2mod\\behaviors\\' => 18,
         ),
         'x' => 
         array (
@@ -41,6 +47,8 @@ class ComposerStaticInit23d15423d5d52149b8a4c2d99e2e9690
         'p' => 
         array (
             'phpDocumentor\\Reflection\\' => 25,
+            'paulzi\\sortable\\' => 16,
+            'paulzi\\adjacencyList\\' => 21,
         ),
         'm' => 
         array (
@@ -79,6 +87,10 @@ class ComposerStaticInit23d15423d5d52149b8a4c2d99e2e9690
             'kartik\\alert\\' => 13,
             'kartik\\affix\\' => 13,
         ),
+        'j' => 
+        array (
+            'jino5577\\daterangepicker\\' => 25,
+        ),
         'i' => 
         array (
             'insolita\\wgadminlte\\' => 20,
@@ -110,6 +122,7 @@ class ComposerStaticInit23d15423d5d52149b8a4c2d99e2e9690
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\Yaml\\' => 23,
+            'Symfony\\Component\\Translation\\' => 30,
             'Symfony\\Component\\Finder\\' => 25,
             'Symfony\\Component\\EventDispatcher\\' => 34,
             'Symfony\\Component\\DomCrawler\\' => 29,
@@ -145,6 +158,7 @@ class ComposerStaticInit23d15423d5d52149b8a4c2d99e2e9690
         array (
             'Codeception\\Extension\\' => 22,
             'Codeception\\' => 12,
+            'Carbon\\' => 7,
         ),
     );
 
@@ -156,6 +170,10 @@ class ComposerStaticInit23d15423d5d52149b8a4c2d99e2e9690
         'yii\\jui\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2-jui',
+        ),
+        'yii\\imagine\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yiisoft/yii2-imagine',
         ),
         'yii\\gii\\' => 
         array (
@@ -181,6 +199,26 @@ class ComposerStaticInit23d15423d5d52149b8a4c2d99e2e9690
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2',
         ),
+        'yii2mod\\moderation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yii2mod/yii2-moderation',
+        ),
+        'yii2mod\\enum\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yii2mod/yii2-enum',
+        ),
+        'yii2mod\\editable\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yii2mod/yii2-editable',
+        ),
+        'yii2mod\\comments\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yii2mod/yii2-comments',
+        ),
+        'yii2mod\\behaviors\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yii2mod/yii2-behaviors',
+        ),
         'xj\\bootbox\\' => 
         array (
             0 => __DIR__ . '/..' . '/xj/yii2-bootbox-widget',
@@ -198,6 +236,14 @@ class ComposerStaticInit23d15423d5d52149b8a4c2d99e2e9690
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
             1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+        ),
+        'paulzi\\sortable\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/paulzi/yii2-sortable',
+        ),
+        'paulzi\\adjacencyList\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/paulzi/yii2-adjacency-list',
         ),
         'mdm\\admin\\' => 
         array (
@@ -323,6 +369,10 @@ class ComposerStaticInit23d15423d5d52149b8a4c2d99e2e9690
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-affix',
         ),
+        'jino5577\\daterangepicker\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jino5577/yii2-date-range-picker',
+        ),
         'insolita\\wgadminlte\\' => 
         array (
             0 => __DIR__ . '/..' . '/insolita/yii2-adminlte-widgets',
@@ -366,6 +416,10 @@ class ComposerStaticInit23d15423d5d52149b8a4c2d99e2e9690
         'Symfony\\Component\\Yaml\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/yaml',
+        ),
+        'Symfony\\Component\\Translation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/translation',
         ),
         'Symfony\\Component\\Finder\\' => 
         array (
@@ -435,9 +489,20 @@ class ComposerStaticInit23d15423d5d52149b8a4c2d99e2e9690
         array (
             0 => __DIR__ . '/..' . '/codeception/base/src/Codeception',
         ),
+        'Carbon\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
+        ),
     );
 
     public static $prefixesPsr0 = array (
+        'y' => 
+        array (
+            'yii\\imperavi\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/asofter/yii2-imperavi-redactor',
+            ),
+        ),
         'c' => 
         array (
             'cebe\\gravatar\\' => 
@@ -450,6 +515,13 @@ class ComposerStaticInit23d15423d5d52149b8a4c2d99e2e9690
             'Prophecy\\' => 
             array (
                 0 => __DIR__ . '/..' . '/phpspec/prophecy/src',
+            ),
+        ),
+        'I' => 
+        array (
+            'Imagine' => 
+            array (
+                0 => __DIR__ . '/..' . '/imagine/imagine/lib',
             ),
         ),
         'H' => 

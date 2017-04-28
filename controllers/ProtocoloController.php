@@ -408,7 +408,7 @@ class ProtocoloController extends Controller
                             'searchModel' =>$searchModel ,
                             'Estudio' => $Estudio,
                             'dataProvider' => $dataProvider,
-                            'informe'=>$informetemp,
+                            'informetemp'=>$informetemp,
                             'nomenclador'=>$nomenclador,
                             'tanda'=>$tanda,
                             'pacprest' => $pacprest,

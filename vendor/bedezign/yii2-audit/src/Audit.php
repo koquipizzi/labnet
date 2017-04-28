@@ -208,6 +208,13 @@ class Audit extends Module
         parent::init();
         $app = Yii::$app;
 
+        // check if the module has been installed (prevents errors while installing)
+        try {
+            $this->getDb()->getTableSchema(AuditEntry::tableName());
+        } catch (\Exception $e) {
+            return;
+        }
+
         // Before action triggers a new audit entry
         $app->on(Application::EVENT_BEFORE_ACTION, [$this, 'onBeforeAction']);
         // After request finalizes the audit entry.

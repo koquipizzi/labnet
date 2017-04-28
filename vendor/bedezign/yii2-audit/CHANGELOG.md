@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.0.10 Unreleased
+## 1.0.11 April 15, 2017
 
-*
+* Bug: use correct database when running migrations if the database component is not "db"
+* Bug: check if the module has been installed (prevents errors prior to migration while installing)
+
+## 1.0.10 March 26, 2017
+
+* Bug [#201](https://github.com/bedezign/yii2-audit/issues/201): Fix migration on pgsql
 
 ## 1.0.9 March 25, 2017
 

@@ -53,9 +53,6 @@ $form = ActiveForm::begin ( [
                                                 'id' => "idFile",
                                             ],
                                             'pluginOptions' => [
-                                             //   'elCaptionText' => '#galeriar',
-											 	'maxImageWidth' => 200,
-												'maxImageHeight' => 150,
                                                 'uploadUrl' => Url::to(['/user/update']),
                                                 'uploadExtraData' => [
                                                     'id' => $model->id,
@@ -70,7 +67,7 @@ $form = ActiveForm::begin ( [
                                                     '    </div>' .
                                                     '</div>',
                                                 ],
-                                                'maxFileCount' => 10,
+                                                'maxFileCount' => 1,
 // 												        				'uploadExtraData' => new \yii\web\JsExpression("function (previewId, index) {
 // 																						$('.kv-fileinput-error').addClass('hide');
 // 																						}"),

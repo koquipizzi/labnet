@@ -124,7 +124,9 @@ $config = [
                     ],
                     'yii2mod.comments' => [
                         'class' => 'yii\i18n\PhpMessageSource',
-                        'basePath' => '@yii2mod/comments/messages',
+                      //  'basePath' => '@yii2mod/comments/messages',
+                        'sourceLanguage' => 'es-ES',
+                        'basePath' => '@app/common/messages',
                     ],
                     'yii' => [
                         'class' => 'yii\i18n\PhpMessageSource',

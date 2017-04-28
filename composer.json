@@ -34,7 +34,10 @@
         "kartik-v/yii2-mpdf": "dev-master",
         "kartik-v/yii2-grid": "@dev",
         "bedezign/yii2-audit": "^1.0",
-        "bubasuma/yii2-simplechat": "^2.0"
+        "bubasuma/yii2-simplechat": "^2.0",
+        "jino5577/yii2-date-range-picker": "*",
+        "yii2mod/yii2-comments": "*",
+        "yiisoft/yii2-imagine": "^2.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

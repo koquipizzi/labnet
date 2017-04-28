@@ -18,8 +18,8 @@
  */
 return [
     '(not set)' => '',
-    'Apply' => '',
-    'Close' => '',
-    'Edit' => '',
-    'Reset' => '',
+    'Apply' => 'Aplicar',
+    'Close' => 'Cerrar',
+    'Edit' => 'Editar',
+    'Reset' => 'Restablecer',
 ];

@@ -67,7 +67,7 @@ class ViewPacientePrestadora extends \yii\db\ActiveRecord
             'email_paciente' => Yii::t('app', 'Email Paciente'),
             'Tipo_documento_id' => Yii::t('app', 'Tipo Documento ID'),
             'localidad_paciente' => Yii::t('app', 'Localidad Paciente'),
-            'domicilo_paciente' => Yii::t('app', 'Domicilo Paciente'),
+            'domicilio_paciente' => Yii::t('app', 'Domicilo Paciente'),
             'telefono_prestadora' => Yii::t('app', 'Telefono Prestadora'),
             'domicilio_prestadora' => Yii::t('app', 'Domicilio Prestadora'),
             'email_prestadora' => Yii::t('app', 'Email Prestadora'),

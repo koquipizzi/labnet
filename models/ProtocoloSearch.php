@@ -302,17 +302,13 @@ class ProtocoloSearch extends Protocolo
                     'pageSize' => 100,
             ],
         ]);
-
-      
-//        var_dump($dataProvider); die();
-        // get the user records in the current page
-  //      $models = $dataProvider->getModels();      
+ 
         return $dataProvider;
     }
     
   
     
-        protected function addSearchParameter($query, $attribute, $partialMatch = true)
+    protected function addSearchParameter($query, $attribute, $partialMatch = true)
     {
         if (($pos = strrpos($attribute, '.')) !== false) {
             $modelAttribute = substr($attribute, $pos + 1);
@@ -326,13 +322,7 @@ class ProtocoloSearch extends Protocolo
             return;
         }
         $attribute = "Protocolo.$attribute";
-      //  echo $value; die();
-      //  $query->andFilterWhere(['like', 'descripcion', $this->descripcion])
-//        if ($partialMatch) {
-//            $query->andFilterWhere(['like', $attribute, $value]);
-//        } else {
-//            $query->andWhere([ $attribute => $value]);
-//        }
+
     }
     
 
@@ -1115,6 +1105,132 @@ class ProtocoloSearch extends Protocolo
         return $dataProvider;
     }
 
+        public function search_asignados_index($id=null, $params=NULL)
+    {
+        if (isset($id))
+            $loggedUserId = $id;
+        else $loggedUserId = 2;
+    
+        $consulta = "Select concat(SUBSTRING(Protocolo.anio,-2),Protocolo.letra,'-', LPAD(Protocolo.nro_secuencia, 6, 0)) as codigo , 
+                        Protocolo.id,
+                        Workflow_Q.Informe_id as informe_id,
+                        Workflow_Q.fecha_inicio,
+                        Protocolo.fecha_entrada,
+                        Protocolo.fecha_entrega,
+                        Protocolo.nro_secuencia,
+                        Protocolo.anio,Protocolo.letra,
+                        Workflow_Q.workflow_id,
+                        Workflow_Q.Estado_id,
+                        Informe.Estudio_id as estudio,
+                        Paciente.nombre as nombre,
+                        Workflow_Q.Estado_id as lastEstado,
+                        Paciente.nro_documento,
+                        Estudio.nombre as nombre_estudio
+                    From Protocolo
+                    JOIN Informe ON (Protocolo.id = Informe.Protocolo_id)
+                    JOIN Estudio ON (Informe.Estudio_id = Estudio.id)
+                    JOIN Paciente_prestadora ON (Protocolo.Paciente_prestadora_id = Paciente_prestadora.id)
+                    JOIN Paciente ON (Paciente_prestadora.Paciente_id = Paciente.id)
+                    JOIN (
+                            Select
+                                    Workflow.Informe_id,
+                                    max(Workflow.fecha_inicio) as fecha_inicio,
+                                    max(Workflow.id) as workflow_id,
+                                    Workflow.Estado_id
+                            From Workflow 
+                            WHERE Workflow.Responsable_id = ".$loggedUserId."
+                            AND Workflow.fecha_fin is NULL
+                            GROUP BY Workflow.Informe_id
+                    ) as Workflow_Q ON (Informe.id = Workflow_Q.Informe_id)
+                    where Workflow_Q.Estado_id <  5 ";
+                //    order by Protocolo.id desc;";
+        
+        if (isset($params['ProtocoloSearch']['nro_secuencia']) && ($params['ProtocoloSearch']['nro_secuencia'] <> "") )
+            $consulta = $consulta." and Protocolo.nro_secuencia = ".$params['ProtocoloSearch']['nro_secuencia'];
+        
+        if (isset($params['ProtocoloSearch']['nombre']) && ($params['ProtocoloSearch']['nombre'] <> "") )
+            $consulta = $consulta." and Paciente.nombre like '%".$params['ProtocoloSearch']['nombre']."%'";
+        
+        if (isset($params['ProtocoloSearch']['nro_documento']) && ($params['ProtocoloSearch']['nro_documento'] <> "") )
+            $consulta = $consulta." and Paciente.nro_documento like '%".$params['ProtocoloSearch']['nro_documento']."%'";
+        
+       if(isset($params['ProtocoloSearch']['fecha_entrada']) && ($params['ProtocoloSearch']['fecha_entrada'] <> "")) 
+            { 
+                list($start_date, $end_date) = explode(' - ', $params['ProtocoloSearch']['fecha_entrada']); 
+       
+                $dia = substr($start_date,0,2);
+                $mes = substr($start_date,3,2);
+                $anio = substr($start_date,6,4);
+                $time = $anio."-".$mes."-".$dia;
+
+                $dia2 = substr($end_date,0,2);
+                $mes2 = substr($end_date,3,2);
+                $anio2 = substr($end_date,6,4);
+                $time2 = $anio2."-".$mes2."-".$dia2;
+                $consulta = $consulta." and  Protocolo.fecha_entrada between '".$time."' and '".$time2."'";
+            } 
+        
+        if(isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "")) 
+            { 
+                list($start_date, $end_date) = explode(' - ', $params['ProtocoloSearch']['fecha_entrega']); 
+       
+                $dia = substr($start_date,0,2);
+                $mes = substr($start_date,3,2);
+                $anio = substr($start_date,6,4);
+                $time = $anio."-".$mes."-".$dia;
+
+                $dia2 = substr($end_date,0,2);
+                $mes2 = substr($end_date,3,2);
+                $anio2 = substr($end_date,6,4);
+                $time2 = $anio2."-".$mes2."-".$dia2;
+                $consulta = $consulta." and  Protocolo.fecha_entrega between '".$time."' and '".$time2."'";
+            }   
+        if (isset($params['ProtocoloSearch']['codigo']) && ($params['ProtocoloSearch']['codigo'] <> "") )
+            {
+                $nro = ltrim($params['ProtocoloSearch']['codigo'], '0');
+                $consulta = $consulta." and (Protocolo.anio like '%".$params['ProtocoloSearch']['codigo']."%'"
+                    . "or Protocolo.letra like '%".$params['ProtocoloSearch']['codigo']."%'"
+                    . "or Protocolo.nro_secuencia like '%".$nro."%')";
+               // die($query);
+            }
+            
+       
+        $consultaCant = "select count(tt.id) as total from ( ".$consulta." ) as tt";
+
+        $command =  \Yii::$app->db->createCommand($consultaCant);
+        $results = $command->queryAll();
+        $itemsCount = (int)$results[0]["total"];       
+
+        $dataProvider_asignados = new \yii\data\SqlDataProvider([
+            'sql' => $consulta,
+            'sort'=> ['defaultOrder' => ['fecha_entrega'=> SORT_ASC]], 
+            'totalCount' => $itemsCount,
+            'pagination' => [
+                    'pageSize' => 5,
+            ],
+        ]);
+
+        $dataProvider_asignados->setSort([
+            'attributes' => [
+        //     'id',
+        'fecha_entrega',
+                'nombre'=> [
+                    'asc' => ['Paciente.nombre' => SORT_ASC],
+                    'desc' => ['Paciente.nombre' => SORT_DESC],
+                ],
+                'nro_documento' => [
+                    'asc' => ['Paciente.nro_documento' => SORT_ASC],
+                    'desc' => ['Paciente.nro_documento' => SORT_DESC],
+                ]
+            ]
+        ]);
+
+        if (!($this->load($params) && $this->validate())) {
+                return $dataProvider_asignados;
+            }
+        return $dataProvider_asignados;
+    }
+    
 
 }
 

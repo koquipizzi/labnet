@@ -47,7 +47,7 @@ class InformeNomenclador extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'id_informe' => Yii::t('app', 'Id Informe'),
-            'id_nomenclador' => Yii::t('app', 'Id Nomenclador'),
+            'id_nomenclador' => Yii::t('app', 'Servicio'),
             'cantidad' => Yii::t('app', 'Cantidad'),
         ];
     }

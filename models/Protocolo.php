@@ -150,8 +150,20 @@ class Protocolo extends \yii\db\ActiveRecord
     public function getPacienteText()
     {
         $paciente= $this->hasOne(ViewPacientePrestadora::className(), ['id' => 'Paciente_prestadora_id'])->one();
+    //    var_dump($paciente); 
         $pac = substr($paciente->nombreDniDescripcionNroAfiliado, 0, strpos($paciente->nombreDniDescripcionNroAfiliado, '('));
         return $pac;
+    }
+
+    public function getPacienteTexto()
+    {
+        $pacientePrestadora= $this->hasOne(PacientePrestadora::className(), ['id' => 'Paciente_prestadora_id'])->one();
+    //       var_dump($pacientePrestadora->Paciente_id); 
+        $paciente= Paciente::find()->where(['id' => $pacientePrestadora->Paciente_id])->one();
+   //     var_dump($paciente); die();
+        return $paciente->nombre;
+   //     $pac = substr($paciente->nombreDniDescripcionNroAfiliado, 0, strpos($paciente->nombreDniDescripcionNroAfiliado, '('));
+   //     return $pac;
     }
     
     public function getPacienteEdad()

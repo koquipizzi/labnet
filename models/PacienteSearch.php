@@ -80,17 +80,20 @@ class PacienteSearch extends Paciente
     {
         $query = "
         			Select Paciente.*,
+                            Paciente.id as PacienteId,
                            Paciente_prestadora.id as pacprest,
-                           Prestadoras.descripcion as nombre_prest
+                           Prestadoras.descripcion as nombre_prest,
+                           concat(Prestadoras.descripcion,' - ', Paciente_prestadora.nro_afiliado) as nombre_prest_nro
                     From Paciente
                             left JOIN Paciente_prestadora ON (Paciente.id = Paciente_prestadora.Paciente_id)         
                             left JOIN Prestadoras ON (Prestadoras.id = Paciente_prestadora.Prestadoras_id)                 
                    
                     ";
         if (isset($params['PacienteSearch']['nombre']) && ($params['PacienteSearch']['nombre'] <> "") )
-            $query = $query." where Paciente.nombre like '".$params['PacienteSearch']['nombre']."%'";
+            $query = $query." where Paciente.nombre like '%".$params['PacienteSearch']['nombre']."%'";
         
-        $consultaCant = "Select Count(Paciente.id) as total From Paciente";
+     //   $consultaCant = "Select Count(Paciente.id) as total From Paciente";
+        $consultaCant = 'SELECT count(tt.PacienteId) as total FROM ('.$query.') as tt';
      // return total items count for this sql query
        // $itemsCount = \Yii::$app->db->createCommand($consulta)->queryScalar();
         
@@ -102,6 +105,15 @@ class PacienteSearch extends Paciente
      //   $query = $query." group by Paciente.nombre ";
         $dataProvider = new \yii\data\SqlDataProvider([
             'sql' => $query,
+            'sort' => [
+                 'defaultOrder' => ['nombre' => SORT_ASC],
+                'attributes' => [
+                    'nombre' => [
+                            'asc' => ['Paciente.nombre' => SORT_ASC],
+                            'desc' => ['Paciente.nombre' => SORT_DESC],
+                        ],        
+                ],
+            ],
             'totalCount' => $itemsCount,
             'pagination' => [
                     'pageSize' => 50,

@@ -5,56 +5,25 @@ $params = require(__DIR__ . '/params.php');
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log', 'audit', 'simplechat'],
+    'bootstrap' => ['log', 'audit'],
     'language'=>'es', // spanish
     'params' => $params,
     'modules' => [
-           'rbac' => [
-                'class' => 'dektrium\rbac\Module'
-            ],
-            // Yii2 User
-        /*   'user' => [
-              //  'identityClass' => 'app\models\User',
-
-                'class' => 'dektrium\user\Module',
-                'controllerMap' => [
-                    'admin' => 'cinghie\yii2userextended\controllers\AdminController',
-                    'settings' => 'cinghie\yii2userextended\controllers\SettingsController'
-                ],
-                // Yii2 User Models Overrides
-                'modelMap' => [
-                    'RegistrationForm' => 'cinghie\yii2userextended\models\RegistrationForm',
-                    'Profile' => 'cinghie\yii2userextended\models\Profile',
-                    'SettingsForm' => 'cinghie\yii2userextended\models\SettingsForm',
-                    'User' => 'cinghie\yii2userextended\models\User',
-                ],
-            ],*/
-            // Yii2 User Extended
-            'userextended' => [
-                'class' => 'cinghie\yii2userextended\Module',
-                'avatarPath' => '@webroot/img/users/', // Path to your avatar files
-                'avatarURL' => '@web/img/users/', // Url to your avatar files
-                'showTitles' => true, // Set false in adminLTE
-            ],
-         'gii' => array(
-            'class' => 'system.gii.GiiModule',
-            'password' => '1234',
-            'generatorPaths' => array('bootstrap.gii.bootstrap'),
-         ),
          'audit' => [
-            'class' => 'bedezign\yii2\audit\Audit',
-		//	'panelsMerge' => [
-		//		'app/views' => [
-		//			'class' => '@app\views\panels\ViewsPanel',
-		//		],
-		//	],
-		],
+             'class' => 'bedezign\yii2\audit\Audit',
+ 		//	'panelsMerge' => [
+ 		//		'app/views' => [
+ 		//			'class' => '@app\views\panels\ViewsPanel',
+ 		//		],
+ 		//	],
+ 		],
+
          'comment' => [
             'class' => 'yii2mod\comments\Module',
             // when admin can edit comments on frontend
-            'enableInlineEdit' => false,
+            'enableInlineEdit' => tru,
             'controllerMap' => [
-                'comments' => 'yii2mod\comments\controllers\ManageController',
+            //    'comments' => 'yii2mod\comments\controllers\ManageController',
                 // Also you can override some controller properties in following way:
                 'comments' => [
                     'class' => 'yii2mod\comments\controllers\ManageController',
@@ -62,16 +31,12 @@ $config = [
                         'class' => 'yii2mod\comments\models\search\CommentSearch',
                         'pageSize' => 25
                     ],
-                    'indexView' => 'custom path to index view file',
-                    'updateView' => 'custom path to update view file',
+                    'indexView' => '@vendor/yii2mod/yii2-comments/views/manage/index',
+                    'updateView' => '@vendor/yii2mod/yii2-comments/views/manage/update',
                 ],
-            ],
+            ]  
         ],
-       
-        'simplechat' => [
-            'class' => 'bubasuma\simplechat\Module',
-        ],
-         'admin' => [
+        'admin' => [
            'class' => 'mdm\admin\Module',
            'layout' => 'left-menu', // defaults to null, using the application's layout without the menu
         ],
@@ -103,14 +68,14 @@ $config = [
         ]
     ],
     'components' => [
-            'view' => [
+            /*'view' => [
                 'theme' => [
                     'pathMap' => [
                         '@vendor/dektrium/rbac/views' => '@vendor/cinghie/yii2-user-extended/views',
                         '@vendor/dektrium/user/views' => '@vendor/cinghie/yii2-user-extended/views',
                     ],
                 ],
-            ],
+            ],*/
             'i18n' => [
                 'translations' => [
                     'app*' => [
@@ -217,8 +182,9 @@ $config = [
         'class' => 'mdm\admin\components\AccessControl',
 		'allowActions' => [
 			'admin/*', // add or remove allowed actions to this list
-            'protocolo/*',
+            'comment/*',
             'audit/*',
+            'debug/*'
 		]
     ],
     'params' => $params,

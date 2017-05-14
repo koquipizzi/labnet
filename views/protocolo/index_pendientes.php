@@ -156,8 +156,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'value'=> "$url",       
                                             'data-id'=> "$inf->id",  
                                             'data-protocolo'=> "$inf->Protocolo_id",  
-                                ]);
-                                $val = $val."<br /><span></span>";}
+                                    ]);
+                                    $val = $val."<br /><span></span>";
+                                }
                                 return $val;
                             },
                         ],                   

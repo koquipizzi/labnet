@@ -88,14 +88,19 @@ $this->registerCss(".treeview {
                                     overflow-y: auto;
                                     height: 200px;}");
 
-echo TreeView::widget([
+echo execut\widget\TreeView::widget([
     'data' => $items2,
     'size' => TreeView::SIZE_SMALL,
+    'header'=> 'Seleccione Tipo de Estudio',
+    'searchOptions' => [
+        'inputOptions' => [
+            'placeholder' => 'Buscar Estudio...'
+        ],
+    ],
     'clientOptions' => [
         'onNodeSelected' => $onSelect,
     ],
 ]);
-
 
 ?>
 
@@ -125,9 +130,37 @@ echo TreeView::widget([
 
                                     </div>
                                 </a>
+                            </li>
+                            <li>
+                                <a href="#tab2-3" data-toggle="tab">
+                                    <div>
+                                        <i class="fa fa-image"></i>
+                                        <span>Observaciones</span>
+
+                                    </div>
+                                </a>
                             </li> 
-                            <li class="pull-right">
-                                <a href="#" class="text-muted mostrarTree"><i class="fa fa-edit"></i></a>
+                                 <li class="pull-right ">
+                                <button class="btn btn-default btn-sm  mostrarTree pull-right" title="Agregar texto"><i class="fa fa-edit"></i></button>
+                        <button class="btn btn-default btn-sm  guardarTexto pull-right" value="<?= Url::to(['textos/copy']) ?>"><i class="fa fa-copy"></i></button>
+                        <?php  
+                                echo  Html::button("<i class='fa fa-list-alt'></i>",
+                                    ['class'=>'btn btn-default btn-sm pull-right',
+                                        'onclick'=>"window.location.href = '" . \Yii::$app->urlManager->createUrl(['/informe/printreducido','id'=>$model->id, 'estudio' => $model->Estudio_id ]) . "';",
+                                        'data-toggle'=>'tooltip',
+                                        'title'=>Yii::t('app', 'Informe Reducido'),
+                                    ]
+                                );
+                         ?>
+                         <?php   $url = ['informe/print', 'id' => $model->id , 'estudio' => $model->Estudio_id];
+                                echo  Html::button("<i class='fa fa-file-pdf-o'></i>",
+                                    ['class'=>'btn btn-default btn-sm  pull-right',
+                                        'onclick'=>"window.location.href = '" . \Yii::$app->urlManager->createUrl(['/informe/imprimir','id'=>$model->id, 'estudio' => $model->Estudio_id ]) . "';",
+                                        'data-toggle'=>'tooltip',
+                                        'title'=>Yii::t('app', 'Informe Preliminar'),
+                                    ]
+                                );
+                         ?>
                             </li> 
                             
                         </ul>
@@ -476,13 +509,49 @@ echo TreeView::widget([
                                 </div>
 
 
-                            </div><!-- /End pad 2 -->        
+                            </div><!-- /End pad 2 -->
+                            <div class="tab-pane fade" id="tab2-3">
+                        <h4> Observaciones Administrativas </h4>
+                        <p>
+                        <div style="margin-top: 5px;">
+                             <?php
+                              $hid =   "<input type=\"hidden\" name=\"id_informe\" value=\"".$model->id."\">";
+                              $formObs = ActiveForm::begin([
+                                                'id' => 'form-informe-observaciones',
+                                                'options' => [
+                                                    'class' => 'form-horizontal'
+                                                ]
+                                    ]);
+
+                                     echo  $formObs->field($modelp, 'observaciones', ['template' => "
+                                                <div class='col-md-12'>{input}</div>
+                                                {hint}
+                                                {error}"
+                                            ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);     
+                                ?>
+                                <?= $formObs->field($model, 'id')->hiddenInput()->label(false); ?>
+
+                                <div class="form-footer">
+                                    <div style="text-align: right;">
+                                        <?= Html::submitButton($modelp->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $modelp->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+                                    </div>
+                                </div>
+                                <?php ActiveForm::end(); ?>  
+                        </div>
+                        </p>
+                    </div>          
                         </div>
                     </div><!-- /.panel-body -->
                     <?php Pjax::end(); ?> 
                     <!--/ End tabs content -->
                 </div><!-- /.panel -->
                 <!--/ End double tabs -->
+                
+                <?php echo \yii2mod\comments\widgets\Comment::widget([
+                    'model' => $model,
+                    //  'formId' => 'comment-form2',
+                    'pjaxContainerId' => 'unique-pjax-container-id'
+                ]); ?>
 
             </div>
         </div><!-- /.row -->

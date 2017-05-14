@@ -4,47 +4,50 @@ use yii\helpers\Html;
 ?>
 <div class="pagina">
     <div class="header_pap">
+        <table>
+            <tr>
+                <td>
+                    
+                </td>
+            </tr>
+            <tr>
+                <td width="400px" style="padding-left: 20px; padding-top: 180px;float: left;">
+                    <table class="header_pap">
+                        <tr>
+                           <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PACIENTE </td><td><?php echo $modelp->pacienteText; ?> </td>
+                        </tr>
+                        <tr>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">DOCUMENTO </td><td><?php echo $modelp->pacienteDoc; ?> </td>
+                        </tr>
+                        <tr>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">EDAD </td><td><?php echo $model->edad; ?> </td>
+                        </tr>
+                        <tr>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">COBERTURA </td><td><?php echo $modelp->cobertura; ?> </td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="400px" style="padding-top: 180px; margin-left: 20px; float: right;">
+                    <table class="header_pap">
+                        <tr>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PROTOCOLO</td><td><?php echo $modelp->codigo; ?> </td>
+                        </tr>
+                        <tr>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">FECHA</td><td><?php echo $modelp->fechaEntrega;  ?> </td>
+                        </tr>
+                        <tr>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">MÉDICO </td><td><?php echo $modelp->medico->nombre; ?> </td>
+                        </tr>
+                        <tr>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PROCEDENCIA </td><td><?php echo $modelp->procedencia->descripcion; ?></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
     </div>
-   
-    <div class="ContainerDataProtocolo">
-            <div   class="ContainerDataFecha">
-                 <?php echo $modelp->fechaEntrega; ?>
-            </div>   
-            <div   class="ContainerData">
-                <div class="labelprotocoloCodigo"  >
-                    Protocolo:
-                </div>
-                <div class="descriptionProtocoloCodigo"  >
-                          <?php echo $modelp->codigo; ?>
-                </div>
-            </div>
-            <div   class="ContainerDataPaciente">
-                <div class="labelprotocoloPaciente"  >
-                    Paciente:
-                </div>
-                <div class="descriptionProtocoloPaciente"  >
-                         <?php echo $modelp->pacienteText;  ?>
-                </div>
-            </div>        
-            <div   class="ContainerData">
-                <div class="labelprotocoloMedico"  >
-                    Médico:
-                </div>
-                <div class="descriptionProtocoloMedico"  >
-                           <?php  echo $modelp->medico->nombre;   ?>
-                </div>
-            </div>   
-            <div   class="ContainerDataEdad">
-                <div class="labelprotocoloEdad"  >
-                    Edad:
-                </div>
-                <div class="descriptionProtocoloEdad"  >
-                           <?php echo $model->edad; ?>
-                </div>
-            </div>           
-
-    </div>
-    <h5 style="text-align: center; margin-left: 20px; font-weight: bold; text-decoration: underline">INFORME INMUNOHISTOQUÍMICO</h5>
+    <hr>
+    <h5 style="font-size:13px; text-align: center; margin-left: 20px; font-weight: bold; text-decoration: underline">INFORME INMUNOHISTOQUÍMICO</h5>
     <div class="informe">
         <div class="pap_labels">
             MATERIAL

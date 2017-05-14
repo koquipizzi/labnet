@@ -134,16 +134,16 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
         <div class="box">
             <div class="box-header with-border">
                 <div id="row">
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <h3 class="box-title"><strong><?php echo 'Estudio: '.$model->estudio->descripcion; ?></strong></h3>
                     </div>
                      <div class="col-md-3">                       
                             <?php Pjax::begin(['id'=>'estado']); ?>                                 
                                    <?php echo "Estado: ". $model->workflowLastStateName; ?>
                                    <?php if(Helper::checkRoute('/workflow/*')){?>
-                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                             <span class="rounded estadoDesc">                                    
-                                            Estado                                
+                                             <i class="fa fa-chevron-down"></i>                                
                                             </span>
                                         </button>
                                     <?php }?>  
@@ -160,9 +160,9 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                             <?php Pjax::begin(['id'=>'estado']); ?>                                 
                                    <?php echo "Asignado: ". $model->workflowLastAsignationUser; ?>
                                    <?php if(Helper::checkRoute('/workflow/*')){?>
-                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                             <span class="rounded estadoDesc">                                    
-                                            Asignar a                                
+                                            <i class="fa fa-chevron-down"></i>                              
                                             </span>
                                         </button>
                                     <?php }?>  
@@ -175,28 +175,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                             <?php Pjax::end(); ?>   
                         </div> 
                     
-                     <div class="col-md-3">
-                        <button class="btn btn-primary btn-sm mostrarTree pull-right" title="Agregar texto"><i class="fa fa-edit"></i></button>
-                        <button class="btn btn-primary btn-sm guardarTexto pull-right" value="<?= Url::to(['textos/copy']) ?>"><i class="fa fa-copy"></i></button>
-                        <?php  
-                                echo  Html::button("<i class='fa fa-list-alt'></i>",
-                                    ['class'=>'btn btn-primary btn-sm pull-right',
-                                        'onclick'=>"window.location.href = '" . \Yii::$app->urlManager->createUrl(['/informe/printreducido','id'=>$model->id, 'estudio' => $model->Estudio_id ]) . "';",
-                                        'data-toggle'=>'tooltip',
-                                        'title'=>Yii::t('app', 'Informe Reducido'),
-                                    ]
-                                );
-                         ?>
-                         <?php   $url = ['informe/print', 'id' => $model->id , 'estudio' => $model->Estudio_id];
-                                echo  Html::button("<i class='fa fa-file-pdf-o'></i>",
-                                    ['class'=>'btn btn-primary btn-sm pull-right',
-                                        'onclick'=>"window.location.href = '" . \Yii::$app->urlManager->createUrl(['/informe/imprimir','id'=>$model->id, 'estudio' => $model->Estudio_id ]) . "';",
-                                        'data-toggle'=>'tooltip',
-                                        'title'=>Yii::t('app', 'Informe Preliminar'),
-                                    ]
-                                );
-                         ?>
-                      </div>
+                     
                 </div>    
 
                 <!-- botones derecha_-->
@@ -204,6 +183,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
             <div class="box-body no-padding">
                   <?= $this->render('_form_pap', [
                     'model' => $model, 
+                    'modelp' => $modelp, 
                     'edad'=>$modelp->pacienteEdad,
                     'dataproviderMultimedia'=>$dataproviderMultimedia,
                     'codigo'=>$codigo,
@@ -226,4 +206,16 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                     ]) 
                ?>
                -->
-		  
+<?php 		  
+    $this->registerJsFile('@web/assets/admin/js/cipat_modal_informe.js', ['depends' => [yii\web\AssetBundle::className()]]);
+    Modal::begin([
+                    'id' => 'modal',    
+                   // 'size'=>'modal-lg',
+                    'options' => ['tabindex' => false ],
+                ]);
+                echo "<div id='modalContentAutotexto' ></div>";      
+    Modal::end();
+    
+
+?>
+            

@@ -12,7 +12,7 @@ use yii\helpers\Html;
             </tr>
             <tr>
                 <td width="400px" style="padding-top: 180px; padding-left: 20px; float: left;">
-                    <table>
+                    <table class="header_pap">
                         <tr>
                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PACIENTE </td><td><?php echo $modelp->pacienteText; ?> </td>
                         </tr>
@@ -23,12 +23,12 @@ use yii\helpers\Html;
                             <td style="white-space:nowrap; width: 3cm; font-weight: bold;">EDAD </td><td><?php echo $model->edad; ?> </td>
                         </tr>
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PACIENTE </td><td>PACIENTE </td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">COBERTURA </td><td><?php echo $modelp->cobertura; ?></td>
                         </tr>
                     </table>
                 </td>
                 <td width="400px" style="padding-top: 180px; margin-left: 20px; float: right;">
-                    <table>
+                    <table class="header_pap">
                         <tr>
                             <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PROTOCOLO</td><td><?php echo $modelp->codigo; ?> </td>
                         </tr>
@@ -47,7 +47,7 @@ use yii\helpers\Html;
         </table>
     </div>
     <hr>
-    <h5 style="text-align: center; margin-left: 20px; font-weight: bold; text-decoration: underline">
+    <h5 style="font-size: 13px; text-align: center; margin-left: 20px; font-weight: bold; text-decoration: underline">
         <?php echo $model->titulo; ?>
     </h5>
     <div class="informe">
@@ -65,16 +65,16 @@ use yii\helpers\Html;
         </div>        
         <div class="pap_labels">
             CITOLOGÍA HORMONAL
-        </div>   
+        </div>  
         <div class="pap_desc">
-            <table>
-                <tr><td style="white-space:nowrap; width: 4cm;">CALIDAD DE MUESTRA</td> <td style="font-style: italic;"><?php echo $model->calidad ? Leyenda::findOne(['id' => $model->calidad ])->texto : ""  ?></td></tr>
-                <tr><td style="white-space:nowrap; width: 4cm;">ASPECTO</td>            <td style="font-style: italic;"><?php echo $model->aspecto ? Leyenda::findOne(['id' => $model->aspecto ])->texto : ""  ?></td></tr>
-                <tr><td style="white-space:nowrap; width: 4cm;">FLORA</td>              <td style="font-style: italic;"><?php echo $model->flora ? Leyenda::findOne(['id' => $model->flora ])->texto : ""  ?></td></tr>
-                <tr><td style="white-space:nowrap; width: 4cm;">LEUCOCITOS</td>         <td style="font-style: italic;"><?php echo Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->leucositos])->texto  ?></td></tr>
-                <tr><td style="white-space:nowrap; width: 4cm;">HEMATIES</td>           <td style="font-style: italic;"><?php echo Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->hematies])->texto ?></td></tr>
-                <tr><td style="white-space:nowrap; width: 4cm;">OTROS ELEMENTOS</td>    <td style="font-style: italic;"><?php echo $model->otros ? Leyenda::findOne(['id' => $model->otros ])->texto : ""  ?></td></tr>
-                <tr><td style="white-space:nowrap; width: 4cm;">MICROORGANISMOS</td>    <td style="font-style: italic;"><?php echo $model->microorganismos ? Leyenda::findOne(['id' => $model->microorganismos ])->texto : ""  ?></td></tr>
+            <table class="pap_desc">
+                <tr><td class="pap_labels_cito">CALIDAD DE MUESTRA</td> <td  class="pap_desc_cito"><?php echo $model->calidad ? Leyenda::findOne(['id' => $model->calidad ])->texto : ""  ?></td></tr>
+                <tr><td class="pap_labels_cito">ASPECTO</td>            <td  class="pap_desc_cito"><?php echo $model->aspecto ? Leyenda::findOne(['id' => $model->aspecto ])->texto : ""  ?></td></tr>
+                <tr><td class="pap_labels_cito">FLORA</td>              <td  class="pap_desc_cito"><?php echo $model->flora ? Leyenda::findOne(['id' => $model->flora ])->texto : ""  ?></td></tr>
+                <tr><td class="pap_labels_cito">LEUCOCITOS</td>         <td  class="pap_desc_cito"><?php echo Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->leucositos])->texto  ?></td></tr>
+                <tr><td class="pap_labels_cito">HEMATIES</td>           <td  class="pap_desc_cito"><?php echo Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->hematies])->texto ?></td></tr>
+                <tr><td class="pap_labels_cito">OTROS ELEMENTOS</td>    <td  class="pap_desc_cito"><?php echo $model->otros ? Leyenda::findOne(['id' => $model->otros ])->texto : ""  ?></td></tr>
+                <tr><td class="pap_labels_cito">MICROORGANISMOS</td>    <td  class="pap_desc_cito"><?php echo $model->microorganismos ? Leyenda::findOne(['id' => $model->microorganismos ])->texto : ""  ?></td></tr>
             </table>
             
         </div>

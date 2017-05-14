@@ -234,6 +234,7 @@ Yii::$app->name = "LabNET";
                         <img src="<?= Yii::$app->getHomeUrl().'images/photo.jpg' ?>" class="user-image"  alt="admin" >
                         <span class="hidden-xs">Laboratorio CIPAT</span>
                     </a>
+                    
                     <!--ul class="dropdown-menu">
                         <!-- User image ->
                         <li class="user-header">

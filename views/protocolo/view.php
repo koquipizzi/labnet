@@ -9,7 +9,7 @@ use yii\bootstrap\Modal;
 use \app\models\Informe;
 /* @var $this yii\web\View */
 /* @var $model app\models\Protocolo */
-
+//var_dump($model); die();
 
 $this->title = $model->PacienteText.' - '.  $model->Codigo;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Protocolos'), 'url' => ['index']];
@@ -58,7 +58,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_protocolo.js', ['depends
                                     ]) ?>
                                     </div>
                                     <div class="col-md-6 col-sm-6">
-                                        <div class="box">
+                                        <div class="box box-success">
                                             <div class="box-header">
                                                 <h3 class="box-title">Estudios</h3>
                                             </div>

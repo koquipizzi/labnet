@@ -1,6 +1,8 @@
 <?php
 
 use app\models\Informe;
+use app\models\PacientePrestadora;
+$nro_afiliado = PacientePrestadora::find()->where(['id' => $model->Paciente_prestadora_id])->one()->nro_afiliado;
 
 ?>
                 <table class="table table-striped">
@@ -41,6 +43,14 @@ use app\models\Informe;
                          </td>
                         <td>
                             <span class="pull-left text-strong"><?= $model->cobertura ?></span>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>
+                            <span class="pull-left text-capitalize">Nro. Afiliado</span>
+                         </td>
+                        <td>
+                            <span class="pull-left text-strong"><?= $nro_afiliado ?></span>
                         </td>
                     </tr>
                     <tr>

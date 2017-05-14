@@ -5,20 +5,17 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Paciente */
 
-$this->title = "Paciente: ".$model->nombre;
+$this->title = "Paciente: ".$prest_nro;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pacientes'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->nombre, 'url' => ['view', 'id' => $model->id]];
-
+use app\models\PacientePrestadora;
+$afiliadoA = PacientePrestadora::find()->where(['Paciente_id' => $model->id]);
+//var_dump($prest_nro); die();
+//if (!isset($prest_nro))
+  //  echo $prest_nro;  die();
+  
 ?>
-
 <div class="box box-info">
-        <div class="box-header with-border">
-                        <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-                <div class="pull-right">
-                        <?= Html::a('<i class="fa fa-pencil"></i> Volver', ['paciente/index'], ['class'=>'btn btn-primary']) ?>
-                </div>
-        </div>
-
         <?= DetailView::widget([
             'model' => $model,
             'attributes' =>

@@ -59,7 +59,7 @@ use kartik\popover\PopoverX;
                                                 if (isset($historial['fecha_entrega']))
                                                 {
                                                 $date = date_create($historial['fecha_entrega']);
-                                                $fecha= date_format($date, 'd-m-Y');
+                                                $fecha= date_format($date, 'd-m-y');
                                                 list($mes, $día, $año) = explode("-", $fecha);
                                                 echo $mes."-".$día."-".$año ;    
                                                 }
@@ -183,7 +183,7 @@ use kartik\popover\PopoverX;
                                 }
                                
                                 echo PopoverX::widget([
-                                                'header' => 'Detalle Estudioo',
+                                                'header' => 'Detalle Estudio',
                                               //  'id'=>'popHistorial$id_i',
                                                 'class' => 'popover-lg',
                                                 'placement' => PopoverX::ALIGN_RIGHT,

@@ -1,7 +1,10 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use wbraganca\dynamicform\DynamicFormWidget;
+
+
+ 
 use yii\helpers\ArrayHelper;
 use app\models\Localidad;
 use app\models\Sexo;
@@ -15,38 +18,22 @@ use app\models\PacientePrestadora;
 use yii\data\ActiveDataProvider;
 use vova07\select2\Widget;
 use kartik\datecontrol\DateControl;
-use xj\bootbox\BootboxAsset;
-BootboxAsset::register($this);
+
 /* @var $this yii\web\View */
 /* @var $model app\models\Paciente */
 /* @var $form yii\widgets\ActiveForm */
-
 ?>
-
+<?php 
+    $this->registerJsFile('@web/assets/admin/js/cipat_modal_paciente.js',
+    ['depends' => [yii\web\AssetBundle::className()]]);
+?>
 <?= Html::csrfMetaTags() ?>
-  <?php /* \insolita\wgadminlte\LteBox::begin([  
-             'type'=>\insolita\wgadminlte\LteConst::TYPE_INFO,
-             'isSolid'=>true,
-             'boxTools'=>'<button class="btn btn-success btn-xs create_button" ><i class="fa fa-plus-circle"></i> Add</button>',
-             'tooltip'=>'this tooltip description',
-             'title'=>'Manage users',
-             'footer'=>'total 44 active users',
-         ])?>
-        ANY BOX CONTENT HERE
-    <?php \insolita\wgadminlte\LteBox::end() */ ?>
 
-    <?php
-   // if (isset())
-/* echo \insolita\wgadminlte\Alert::widget([
-              'type'=>\insolita\wgadminlte\LteConst::TYPE_SUCCESS,
-              'text'=>'Operation Complete',
-              'closable'=>true
-          ]);*/
-    ?>
 
 <div class="paciente-form">  
-   <?php
-        $form = ActiveForm::begin(['id'=>'create-paciente-form'  ,   
+   <?php $form = ActiveForm::begin(['id' => 'dynamic-form',
+
+    // $form = ActiveForm::begin(['id'=>'create-paciente-form'  ,   
             'options' => [
                 'class' => 'form-horizontal mt-10',
                 'id' => 'create-paciente-form',
@@ -287,6 +274,3 @@ BootboxAsset::register($this);
 
 </div>
 
-<?php 
-    $this->registerJsFile('@web/assets/admin/js/cipat_modal_paciente.js', ['depends' => [yii\web\AssetBundle::className()]]);    $this->registerJsFile('@web/assets/admin/js/cipat_modal_paciente.js', ['depends' => [yii\web\AssetBundle::className(),  'yii\web\JqueryAsset']]);   
-?>

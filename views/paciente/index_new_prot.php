@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
+use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\PacienteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -12,6 +13,22 @@ BootboxAsset::register($this);
 $this->title = Yii::t('app', 'Pacientes');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?php 
+    Modal::begin([
+            'id' => 'modal',    
+           // 'size'=>'modal-lg',
+            'options' => ['tabindex' => false ],
+        ]);
+        echo "<div id='modalContent'></div>";
+    Modal::end();  
+
+    
+    ?>
+    <div>
+
+</div>
+
 <div class="header-content">
     <div class="pull-left">
         <h3 class="panel-title">Listado de <?= Html::encode($this->title) ?></h3>
@@ -23,13 +40,33 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <?php Pjax::begin(['id'=>'pacientes', 'enablePushState' => FALSE]); ?>    
-<?= GridView::widget([
+<?php echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'options'=>array('class'=>'table table-striped table-lilac'),
+        'options'=>array('class'=>'table table-striped'),
         'filterModel' => $searchModel,
         'columns' => [
         //    ['class' => 'yii\grid\SerialColumn'],
-            'nombre',
+            [
+                'format' => 'raw',
+                'contentOptions' => ['style' => 'width:5%;'],
+                'value'=>function ($data) { 
+                    if (isset($data['nombre_prest_nro']))
+                        $nro= 'Cobertura: '.$data['nombre_prest_nro'];
+                    else $nro= 'Cobertura: Sin datos';
+                    $url ='index.php?r=paciente/view_modal&id='.$data['PacienteId'];
+                    return Html::a('<i class="fa fa-arrow-right"></i>', FALSE, [
+                                'title' => Yii::t('app', 'View'),
+                                'class'=>'btn  btn-xs ver', 
+                                'value'=> "$url",
+                                'data-nro' => "$nro"
+                    ]);;
+                }
+            ],
+            [
+                    'label' => 'Paciente',
+                    'attribute'=>'nombre', 
+                    'contentOptions' => ['style' => 'width:30%;'],
+            ],
             'nro_documento',
             [
                 'label' => 'Teléfono',
@@ -37,19 +74,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' =>['class' => 'table_class','style'=>'width:12%;'],
                 'attribute' => 'telefono',
             ],            
-            'domicilio',
+           // 'domicilio',
             [
-                'label' => 'Cobertura/OS',
-                'attribute' => 'nombre_prest',
+                'label' => 'Cobertura/OS - Nro Afiliado',
+                'attribute' => 'nombre_prest_nro',
             ], 
             [
             'class' => 'yii\grid\DataColumn', 
             'format' => 'raw',
             'value' => function ($data) {
-              $url ='index.php?r=protocolo/create2&pacprest='.$data['pacprest'];
+              $url ='index.php?r=protocolo/create3&pacprest='.$data['pacprest'];
+              $url2 ='index.php?r=paciente/view_modal&id='.$data['PacienteId'];
               return Html::a('<i class="fa fa-file"></i> Crear Protocolo', $url, [
                                 'title' => Yii::t('app', 'View'),
-                                'class'=>'btn  btn-xs ver', 
+                                'class'=>'btn btn-success btn-xs', 
                                 'value'=> "$url",
                     ]);
                 },

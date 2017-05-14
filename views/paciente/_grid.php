@@ -40,14 +40,7 @@ use yii\widgets\Pjax;
                                                     'value'=> "$url",
                                         ]);
                                     },
-                                    'crear' => function ($url, $model) {
-                                        return Html::a('<span class="fa fa-trash"></span>', FALSE, [
-                                                    'title' => Yii::t('app', 'Borrar'),
-                                                    'class'=>'btn btn-danger btn-xs', 
-                                                    'onclick'=>'deletePrestadora('.$model->id.',"'.$url.'")', 
-                                                    'value'=> "$url",
-                                        ]); 
-                                    },
+                                   
                                 ],
 
           

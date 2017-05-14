@@ -12,7 +12,7 @@ use yii\helpers\Html;
             </tr>
             <tr>
                 <td width="400px" style="padding-left: 20px; padding-top: 180px;float: left;">
-                    <table>
+                    <table class="header_pap">
                         <tr>
                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PACIENTE </td><td><?php echo $modelp->pacienteText; ?> </td>
                         </tr>
@@ -23,17 +23,17 @@ use yii\helpers\Html;
                             <td style="white-space:nowrap; width: 3cm; font-weight: bold;">EDAD </td><td><?php echo $model->edad; ?> </td>
                         </tr>
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PACIENTE </td><td>PACIENTE </td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">COBERTURA </td><td><?php echo $modelp->cobertura; ?> </td>
                         </tr>
                     </table>
                 </td>
-                <td width="400px" style="margin-left: 20px; padding-top: 180px; float: right;">
-                    <table>
+                <td width="400px" style="padding-top: 180px; margin-left: 20px; float: right;">
+                    <table class="header_pap">
                         <tr>
                             <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PROTOCOLO</td><td><?php echo $modelp->codigo; ?> </td>
                         </tr>
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">FECHA</td><td><?php echo $modelp->fechaEntrega; ?> </td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">FECHA</td><td><?php echo $modelp->fechaEntrega;  ?> </td>
                         </tr>
                         <tr>
                             <td style="white-space:nowrap; width: 3cm; font-weight: bold;">MÉDICO </td><td><?php echo $modelp->medico->nombre; ?> </td>
@@ -47,7 +47,7 @@ use yii\helpers\Html;
         </table>
     </div>
     <hr>
-    <h5 style="text-align: center; margin-left: 20px; font-weight: bold; text-decoration: underline">ESTUDIO DE CITOLOGIA ESPECIAL</h5>
+    <h5 style="font-size: 13px;text-align: center; margin-left: 20px; font-weight: bold; text-decoration: underline">ESTUDIO DE CITOLOGIA ESPECIAL</h5>
     <div class="informe">
         <div class="pap_labels">
             TIPO DE ESTUDIO

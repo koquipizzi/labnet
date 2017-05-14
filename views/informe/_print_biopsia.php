@@ -12,15 +12,15 @@ use yii\helpers\Html;
             </tr>
             <tr>
                 <td width="400px"  style="padding-top: 180px; padding-left: 20px; float: left;">
-                    <table>
+                    <table class="header_pap">
                         <tr>
-                           <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PACIENTE </td><td><?php echo $modelp->pacienteText; ?> </td>
+                           <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PACIENTE </td><td><?php echo $modelp->pacienteTexto; ?> </td>
                         </tr>
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">DOCUMENTO </td><td><?php echo $modelp->pacienteDoc; ?> </td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">DOCUMENTO </td><td><?php echo $modelp->pacienteDoc ? $modelp->pacienteDoc : "Sin datos" ?> </td>
                         </tr>
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">EDAD </td><td><?php echo $model->edad; ?> </td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">EDAD </td><td><?php echo $model->edad == 0 ? "Sin datos" : $model->edad; ?> </td>
                         </tr>
                         <tr>
                             <td style="white-space:nowrap; width: 3cm; font-weight: bold;">COBERTURA </td><td><?php echo $modelp->procedencia->descripcion; ?>  </td>
@@ -28,7 +28,7 @@ use yii\helpers\Html;
                     </table>
                 </td>
                 <td width="400px" style="margin-left: 20px;padding-top: 180px; float: right;">
-                    <table>
+                    <table class="header_pap">
                         <tr>
                             <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PROTOCOLO</td><td><?php echo $modelp->codigo; ?> </td>
                         </tr>
@@ -47,7 +47,7 @@ use yii\helpers\Html;
         </table>
     </div>
     <hr>
-    <h5 style="text-align: center; margin-left: 20px; font-weight: bold; text-decoration: underline">
+    <h5 style="font-size:13px; text-align: center; margin-left: 20px; font-weight: bold; text-decoration: underline">
         INFORME ANATOMOPATÓLOGICO
     </h5>
     <div class="informe">

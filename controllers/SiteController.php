@@ -8,6 +8,10 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\Paciente;
+use app\models\Informe;
+use app\models\Protocolo;
+use app\models\ProtocoloSearch;
 
 class SiteController extends Controller
 {
@@ -58,8 +62,37 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-     //   return $this->render('index');
-	$this->redirect(['/protocolo/index']);
+        $c = Paciente::find()->count();
+        $i = Informe::find()->count();
+        $p = Informe::find()->where('Estudio_id = 1')->count();
+        $m = Informe::find()->where('Estudio_id = 3')->count();
+        $b = Informe::find()->where('Estudio_id = 2')->count();
+        $ci = Informe::find()->where('Estudio_id = 4')->count();
+        $in = Informe::find()->where('Estudio_id = 5')->count();
+
+        $searchProtocolos = new ProtocoloSearch();
+        $propios = $searchProtocolos->search_asignados_index(2, NULL);
+    //    var_dump($propios); die();
+        
+
+        $meses = [];
+        $cantidades = [];
+        for ($i = 0; $i <= 12; $i++)
+        {
+            $mesmenos = "-".$i." month";
+            $time = strtotime($mesmenos, time());
+            $dateFinal = date("Y-m-d", $time);
+            $mes = date("m", strtotime($dateFinal));
+            $anio = date("Y", strtotime($dateFinal));
+            $sql = Protocolo::find()->where(' Year(fecha_entrada)='.$anio.' and Month(fecha_entrada) ='. $mes)->count();
+            $meses[] = $mes."-".$anio;
+            $cantidades[] = $sql;
+        }
+         return $this->render('index', ['c'=> $c, 'i'=> $i,  'p'=> $p,
+                            'm'=> $m,'b'=> $b, 'ci'=> $ci, 'in'=> $in,
+                            'meses'=> $meses, 'cantidades'=> $cantidades,
+                            'propios'=> $propios
+                            ]);
     }
 
     /**

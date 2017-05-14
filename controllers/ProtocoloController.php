@@ -22,6 +22,7 @@ use app\models\Paciente;
 use yii\data\SqlDataProvider;
 use yii\data\ArrayDataProvider;
 use app\models\User;
+use yii\base\Model;
 
 
 /**
@@ -300,6 +301,91 @@ class ProtocoloController extends Controller
         }
     }
         
+    public function actionCreate3($pacprest=null){ 
+        $pacprest_modelo = \app\models\PacientePrestadora::findOne($pacprest);      
+        $paciente = Paciente::findOne($pacprest_modelo->Paciente_id);
+        $prestadora = \app\models\Prestadoras::findOne($pacprest_modelo->Prestadoras_id);       
+        $mdlProtocolo = new Protocolo();
+        $modelSecuencia= new NroSecuenciaProtocolo();
+        $modelSecuencia->fecha= date("Y-m-d");
+        $modelSecuencia->save();
+        $modelSecuencia->refresh();
+        $mdlProtocolo->nro_secuencia=$secuencia;   
+        $secuencia=sprintf("%06d", $secuencia);
+        $mdlProtocolo->nro_secuencia=$secuencia;
+        $mdlProtocolo->Paciente_prestadora_id=$pacprest;
+        $modelsInformes = [new Informe];
+        $modelsNomenclador = [[new InformeNomenclador]];
+        if ($mdlProtocolo->load(Yii::$app->request->post())) {       
+           // var_dump($mdlProtocolo); die();
+            if ($mdlProtocolo->fecha_entrada == NULL)
+                $mdlProtocolo->fecha_entrada = date("Y-m-d");
+            $modelsInformes = Informe::createMultiple(Informe::classname());
+            Model::loadMultiple($modelsInformes, Yii::$app->request->post());
+            $valid = $mdlProtocolo->validate();
+            if (isset($_POST['InformeNomenclador'][0][0])) {
+                foreach ($_POST['InformeNomenclador'] as $indexInforme => $nomencladores) {
+                    foreach ($nomencladores as $index => $nom) {
+                        $data['InformeNomenclador'] = $nom;
+                        $modelInformeNomenclador = new InformeNomenclador;
+                        $modelInformeNomenclador->load($data);
+                        $modelsNomenclador[$indexInforme][$index] = $modelInformeNomenclador;
+                    }
+                }
+            }
+
+            if ($valid) {
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $mdlProtocolo->save(false)) {
+                        foreach ($modelsInformes as $indexHouse => $modelInforme) {
+                            if ($flag === false) {
+                                break;
+                            }
+
+                            $modelInforme->Protocolo_id = $mdlProtocolo->id;
+
+                            if (!($flag = $modelInforme->save(false))) {
+                                break;
+                            }
+                            if (isset($modelsNomenclador[$indexHouse]) && is_array($modelsNomenclador[$indexHouse])) {
+                                foreach ($modelsNomenclador[$indexHouse] as $indexRoom => $modelNom) {
+                                    $informeNomenclador= new InformeNomenclador();
+                                    $informeNomenclador->id_informe=$modelInforme->id;
+                                    $informeNomenclador->id_nomenclador=$modelNom->id_nomenclador;
+                                    $informeNomenclador->cantidad = $modelNom->cantidad;
+                                    $informeNomenclador->save();
+                                  
+                                    if (!($flag = $informeNomenclador->save(false))) {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if ($flag) {
+                        $transaction->commit();
+                        return $this->redirect(['view', 'id' => $mdlProtocolo->id]);
+                    } else {
+                        $transaction->rollBack();
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                }
+            }
+        }
+        return $this->render('_form3', [
+                            'model' => $mdlProtocolo,
+                            'modelsInformes'=>(empty($modelsInformes)) ? [new Informe] : $modelsInformes,
+                            'modelsNomenclador'=>(empty($modelsNomenclador)) ? [new InformeNomenclador] : $modelsNomenclador,
+                            'pacprest' => $pacprest,
+                            'paciente'=>$paciente,
+                            'prestadora'=> $prestadora
+                             ]);
+    }
+
+
     public function actionCreate2($pacprest=null){ 
       /*  $session = Yii::$app->session;
         $session->open();
@@ -414,6 +500,18 @@ class ProtocoloController extends Controller
     }
         
 
+
+
+    public function actionViewkoko($id)
+        {
+            $model = $this->findModel($id);
+            $informes = $model->informes;
+
+            return $this->render('view', [
+                'model' => $model,
+                'informes' => $informes,
+            ]);
+        }
         /**
      * Creates a new Protocolo model.
      * If creation is successful, the browser will be redirected to the 'view' page.

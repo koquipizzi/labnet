@@ -18,6 +18,7 @@ use app\models\PrestadoraTemp;
 use app\models\PrestadoratempSearch;
 use app\models\PacientePrestadoraSearch;
 use yii\data\ActiveDataProvider;
+use yii\web;
 
 
 /**
@@ -76,6 +77,15 @@ class PacienteController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+
+    public function actionView_modal($id)
+    {
+      //  if ($prest_nro == 0)
+        return $this->renderAjax('viewModal', [
+            'model' => $this->findModel($id)
+        ]);
+
     }
 
     /**

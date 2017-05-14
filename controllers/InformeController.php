@@ -190,31 +190,56 @@ class InformeController extends Controller {
 	 */
 
 	public function actionUpdate($id=null) {	
-            if(isset($id)){
-                    $model = $this->findModel ( $id );
-            }else{
-                    $model=$this->findModel(Yii::$app->request->post('Informe_id'));
-            }
-			
-            $nominf = new InformeNomenclador();
-            if (isset($_POST['hasEditable'])) {
-                    \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                    $nom = $model->getNomencladorInforme($_POST['id_nom_inf']);
-                    $nominf = InformeNomenclador::find()->where(['=', 'id', $nom['id']])->one();
-                    $cant = $_POST['cantidad'];
-                    if (is_numeric($cant)){
-                            $nominf->cantidad = $_POST['cantidad'];
-                            $nominf->save();
-                            return ['response'=>$nominf->cantidad, 'message'=>''];
-                    }
-                    else {
-                            return ['response'=>$nominf->cantidad, 'message'=>'Ingrese un número'];
-                    }
 
-            }
-            if ($model) {
-                    $modelp = $model->protocolo;
-            } 
+		if (isset($_POST['Protocolo']['observaciones'])){
+			$model=$this->findModel($_POST['Informe']['id']);
+			if ($model) {
+				$modelp = $model->protocolo;
+				$modelp->observaciones = $_POST['Protocolo']['observaciones'];
+				$modelp->save();
+			} 
+		}
+		
+		if(isset($id)){
+				$model = $this->findModel ( $id );
+		}else{
+				$model=$this->findModel(Yii::$app->request->post('Informe_id'));
+		}
+
+        $nominf = new InformeNomenclador();
+        if (isset($_POST['hasEditable'])) {
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+			if (isset($_POST['observaciones'])){
+				$model=$this->findModel($_POST['Informe']['id']);
+				if ($model) {
+					$modelp = $model->protocolo;
+					$modelp->observaciones = $_POST['Protocolo']['observaciones'];
+					$modelp->save();
+					return ['response'=>$modelp->observaciones, 'message'=>''];
+				} 
+			}
+			else
+			{
+				$nom = $model->getNomencladorInforme($_POST['id_nom_inf']);
+				$nominf = InformeNomenclador::find()->where(['=', 'id', $nom['id']])->one();
+				$cant = $_POST['cantidad'];
+				if (is_numeric($cant)){
+						$nominf->cantidad = $_POST['cantidad'];
+						$nominf->save();
+						return ['response'=>$nominf->cantidad, 'message'=>''];
+				}
+				else {
+						return ['response'=>$nominf->cantidad, 'message'=>'Ingrese un número'];
+				}
+			}
+
+        }
+        if ($model) {
+        	$modelp = $model->protocolo;
+		//	echo $modelp->pacienteTexto;
+		//	var_dump($modelp); die();
+        } 
 	//		die();
             $searchModel = new InformeNomencladorSearch();
             $informeNomenclador = new InformeNomenclador();
@@ -855,7 +880,7 @@ class InformeController extends Controller {
 				'orientation' => Pdf::ORIENT_PORTRAIT,
 				// stream to browser inline
 				'destination' => Pdf::DEST_BROWSER,
-				'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.css',
+				'cssFile' => '@app/web/css/print/informe.css',
 				// any css to be embedded if required
 				'cssInline' => '* {font-size:14px;}',
 				// set mPDF properties on the fly
@@ -896,7 +921,7 @@ class InformeController extends Controller {
 				'orientation' => Pdf::ORIENT_PORTRAIT,
 				// stream to browser inline
 				'destination' => Pdf::DEST_BROWSER,
-				'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.css',
+				'cssFile' => '@app/web/css/print/informe.css',
 				// any css to be embedded if required
 				'cssInline' => '* {font-size:14px;}',
 				// set mPDF properties on the fly
@@ -938,7 +963,7 @@ class InformeController extends Controller {
                     'orientation' => Pdf::ORIENT_PORTRAIT,
                     // stream to browser inline
                     'destination' => Pdf::DEST_BROWSER,
-                    'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.css',
+                    'cssFile' => '@app/web/css/print/informe.css',
                     // any css to be embedded if required
                     'cssInline' => '* {font-size:14px;}',
                     // set mPDF properties on the fly
@@ -981,7 +1006,7 @@ class InformeController extends Controller {
                     'orientation' => Pdf::ORIENT_PORTRAIT,
                     // stream to browser inline
                     'destination' => Pdf::DEST_BROWSER,
-                    'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.css',
+                    'cssFile' => '@app/web/css/print/informe.css',
                     // any css to be embedded if required
                     'cssInline' => '* {font-size:14px;}',
                     // set mPDF properties on the fly
@@ -1025,7 +1050,7 @@ class InformeController extends Controller {
 				'orientation' => Pdf::ORIENT_PORTRAIT,
 				// stream to browser inline
 				'destination' => Pdf::DEST_BROWSER,
-				'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.css',
+				'cssFile' => '@app/web/css/print/informe.css',
 				// any css to be embedded if required
 				'cssInline' => '* {font-size:14px;}',
 				// set mPDF properties on the fly

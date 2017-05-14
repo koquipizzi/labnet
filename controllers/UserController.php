@@ -11,7 +11,7 @@ use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use yii\imagine\Image;
 use Imagine\Image\Box;
-
+use Imagine;
 use yii\helpers\BaseFileHelper;
 
 /**
@@ -160,14 +160,18 @@ class UserController extends Controller
             $fileName = $uid . '.' . $file->extension;
             $filePath = $directory . $fileName;
 //var_dump($file); die();
-           $image = Image::crop($file->tempName,
+            $image = Image::getImagine()->open($file->tempName)
+            ->thumbnail(new Box($width, $height));
+        //    ->save($savePath , ['quality' => 90]);
+
+    /*       $image = Image::crop($file->tempName,
                     intval($cropInfo['width']),
                     intval($cropInfo['height']),
 					[$cropInfo['x'], $cropInfo['y']])->resize(new Box($width, $height));
 //var_dump($image); die();
+*/
 
-
-            if ($image->save($filePath)) {
+            if ($image->save($filePath, ['quality' => 90])) {
                 $path = '/images/users' . DIRECTORY_SEPARATOR . Yii::$app->session->id . DIRECTORY_SEPARATOR . $fileName;
                 $model->avatar = $path;
                 $model->save();

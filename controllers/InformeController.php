@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Informe;
+use app\models\Protocolo;
 use app\models\Laboratorio;
 use app\models\InformeSearch;
 use yii\web\Controller;
@@ -191,36 +192,23 @@ class InformeController extends Controller {
 
 	public function actionUpdate($id=null) {	
 
-		if (isset($_POST['Protocolo']['observaciones'])){
-			$model=$this->findModel($_POST['Informe']['id']);
-			if ($model) {
-				$modelp = $model->protocolo;
-				$modelp->observaciones = $_POST['Protocolo']['observaciones'];
-				$modelp->save();
-			} 
-		}
-		
 		if(isset($id)){
 				$model = $this->findModel ( $id );
 		}else{
 				$model=$this->findModel(Yii::$app->request->post('Informe_id'));
 		}
+		if ($model) {
+        	$modelp = $model->protocolo;
+        }
+
+		if (isset($_POST['Protocolo']['observaciones'])){
+			$modelp->observaciones = $_POST['Protocolo']['observaciones'];
+			$modelp->save(false);
+		}
 
         $nominf = new InformeNomenclador();
         if (isset($_POST['hasEditable'])) {
 			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
-			if (isset($_POST['observaciones'])){
-				$model=$this->findModel($_POST['Informe']['id']);
-				if ($model) {
-					$modelp = $model->protocolo;
-					$modelp->observaciones = $_POST['Protocolo']['observaciones'];
-					$modelp->save();
-					return ['response'=>$modelp->observaciones, 'message'=>''];
-				} 
-			}
-			else
-			{
 				$nom = $model->getNomencladorInforme($_POST['id_nom_inf']);
 				$nominf = InformeNomenclador::find()->where(['=', 'id', $nom['id']])->one();
 				$cant = $_POST['cantidad'];
@@ -232,28 +220,22 @@ class InformeController extends Controller {
 				else {
 						return ['response'=>$nominf->cantidad, 'message'=>'Ingrese un número'];
 				}
-			}
-
         }
-        if ($model) {
-        	$modelp = $model->protocolo;
-		//	echo $modelp->pacienteTexto;
-		//	var_dump($modelp); die();
-        } 
-	//		die();
-            $searchModel = new InformeNomencladorSearch();
-            $informeNomenclador = new InformeNomenclador();
-            $searchModel->id_informe = $model->id;
-            $dataProvider = $searchModel->search([]);
-            $informe=$this->findModel( $model->id );
-            $historialPaciente=$informe->getHistorialUsuario();
-		//	$historialPaciente='';
-            if (is_null($model->titulo)) {
-                 $model->titulo = $model->estudio->titulo;
-             }
-            // View to Render
-            //Obtener fotos
-            $dataproviderMultimedia = new ArrayDataProvider([
+       
+
+        $searchModel = new InformeNomencladorSearch();
+        $informeNomenclador = new InformeNomenclador();
+        $searchModel->id_informe = $model->id;
+        $dataProvider = $searchModel->search([]);
+        $informe=$this->findModel( $model->id );
+        $historialPaciente=$informe->getHistorialUsuario();
+
+        if (is_null($model->titulo)) {
+            $model->titulo = $model->estudio->titulo;
+        }
+        // View to Render
+        //Obtener fotos
+        $dataproviderMultimedia = new ArrayDataProvider([
                             'allModels' => Multimedia::findAll(['Informe_id'=>$model->id]),
             ]);
             
@@ -977,9 +959,9 @@ class InformeController extends Controller {
                                     'title' => 'Informe Anatomopatológico' 
                     ],
                     'methods' => [ 
-                                    'SetHeader' => [ 
-                                                    'Sistema LABnet' 
-                                    ],
+                               //     'SetHeader' => [ 
+                               //                     'Sistema LABnet' 
+                              //      ],
                                     'SetFooter' => [ 
                                                     $laboratorio->direccion.'|web: '.$laboratorio->web.'|Tel.:'.$laboratorio->telefono 
                                     ] 
@@ -1020,9 +1002,9 @@ class InformeController extends Controller {
                                     'title' => 'BIOLOGIA MOLECULAR - HPV DNA TEST' 
                     ],
                     'methods' => [ 
-                                    'SetHeader' => [ 
-                                                    'Sistema LABnet' 
-                                    ],
+                                 //   'SetHeader' => [ 
+                                //                    'Sistema LABnet' 
+                                //    ],
                                     'SetFooter' => [ 
                                                     $laboratorio->direccion.'|web: '.$laboratorio->web.'|Tel.:'.$laboratorio->telefono 
                                     ] 

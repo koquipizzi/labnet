@@ -7,22 +7,22 @@ class m170613_192109_protocolo_codigo extends Migration
     public function safeUp()
     {
         $this->execute('alter table Protocolo add codigo varchar(30)');
-        $this->execute('
+        $this->execute(" 
             CREATE TRIGGER bi_protocolo_codigo
                 BEFORE INSERT ON Protocolo
                 FOR EACH ROW
             BEGIN
-                SET NEW.codigo := CONCAT(SUBSTRING(NEW.anio,-2),NEW.letra,'-', LPAD(Protocolo.nro_secuencia, 6, 0));
-            END; 
-        ');
-        $this->execute('
+                SET NEW.codigo = CONCAT(SUBSTRING(NEW.anio,-2),NEW.letra,'-', LPAD(NEW.nro_secuencia, 6, 0));
+            END
+        ");
+        $this->execute(" 
             CREATE TRIGGER bu_protocolo_codigo
                 BEFORE UPDATE ON Protocolo
                 FOR EACH ROW
             BEGIN
-                SET NEW.codigo := CONCAT(SUBSTRING(NEW.anio,-2),NEW.letra,'-', LPAD(Protocolo.nro_secuencia, 6, 0));
-            END;
-        ');        
+                SET NEW.codigo = CONCAT(SUBSTRING(NEW.anio,-2),NEW.letra,'-', LPAD(NEW.nro_secuencia, 6, 0));
+            END
+        ");        
     }
 
     public function safeDown()

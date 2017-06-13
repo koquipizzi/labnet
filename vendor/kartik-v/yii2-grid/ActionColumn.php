@@ -3,7 +3,7 @@
 /**
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2017
  * @package yii2-grid
- * @version 3.1.4
+ * @version 3.1.5
  */
 
 namespace kartik\grid;
@@ -299,7 +299,8 @@ class ActionColumn extends YiiActionColumn
     {
         $content = parent::renderDataCellContent($model, $key, $index);
         $options = $this->dropdownButton;
-        if ($this->_isDropdown) {
+        $trimmed = trim($content);
+        if ($this->_isDropdown  && !empty($trimmed)) {
             $label = ArrayHelper::remove($options, 'label', Yii::t('kvgrid', 'Actions'));
             $caret = ArrayHelper::remove($options, 'caret', ' <span class="caret"></span>');
             $options = array_replace_recursive($options, ['type' => 'button', 'data-toggle' => 'dropdown']);

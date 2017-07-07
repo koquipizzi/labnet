@@ -12,6 +12,7 @@ use app\models\Paciente;
 use app\models\Informe;
 use app\models\Protocolo;
 use app\models\ProtocoloSearch;
+use app\models\Laboratorio;
 
 class SiteController extends Controller
 {
@@ -72,8 +73,6 @@ class SiteController extends Controller
 
         $searchProtocolos = new ProtocoloSearch();
         $propios = $searchProtocolos->search_asignados_index(2, NULL);
-    //    var_dump($propios); die();
-        
 
         $meses = [];
         $cantidades = [];

@@ -125,7 +125,7 @@ $this->title = 'LabNET - Administración de Informes Patológicos';
                         <?= ChartJs::widget([
                             'type' => 'doughnut',
                             'data' => [
-                                'labels' => [PAP, Biopsia, Citología, Molecular, InmunoH],
+                                'labels' => ['PAP', 'Biopsia', 'Citología', 'Molecular', 'InmunoH'],
                                 'datasets' => [
                                     [
                                         'label' => 'Cantidad',
@@ -189,7 +189,7 @@ $this->title = 'LabNET - Administración de Informes Patológicos';
                 <?= ChartJs::widget([
                         'type' => 'bar',
                         'data' => [
-                            'labels' => [PAP, Biopsia, Citología, Molecular, InmunoH],
+                            'labels' => ['PAP', 'Biopsia', 'Citología', 'Molecular', 'InmunoH'],
                             'datasets' => [
                                 [
                                     'label' => [$p, $b, $ci, $m, $in],

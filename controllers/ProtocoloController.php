@@ -52,9 +52,18 @@ class ProtocoloController extends Controller
      */
     public function actionIndex()
     {
+
+// error_reporting(E_ALL);
+// ini_set("display_errors", 1);
+        
         $searchModel = new ProtocoloSearch();
         $searchModelAsig = new ProtocoloSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $params = Yii::$app->request->queryParams;
+        $params['ProtocoloSearch']['estado_id'] = 4;
+
+        $dataProvider = $searchModel->search($params);
+
        // $dataProviderPendientes = $searchModel->search_pendientes(Yii::$app->request->queryParams);
        // $dataProviderTerminados = $searchModel->search_terminados(Yii::$app->request->queryParams);
       //  $dataProviderEntregados = $searchModel->search_entregados(Yii::$app->request->queryParams);

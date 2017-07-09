@@ -48,6 +48,34 @@ class ProtocoloSearch extends Protocolo
         return array_merge(parent::attributes(), ['nombre', 'nro_documento', 'codigo']);
     }
 
+    private function nroSecuenciaFilter() {
+
+    }
+
+
+
+    private function paramExists($params, $key) {
+        return
+            is_array($params)
+            && array_key_exists($key, $params);
+    }
+
+    private function addWhereSentence($where, $sentence, $connector = 'AND') {
+        if(empty($where))
+            return $sentence;
+        return " {$where} {$connector} {$sentence} ";
+    }
+
+    /**
+    * Filtro de Estado en Workflow
+    */
+    private function estadoFilter($params, &$where, &$queryParams) {
+        if($this->paramExists($params, 'estado_id')) {
+            $queryParams[':estado_id'] = $params['estado_id'];
+            $where = $this->addWhereSentence($where, "Workflow.Estado_id = :estado_id");
+        }
+    }
+
     /**
      * Creates data provider instance with search query applied
      *
@@ -57,30 +85,35 @@ class ProtocoloSearch extends Protocolo
      */
     public function search($params)
     {       
-   //     if (isset($params['_pjax']) && ($params['_pjax'] == '#asignados'))
-   //         $this->search_asignados (null, $params);
- 
+        $queryParams = [];
+        $where = '';
+        $formParams = [];
+        if(array_key_exists('ProtocoloSearch',$params)) {
+            $formParams = $params['ProtocoloSearch'];
+        }
 
-        $query = '
-                SELECT 
-                    distinct(Protocolo.id) as idp, 
-                    Protocolo.* , 
-                    Paciente.nombre, 
-                    Paciente.nro_documento,
-                    Workflow.Informe_id,
-                    Workflow.fecha_inicio,
-                    Workflow.id as WorkFlow_ID,
-                    Workflow.Estado_id					
-                FROM `Protocolo` 
-                LEFT JOIN `Informe` ON `Protocolo`.`id` = `Informe`.`Protocolo_id` 
-                LEFT JOIN `Paciente_prestadora` pp ON `Protocolo`.`Paciente_prestadora_id` = pp.`id`
-                LEFT JOIN `Paciente` ON pp.`Paciente_id` = `Paciente`.`id` 
-                JOIN View_Informe_Ult_WorkFlow ON (Informe.id = View_Informe_Ult_WorkFlow.Informe_id)
-                JOIn Workflow on View_Informe_Ult_WorkFlow.id = Workflow.id 
-                WHERE Workflow.Estado_id = 4
+        $fieldList = '
+            distinct(Protocolo.id) as idp, 
+            Protocolo.* , 
+            Paciente.nombre, 
+            Paciente.nro_documento,
+            Workflow.Informe_id,
+            Workflow.fecha_inicio,
+            Workflow.id as WorkFlow_ID,
+            Workflow.Estado_id					
+        ';
+        $fromTables = '
+            Protocolo
+            LEFT JOIN Informe ON Protocolo.id = Informe.Protocolo_id
+            LEFT JOIN Paciente_prestadora ON Protocolo.Paciente_prestadora_id = Paciente_prestadora.id
+            LEFT JOIN Paciente ON Paciente_prestadora.Paciente_id = Paciente.id
+            JOIN View_Informe_Ult_WorkFlow ON Informe.id = View_Informe_Ult_WorkFlow.Informe_id
+            JOIn Workflow ON View_Informe_Ult_WorkFlow.id = Workflow.id 
         ';
 
-            
+        $this->estadoFilter($formParams, $where, $queryParams);
+        
+/*            
         if (isset($params['ProtocoloSearch']['nro_secuencia']) && ($params['ProtocoloSearch']['nro_secuencia'] <> "") )
             $query = $query." and Protocolo.nro_secuencia = ".$params['ProtocoloSearch']['nro_secuencia'];
         
@@ -108,7 +141,7 @@ class ProtocoloSearch extends Protocolo
             $time = $anio."-".$mes."-".$dia;
             $query = $query." and Protocolo.fecha_entrada like '".$time."%'";
         }
-  */      
+  *   
         if (isset($params['ProtocoloSearch']['codigo']) && ($params['ProtocoloSearch']['codigo'] <> "") )
             {
                 $nro = ltrim($params['ProtocoloSearch']['codigo'], '0');
@@ -148,18 +181,38 @@ class ProtocoloSearch extends Protocolo
                 $time2 = $anio2."-".$mes2."-".$dia2;
                 $query = $query." and  Protocolo.fecha_entrega between '".$time."' and '".$time2."'";
             } 
- 
-        $consultaCant = 'SELECT count(tt.idp) as total FROM ('.$query.') as tt';
-      //  echo $consultaCant; die();
-        $command =  \Yii::$app->db->createCommand($consultaCant);
-        $results = $command->queryAll();
-        $itemsCount =  (int)$results[0]["total"];  
+ */
+        if(!empty($where)) {
+            $where = " WHERE {$where} ";
+        }
+
+        $query = "
+            SELECT {$fieldList}
+            FROM {$fromTables}
+            {$where}
+        ";
+
+        $consultaCant = "
+            SELECT count(*) as total
+            FROM {$fromTables}
+            {$where}
+        ";
+
+// var_dump($queryParams); 
+// echo "search";
+// die();       
+
+        $itemsCount = Yii::$app->db->createCommand(
+            $consultaCant, 
+            $queryParams
+        )->queryScalar();
         
-       // $query = $query." order by Protocolo.id desc;";
+        // $query = $query." order by Protocolo.id desc;";
         $dataProvider = new \yii\data\SqlDataProvider([
             'sql' => $query,
+            'params' => $queryParams,
              'sort' => [
-                 'defaultOrder' => ['id' => SORT_DESC],
+                'defaultOrder' => ['id' => SORT_DESC],
                 'attributes' => [
                      'nombre',
                     'nro_documento' => [
@@ -175,7 +228,6 @@ class ProtocoloSearch extends Protocolo
                     
                 ],
             ],
-            
             'totalCount' => $itemsCount,
             'key'        => 'id' ,
             'pagination' => [

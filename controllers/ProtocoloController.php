@@ -319,6 +319,7 @@ class ProtocoloController extends Controller
         $modelSecuencia->fecha= date("Y-m-d");
         $modelSecuencia->save();
         $modelSecuencia->refresh();
+        $secuencia = 42425235;
         $mdlProtocolo->nro_secuencia=$secuencia;   
         $secuencia=sprintf("%06d", $secuencia);
         $mdlProtocolo->nro_secuencia=$secuencia;

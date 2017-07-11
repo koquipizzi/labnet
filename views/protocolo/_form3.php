@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         'data-pjax' => '',
                     ]
             ]); ?>
-                <input type="hidden" name="tanda" value="<?= $tanda ?>" id="tanda">
+                <input type="hidden" name="tanda" value="<?php // $tanda ?>" id="tanda">
  
 
         <div class="col-md-6" style="text-align: right; margin-bottom:-10px">

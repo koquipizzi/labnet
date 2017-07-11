@@ -105,7 +105,10 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
             <div class="box-body no-padding">             
                 <?php
                     echo $this->render('//protocolo/_nomencladores_informe', [
-                    'model' => $model, 'informe'=>$informe,  'dataProvider'=> $dataProvider, 'modeloInformeNomenclador' => $modeloInformeNomenclador]) 
+                    'model' => $model, 
+                   //'informe'=>$informe,  
+                    'dataProvider'=> $dataProvider, 
+                    'modeloInformeNomenclador' => $modeloInformeNomenclador]) 
                 ?>
             </div>
         </div>
@@ -116,14 +119,14 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 		             
 		  	        <div  id="historialPacientePanel" data-spy="scroll" data-offset="3" data-target="#historial" class="panel-body text-center" style=" position: relative;">	                                                         
 	                        <?php 
-		                            if(is_array($historialPaciente)){
+		                         /*   if(is_array($historialPaciente)){
 		                                echo	$this->render('/informe/historialPaciente', [
 		                                    'historialPaciente'=>$historialPaciente
 		                                ]) ;
 		                            }else{
 		                                    echo "El Paciente no tiene historial.";
 		                            }
-                                          
+                                 */         
 	                        ?>
                     </div>
                             
@@ -186,7 +189,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                     'modelp' => $modelp, 
                     'edad'=>$modelp->pacienteEdad,
                     'dataproviderMultimedia'=>$dataproviderMultimedia,
-                    'codigo'=>$codigo,
+                 //   'codigo'=>$codigo,
                 ]) ?>
             </div>
         </div>

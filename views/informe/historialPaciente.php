@@ -96,20 +96,22 @@ use kartik\popover\PopoverX;
                                                     [
                                                     'material',
                                                     [
-                                                        'label'=>'Calidad',
-                                                        'value'=>  Leyenda::findOne(['id' => $modelI->calidad ])->texto,
+                                                        'label'=>'Calidad', 
+                                                         'value' => empty($modelI->calidad) ? "" : Leyenda::findOne(['id' => $modelI->calidad ])->texto ,
                                                     ],
                                                     [
                                                         'label'=>'Aspecto',
-                                                        'value'=>  Leyenda::findOne(['id' => $modelI->aspecto ])->texto,
+                                                       //  'value' => empty($modelI->aspecto) ? Leyenda::findOne(['id' => $modelI->aspecto ])->texto: "",
+                                                        'value' => empty($modelI->aspecto) ? "": Leyenda::findOne(['id' => $modelI->aspecto ])->texto,
                                                     ],
                                                     [
                                                         'label'=>'Flora',
-                                                        'value'=>  Leyenda::findOne(['id' => $modelI->flora ])->texto,
+                                                        'value'=> empty($modelI->flora) ? "" : Leyenda::findOne(['id' => $modelI->flora ])->texto,
+                                                        
                                                     ],
                                                     [
                                                         'label'=>'Leucocitos',
-                                                        'value'=>$modelI->getValor($modelI->leucositos),
+                                                        'value' => $modelI->getValor($modelI->leucositos) ,
                                                     ],
                                                     [
                                                         'label'=>'Hematíes',
@@ -117,12 +119,12 @@ use kartik\popover\PopoverX;
                                                     ],
                                                     [
                                                         'label'=>'Otros',
-                                                        'value'=>  Leyenda::findOne(['id' => $modelI->otros ])->texto,
+                                                        'value'=>  empty($modelI->otros) ? "": Leyenda::findOne(['id' => $modelI->otros ])->texto,
                                                     ],
-                                                    [
+                                                  /*  [
                                                         'label'=>'Microorganismos',
-                                                        'value'=>  Leyenda::findOne(['id' => $modelI->microorganismos ])->texto,
-                                                    ],
+                                                        'value'=> empty($modelI->microorganismos) ? Leyenda::findOne(['id' => $modelI->microorganismos ])->texto: "",
+                                                    ],*/
                          
                                                     'diagnostico',
                                                     'observaciones',

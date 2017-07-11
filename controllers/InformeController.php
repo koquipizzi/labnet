@@ -270,7 +270,7 @@ class InformeController extends Controller {
                                                 '(id)' => SORT_DESC
                                 ] )->one ();
             //se asigna un estudio y lo cambia al estado en proceso       
-			var_dump($ultimoEstado);  die();
+		//	var_dump($ultimoEstado);  die();
             if($ultimoEstado->Estado_id===Workflow::estadoPendiente()){
                     $this->autoAsignarEstudio( $model->id, $ultimoEstado );
             }else{

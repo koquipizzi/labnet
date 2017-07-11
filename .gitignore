@@ -8,3 +8,5 @@ protected/data/*.db
 themes/classic/views/
 vendor
 vendor/*
+.vscode
+.vscode/*

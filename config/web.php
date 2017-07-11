@@ -21,7 +21,7 @@ $config = [
          'comment' => [
             'class' => 'yii2mod\comments\Module',
             // when admin can edit comments on frontend
-            'enableInlineEdit' => tru,
+            'enableInlineEdit' => true,
             'controllerMap' => [
             //    'comments' => 'yii2mod\comments\controllers\ManageController',
                 // Also you can override some controller properties in following way:

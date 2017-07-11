@@ -9,6 +9,9 @@ $config = [
     'language'=>'es', // spanish
     'params' => $params,
     'modules' => [
+        'simplechat' => [
+            'class' => 'bubasuma\simplechat\Module',
+        ],
          'audit' => [
              'class' => 'bedezign\yii2\audit\Audit',
  		//	'panelsMerge' => [

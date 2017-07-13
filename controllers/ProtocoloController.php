@@ -60,7 +60,7 @@ class ProtocoloController extends Controller
         $searchModelAsig = new ProtocoloSearch();
 
         $params = Yii::$app->request->queryParams;
-        $params['ProtocoloSearch']['estado_id'] = 4;
+        $params['ProtocoloSearch']['estado_id'] = 1;
 
         $dataProvider = $searchModel->search($params);
 
@@ -319,21 +319,22 @@ class ProtocoloController extends Controller
         $modelSecuencia->fecha= date("Y-m-d");
         $modelSecuencia->save();
         $modelSecuencia->refresh();
-        $secuencia = 42425235;
-        $mdlProtocolo->nro_secuencia=$secuencia;   
+        $secuencia= $modelSecuencia->secuencia;   
         $secuencia=sprintf("%06d", $secuencia);
         $mdlProtocolo->nro_secuencia=$secuencia;
         $mdlProtocolo->Paciente_prestadora_id=$pacprest;
         $modelsInformes = [new Informe];
         $modelsNomenclador = [[new InformeNomenclador]];
+
+        $fecha = date_create ();
+        $fecha = date_format ( $fecha, 'd-m-Y H:i:s' );
         if ($mdlProtocolo->load(Yii::$app->request->post())) {       
-           // var_dump($mdlProtocolo); die();
             if ($mdlProtocolo->fecha_entrada == NULL)
                 $mdlProtocolo->fecha_entrada = date("Y-m-d");
             $modelsInformes = Informe::createMultiple(Informe::classname());
             Model::loadMultiple($modelsInformes, Yii::$app->request->post());
             $valid = $mdlProtocolo->validate();
-            if (isset($_POST['InformeNomenclador'][0][0])) {
+            if (!empty($_POST['InformeNomenclador'][0][0])) {
                 foreach ($_POST['InformeNomenclador'] as $indexInforme => $nomencladores) {
                     foreach ($nomencladores as $index => $nom) {
                         $data['InformeNomenclador'] = $nom;
@@ -343,6 +344,7 @@ class ProtocoloController extends Controller
                     }
                 }
             }
+            else $modelsNomenclador = null;
 
             if ($valid) {
                 $transaction = Yii::$app->db->beginTransaction();
@@ -358,8 +360,14 @@ class ProtocoloController extends Controller
                             if (!($flag = $modelInforme->save(false))) {
                                 break;
                             }
-                            if (isset($modelsNomenclador[$indexHouse]) && is_array($modelsNomenclador[$indexHouse])) {
-                                foreach ($modelsNomenclador[$indexHouse] as $indexRoom => $modelNom) {
+                            $workflow= new Workflow();
+                            $workflow->Informe_id= $modelInforme->id;
+                            $workflow->Estado_id=1;//estado 1 es pendiente 
+                            $workflow->fecha_inicio = $fecha;           
+                            $workflow->save();
+                           
+                            if (!empty($modelsNomenclador) && is_array($modelsNomenclador[$indexHouse])) {
+                                foreach ($modelsNomenclador[$indexHouse] as $index => $modelNom) {
                                     $informeNomenclador= new InformeNomenclador();
                                     $informeNomenclador->id_informe=$modelInforme->id;
                                     $informeNomenclador->id_nomenclador=$modelNom->id_nomenclador;

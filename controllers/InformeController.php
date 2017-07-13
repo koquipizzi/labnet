@@ -264,6 +264,7 @@ class InformeController extends Controller {
                 }
             }
             //obtine el utlimo estado 
+			var_dump($model->id);
             $ultimoEstado = Workflow::find ( 'id' )->where ( [
                             'Informe_id' => $model->id
                                 ] )->orderBy ( [

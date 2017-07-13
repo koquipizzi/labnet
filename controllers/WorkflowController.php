@@ -123,10 +123,9 @@ class WorkflowController extends Controller
     	 */
     	$ultimoWorkflow = Workflow::find ( 'id' )->where ( [
     			'Informe_id' => $id_inf
-    	] )->orderBy (['(id)' => SORT_DESC])->one();//var_dump($ultimoWorkflow);var_dump($fecha);
+    	] )->orderBy (['(id)' => SORT_DESC])->one(); 
     	if(isset($ultimoWorkflow)){
     		$ultimoWorkflow->fecha_fin = $fecha;
-                  //  var_dump($ultimoWorkflow); die();
     		$ultimoWorkflow->update ();
     	}
     	
@@ -139,12 +138,10 @@ class WorkflowController extends Controller
 			$model->Responsable_id =Yii::$app->request->post('Workflow')['Responsable_id'];
 			
 		}else{
-//                    var_dump("JASDA");
-//                     var_dump(Yii::$app->request->post('estado')); var_dump(Workflow::estadoPendiente());
                      if(Yii::$app->request->post('estado')== Workflow::estadoPendiente()  ){
                               $model->Informe_id = Yii::$app->request->post('Workflow')['Informe_id'];
                               $model->Estado_id = Yii::$app->request->post('estado');
-//                              var_dump("entreeeee");die();
+
                         }
 			/**
 			 * crea un workflown y le setea el estado sin ser reasigado

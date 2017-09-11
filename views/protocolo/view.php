@@ -34,7 +34,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_protocolo.js', ['depends
                 <div class="panel-body">
                                     <div class="row">
                                     
-                                    <div class="col-md-6 col-sm-6">
+                                    <div class="col-md-4 col-sm-4">
                                     <?= DetailView::widget([
                                         'model' => $model,
                                         'attributes' =>
@@ -57,7 +57,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_protocolo.js', ['depends
                                             ],
                                     ]) ?>
                                     </div>
-                                    <div class="col-md-6 col-sm-6">
+                                    <div class="col-md-8 col-sm-8">
                                         <div class="box box-success">
                                             <div class="box-header">
                                                 <h3 class="box-title">Estudios</h3>

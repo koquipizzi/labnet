@@ -1,19 +1,28 @@
 <?php
+//var_dump($model->estudio_id); die();
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
 
-
 use yii\web\JsExpression;
 use execut\widget\TreeView;
 use app\controllers\AutoTextTreeController;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
-use kartik\widgets\FileInput;
+use app\models\Workflow;
+use kartik\editable\Editable;
+use kartik\popover\PopoverX;
 
+//Pjax::begin([
+//    'id' => 'pjax-container',
+//]);
 
+echo \yii::$app->request->get('page');
+
+//Pjax::end();
+/*
 $onSelect = new JsExpression(<<<JS
 function (undefined, item) {
     if (item.href !== location.pathname) {
@@ -33,8 +42,8 @@ function (undefined, item) {
 }
 JS
 );
-
-$estudio = 1;
+$estudio = $model->estudio_id;
+$estudio = 2;
 $id = $model->id;
 $query = "SELECT * FROM Textos where `estudio_id` = '".$estudio."' ";
 
@@ -70,20 +79,24 @@ echo execut\widget\TreeView::widget([
     ],
 ]);
 
-
+*/
 ?>
 <div class="panel-body no-padding">
 
-    <?php $form = ActiveForm::begin([            
+    <?php $form = ActiveForm::begin([             
+            'action' => '/index.php?r=textos/customtext',
             'options' => [
                 'class' => 'form-horizontal mt-10',
-                'id' => 'create-autotexto-form',
+                'id' => 'create-autotexto-form',               
                 'enableAjaxValidation' => true,
                 'data-pjax' => '',
              ]
         ]); ?>
 
        <?php //die($model->estudio_id);
+    
+
+          
             $data=ArrayHelper::map(\app\models\Estudio::find()->asArray()->all(), 'id', 'nombre');   
             
             echo $form->field($model, 'estudio_id', ['template' => "{label}
@@ -92,12 +105,15 @@ echo execut\widget\TreeView::widget([
             {error}",  'labelOptions' => [ 'class' => 'col-md-2  control-label' ]
                 ])->widget(select2::classname(), [
                             'data' => $data,
+                            'disabled' => true,
                             'language'=>'es',
                             'options' => ['placeholder' => 'Seleccione un tipo de Estudio ...'],
                             'pluginOptions' => [
                                 'allowClear' => false
                                 ],
-                            ])->error([ 'style' => ' margin-right: 30%;'])?>
+                            ])->error([ 'style' => ' margin-right: 30%;']);
+                            
+                            ?>
     
         
         <?= $form->field($model, 'codigo', ['template' => "{label}
@@ -106,6 +122,13 @@ echo execut\widget\TreeView::widget([
             {error}",
             'labelOptions' => [ 'class' => 'col-md-2  control-label' ]
     ])->textInput(['maxlength' => true]) ?>
+
+<?= $form->field($model, 'macro', ['template' => "{label}
+            <div class='col-md-9'>{input}</div>
+            {hint}
+            {error}",
+            'labelOptions' => [ 'class' => 'col-md-2  control-label' ]
+    ])->textarea(['rows' => 6])->label('Tipo de Estudio') ?>
     
     <?= $form->field($model, 'material', ['template' => "{label}
             <div class='col-md-9'>{input}</div>
@@ -121,19 +144,12 @@ echo execut\widget\TreeView::widget([
             'labelOptions' => [ 'class' => 'col-md-2  control-label' ]
     ])->textarea(['rows' => 6]) ?>
     
-    <?= $form->field($model, 'macro', ['template' => "{label}
-            <div class='col-md-9'>{input}</div>
-            {hint}
-            {error}",
-            'labelOptions' => [ 'class' => 'col-md-2  control-label' ]
-    ])->textarea(['rows' => 6]) ?>
-    
     <?= $form->field($model, 'micro', ['template' => "{label}
             <div class='col-md-9'>{input}</div>
             {hint}
             {error}",
             'labelOptions' => [ 'class' => 'col-md-2  control-label' ]
-    ])->textarea(['rows' => 6]) ?>
+    ])->textarea(['rows' => 6])->label('Descripción Citológica') ?>
     
     <?= $form->field($model, 'diagnos', ['template' => "{label}
             <div class='col-md-9'>{input}</div>
@@ -148,11 +164,14 @@ echo execut\widget\TreeView::widget([
             {error}",
             'labelOptions' => [ 'class' => 'col-md-2  control-label' ]
     ])->textarea(['rows' => 6]) ?>
+    <?php
+              echo $form->field($model, 'estudio_id')->hiddenInput(['value'=> $model->estudio_id])->label(false);
+    ?>
 
     <div class="form-footer">
         <div class="col-sm-offset-3">
             <div style="text-align: right;">
-            <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-primary' : 'btn btn-primary']) ?>
+            <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-primary enviar_autotexto' : 'btn btn-primary enviar_autotexto']) ?>
              <button type="reset" class="btn btn-danger">Restablecer</button>
             </div>
 

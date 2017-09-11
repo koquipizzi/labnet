@@ -78,36 +78,65 @@ use kartik\popover\PopoverX;
                                                                     padding-right: 1px;
                                                                 }
                                                                 ");
-
-                                       /* if (isset($historial['fecha_entrega']))
-                                            {
-                                                $date = date_create($historial['fecha_entrega']);
-                                                $fecha= date_format($date, 'd-m-Y');
-                                                list($mes, $día, $año) = explode("-", $fecha);
-                                            //    echo $mes."-".$día."-".$año ;
-                                            }
-                                            */
+                                        
                                             $id_i=$historial['id_informe'];
                                             $modelI= Informe::find()->where("id=$id_i")->one();
+                                        
+                                            if (empty($modelI->aspecto))
+                                                $aspecto2 = "Sin datos";
+                                            else
+                                               {// $aspecto = Leyenda::find()->where(['=', 'id', $modelI->aspecto])->one(); 
+                                                $aspecto = Leyenda::find()->where("id=$modelI->aspecto")->one();
+                                            //    var_dump($modelI->aspecto); die();
+                                                $aspecto2 = $aspecto->texto;                                   
+                                            }
+                                               
+                                           if (empty($modelI->calidad))
+                                                $calidad = "Sin datos"; 
+                                            else
+                                               {$c = Leyenda::find()->where(['=', 'id', $modelI->calidad])->one();
+                                                $calidad = $c->texto;
+                                               }
+                                                              
+                                            if (empty($modelI->flora))
+                                                $flora = "Sin datos"; 
+                                            else
+                                               { $f = Leyenda::find()->where(['=', 'id', $modelI->flora])->one();  
+                                                   $flora = $f->texto; 
+                                               } 
+                                               
+                                            if (empty($modelI->otros))
+                                               $otros = "Sin datos"; 
+                                            else
+                                              { $o = Leyenda::find()->where(['=', 'id', $modelI->otros])->one();
+                                                  $otros = $o->texto; 
+                                              } 
+
+                                            if (empty($modelI->microorganismos))
+                                              $microorganismos = "Sin datos"; 
+                                            else
+                                                {   $m = Leyenda::find()->where(['=', 'id', $modelI->microorganismos])->one();
+                                                    $microorganismos = $m->texto; 
+                                                } 
+
                                             if($modelI->Estudio_id===Estudio::getEstudioPap()){
-                                                $content= DetailView::widget([
+                                                $content= 
+                                                DetailView::widget([
                                                     'model' => $modelI,
                                                     'attributes' =>
                                                     [
                                                     'material',
                                                     [
                                                         'label'=>'Calidad', 
-                                                         'value' => empty($modelI->calidad) ? "" : Leyenda::findOne(['id' => $modelI->calidad ])->texto ,
+                                                        'value' => $calidad,
                                                     ],
                                                     [
                                                         'label'=>'Aspecto',
-                                                       //  'value' => empty($modelI->aspecto) ? Leyenda::findOne(['id' => $modelI->aspecto ])->texto: "",
-                                                        'value' => empty($modelI->aspecto) ? "": Leyenda::findOne(['id' => $modelI->aspecto ])->texto,
+                                                        'value' => $aspecto2,
                                                     ],
                                                     [
                                                         'label'=>'Flora',
-                                                        'value'=> empty($modelI->flora) ? "" : Leyenda::findOne(['id' => $modelI->flora ])->texto,
-                                                        
+                                                        'value' => $flora,                           
                                                     ],
                                                     [
                                                         'label'=>'Leucocitos',
@@ -119,25 +148,28 @@ use kartik\popover\PopoverX;
                                                     ],
                                                     [
                                                         'label'=>'Otros',
-                                                        'value'=>  empty($modelI->otros) ? "": Leyenda::findOne(['id' => $modelI->otros ])->texto,
+                                                        'value'=> $otros,
                                                     ],
-                                                  /*  [
+                                                    [
                                                         'label'=>'Microorganismos',
-                                                        'value'=> empty($modelI->microorganismos) ? Leyenda::findOne(['id' => $modelI->microorganismos ])->texto: "",
-                                                    ],*/
-                         
+                                                        'value'=>$microorganismos,
+                                                    ],
+                                                 
                                                     'diagnostico',
                                                     'observaciones',
+                                               
                                                     ],
                                                 ]);
+                                                
                                             }
-                                            if($modelI->Estudio_id === Estudio::getEstudioCitologia()){
+                                if($modelI->Estudio_id === Estudio::getEstudioCitologia()){
                                                 $content= DetailView::widget([
                                                     'model' => $modelI,
                                                     'attributes' =>
                                                     [
-                                              //      'tipo',
+                                                    'tipo',
                                                     'material',
+                                                    'tecnica',
                                                     'descripcion',
                                                     'diagnostico',
                                                     'observaciones'
@@ -149,8 +181,9 @@ use kartik\popover\PopoverX;
                                         'model' => $modelI,
                                         'attributes' =>
                                         [
-                                       // 'tipo',
+                                        'tipo',
                                         'material',
+                                        'tecnica',
                                         'descripcion',
                                         'diagnostico',
                                         'observaciones'
@@ -162,8 +195,9 @@ use kartik\popover\PopoverX;
                                         'model' => $modelI,
                                         'attributes' =>
                                         [
-                                     //       'tipo',
+                                            'tipo',
                                             'material',
+                                            'tecnica',
                                             'descripcion',
                                             'diagnostico',
                                             'observaciones'

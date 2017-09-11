@@ -15,14 +15,15 @@ use app\controllers\AutoTextTreeController;
 use app\models\Workflow;
 use kartik\editable\Editable;
 use kartik\popover\PopoverX;
+use dosamigos\selectize\SelectizeTextInput;
 
-//Pjax::begin([
-//    'id' => 'pjax-container',
-//]);
 
-echo \yii::$app->request->get('page');
+Pjax::begin([
+   'id' => 'pjax-container',
+]);
 
-//Pjax::end();
+//echo \yii::$app->request->get();
+
 
 $onSelect = new JsExpression(<<<JS
 function (undefined, item) {
@@ -57,30 +58,6 @@ foreach ($result as $row){
 }
 
 $items2 = $tree->getTree();
-//var_dump($items2); die();
-
-/*$items = [
-    [
-        'text' => 'Parent 1',
-        'href' => Url::to(['', 'page' => 'parent1']),
-        'nodes' => [
-            [
-                'text' => 'Child 1',
-                'href' => Url::to(['informe/update', 'id' => '1', 'idtexto'=> '12']),
-                'nodes' => [
-                    [
-                        'text' => 'Grandchild 1',
-                        Url::to(['informe/update', 'id' => '1', 'idtexto'=> '1'])
-                    ],
-                    [
-                        'text' => 'Grandchild 2',
-                        'href' => Url::to(['',  'id' => '1', 'idtexto'=> '15'])
-                    ]
-                ]
-            ],
-        ],
-    ],
-];*/
 
 $this->registerCss(".treeview {
                                 float:left;
@@ -104,7 +81,10 @@ echo execut\widget\TreeView::widget([
     ],
 ]);
 
+
+Pjax::end();
 ?>
+
 
 <div class="row">
     <div class="col-md-12">
@@ -152,33 +132,11 @@ echo execut\widget\TreeView::widget([
                                     </div>
                                 </a>
                             </li> 
-                            <li class="pull-right">
-                                <button class="btn btn-default btn-sm  mostrarTree pull-right" title="Agregar texto"><i class="fa fa-edit"></i></button>
-                        <button class="btn btn-default btn-sm  guardarTexto pull-right" value="<?= Url::to(['textos/copy']) ?>"><i class="fa fa-copy"></i></button>
-                        <?php  
-                                echo  Html::button("<i class='fa fa-list-alt'></i>",
-                                    ['class'=>'btn btn-default btn-sm pull-right',
-                                        'onclick'=>"window.location.href = '" . \Yii::$app->urlManager->createUrl(['/informe/printreducido','id'=>$model->id, 'estudio' => $model->Estudio_id ]) . "';",
-                                        'data-toggle'=>'tooltip',
-                                        'title'=>Yii::t('app', 'Informe Reducido'),
-                                    ]
-                                );
-                         ?>
-                         <?php   $url = ['informe/print', 'id' => $model->id , 'estudio' => $model->Estudio_id];
-                                echo  Html::button("<i class='fa fa-file-pdf-o'></i>",
-                                    ['class'=>'btn btn-default btn-sm  pull-right',
-                                        'onclick'=>"window.location.href = '" . \Yii::$app->urlManager->createUrl(['/informe/imprimir','id'=>$model->id, 'estudio' => $model->Estudio_id ]) . "';",
-                                        'data-toggle'=>'tooltip',
-                                        'title'=>Yii::t('app', 'Informe Preliminar'),
-                                    ]
-                                );
-                         ?>
-                            </li> 
                             
                         </ul>
                     </div><!-- /.panel-heading -->
             <!--/ End tabs heading -->
- <?php Pjax::begin(['id'=>'pjax-tree']); ?>
+        <?php Pjax::begin(['id'=>'pjax-tree']); ?>
             <!-- Start tabs content -->
             <div class="panel-body">
                 <div class="tab-content">
@@ -187,14 +145,15 @@ echo execut\widget\TreeView::widget([
                             <div class="informe-form">
                                 <div class="panel-body no-padding">
                                     <?php
-                                    $form = ActiveForm::begin([
-                                                'id' => 'form-informe-complete',
-                                                'options' => [
-                                                    'class' => 'form-horizontal'
-                                                ]
-                                    ]);
-                                    echo $form->field($model, 'id')->hiddenInput()->label(false); ?>
-                                    <input type="hidden" name="codigo" value="<?php if (isset($codigo)){ echo $codigo;} ?>"/>
+                                        $form = ActiveForm::begin([
+                                                    'id' => 'form-informe-complete',
+                                                    'options' => [
+                                                        'class' => 'form-horizontal'
+                                                    ]
+                                        ]);
+                                        echo $form->field($model, 'id')->hiddenInput()->label(false); 
+                                    ?>
+                                    <input type="hidden" name="codigo" value="<?php if (isset($codigo)){ echo $codigo;} ?>" />
                                     <?php
                                     if ($model->estudio->id == 4) {
                                         echo  $form->field($model, 'tipo', ['template' => "{label}
@@ -239,9 +198,9 @@ echo execut\widget\TreeView::widget([
                                     } 
                                     if ($model->estudio->id == 5) { //INMQ
                                         echo $form->field($model, 'material', ['template' => "{label}
-						<div class='col-md-12'>{input}</div>
-						{hint}
-						{error}",
+                                            <div class='col-md-12'>{input}</div>
+                                            {hint}
+                                            {error}",
                                             'labelOptions' => [ 'class' => 'col-md-1 ']
                                          ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
                                     
@@ -287,99 +246,92 @@ echo execut\widget\TreeView::widget([
                                     
                                     if ($model->estudio->id == 2) {
                                         echo $form->field($model, 'material', ['template' => "{label}
-						<div class='col-md-12'>{input}</div>
-						{hint}
-						{error}",
+                                            <div class='col-md-12'>{input}</div>
+                                            {hint}
+                                            {error}",
+                                            'labelOptions' => [ 'class' => 'col-md-1 ']
+                                        ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
+                                    
+                                        echo  $form->field($model, 'tecnica', ['template' => "{label}
+                                            <div class='col-md-12'>{input}</div>
+                                            {hint}
+                                            {error}",
+                                            'labelOptions' => [ 'class' => 'col-md-1  ']
+                                        ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
+                                        
+                                        echo $form->field($model, 'macroscopia', ['template' => "{label}
+											<div class='col-md-12'>{input}</div>
+											{hint}
+											{error}",
+                                            'labelOptions' => [ 'class' => 'col-md-1']
+                                        ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
+                                    
+                                        echo $form->field($model, 'microscopia', ['template' => "{label}
+											<div class='col-md-12'>{input}</div>
+											{hint}
+											{error}",
+                                            'labelOptions' => [ 'class' => 'col-md-1']
+                                        ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
+                                        
+                                        echo $form->field($model, 'diagnostico', ['template' => "{label}
+											<div class='col-md-12'>{input}</div>
+											{hint}
+											{error}",
+                                            'labelOptions' => [ 'class' => 'col-md-1']
+                                        ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
+                                    
+                                        echo $form->field($model, 'observaciones', ['template' => "{label}
+											<div class='col-md-12'>{input}</div>
+											{hint}
+											{error}",
+                                            'labelOptions' => [ 'class' => 'col-md-1  ']
+                                        ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);      
+                                    }
+                                    
+                                    if ($model->estudio->id == 3) {
+                                        echo $form->field($model, 'material', ['template' => "{label}
+                                            <div class='col-md-12'>{input}</div>
+                                            {hint}
+                                            {error}",
                                             'labelOptions' => [ 'class' => 'col-md-1 ']
                                          ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
                                     
-                                        echo  $form->field($model, 'tecnica', ['template' => "{label}
+                                        echo $form->field($model, 'tecnica', ['template' => "{label}
                                                     <div class='col-md-12'>{input}</div>
                                                     {hint}
                                                     {error}",
                                                     'labelOptions' => [ 'class' => 'col-md-1  ']
-                                                ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
-                                        
-                                        
+                                            ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
+
                                         echo $form->field($model, 'macroscopia', ['template' => "{label}
 												<div class='col-md-12'>{input}</div>
 												{hint}
 												{error}",
-                                        'labelOptions' => [ 'class' => 'col-md-1']
-                                    ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
+                                                'labelOptions' => [ 'class' => 'col-md-1']
+                                            ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20])->label('Método');
+                                        
+                                        
                                     
                                         echo $form->field($model, 'microscopia', ['template' => "{label}
 													<div class='col-md-12'>{input}</div>
 													{hint}
 													{error}",
-                                        'labelOptions' => [ 'class' => 'col-md-1']
-                                    ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
+                                                    'labelOptions' => [ 'class' => 'col-md-1']
+                                            ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20])->label('Resultado');
                                         
                                         echo $form->field($model, 'diagnostico', ['template' => "{label}
 													<div class='col-md-12'>{input}</div>
 													{hint}
 													{error}",
-                                        'labelOptions' => [ 'class' => 'col-md-1']
-                                    ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
+                                                    'labelOptions' => [ 'class' => 'col-md-1']
+                                            ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
                                     
                                         echo $form->field($model, 'observaciones', ['template' => "{label}
 														<div class='col-md-12'>{input}</div>
 														{hint}
 														{error}",
-                                        'labelOptions' => [ 'class' => 'col-md-1  ']
-                                    ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
-                                        
-                                        
-                                           
-                                        
-                                    }
-                                    
-                                    if ($model->estudio->id == 3) {
-                                        echo $form->field($model, 'material', ['template' => "{label}
-						<div class='col-md-12'>{input}</div>
-						{hint}
-						{error}",
-                                            'labelOptions' => [ 'class' => 'col-md-1 ']
-                                         ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
-                                    
-                                        echo  $form->field($model, 'tecnica', ['template' => "{label}
-                                                    <div class='col-md-12'>{input}</div>
-                                                    {hint}
-                                                    {error}",
-                                                    'labelOptions' => [ 'class' => 'col-md-1  ']
-                                                ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
-                                        
-                                        
-                                        echo $form->field($model, 'metodo', ['template' => "{label}
-												<div class='col-md-12'>{input}</div>
-												{hint}
-												{error}",
-                                        'labelOptions' => [ 'class' => 'col-md-1']
-                                    ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
-                                        
-                                        
-                                    
-                                        echo $form->field($model, 'resultado', ['template' => "{label}
-													<div class='col-md-12'>{input}</div>
-													{hint}
-													{error}",
-                                        'labelOptions' => [ 'class' => 'col-md-1']
-                                    ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
-                                        
-                                        echo $form->field($model, 'diagnostico', ['template' => "{label}
-													<div class='col-md-12'>{input}</div>
-													{hint}
-													{error}",
-                                        'labelOptions' => [ 'class' => 'col-md-1']
-                                    ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
-                                    
-                                        echo $form->field($model, 'observaciones', ['template' => "{label}
-														<div class='col-md-12'>{input}</div>
-														{hint}
-														{error}",
-                                        'labelOptions' => [ 'class' => 'col-md-1  ']
-                                    ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);     
-                                        
+                                            'labelOptions' => [ 'class' => 'col-md-1  ']
+                                            ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);           
                                     }
                                     
                                     ?>
@@ -443,11 +395,7 @@ echo execut\widget\TreeView::widget([
                                                     '    </div>' .
                                                     '</div>',
                                                 ],
-                                                'maxFileCount' => 10,
-// 												        				'uploadExtraData' => new \yii\web\JsExpression("function (previewId, index) {
-// 																						$('.kv-fileinput-error').addClass('hide');
-// 																						}"),
-// 																		
+                                                'maxFileCount' => 10,													
                                             ],
                                         ]);
                                         ?>
@@ -458,7 +406,7 @@ echo execut\widget\TreeView::widget([
                                             <?php echo Html::a('<i class="fa fa-retweet"></i>', ['refresh', 'id' => $model->id], ['class' => 'refresh btn btn-success']); ?>
                                             </span>
                                         </h3>
-                                        <?php Pjax::begin(['id' => 'galeriar', 'enablePushState' => FALSE]); ?>    
+                                        <?php Pjax::begin(['id' => 'galeriar', 'enablePushState' => TRUE]); ?>    
                                         <div class="content-galeria">
                                     
                                             <?=
@@ -493,16 +441,33 @@ echo execut\widget\TreeView::widget([
                                                 'options' => [
                                                     'class' => 'form-horizontal'
                                                 ]
-                                    ]);
-
-                                     echo  $formObs->field($modelp, 'observaciones', ['template' => "
-                                                <div class='col-md-12'>{input}</div>
-                                                {hint}
-                                                {error}"
+                                        ]);
+                                    echo $formObs->field($modelp, 'observaciones', ['template' => "
+                                            <div class='col-md-12'>{input}</div>
+                                            {hint}
+                                            {error}"
                                             ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);     
                                 ?>
                                 <?= $formObs->field($model, 'id')->hiddenInput()->label(false); ?>
-
+                                <label class="col-md-1  ">Etiquetas</label>
+                                <?= $form->field($model, 'tagNames',['template' => "
+                                                                                <div class='col-md-12'>{input}</div>
+                                                                                {hint}
+                                                                                {error}"
+                                                                            ])->widget(SelectizeTextInput::className(), [
+                                        // calls an action that returns a JSON object with matched
+                                        // tags
+                                        'loadUrl' => ['tag/list'],
+                                        'options' => ['class' => 'form-control'],
+                                        'clientOptions' => [
+                                            'plugins' => ['remove_button'],
+                                            'valueField' => 'name',
+                                            'labelField' => 'name',
+                                            'searchField' => ['name'],
+                                            'create' => true,
+                                        ]
+                                    ])->hint('Use comas para separar etiquetas'); 
+                                ?>
                                 <div class="form-footer">
                                     <div style="text-align: right;">
                                         <?= Html::submitButton($modelp->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $modelp->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
@@ -514,7 +479,7 @@ echo execut\widget\TreeView::widget([
                     </div>      
                 </div>
             </div><!-- /.panel-body -->
-            <?php Pjax::end(); ?> 
+        <?php Pjax::end(); ?> 
             <!--/ End tabs content -->
         </div><!-- /.panel -->
         <!--/ End double tabs -->
@@ -535,5 +500,6 @@ echo execut\widget\TreeView::widget([
 
     </div>
 </div><!-- /.row -->
+
 
 

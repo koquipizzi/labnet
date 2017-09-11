@@ -12,7 +12,7 @@ use app\models\User;
 use app\models\Workflow;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
-use yii\bootstrap\Modal;
+
 use app\models\Nomenclador;
 use kartik\editable\Editable;
 use kartik\popover\PopoverX;
@@ -21,7 +21,7 @@ use kartik\select2\Select2;
 
 use mdm\admin\components\Helper;
 use xj\bootbox\BootboxAsset;
-
+use yii\bootstrap\Modal;
 BootboxAsset::register($this);
 
 $this->title = Yii::t('app', 'Update {modelClass}: ', [
@@ -113,14 +113,14 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 		             
 		  	        <div  id="historialPacientePanel" data-spy="scroll" data-offset="3" data-target="#historial" class="panel-body text-center" style=" position: relative;">	                                                         
 	                        <?php 
-		                        /*    if(is_array($historialPaciente)){
+		                            if(is_array($historialPaciente)){
 		                                echo	$this->render('/informe/historialPaciente', [
 		                                    'historialPaciente'=>$historialPaciente
 		                                ]) ;
 		                            }else{
 		                                    echo "El Paciente no tiene historial.";
 		                            }
-                                */          
+                                          
 	                        ?>
                     </div>
                             
@@ -131,7 +131,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
         <div class="box">
             <div class="box-header with-border">
                 <div id="row">
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <h3 class="box-title"><?php echo 'Estudio: '.$model->estudio->descripcion; ?></h3>
                     </div>
                      <div class="col-md-3">                       
@@ -171,6 +171,28 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                     ?>                                                                     
                             <?php Pjax::end(); ?>   
                         </div> 
+                        <div class="col-md-3">
+                            <button class="btn btn-default btn-sm  mostrarTree pull-right" title="Agregar texto"><i class="fa fa-edit"></i></button>
+                            <button class="btn btn-default btn-sm  guardarTexto pull-right" value="<?= Url::to(['textos/copy']) ?>"><i class="fa fa-copy"></i></button>
+                            <?php  
+                                    echo  Html::button("<i class='fa fa-list-alt'></i>",
+                                        ['class'=>'btn btn-default btn-sm pull-right',
+                                            'onclick'=>"window.location.href = '" . \Yii::$app->urlManager->createUrl(['/informe/printreducido','id'=>$model->id, 'estudio' => $model->Estudio_id ]) . "';",
+                                            'data-toggle'=>'tooltip',
+                                            'title'=>Yii::t('app', 'Informe Reducido'),
+                                        ]
+                                    );
+                            ?>
+                            <?php   $url = ['informe/print', 'id' => $model->id , 'estudio' => $model->Estudio_id];
+                                    echo  Html::button("<i class='fa fa-file-pdf-o'></i>",
+                                        ['class'=>'btn btn-default btn-sm  pull-right',
+                                            'onclick'=>"window.location.href = '" . \Yii::$app->urlManager->createUrl(['/informe/imprimir','id'=>$model->id, 'estudio' => $model->Estudio_id ]) . "';",
+                                            'data-toggle'=>'tooltip',
+                                            'title'=>Yii::t('app', 'Informe Preliminar'),
+                                        ]
+                                    );
+                            ?>
+                        </div> 
                     
                      
                 </div>    
@@ -197,10 +219,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
         </div>
     </div>
 </div>
-
-
 <?php
-
 
 $this->registerJsFile('@web/assets/admin/js/cipat_modal_informe.js', ['depends' => [yii\web\AssetBundle::className()]]);
 
@@ -215,4 +234,6 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_informe.js', ['depends' 
     
 
 ?>
+
+
             

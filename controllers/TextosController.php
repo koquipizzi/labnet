@@ -68,6 +68,33 @@ class TextosController extends Controller
         return $model;
     }
 
+
+    public function actionCustomtext(){
+        $model = new Textos();
+        $request = Yii::$app->request;
+        
+        if ($request->isAjax){
+            if ($model->load(Yii::$app->request->post())) {
+                if (Textos::find()->where( [ 'codigo' => $model->codigo ] )->exists()){
+                    \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return [
+                        'rdo' => 'ko',
+                    // 'data' => $data,
+                    ];
+                }
+                else {
+                    $model->save();
+                    \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return [
+                        'rdo' => 'ok',
+                     // 'data' => $data,
+                    ];
+                    return;
+                }
+            }    
+        } // es ajax
+        return;
+    }
     /**
      * Creates a new Textos model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -79,32 +106,68 @@ class TextosController extends Controller
 
         if (Yii::$app->request->isAjax) {
             $model = new Textos();
+
             if (isset($_POST['Informe'])){
-                $model->material = $_POST['Informe']['material'];
-                $model->tecnica = $_POST['Informe']['tecnica'];
-                $model->micro = $_POST['Informe']['microscopia'];
-                $model->macro = $_POST['Informe']['macroscopia'];
-                $model->diagnos = $_POST['Informe']['diagnostico'];
-                $model->observ = $_POST['Informe']['observaciones'];
-                $model->estudio_id = $_POST['Informe']['Estudio_id'];
-                $model->codigo = $_POST['codigo'];
+                
+                if (isset($_POST['Informe']['material']))
+                    $model->material = $_POST['Informe']['material'];
+                if (isset($_POST['Informe']['tipo']))
+                    $model->macro = $_POST['Informe']['tipo'];
+                if (isset($_POST['Informe']['tecnica']))    
+                    $model->tecnica = $_POST['Informe']['tecnica'];
+                if (isset($_POST['Informe']['descripcion']))
+                    $model->micro = $_POST['Informe']['descripcion'];
+                if (isset($_POST['Informe']['microscopia']))
+                    $model->micro = $_POST['Informe']['microscopia'];
+                if (isset($_POST['Informe']['macroscopia']))
+                    $model->macro = $_POST['Informe']['macroscopia'];
+                if (isset($_POST['Informe']['diagnostico']))
+                    $model->diagnos = $_POST['Informe']['diagnostico'];
+                if (isset($_POST['Informe']['observaciones']))
+                    $model->observ = $_POST['Informe']['observaciones'];
+                if (isset($_POST['Informe']['Estudio_id']))
+                    $model->estudio_id = $_POST['Informe']['Estudio_id'];
+                if (isset($_POST['codigo']))
+                    $model->codigo = $_POST['codigo'];
             }
             if (isset($_POST['Textos'])){
-                $model->material = $_POST['Textos']['material'];
-                $model->tecnica = $_POST['Textos']['tecnica'];
-                $model->micro = $_POST['Textos']['micro'];
-                $model->macro = $_POST['Textos']['macro'];
-                $model->diagnos = $_POST['Textos']['diagnos'];
-                $model->observ = $_POST['Textos']['observ'];
-                $model->estudio_id = $_POST['Textos']['estudio_id'];
-                $model->codigo = $_POST['Textos']['codigo'];
+                if (isset($_POST['Textos']['material']))
+                    $model->material = $_POST['Textos']['material'];
+                if (isset($_POST['Textos']['tipo']))
+                    $model->tipo = $_POST['Textos']['tipo'];
+                if (isset($_POST['Textos']['tecnica']))
+                    $model->tecnica = $_POST['Textos']['tecnica'];
+                if (isset($_POST['Textos']['micro']))
+                    $model->micro = $_POST['Textos']['micro'];
+                if (isset($_POST['Textos']['macro']))
+                    $model->macro = $_POST['Textos']['macro'];
+                if (isset($_POST['Textos']['diagnos']))
+                    $model->diagnos = $_POST['Textos']['diagnos'];
+                if (isset($_POST['Textos']['observ']))
+                    $model->observ = $_POST['Textos']['observ'];
+                if (isset($_POST['Textos']['estudio_id']))
+                    $model->estudio_id = $_POST['Textos']['estudio_id'];
+                if (isset($_POST['Textos']['estudio_id']))
+                    $model->codigo = $_POST['Textos']['codigo'];
             }
 
-            if ($model->save()) {
+            if ($model->estudio_id == 4) //cito
+                $data = $this->renderAjax('_form_pop_cito', ['model' => $model]);
+            if ($model->estudio_id == 1) //pap
+                $data = $this->renderAjax('_form_pop', ['model' => $model]);
+            if ($model->estudio_id == 3) //mole
+                $data = $this->renderAjax('_form_pop_mole', ['model' => $model]);
+
+          /*  if ($model->save()) {
                 $data = $this->renderAjax('_form_pop', [
                 'model' => $model
-            ]);
-            }
+            ]);*/
+
+   // $model->load($_POST['Informe']);
+           // if ($model->save()) {
+            else $data = $this->renderAjax('_form_pop', [
+                'model' => $model]);
+         //   }
 
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             return [

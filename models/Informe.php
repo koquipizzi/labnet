@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use dosamigos\taggable\Taggable;
 
 /**
  * This is the model class for table "Informe".
@@ -53,7 +54,10 @@ class Informe extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            'bedezign\yii2\audit\AuditTrailBehavior'
+            'bedezign\yii2\audit\AuditTrailBehavior',
+            [
+                'class' => Taggable::className(),
+            ],
         ];
     }
 
@@ -63,6 +67,7 @@ class Informe extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['tagNames'], 'safe'],
             [['Estudio_id', 'Protocolo_id'], 'required'],
             [['Estudio_id', 'Protocolo_id', 'edad', 'estado_actual'], 'integer'],
             [['descripcion', 'citologia'], 'string', 'max' => 2048],
@@ -369,6 +374,10 @@ class Informe extends \yii\db\ActiveRecord
 
         }
     }
-     
+
+    public function getTags()
+    {
+        return $this->hasMany(Tag::className(), ['id' => 'tag_id'])->viaTable('informe_tag_assn', ['informe_id' => 'id']);
+    }
     
 }

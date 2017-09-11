@@ -12,22 +12,15 @@ use app\models\Workflow;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 use kartik\editable\Editable;
-use yii\bootstrap\Modal;
 use mdm\admin\components\Helper;
 use app\models\Nomenclador;
 use kartik\popover\PopoverX;
 use kartik\widgets\ActiveForm;
 use kartik\select2\Select2;
 use xj\bootbox\BootboxAsset;
-BootboxAsset::register($this);
+use yii\bootstrap\Modal;
 
-    Modal::begin([
-                    'id' => 'modal',    
-                   // 'size'=>'modal-lg',
-                    'options' => ['tabindex' => false ],
-                ]);
-                echo "<div id='modalContent'></div>";      
-    Modal::end();
+BootboxAsset::register($this);
     
 $this->title = Yii::t('app', 'Update {modelClass}: ', [
 		'modelClass' => 'Informe',
@@ -119,14 +112,14 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 		             
 		  	        <div  id="historialPacientePanel" data-spy="scroll" data-offset="3" data-target="#historial" class="panel-body text-center" style=" position: relative;">	                                                         
 	                        <?php 
-		                         /*   if(is_array($historialPaciente)){
+		                            if(is_array($historialPaciente)){
 		                                echo	$this->render('/informe/historialPaciente', [
 		                                    'historialPaciente'=>$historialPaciente
 		                                ]) ;
 		                            }else{
 		                                    echo "El Paciente no tiene historial.";
 		                            }
-                                 */         
+                                         
 	                        ?>
                     </div>
                             
@@ -189,7 +182,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                     'modelp' => $modelp, 
                     'edad'=>$modelp->pacienteEdad,
                     'dataproviderMultimedia'=>$dataproviderMultimedia,
-                 //   'codigo'=>$codigo,
+                    'codigo'=>$codigo,
                 ]) ?>
             </div>
         </div>

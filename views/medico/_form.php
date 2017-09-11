@@ -10,6 +10,7 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 use yii\bootstrap\Modal;
 use vova07\select2\Widget;
+use kartik\widgets\Select2;
 
 $this->registerJsFile('@web/assets/admin/js/cipat_add_forms.js', ['depends' => [yii\web\AssetBundle::className()]]);
 ?>
@@ -56,7 +57,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_add_forms.js', ['depends' => [
        
         <?php
             $data=ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
-            echo $form->field($model, 'Localidad_id', ['template' => "{label}
+            echo $form->field($model, 'localidad_id', ['template' => "{label}
             <div class='col-md-7'>{input}</div>
             {hint}
             {error}",  'labelOptions' => [ 'class' => 'col-md-3  control-label' ]

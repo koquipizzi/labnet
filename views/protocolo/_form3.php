@@ -26,6 +26,7 @@ use app\models\ViewPacientePrestadora;
 use app\models\ViewPacientePrestadoraQuery;
 use app\models\Prestadoras;
 use app\models\InformeTemp;
+
 /* @var $this yii\web\View */
 /* @var $model app\models\Protocolo */
 /* @var $form yii\widgets\ActiveForm */
@@ -332,7 +333,8 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
             <?php endforeach; ?>
         </div>
     </div>
-    <?php DynamicFormWidget::end(); ?>
+    <?php DynamicFormWidget::end();  ?>
+
 
         <div class="box-footer" >
             <div class="pull-right box-tools">
@@ -344,4 +346,3 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     <?php ActiveForm::end(); ?>
 
 </div>
-        

@@ -10,9 +10,11 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Paciente;
 use app\models\Informe;
+use app\models\Tag;
 use app\models\Protocolo;
 use app\models\ProtocoloSearch;
 use app\models\Laboratorio;
+use yii\db\Query;
 
 class SiteController extends Controller
 {
@@ -70,6 +72,21 @@ class SiteController extends Controller
         $b = Informe::find()->where('Estudio_id = 2')->count();
         $ci = Informe::find()->where('Estudio_id = 4')->count();
         $in = Informe::find()->where('Estudio_id = 5')->count();
+        $sql = "SELECT * FROM tag order by frequency desc limit 5";
+        $connection = \Yii::$app->db;
+        $model = $connection->createCommand($sql);
+        $tags = $model->queryAll();
+    //    var_dump($tags[8]['name']); die();
+
+        $tagsLabels = [];
+        $frequencies = [];
+        for ($i = 0; $i < 5; $i++)
+        {
+            $tagsLabels[] = $tags[$i]['name'];
+            $frequencies[] = $tags[$i]['frequency'];
+        }
+   //     $model = Tag::findBySql($sql)->all();
+        //$tags = Tag::find()->all();
 
         $searchProtocolos = new ProtocoloSearch();
         $propios = $searchProtocolos->search_asignados_index(2, NULL);
@@ -90,7 +107,9 @@ class SiteController extends Controller
          return $this->render('index', ['c'=> $c, 'i'=> $i,  'p'=> $p,
                             'm'=> $m,'b'=> $b, 'ci'=> $ci, 'in'=> $in,
                             'meses'=> $meses, 'cantidades'=> $cantidades,
-                            'propios'=> $propios
+                            'propios'=> $propios, 
+                            'tags'=> $tagsLabels, 
+                            'frequencies'=> $frequencies,
                             ]);
     }
 

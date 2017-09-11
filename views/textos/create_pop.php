@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                       <?= Html::a('<i class="fa fa-arrow-left"></i> Volver', ['textos/index'], ['class'=>'btn btn-primary']) ?>
                         </div>
             </div>
-            <?= $this->render('_form', [
+            <?= $this->render('_form_pop', [
                     'model' => $model,
                 ]) ?>
 </div>

@@ -26,6 +26,16 @@ use yii\widgets\Pjax;
                                 'descripcion',
                                 'observaciones',
                                 'nomencladores',
+                                [
+                                    'attribute' => 'QR',
+                                    'filter' => false,
+                                    'format' => 'raw',
+                                     'value' => function ($data) {
+                                         return "<img src='". Url::to(['/protocolo/qr-code', 'id' => $data->id])."' width='100'/>";
+                                         
+                                     },
+                                  ],
+                                  
 
  
 //                                ['class' => 'yii\grid\ActionColumn',

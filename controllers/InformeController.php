@@ -238,7 +238,7 @@ class InformeController extends Controller {
         $dataproviderMultimedia = new ArrayDataProvider([
                             'allModels' => Multimedia::findAll(['Informe_id'=>$model->id]),
             ]);
-            
+  
         if($model->WorkflowLastState!= Workflow::estadoEntregado()){
             if ($model->load ( Yii::$app->request->post () ) && $model->save () ) {
                 if ($model->estudio->nombre === 'PAP') {
@@ -248,10 +248,11 @@ class InformeController extends Controller {
                                         'dataProvider' => $dataProvider ,
                                         'historialPaciente'=>$historialPaciente,
                                         'modeloInformeNomenclador' =>  $informeNomenclador,
-                                        'dataproviderMultimedia'=>$dataproviderMultimedia,
+										'dataproviderMultimedia'=>$dataproviderMultimedia,
+										'codigo'=>$codigo,
                         ] );
                 } else {
-                     $codigo = "";
+                     	$codigo = "";
                         return $this->render ( 'update', [ 
                                         'model' => $model,
                                         'modelp' => $modelp,
@@ -264,7 +265,7 @@ class InformeController extends Controller {
                 }
             }
             //obtine el utlimo estado 
-			var_dump($model->id);
+			//var_dump($model->id);
             $ultimoEstado = Workflow::find ( 'id' )->where ( [
                             'Informe_id' => $model->id
                                 ] )->orderBy ( [
@@ -282,18 +283,63 @@ class InformeController extends Controller {
             $file=Yii::$app->request->post('Informe_id');
             if(isset($file)){
                 $this->multimediaUpload();
-                $id=$model->id;
-               return true;
-            }
-        }
+				$id=$model->id;
+				$dataproviderMultimedia = new ArrayDataProvider([
+					'allModels' => Multimedia::findAll(['Informe_id'=>$model->id])]);
+					return true;
+				return $this->renderAjax('galeria_1', [
+					'model' => $model,
+					'dataproviderMultimedia' => $dataproviderMultimedia,
+				]);
+			}
+
+			if (isset($_POST['Informe']['tagNames']))
+				$tags=$_POST['Informe']['tagNames']; 
+            if(isset($tags)){
+			//	var_dump($tags); 
+				$tags = explode(',', $tags);
+				foreach($tags as $tag)
+					{
+						$tagModel = new \app\models\Tag();
+						$tagM = new \app\models\Tag();
+						$tagM = $tagModel->find()->where(['=', 'name', $tag])->one();
+						if (isset($tagM->name)){
+							$tagM->frequency = $tagM->frequency + 1;
+							$tagM->save();
+						//	return;
+						}
+						else {
+							$tagModel->name = $tag;
+							//$f = $tagModel->frequency; 
+							$tagModel->frequency = $tagModel->frequency + 1;
+							$tagModel->save();
+						}
+					}
+
+				//die();
+               /* $this->multimediaUpload();
+				$id=$model->id;
+				$dataproviderMultimedia = new ArrayDataProvider([
+					'allModels' => Multimedia::findAll(['Informe_id'=>$model->id])]);
+					return true;
+				return $this->renderAjax('galeria_1', [
+					'model' => $model,
+					'dataproviderMultimedia' => $dataproviderMultimedia,
+              // return true;
+				]);*/
+			//	die('kkk');
+			}
+		}
+		$codigo = "";
         if ($model->estudio->nombre === 'PAP') {
                 //    $model->leucositos= 0;
                //     $model->hematies= 0;
 					if (isset($_GET['idtexto'])) {
+					//	die('lpm');die();
                         $textoModel = new \app\models\Textos();
                         $texto = $textoModel->find()->where(['=', 'id', $_GET['idtexto']])->one(); //findModel($_GET['idtexto']);
                         $this->cargarModelo($model, $texto);      
-                        $codigo = $texto->codigo;
+						$codigo = $texto->codigo;
                         $model->save();
                     }
                     return $this->render ( 'update_pap', [ 
@@ -302,10 +348,10 @@ class InformeController extends Controller {
                                             'dataProvider' => $dataProvider,
                                             'historialPaciente'=>$historialPaciente,
                                             'modeloInformeNomenclador' =>  $informeNomenclador,
-                                            'dataproviderMultimedia'=>$dataproviderMultimedia,
+											'dataproviderMultimedia'=>$dataproviderMultimedia,
+											'codigo'=>$codigo,
                                          ] );            
             } else {
-                    $codigo = "";
                     if (isset($_GET['idtexto'])) {
                         $textoModel = new \app\models\Textos();
                         $texto = $textoModel->find()->where(['=', 'id', $_GET['idtexto']])->one(); //findModel($_GET['idtexto']);

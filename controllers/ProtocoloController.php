@@ -23,6 +23,9 @@ use yii\data\SqlDataProvider;
 use yii\data\ArrayDataProvider;
 use app\models\User;
 use yii\base\Model;
+use Da\QrCode\QrCode;
+use yii\web\Response;
+use yii\helpers\Url;
 
 
 /**
@@ -83,6 +86,31 @@ class ProtocoloController extends Controller
 //            'dataProviderTerminados' => $dataProviderTerminados,
 //            'dataProviderTodosLosProtocolos'=>$dataProviderTodosLosProtocolos
         ]);
+    }
+
+    /*public function actions()
+    {
+        return [
+            'qr' => [
+                'class' => QrCodeAction::className(),
+                'text' => 'https://2amigos.us',
+                'param' => 'v',
+                'commponent' => 'qr' // if configured in our app as `qr` 
+            ]
+        ];
+    }*/
+
+    public function actionQrCode($id) {
+        $qr = Yii::$app->get('qr');
+        //  var_dump($qr); die();
+          Yii::$app->response->format = Response::FORMAT_RAW;
+          Yii::$app->response->headers->add('Content-Type', $qr->getContentType());
+        $text =   Url::to(['/informe//update', 'id' => $id]);
+        return $qr
+              ->setText($text)
+              ->setLabel($id)
+              ->writeString();
+        //return QrCode::png2wbmp( Yii::$app->getRequest()->getQueryParam('id'),  false, Enum::QR_ECLEVEL_L, 8, 4, true );
     }
     
     
@@ -393,6 +421,9 @@ class ProtocoloController extends Controller
                 }
             }
         }
+
+       
+          
         return $this->render('_form3', [
                             'model' => $mdlProtocolo,
                             'modelsInformes'=>(empty($modelsInformes)) ? [new Informe] : $modelsInformes,

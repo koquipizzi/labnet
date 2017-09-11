@@ -24,6 +24,9 @@ use app\controllers\AutoTextTreeController;
 //echo \yii::$app->request->get('page');
 
 //Pjax::end();
+Pjax::begin([
+    'id' => 'pjax-container',
+ ]);
 
 $onSelect = new JsExpression(<<<JS
 function (undefined, item) {
@@ -101,7 +104,7 @@ echo execut\widget\TreeView::widget([
         'onNodeSelected' => $onSelect,
     ],
 ]);
-
+Pjax::end();
 ?>
 
 
@@ -166,6 +169,7 @@ echo execut\widget\TreeView::widget([
                         </ul>
                     </div><!-- /.panel-heading -->
                     <!--/ End tabs heading -->
+                    
                      <?php Pjax::begin(['id'=>'pjax-tree']); ?>
                     <!-- Start tabs content -->
                     <div class="panel-body">
@@ -176,14 +180,17 @@ echo execut\widget\TreeView::widget([
                                     <div class="informe-form">
                                         <div class="panel-body no-padding">                                            
                                             <?php
-                                            $this->registerCss("label.col-md-1 {font-weight: bold;}");
-                                            $form = ActiveForm::begin([
-                                                        'id' => 'form-informe-complete',
-                                                        'options' => [
-                                                            'class' => 'form-horizontal',
-                                                        ]
-                                            ]);
+                                                $this->registerCss("label.col-md-1 {font-weight: bold;}");
+                                                $form = ActiveForm::begin([
+                                                            'id' => 'form-informe-complete',
+                                                            'options' => [
+                                                                'class' => 'form-horizontal',
+                                                            ]
+                                                ]);
+                                                echo $form->field($model, 'id')->hiddenInput()->label(false); 
                                             ?>
+                                             <input type="hidden" name="codigo" value="<?php if (isset($codigo)){ echo $codigo;} ?>" />
+                                   
                                             <?php
                                                 echo $form->field($model, 'titulo', ['template' => "{label}
                                                         <div class='col-md-12'>{input}</div><div class='clearfix'></div>
@@ -226,6 +233,7 @@ echo execut\widget\TreeView::widget([
                                                                 {hint}
                                                                 {error}", 'labelOptions' => [ 'class' => 'col-md-4  control-label']
                                                              ])->widget(select2::classname(), [
+                                                                 'attribute'=> 'codigo',
                                                                     'data' => $dataCalidad,
                                                                     'language' => 'es',
                                                                     'options' => ['placeholder' => 'Seleccione una Leyenda'],
@@ -330,13 +338,13 @@ echo execut\widget\TreeView::widget([
                                                     ?>
 
                                                     <?php
-                                                    $dataAspecto = ArrayHelper::map(Leyenda::getTextoO(), 'id', 'texto');
+                                                    $dataOtros = ArrayHelper::map(Leyenda::getTextoO(), 'id', 'texto');
                                                     echo $form->field($model, 'otros', ['template' => "{label}
                                                             <div class='col-md-7'>{input}</div>
                                                             {hint}
                                                             {error}", 'labelOptions' => [ 'class' => 'col-md-4  control-label']
                                                       ])->widget(select2::classname(), [
-                                                            'data' => $dataAspecto,
+                                                            'data' => $dataOtros,
                                                             'language' => 'es',
                                                             'options' => ['placeholder' => 'Seleccione una Leyenda'],
                                                             'pluginOptions' => [
@@ -560,7 +568,7 @@ echo execut\widget\TreeView::widget([
 
 $this->registerJsFile('@web/assets/admin/js/cipat_modal_informe.js', ['depends' => [yii\web\AssetBundle::className()]]);
 
-$this->registerJsFile('@web/assets/admin/js/cipat_informe_pap.js', ['depends' => [yii\web\AssetBundle::className()]]);
+//$this->registerJsFile('@web/assets/admin/js/cipat_informe_pap.js', ['depends' => [yii\web\AssetBundle::className()]]);
 
 $this->registerJsFile('@web/assets/global/plugins/bower_components/jquery-easing-original/jquery.easing.1.3.min.js', ['depends' => [yii\web\AssetBundle::className()]]);
 

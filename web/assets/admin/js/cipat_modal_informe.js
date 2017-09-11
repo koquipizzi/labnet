@@ -158,8 +158,8 @@
     
     function guardarInforme(){
         var forminforme = $("#form-informe-complete");
-  	// submit form
-  	var url = 'index.php?r=informe/update&id='+forminforme.find("input#informe-id.form-control").val();;
+  	    // submit form
+  	    var url = 'index.php?r=informe/update&id='+forminforme.find("input#informe-id.form-control").val();;
         $.ajax({
             url    : url ,
             type   : "post",
@@ -176,27 +176,7 @@
       
     }
 
-    
-    $(document).on('ready pjax:success', function () {
-        $('.tree-view-wrapper').hide();
-        $('.kv-upload-progress').change(function(){ 
-          //  debugger;
-           alert('event.data'); 
-        });
-
-        $(".verInforme").click(function(e){ 
-            e.preventDefault();
-            $('#detalleInforme').load($(this).attr('value'));
-            $('#popoverInforme').popover('show');
-            $('[data-toggle="popover"]').popover('show');
-        });
-        
-        $(".testKoqui").click(function(e){ 
-            e.preventDefault();
-            alert('lpm');
-        });
-                 
-        $('.guardarTexto').click(function (e) { 
+    $('.guardarTexto').click(function (e) { 
             e.preventDefault(); 
             $('#modal').find('.modal-header').html('Nuevo Autotexto');
             var $url = 'index.php?r=textos/create'; 
@@ -217,11 +197,11 @@
                                     dataType: "JSON",
                                     success: function (response) 
                                     { 
-                                        $('#modal').find('#modalContent').html(response.data);     
+                                        $('#modalContentAutotexto').html(response.data);     
                                         $('#modal').find('#modalContent').addClass('modal-autotexto');
                                         $('#modal').modal('show');
                                         $('#modal').focus();
-                                        bootbox.hideAll();                                       
+                                        bootbox.hideAll();                                                                         
                                     },
                                     error  : function () 
                                     {
@@ -239,50 +219,91 @@
             
             
         });
-        
-    $("body").on("beforeSubmit", "form#create-autotexto-form", function () {
-                $("body").keydown(function(event){
-                    if(event.keyCode == 13) {
+
+    
+    $(document).on('ready pjax:success', function () {
+        $('.tree-view-wrapper').hide();
+        $('.kv-upload-progress').change(function(){ 
+          //  debugger;
+           alert('event.data'); 
+        });
+
+        $(".verInforme").click(function(e){ 
+            e.preventDefault();
+            $('#detalleInforme').load($(this).attr('value'));
+            $('#popoverInforme').popover('show');
+            $('[data-toggle="popover"]').popover('show');
+        });
+     
+    $("#idFile").on('fileuploaded', function(event) {
+        $.pjax.reload({container:"#galeriar"});
+     });
+
+    $("body").on("submit", "form#create-autotexto-form", function (e) {
+            $("body").keydown(function(event){
+                if(event.keyCode == 13) {
                         event.preventDefault();
                         return false;
-                    }
-                }); 
-                                
-
-                var form = $(this);                       
+                }
+            }); 
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var form = $(this);                       
                 // return false if form still have some validation errors
-                if (form.find(".has-error").length) 
+            if (form.find(".has-error").length) 
                 {
                     return false;
                 }
                 // submit form
-                $.ajax({
+            $.ajax({
                     url    : form.attr("action"),
                     type   : "post",
                     data   : form.serialize(),
                     success: function (response) 
                     {
-                        $("#modal").modal("toggle");
-                     //   $.pjax.reload({container:"#pacientes"}); //for pjax update
-                        var n = noty({
-                            text: 'Autotexto generado con éxito!',
-                            type: 'success',
-                            class: 'animated pulse',
-                            layout: 'topRight',
-                            theme: 'relax',
-                            timeout: 3000, // delay for closing event. Set false for sticky notifications
-                            force: false, // adds notification to the beginning of queue when set to true
-                            modal: false, // si pongo true me hace el efecto de pantalla gris
-                        });
+                        if (response.rdo == 'ko'){
+                            var n = noty({
+                                text: 'El código debe ser único',
+                                type: 'error',
+                                killer: true,
+                                class: 'animated pulse',
+                                layout: 'topRight',
+                                theme: 'relax',
+                                timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                force: false, // adds notification to the beginning of queue when set to true
+                                modal: false, // si pongo true me hace el efecto de pantalla gris
+                            });
+                            return false;
+                        }
+                            
+                        else {
+                         //   $.pjax.reload({container:'#pjax-tree'});
+                            $("#modal").modal("toggle");
+                            
+                            //   $.pjax.reload({container:"#pacientes"}); //for pjax update
+                            var n = noty({
+                                   text: 'Autotexto generado con éxito!',
+                                   type: 'success',
+                                   class: 'animated pulse',
+                                   layout: 'topRight',
+                                   theme: 'relax',
+                                   killer: true,
+                                   timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                   force: false, // adds notification to the beginning of queue when set to true
+                                   modal: false, // si pongo true me hace el efecto de pantalla gris
+                            });
+                               $.pjax.reload({container:"#pjax-container"});
+                        }
+                        
 
                     },
                     error  : function () 
                     {
                         console.log("internal server error");
                     }
-                });
-                return false;
             });
+        return false;
+    });
     
         $('.content-galeria').load($(this).attr('value'));
 

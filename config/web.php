@@ -79,6 +79,10 @@ $config = [
                     ],
                 ],
             ],*/
+            'qr' => [
+                'class' => '\Da\QrCode\Component\QrCodeComponent',
+                // ... you can configure more properties of the component here
+            ],
             'i18n' => [
                 'translations' => [
                     'app*' => [

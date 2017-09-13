@@ -72,7 +72,7 @@ class SiteController extends Controller
         $b = Informe::find()->where('Estudio_id = 2')->count();
         $ci = Informe::find()->where('Estudio_id = 4')->count();
         $in = Informe::find()->where('Estudio_id = 5')->count();
-        $sql = "SELECT * FROM tag order by frequency desc limit 5";
+        $sql = "SELECT * FROM Tag order by frequency desc limit 5";
         $connection = \Yii::$app->db;
         $model = $connection->createCommand($sql);
         $tags = $model->queryAll();

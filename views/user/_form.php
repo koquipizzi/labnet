@@ -13,11 +13,11 @@ use yii\helpers\Url;
 <div class="user-form">
 	<div class="panel-body no-padding">
         <?php
-								
-$form = ActiveForm::begin ( [ 
-										'options' => [ 
-												'class' => 'form-horizontal mt-10' 
-										] 
+
+$form = ActiveForm::begin ( [
+										'options' => [
+												'class' => 'form-horizontal mt-10'
+										]
 								] );
 								?>
 
@@ -25,13 +25,13 @@ $form = ActiveForm::begin ( [
 	<div class='col-md-7'>{input}</div>
 	{hint}
 	{error}",'labelOptions' => [ 'class' => 'col-md-3  control-label' ] ] )->textInput ( [ 'maxlength' => true ] )?>
-	
-	
+
+
 	<?=$form->field ( $model, 'email', [ 'template' => "{label}
 	<div class='col-md-7'>{input}</div>
 	{hint}
 	{error}",'labelOptions' => [ 'class' => 'col-md-3  control-label' ] ] )->textInput ( [ 'maxlength' => true ] )?>
-	
+
 	<?=$form->field ( $model, 'password', [ 'template' => "{label}
 	<div class='col-md-7'>{input}</div>
 	{hint}
@@ -71,7 +71,7 @@ $form = ActiveForm::begin ( [
 // 												        				'uploadExtraData' => new \yii\web\JsExpression("function (previewId, index) {
 // 																						$('.kv-fileinput-error').addClass('hide');
 // 																						}"),
-// 																		
+//
                                             ],
                                         ]);
                                         ?>
@@ -87,6 +87,5 @@ $form = ActiveForm::begin ( [
 
     </div>
 
-	
+
 </div>
-                           

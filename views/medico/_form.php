@@ -10,7 +10,6 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 use yii\bootstrap\Modal;
 use vova07\select2\Widget;
-use kartik\widgets\Select2;
 
 $this->registerJsFile('@web/assets/admin/js/cipat_add_forms.js', ['depends' => [yii\web\AssetBundle::className()]]);
 ?>
@@ -54,10 +53,10 @@ $this->registerJsFile('@web/assets/admin/js/cipat_add_forms.js', ['depends' => [
             {error}",
             'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
         ])->textArea(['maxlength' => true]);?>
-       
+
         <?php
             $data=ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
-            echo $form->field($model, 'localidad_id', ['template' => "{label}
+            echo $form->field($model, 'Localidad_id', ['template' => "{label}
             <div class='col-md-7'>{input}</div>
             {hint}
             {error}",  'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
@@ -71,7 +70,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_add_forms.js', ['depends' => [
                         'settings' => [
                             'width' => '100%',
                         ],
-                    ]);                     
+                    ]);
         ?>
         <?php
             $data= ArrayHelper::map(\app\models\Especialidad::find()->asArray()->all(), 'id', 'nombre');
@@ -79,7 +78,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_add_forms.js', ['depends' => [
             <div class='col-md-7'>{input}</div>
             {hint}
             {error}",  'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
-            ])->widget(Widget::className(), 
+            ])->widget(Widget::className(),
                     [
                         'options' => [
                             'multiple' => false,
@@ -89,7 +88,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_add_forms.js', ['depends' => [
                         'settings' => [
                             'width' => '100%',
                         ],
-                    ]);                       
+                    ]);
         ?>
         <?= $form->field($model, 'notas', ['template' => "{label}
                 <div class='col-md-7'>{input}</div>
@@ -97,7 +96,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_add_forms.js', ['depends' => [
                 {error}",
                     'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
                ])->textArea(['maxlength' => true]);?>
-        
+
     </div>
     <div class="box-footer" >
         <div class="pull-right box-tools">
@@ -108,5 +107,3 @@ $this->registerJsFile('@web/assets/admin/js/cipat_add_forms.js', ['depends' => [
         <?php ActiveForm::end(); ?>
 
     </div>
-
-

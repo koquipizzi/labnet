@@ -7,13 +7,13 @@ class m170613_150714_workflow_view extends Migration
     public function safeUp()
     {
         $this->execute('
-            CREATE VIEW View_Informe_Ult_WorkFlow AS
-                SELECT 
+            CREATE VIEW view_informe_ult_workflow AS
+                SELECT
                     Workflow.Informe_id AS informe_id,
                     MAX(Workflow.id) AS id
                 FROM
                     Workflow
-                GROUP BY Workflow.Informe_id        
+                GROUP BY Workflow.Informe_id
         ');
 
     }
@@ -22,7 +22,7 @@ class m170613_150714_workflow_view extends Migration
     {
         echo "m170613_150714_workflow_view cannot be reverted.\n";
         $this->execute('
-            DROP VIEW View_Informe_Ult_WorkFlow    
+            DROP VIEW view_informe_ult_workflow
         ');
         return false;
     }

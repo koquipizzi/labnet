@@ -53,7 +53,7 @@
         'fieldConfig' => ['template'=>'']
     ]); ?>
                   <?= $form->field($model, 'username',[
-                'template' => '            
+                'template' => '
                     <div class="form-group">
                         <div class="input-group input-group-lg rounded no-overflow">
                             {input}
@@ -61,10 +61,10 @@
                         </div>
                     </div>
                 ',
-            ])->textInput(['autofocus' => true,'placeholder'=>'Nombre de Usuario']); ?>            
-            
+            ])->textInput(['autofocus' => true,'placeholder'=>'Nombre de Usuario']); ?>
+
             <?= $form->field($model, 'password',[
-                'template' => '            
+                'template' => '
                     <div class="form-group">
                         <div class="input-group input-group-lg rounded ">
                             {input}
@@ -73,7 +73,7 @@
                     </div>
                 ',
             ])->passwordInput(['placeholder'=>'Contraseña']); ?>
-    
+
       <div class="row">
        <div class="col-xs-1">
        </div>
@@ -85,7 +85,7 @@
           </div>
         </div>
         <!-- /.col -->
-        
+
         <!--</div>-->
 
         <div class="col-xs-4">

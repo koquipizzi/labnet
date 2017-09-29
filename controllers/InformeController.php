@@ -315,19 +315,6 @@ class InformeController extends Controller {
 							$tagModel->save();
 						}
 					}
-
-				//die();
-               /* $this->multimediaUpload();
-				$id=$model->id;
-				$dataproviderMultimedia = new ArrayDataProvider([
-					'allModels' => Multimedia::findAll(['Informe_id'=>$model->id])]);
-					return true;
-				return $this->renderAjax('galeria_1', [
-					'model' => $model,
-					'dataproviderMultimedia' => $dataproviderMultimedia,
-              // return true;
-				]);*/
-			//	die('kkk');
 			}
 		}
 		$codigo = "";

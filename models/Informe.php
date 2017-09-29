@@ -6,6 +6,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use dosamigos\taggable\Taggable;
 
+
 /**
  * This is the model class for table "Informe".
  *
@@ -42,7 +43,9 @@ use dosamigos\taggable\Taggable;
 class Informe extends \yii\db\ActiveRecord
 {
 	
-	public $files;
+    public $files;
+    public $tagNames;
+    
     /**
      * @inheritdoc
      */

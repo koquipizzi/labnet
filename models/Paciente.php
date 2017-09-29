@@ -26,7 +26,7 @@ use Yii;
  */
 class Paciente extends \yii\db\ActiveRecord
 {
-    
+
 
     /**
      * @inheritdoc
@@ -57,8 +57,8 @@ class Paciente extends \yii\db\ActiveRecord
             [['Tipo_documento_id'], 'exist', 'skipOnError' => true, 'targetClass' => TipoDocumento::className(), 'targetAttribute' => ['Tipo_documento_id' => 'id']],
             [['notas'], 'string', 'max' => 512],
             ['fecha_nacimiento', DateTimeCompareValidator::className(), 'compareValue' => date('Y-m-d'), 'operator' => '<='],
-            ['fecha_nacimiento', DateTimeCompareValidator::className(), 'compareValue' => $this->edad_permitida(), 'operator' => '>='],       
-            
+            ['fecha_nacimiento', DateTimeCompareValidator::className(), 'compareValue' => $this->edad_permitida(), 'operator' => '>='],
+
             ];
     }
 
@@ -83,15 +83,15 @@ class Paciente extends \yii\db\ActiveRecord
         ];
     }
 
-    
+
     public function edad_permitida(){
             $fecha = date('Y-m-j');
             $nuevafecha = strtotime ( '-110 year' , strtotime ( $fecha ) ) ;
             $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
             return $nuevafecha;
     }
-    
-    
+
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -115,68 +115,68 @@ class Paciente extends \yii\db\ActiveRecord
     {
         return $this->hasMany(PacientePrestadora::className(), ['Paciente_id' => 'id']);
     }
-    
+
     public function getLocalidadTexto()
-    {       
+    {
         $localidad = $this->hasOne(Localidad::className(), ['id' => 'Localidad_id'])->one();
         if ($localidad)
             return $localidad->nombre;
         return '';
     }
-    
+
     public function getGeneroTexto()
-    {       
+    {
         $gen = $this->hasOne(Sexo::className(), ['id' => 'sexo'])->one();
         if ($gen)
             return $gen->descripcion;
         return '';
     }
-    
+
     // you need a getter for select2 dropdown
     public function getdropPrestadoras()
     {
         $data = Prestadoras::find()->asArray()->all();
         return ArrayHelper::map($data, 'id', 'descripcion');
     }
-    
+
     // You will need a getter for the current set o Acervo in this Tema
     public function getPrestadorasIds()
     {
-       // $data = PacientePrestadora::find()->asArray()->all()  
+       // $data = PacientePrestadora::find()->asArray()->all()
           $data =  \yii\helpers\ArrayHelper::getColumn(
           PacientePrestadora::find()->asArray()->all(), 'Prestadoras_id');
           return $data;
     }
-    
+
     public function getPrestadoras()
     {
         return $this->hasMany(Prestadoras::className(), ['id' => 'prestadora_id'])->viaTable('paciente_prestadora', ['paciente_id' => 'id']);
     }
-    
+
      public function afterSave($insert, $changedAttributes)
     {
 //        $actualPrestadoras = [];
 //        $prestadoraExists = 0; //for updates
-//         
+//
 //        if (isset(Yii::$app->request->post('Paciente')['PrestadorasIds']))
 //            $nuevosPrestadoras  = Yii::$app->request->post('Paciente')['PrestadorasIds'];
 //        else $nuevosPrestadoras = [];
-//        
+//
 //        if (($actualPrestadoras = PacientePrestadora::find()
 //                ->andWhere("Paciente_id = $this->id")
-//                ->asArray()->all()) !== null) 
+//                ->asArray()->all()) !== null)
 //                {
 //                    $actualPrestadoras = ArrayHelper::getColumn($actualPrestadoras, 'Prestadoras_id');
 //                    $prestadoraExists = 1; // if there is authors relations, we will work it latter
-//                 } 
-//                 
-//        if ($prestadoraExists == 1) { //delete colecciones y acervo 
+//                 }
+//
+//        if ($prestadoraExists == 1) { //delete colecciones y acervo
 //            foreach ($actualPrestadoras as $remove) {
 //              $r = PacientePrestadora::findOne(['Prestadoras_id' => $remove, 'Paciente_id' => $this->id]);
 //              $r->delete();
 //            }
-//        } 
-//        
+//        }
+//
 //        if (!empty($nuevosPrestadoras)) { //save the relations
 //          foreach ($nuevosPrestadoras as $id) {
 //            //$actualTemas = array_diff($nuevosTemas, [$id]); //remove remaining authors from array
@@ -186,7 +186,7 @@ class Paciente extends \yii\db\ActiveRecord
 //            $r->save();
 //            }
 //        }
-       
-       
+
+
     }
 }

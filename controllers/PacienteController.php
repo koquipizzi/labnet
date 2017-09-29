@@ -55,7 +55,7 @@ class PacienteController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-    
+
     public function actionBuscar()
     {
         $searchModel = new PacienteSearch();
@@ -95,26 +95,29 @@ class PacienteController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Paciente();       
+        $model = new Paciente();
         if (isset($_POST['PrestadoraTemp']['tanda']))
             $tanda = $_POST['PrestadoraTemp']['tanda'];
         else  $tanda = time();
         //var_dump($tanda);die();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
             $searchModel = new PrestadoratempSearch();
             $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams, $tanda);
+            var_dump($dataPrestadoras);
+            die();
             foreach($dataPrestadoras->getModels() as $record) {
                 $pac_prest = new PacientePrestadora();
                 $pac_prest->Paciente_id = $model->id;
                 $pac_prest->Prestadoras_id = $record['Prestadora_id'];
                 $pac_prest->nro_afiliado = $record['nro_afiliado'];
-                $pac_prest->save(); 
-            } 
+                $pac_prest->save();
+            }
             return $this->render('view', [
                 'model' => $model,
             ]);
         } else {
-            $prestadoraTemp = new \app\models\PrestadoraTemp();               
+            $prestadoraTemp = new \app\models\PrestadoraTemp();
             $prestadoraTemp->tanda = $tanda;
             $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
             $dataTipoDocumento = ArrayHelper::map(TipoDocumento::find()->asArray()->all(), 'id', 'descripcion');
@@ -154,14 +157,14 @@ class PacienteController extends Controller
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
-                
+
         } else {
             $searchModel = new PacientePrestadoraSearch();
-            $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$id);            
+            $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$id);
             $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
             $dataTipoDocumento = ArrayHelper::map(TipoDocumento::find()->asArray()->all(), 'id', 'descripcion');
             $pacientePrestadora = new \app\models\PacientePrestadora();
-            $prestadoraTemp = new \app\models\PrestadoraTemp();              
+            $prestadoraTemp = new \app\models\PrestadoraTemp();
             return $this->render('update', [
                 'model' => $model,
                 'dataPrestadoras' => $dataPrestadoras,
@@ -169,11 +172,11 @@ class PacienteController extends Controller
                 'dataTipoDocumento'=> $dataTipoDocumento,
                 'pacientePrestadora'=> $pacientePrestadora,
                 'prestadoraTemp'=>$prestadoraTemp,
-            //    'tanda' => $tanda,                
+            //    'tanda' => $tanda,
             ]);
         }
     }
-    
+
         public function actionChequear($id)
     {
         $model = $this->findModel($id);
@@ -189,14 +192,14 @@ class PacienteController extends Controller
            return;
                // return $this->redirect(['view', 'id' => $model->id]);
             }
-                
+
         } else {
             $searchModel = new PacientePrestadoraSearch();
-            $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$id);            
+            $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$id);
             $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
             $dataTipoDocumento = ArrayHelper::map(TipoDocumento::find()->asArray()->all(), 'id', 'descripcion');
             $pacientePrestadora = new \app\models\PacientePrestadora();
-            $prestadoraTemp = new \app\models\PrestadoraTemp();              
+            $prestadoraTemp = new \app\models\PrestadoraTemp();
             return $this->renderAjax('_form_chequear', [
                 'model' => $model,
                 'dataPrestadoras' => $dataPrestadoras,
@@ -204,11 +207,11 @@ class PacienteController extends Controller
                 'dataTipoDocumento'=> $dataTipoDocumento,
                 'pacientePrestadora'=> $pacientePrestadora,
                 'prestadoraTemp'=>$prestadoraTemp,
-            //    'tanda' => $tanda,                
+            //    'tanda' => $tanda,
             ]);
         }
     }
-    
+
 
     /**
      * Deletes an existing Paciente model.

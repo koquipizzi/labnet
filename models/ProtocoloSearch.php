@@ -107,8 +107,8 @@ class ProtocoloSearch extends Protocolo
             LEFT JOIN Informe ON Protocolo.id = Informe.Protocolo_id
             LEFT JOIN Paciente_prestadora ON Protocolo.Paciente_prestadora_id = Paciente_prestadora.id
             LEFT JOIN Paciente ON Paciente_prestadora.Paciente_id = Paciente.id
-            JOIN View_Informe_Ult_WorkFlow ON Informe.id = View_Informe_Ult_WorkFlow.Informe_id
-            JOIn Workflow ON View_Informe_Ult_WorkFlow.id = Workflow.id 
+            JOIN view_informe_ult_workflow ON Informe.id = view_informe_ult_workflow.Informe_id
+            JOIn Workflow ON view_informe_ult_workflow.id = Workflow.id 
         ';
 
         $this->estadoFilter($formParams, $where, $queryParams);
@@ -586,8 +586,8 @@ class ProtocoloSearch extends Protocolo
                     JOIN Estudio ON (Informe.Estudio_id = Estudio.id)
                     JOIN Paciente_prestadora ON (Protocolo.Paciente_prestadora_id = Paciente_prestadora.id)
                     JOIN Paciente ON (Paciente_prestadora.Paciente_id = Paciente.id)
-					JOIN View_Informe_Ult_WorkFlow ON (Informe.id = View_Informe_Ult_WorkFlow.Informe_id)
-					JOIn Workflow on View_Informe_Ult_WorkFlow.id = Workflow.id 
+					JOIN view_informe_ult_workflow ON (Informe.id = view_informe_ult_workflow.Informe_id)
+					JOIn Workflow on view_informe_ult_workflow.id = Workflow.id 
 					WHERE Workflow.Estado_id <  5        
                     AND Workflow.Responsable_id = ".$loggedUserId;
         
@@ -1176,8 +1176,8 @@ class ProtocoloSearch extends Protocolo
             JOIN Estudio ON (Informe.Estudio_id = Estudio.id)
             JOIN Paciente_prestadora ON (Protocolo.Paciente_prestadora_id = Paciente_prestadora.id)
             JOIN Paciente ON (Paciente_prestadora.Paciente_id = Paciente.id)
-            JOIN View_Informe_Ult_WorkFlow ON (View_Informe_Ult_WorkFlow.informe_id = Informe.id)
-            JOIN Workflow ON (View_Informe_Ult_WorkFlow.id = Workflow.id)
+            JOIN view_informe_ult_workflow ON (view_informe_ult_workflow.informe_id = Informe.id)
+            JOIN Workflow ON (view_informe_ult_workflow.id = Workflow.id)
             WHERE
             Workflow.Estado_id <  5 
             AND Workflow.Responsable_id = ".$loggedUserId."        

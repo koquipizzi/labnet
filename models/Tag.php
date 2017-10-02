@@ -2,10 +2,15 @@
 
 namespace app\models;
 
+use sjaakp\taggable\TagBehavior;
+use sjaakp\taggable\SluggableBehavior;
+
+
+
 use Yii;
 
 /**
- * This is the model class for table "tag".
+ * This is the model class for table "Tag".
  *
  * @property integer $id
  * @property string $name
@@ -18,7 +23,29 @@ class Tag extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tag';
+        return 'Tag';
+    }
+
+    public function behaviors()
+	{
+   /*     return [
+            'Tag' => [
+                'class' => TagBehavior::className(),
+                'junctionTable' => 'informe_tag_assn',
+                'modelKeyAttribute' => 'informe_id'
+            ]
+        ];
+*/
+        return [
+            'tag' => [
+                'class' => TagBehavior::className(),
+                'junctionTable' => 'informe_tag_assn',
+            //    'linkRoute' => "blog/tag",
+           //     'linkParam' => "tag",
+           //     'linkAttr'  => "slug",
+            ],
+            
+        ];
     }
 
     /**
@@ -32,6 +59,7 @@ class Tag extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 255],
         ];
     }
+
 
     /**
      * @inheritdoc

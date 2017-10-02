@@ -4,7 +4,8 @@ namespace app\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
-use dosamigos\taggable\Taggable;
+//use dosamigos\taggable\Taggable;
+use sjaakp\taggable\TaggableBehavior;
 
 
 /**
@@ -44,7 +45,7 @@ class Informe extends \yii\db\ActiveRecord
 {
 	
     public $files;
-    public $tagNames;
+    public $editorTags;
     
     /**
      * @inheritdoc
@@ -56,10 +57,19 @@ class Informe extends \yii\db\ActiveRecord
 
     public function behaviors()
     {
+     /*   return [
+           
+            'taggable' => [
+                'class' => TaggableBehavior::className(),
+                'tagClass' => Tag::className(),
+                'junctionTable' => 'informe_tag_assn',
+            ]
+        ];*/
         return [
-            'bedezign\yii2\audit\AuditTrailBehavior',
-            [
-                'class' => Taggable::className(),
+            'taggable' =>[
+                'class' => TaggableBehavior::className(),
+                'tagClass' => Tag::className(),
+                'junctionTable' => 'informe_tag_assn',
             ],
         ];
     }
@@ -70,7 +80,7 @@ class Informe extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tagNames'], 'safe'],
+            [['editorTags'], 'safe'],
             [['Estudio_id', 'Protocolo_id'], 'required'],
             [['Estudio_id', 'Protocolo_id', 'edad', 'estado_actual'], 'integer'],
             [['descripcion', 'citologia'], 'string', 'max' => 2048],
@@ -153,6 +163,7 @@ class Informe extends \yii\db\ActiveRecord
      */   
     public function beforeSave($insert)
     {
+     //   $component->attachBehaviors();
         if (parent::beforeSave($insert)) {
             if($this->Estudio_id==Estudio::getEstudioPap() && (strlen($this->titulo)<=1)){
                  $this->titulo = 'ESTUDIO DE CITOLOGIA EXFOLIATIVA (PAP)';

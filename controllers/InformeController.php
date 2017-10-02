@@ -293,11 +293,12 @@ class InformeController extends Controller {
 				]);
 			}
 
-			if (isset($_POST['Informe']['tagNames']))
-				$tags=$_POST['Informe']['tagNames']; 
-            if(isset($tags)){
+			if (isset($_POST['Informe']['editorTags']))
+				$tagsPost=$_POST['Informe']['editorTags']; 
+           /* if(isset($tagsPost)){
 			//	var_dump($tags); 
-				$tags = explode(',', $tags);
+				$tags = explode(',', $tagsPost);
+				//var_dump($tags); die();
 				foreach($tags as $tag)
 					{
 						$tagModel = new \app\models\Tag();
@@ -315,9 +316,11 @@ class InformeController extends Controller {
 							$tagModel->save();
 						}
 					}
-			}
+			}*/
 		}
 		$codigo = "";
+		if(isset($tagsPost))
+			$model->setEditorTags($tagsPost);
         if ($model->estudio->nombre === 'PAP') {
                 //    $model->leucositos= 0;
                //     $model->hematies= 0;

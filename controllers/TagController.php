@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
+use sjaakp\taggable\TagSuggestAction;
+
 
 /**
  * TagController implements the CRUD actions for Tag model.
@@ -26,6 +28,15 @@ class TagController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                 ],
+            ],
+        ];
+    }
+
+    public function actions()    {
+        return [
+            'suggest' => [
+                'class' => TagSuggestAction::className(),
+                'tagClass' => Tag::className(),
             ],
         ];
     }

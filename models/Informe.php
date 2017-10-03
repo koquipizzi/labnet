@@ -55,7 +55,7 @@ class Informe extends \yii\db\ActiveRecord
         return 'Informe';
     }
 
-    public function behaviors()
+   /* public function behaviors()
     {
      /*   return [
            
@@ -65,14 +65,14 @@ class Informe extends \yii\db\ActiveRecord
                 'junctionTable' => 'informe_tag_assn',
             ]
         ];*/
-        return [
+       /* return [
             'taggable' =>[
                 'class' => TaggableBehavior::className(),
                 'tagClass' => Tag::className(),
                 'junctionTable' => 'informe_tag_assn',
             ],
         ];
-    }
+    }*/
 
     /**
      * @inheritdoc

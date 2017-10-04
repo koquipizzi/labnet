@@ -2,8 +2,8 @@
 
 namespace app\models;
 
-use sjaakp\taggable\TagBehavior;
-use sjaakp\taggable\SluggableBehavior;
+use app\components\TagBehavior;
+use app\components\SluggableBehavior;
 
 
 

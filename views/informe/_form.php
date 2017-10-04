@@ -5,17 +5,13 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use kartik\widgets\FileInput;
 use yii\widgets\Pjax;
-/* @var $this yii\web\View */
-/* @var $model app\models\Informe */
-/* @var $form yii\widgets\ActiveForm */
-
 use yii\web\JsExpression;
 use execut\widget\TreeView;
 use app\controllers\AutoTextTreeController;
 use app\models\Workflow;
 use kartik\editable\Editable;
 use kartik\popover\PopoverX;
-use dosamigos\selectize\SelectizeTextInput;
+use app\components\TagEditor;
 
 
 Pjax::begin([
@@ -336,6 +332,19 @@ Pjax::end();
                                     
                                     ?>
 
+                                    <?= $form->field($model, 'editorTags',['template' => "{label}
+														<div class='col-md-12'>{input}</div>
+														{hint}
+														{error}",
+                                            'labelOptions' => [ 'class' => 'col-md-1  ']
+                                            ] )->widget(TagEditor::className(), [
+                                        'tagEditorOptions' => [
+                                            'autocomplete' => [
+                                                'source' => Url::toRoute(['tag/suggest'])
+                                            ],
+                                        ]
+                                    ]) ?>
+
                                     <?=
                                     $form->field($model, 'Estudio_id', ['template' => "{label}
                                                             <div class='col-md-12'>{input}</div>
@@ -449,25 +458,7 @@ Pjax::end();
                                             ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);     
                                 ?>
                                 <?= $formObs->field($model, 'id')->hiddenInput()->label(false); ?>
-                                <label class="col-md-1  ">Etiquetas</label>
-                                <?= $form->field($model, 'tagNames',['template' => "
-                                                                                <div class='col-md-12'>{input}</div>
-                                                                                {hint}
-                                                                                {error}"
-                                                                            ])->widget(SelectizeTextInput::className(), [
-                                        // calls an action that returns a JSON object with matched
-                                        // tags
-                                        'loadUrl' => ['tag/list'],
-                                        'options' => ['class' => 'form-control'],
-                                        'clientOptions' => [
-                                            'plugins' => ['remove_button'],
-                                            'valueField' => 'name',
-                                            'labelField' => 'name',
-                                            'searchField' => ['name'],
-                                            'create' => true,
-                                        ]
-                                    ])->hint('Use comas para separar etiquetas'); 
-                                ?>
+
                                 <div class="form-footer">
                                     <div style="text-align: right;">
                                         <?= Html::submitButton($modelp->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $modelp->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

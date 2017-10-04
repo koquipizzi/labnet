@@ -21,7 +21,7 @@ use app\models\InformeNomencladorSearch;
 use app\models\InformeNomenclador;
 use app\models\Workflow;
 use kartik\mpdf\Pdf;
-
+use app\components\TagBehavior;
 /**
  * InformeController implements the CRUD actions for Informe model.
  */
@@ -191,7 +191,7 @@ class InformeController extends Controller {
 	 */
 
 	public function actionUpdate($id=null) {	
-
+	
 		if(isset($id)){
 				$model = $this->findModel ( $id );
 		}else{
@@ -206,6 +206,11 @@ class InformeController extends Controller {
 			$modelp->save(false);
 		}
 
+		if (isset($_POST['Informe']['editorTags'])){
+			$tagsPost=$_POST['Informe']['editorTags']; 
+			$model->setEditorTags($tagsPost);
+		}
+		
         $nominf = new InformeNomenclador();
         if (isset($_POST['hasEditable'])) {
 			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -239,6 +244,7 @@ class InformeController extends Controller {
                             'allModels' => Multimedia::findAll(['Informe_id'=>$model->id]),
             ]);
   
+		$codigo = "";
         if($model->WorkflowLastState!= Workflow::estadoEntregado()){
             if ($model->load ( Yii::$app->request->post () ) && $model->save () ) {
                 if ($model->estudio->nombre === 'PAP') {
@@ -252,7 +258,6 @@ class InformeController extends Controller {
 										'codigo'=>$codigo,
                         ] );
                 } else {
-                     	$codigo = "";
                         return $this->render ( 'update', [ 
                                         'model' => $model,
                                         'modelp' => $modelp,
@@ -292,35 +297,8 @@ class InformeController extends Controller {
 					'dataproviderMultimedia' => $dataproviderMultimedia,
 				]);
 			}
-
-			if (isset($_POST['Informe']['editorTags']))
-				$tagsPost=$_POST['Informe']['editorTags']; 
-           /* if(isset($tagsPost)){
-			//	var_dump($tags); 
-				$tags = explode(',', $tagsPost);
-				//var_dump($tags); die();
-				foreach($tags as $tag)
-					{
-						$tagModel = new \app\models\Tag();
-						$tagM = new \app\models\Tag();
-						$tagM = $tagModel->find()->where(['=', 'name', $tag])->one();
-						if (isset($tagM->name)){
-							$tagM->frequency = $tagM->frequency + 1;
-							$tagM->save();
-						//	return;
-						}
-						else {
-							$tagModel->name = $tag;
-							//$f = $tagModel->frequency; 
-							$tagModel->frequency = $tagModel->frequency + 1;
-							$tagModel->save();
-						}
-					}
-			}*/
 		}
 		$codigo = "";
-		if(isset($tagsPost))
-			$model->setEditorTags($tagsPost);
         if ($model->estudio->nombre === 'PAP') {
                 //    $model->leucositos= 0;
                //     $model->hematies= 0;

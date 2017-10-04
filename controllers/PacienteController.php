@@ -168,20 +168,54 @@ class PacienteController extends Controller
      */
     public function actionUpdate($id)
     {
+        
         $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post())){
-            if ($model->validate()) {
-                // all inputs are valid
-            } else {
-                // validation failed: $errors is an array containing error messages
-                $errors = $model->errors;
-            }
+        $PacientePrestadorasmultiple = [new \app\models\PacientePrestadora()];
+       
+        if ($model->load(Yii::$app->request->post())) {
+     
+               if ($model->save()){
+                    
+                    $modelsPacientePrestadora = PacientePrestadora::createMultiple(PacientePrestadora::classname());
+                    Model::loadMultiple($modelsPacientePrestadora, Yii::$app->request->post());
+                      var_dump(Yii::$app->request->post());die();
+                    $transaction = Yii::$app->db->beginTransaction();                          
+                    try {
+                            $flag=true;
+                            foreach ($modelsPacientePrestadora as $indexHouse => $modelPacientePrestadora) {
+                                if ($flag === false) {
+                                    break;
+                                }
 
-            if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
+                                $modelPacientePrestadora->Paciente_id = $model->id;
+                                var_dump($modelPacientePrestadora);die();
+                                if(!$modelPacientePrestadora->id){
+                                    if (!($flag = $modelPacientePrestadora->save(false))) {
+                                        break;
+                                    }                                     
+                                }
+
+
+                            }
+                        
+
+                            if ($flag) {
+                                $transaction->commit();
+                                return $this->redirect(['view', 'id' => $model->id]);
+                            } else {
+                                $transaction->rollBack();
+                            }
+                        } catch (Exception $e) {
+                            $transaction->rollBack();
+                             }
+                }
+
+            return $this->render('view', [
+                'model' => $model,
+            ]);
 
         } else {
+            $PacientePrestadorasmultiple = PacientePrestadora::find()->where(['Paciente_id' => $id])->all();
             $searchModel = new PacientePrestadoraSearch();
             $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$id);
             $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
@@ -195,6 +229,8 @@ class PacienteController extends Controller
                 'dataTipoDocumento'=> $dataTipoDocumento,
                 'pacientePrestadora'=> $pacientePrestadora,
                 'prestadoraTemp'=>$prestadoraTemp,
+                'PacientePrestadorasmultiple'=>$PacientePrestadorasmultiple,
+
             //    'tanda' => $tanda,
             ]);
         }

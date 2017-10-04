@@ -171,50 +171,49 @@ class PacienteController extends Controller
         
         $model = $this->findModel($id);
         $PacientePrestadorasmultiple = [new \app\models\PacientePrestadora()];
-       
         if ($model->load(Yii::$app->request->post())) {
-     
-               if ($model->save()){
-                    
-                    $modelsPacientePrestadora = PacientePrestadora::createMultiple(PacientePrestadora::classname());
-                    Model::loadMultiple($modelsPacientePrestadora, Yii::$app->request->post());
-                      var_dump(Yii::$app->request->post());die();
-                    $transaction = Yii::$app->db->beginTransaction();                          
-                    try {
+            $arrayPacientePrestadora=Yii::$app->request->post()['PacientePrestadora'];                       
+            $transaction = Yii::$app->db->beginTransaction();                          
+            try {
+                    if ($model->save()){   
+                        if(!empty($arrayPacientePrestadora )){   
                             $flag=true;
-                            foreach ($modelsPacientePrestadora as $indexHouse => $modelPacientePrestadora) {
-                                if ($flag === false) {
-                                    break;
+                            foreach ($arrayPacientePrestadora as $indexHouse => $modelPacientePrestadora) {
+                                      $pacientePrest =  new \app\models\PacientePrestadora();
+                                        if ($flag === false) {
+                                            break;
+                                        }
+                                     if(empty($modelPacientePrestadora['id'])){
+                                            $pacientePrest->Paciente_id = $model->id;
+                                            $pacientePrest->Prestadoras_id=$modelPacientePrestadora['Prestadoras_id'];
+                                            $pacientePrest->nro_afiliado=$modelPacientePrestadora['nro_afiliado'];
+                                            $pacientePrest->save();    
+                                     }else{
+                                           $pp= PacientePrestadora::find()->where(['id' => $modelPacientePrestadora['id'] ])->one();
+                                            $pp->Prestadoras_id=$modelPacientePrestadora['Prestadoras_id'];
+                                            $pp->nro_afiliado=$modelPacientePrestadora['nro_afiliado'];
+                                            $pp->save();
+                                            }     
+                                     }
                                 }
-
-                                $modelPacientePrestadora->Paciente_id = $model->id;
-                                var_dump($modelPacientePrestadora);die();
-                                if(!$modelPacientePrestadora->id){
-                                    if (!($flag = $modelPacientePrestadora->save(false))) {
-                                        break;
-                                    }                                     
-                                }
-
-
                             }
                         
 
-                            if ($flag) {
-                                $transaction->commit();
-                                return $this->redirect(['view', 'id' => $model->id]);
-                            } else {
-                                $transaction->rollBack();
-                            }
-                        } catch (Exception $e) {
-                            $transaction->rollBack();
-                             }
-                }
 
-            return $this->render('view', [
-                'model' => $model,
-            ]);
-
-        } else {
+                    if ($flag) {
+                        $transaction->commit();
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    } else {
+                        $transaction->rollBack();
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                    }                                    
+                        
+                    return $this->render('view', [
+                        'model' => $model,
+                    ]);   
+        }else {
             $PacientePrestadorasmultiple = PacientePrestadora::find()->where(['Paciente_id' => $id])->all();
             $searchModel = new PacientePrestadoraSearch();
             $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$id);
@@ -233,8 +232,12 @@ class PacienteController extends Controller
 
             //    'tanda' => $tanda,
             ]);
-        }
     }
+}
+
+
+
+
 
         public function actionChequear($id)
     {

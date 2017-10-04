@@ -26,5 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'pacientePrestadora'=> $pacientePrestadora,
                 'prestadoraTemp'=>$prestadoraTemp,
                 'tanda' => $tanda,
+                'PacientePrestadorasmultiple'=>$PacientePrestadorasmultiple,
             ]) ?>
 </div>

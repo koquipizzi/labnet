@@ -234,7 +234,7 @@ $this->registerJs($js);
                         <?php foreach ($PacientePrestadorasmultiple as $index => $modelPrestadora): ?>
                             <div class="item panel panel-default"><!-- widgetBody -->
                                 <div class="panel-heading">
-                                    <span class="panel-title-address">Address: <?= ($index + 1) ?></span>
+                                    <span class="panel-title-address">Prestadora: <?= ($index + 1) ?></span>
                                     <button type="button" class="pull-right remove-item btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
                                     <div class="clearfix"></div>
                                 </div>

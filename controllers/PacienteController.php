@@ -122,11 +122,9 @@ class PacienteController extends Controller
                                     break;
                                 } 
                             }
-                        
-
                             if ($flag) {
                                 $transaction->commit();
-                                return $this->redirect(['view', 'id' => $model->id]);
+                                return $this->redirect(['index']);
                             } else {
                                 $transaction->rollBack();
                             }
@@ -135,9 +133,7 @@ class PacienteController extends Controller
                              }
                 }
 
-            return $this->render('view', [
-                'model' => $model,
-            ]);
+           return $this->redirect(['index']);
         } else {
                 $prestadoraTemp = new \app\models\PrestadoraTemp();
                 $prestadoraTemp->tanda = $tanda;
@@ -170,7 +166,6 @@ class PacienteController extends Controller
     {
         
         $model = $this->findModel($id);
-        $PacientePrestadorasmultiple = [new \app\models\PacientePrestadora()];
         if ($model->load(Yii::$app->request->post())) {
             $arrayPacientePrestadora=Yii::$app->request->post()['PacientePrestadora'];                       
             $transaction = Yii::$app->db->beginTransaction();                          
@@ -202,7 +197,7 @@ class PacienteController extends Controller
 
                     if ($flag) {
                         $transaction->commit();
-                        return $this->redirect(['view', 'id' => $model->id]);
+                       return $this->redirect(['index']);
                     } else {
                         $transaction->rollBack();
                     }
@@ -210,7 +205,7 @@ class PacienteController extends Controller
                     $transaction->rollBack();
                     }                                    
                         
-                    return $this->render('view', [
+                    return $this->render('index', [
                         'model' => $model,
                     ]);   
         }else {
@@ -228,7 +223,7 @@ class PacienteController extends Controller
                 'dataTipoDocumento'=> $dataTipoDocumento,
                 'pacientePrestadora'=> $pacientePrestadora,
                 'prestadoraTemp'=>$prestadoraTemp,
-                'PacientePrestadorasmultiple'=>$PacientePrestadorasmultiple,
+                'PacientePrestadorasmultiple'=>(empty($PacientePrestadorasmultiple)) ? [new PacientePrestadora] : $PacientePrestadorasmultiple,
 
             //    'tanda' => $tanda,
             ]);

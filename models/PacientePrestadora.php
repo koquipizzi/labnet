@@ -49,7 +49,7 @@ class PacientePrestadora extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'nro_afiliado' => Yii::t('app', 'Nro Afiliado'),
             'Paciente_id' => Yii::t('app', 'Paciente ID'),
-            'Prestadoras_id' => Yii::t('app', 'Prestadoras ID'),
+            'Prestadoras_id' => Yii::t('app', 'Prestadoras'),
         ];
     }
 

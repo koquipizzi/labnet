@@ -82,15 +82,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                             'urlCreator' => function ($action, $model, $key, $index) {
                                 if ($action === 'view') {
-                                    $url ='index.php?r=prestadoras/viewfacturable&id='.$model->id;
+                                    $url ='index.php?r=prestadoras/viewfacturable&id='.$model['id'];
                                     return $url;
                                                   }
                                    if ($action === 'edit') {
-                                        $url ='index.php?r=prestadoras/updatefacturable&id='.$model->id;
+                                        $url ='index.php?r=prestadoras/updatefacturable&id='.$model['id'];
                                          return $url;
                                           }
                                        if ($action === 'delete') {
-                                            $url ='index.php?r=prestadoras/deletefacturable&id='.$model->id;
+                                            $url ='index.php?r=prestadoras/deletefacturable&id='.$model['id'];
                                             return $url;
                                              }
                                           }

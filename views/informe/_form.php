@@ -332,7 +332,7 @@ Pjax::end();
                                     
                                     ?>
 
-                                    <?= $form->field($model, 'editorTags',['template' => "{label}
+                                    <?php /* $form->field($model, 'editorTags',['template' => "{label}
 														<div class='col-md-12'>{input}</div>
 														{hint}
 														{error}",
@@ -343,7 +343,7 @@ Pjax::end();
                                                 'source' => Url::toRoute(['tag/suggest'])
                                             ],
                                         ]
-                                    ]) ?>
+                                    ])*/ ?>
 
                                     <?=
                                     $form->field($model, 'Estudio_id', ['template' => "{label}

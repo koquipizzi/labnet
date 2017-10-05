@@ -403,7 +403,7 @@ Pjax::end();
                                                     ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);
                                                     ?>
 
-                                                    <?= $form->field($model, 'editorTags',['template' => "{label}
+                                                    <?php /*echo $form->field($model, 'editorTags',['template' => "{label}
 														<div class='col-md-12'>{input}</div>
 														{hint}
 														{error}",
@@ -414,7 +414,7 @@ Pjax::end();
                                                                 'source' => Url::toRoute(['tag/suggest'])
                                                             ],
                                                         ]
-                                                    ]) ?>
+                                                    ])*/ ?>
 
                                                     <?=
                                                     $form->field($model, 'Estudio_id', ['template' => "{label}

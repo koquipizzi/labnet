@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="pull-right">
                 <?= Html::a('<i class="fa fa-plus-circle"></i> Nueva Entidad Facturable', ['prestadoras/createfacturable'], ['class'=>'btn btn-primary']) ?>
-            </div>   
+            </div>
             <div class="clearfix"></div>
         </div>
 
@@ -112,8 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </style>
 
-<?php 
+<?php
     $this->registerJsFile('@web/assets/admin/js/cipat_modal_prestadora.js',
     ['depends' => [yii\web\AssetBundle::className()]]);
 ?>
-

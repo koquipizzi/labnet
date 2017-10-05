@@ -44,7 +44,7 @@ $this->registerJs($js);
 ?>
 
 <?= Html::csrfMetaTags() ?>
-  <?php /* \insolita\wgadminlte\LteBox::begin([  
+  <?php /* \insolita\wgadminlte\LteBox::begin([
              'type'=>\insolita\wgadminlte\LteConst::TYPE_INFO,
              'isSolid'=>true,
              'boxTools'=>'<button class="btn btn-success btn-xs create_button" ><i class="fa fa-plus-circle"></i> Add</button>',
@@ -64,9 +64,9 @@ $this->registerJs($js);
           ]);*/
     ?>
 
-<div class="paciente-form">  
+<div class="paciente-form">
    <?php
-        $form = ActiveForm::begin(['id'=>'create-paciente-form'  ,   
+        $form = ActiveForm::begin(['id'=>'create-paciente-form'  ,
             'options' => [
                 'class' => 'form-horizontal mt-10',
                 'id' => 'create-paciente-form',
@@ -76,7 +76,7 @@ $this->registerJs($js);
         ]); ?>
     <div id="row">
         <div class="col-lg-6">
-            <input type="hidden" id="PacienteId" value="<?= $model->id ?>">            
+            <input type="hidden" id="PacienteId" value="<?= $model->id ?>">
             <?= $form->field($model, 'nombre', ['template' => "{label}
                 <div class='col-md-8'>{input}</div>
                 {hint}
@@ -84,7 +84,7 @@ $this->registerJs($js);
                 'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
             ])->textInput(['maxlength' => true])->error([ 'style' => ' margin-left: 35%;']);?>
             <?php
-                $dataTipo = ArrayHelper::map(TipoDocumento::find()->asArray()->all(), 'id', 'descripcion');   
+                $dataTipo = ArrayHelper::map(TipoDocumento::find()->asArray()->all(), 'id', 'descripcion');
                 $paciente = $model->id;
                 echo $form->field($model, 'Tipo_documento_id', ['template' => "{label}
                 <div class='col-md-8'>{input}</div>
@@ -113,10 +113,10 @@ $this->registerJs($js);
             {hint}
             {error}",
                                 'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
-                ])->textInput(['maxlength' => true]) 
+                ])->textInput(['maxlength' => true])
             ?>
-            <?php 
-                $dataSexo=ArrayHelper::map(Sexo::find()->asArray()->all(), 'id', 'descripcion');   
+            <?php
+                $dataSexo=ArrayHelper::map(Sexo::find()->asArray()->all(), 'id', 'descripcion');
                 echo $form->field($model, 'sexo', ['template' => "{label}
                 <div class='col-md-8'>{input}</div>
                 {hint}
@@ -130,13 +130,13 @@ $this->registerJs($js);
                                     'settings' => [
                                         'width' => '100%',
                                     ],
-                            ]); 
+                            ]);
             ?>
             <div class="">
                 <?php
                 echo $form->field($model, 'fecha_nacimiento',['template' => "{label}
-                <div class='input-group col-md-8' style='padding-left:10px; padding-right:10px; margin-bottom:-4px;' >                
-                {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],                
+                <div class='input-group col-md-8' style='padding-left:10px; padding-right:10px; margin-bottom:-4px;' >
+                {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
                 ])->widget(DateControl::classname(), [
                     'type'=>DateControl::FORMAT_DATE,
                     'ajaxConversion'=>true,
@@ -156,9 +156,9 @@ $this->registerJs($js);
                 {error}",
                             'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
             ])->textInput(['maxlength' => true])->error([ 'style' => ' margin-left: 35%;']); ?>
-            
-            <?php 
-                $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre'); 
+
+            <?php
+                $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
                 echo $form->field($model, 'Localidad_id', ['template' => "{label}
                 <div class='col-md-8'>{input}</div>
                 {hint}
@@ -172,7 +172,7 @@ $this->registerJs($js);
                                     'settings' => [
                                         'width' => '100%',
                                     ],
-                            ])->error([ 'style' => ' margin-left: 35%;']);;                           
+                            ])->error([ 'style' => ' margin-left: 35%;']);;
             ?>
                <?= $form->field($model, 'telefono', ['template' => "{label}
                 <div class='col-md-8'>{input}</div>
@@ -187,7 +187,7 @@ $this->registerJs($js);
                 {error}",
                 'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
             ])->textInput(['maxlength' => true])->error([ 'style' => ' margin-left: 35%;']); ?>
-            
+
             <?= $form->field($model, 'notas', ['template' => "{label}
                     <div class='col-md-8'>{input}</div>
                     {hint}
@@ -195,11 +195,11 @@ $this->registerJs($js);
                         'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
                     ])->textArea(['maxlength' => true])->error([ 'style' => ' margin-right: 30%;'])
             ?>
-            
+
             <?php echo Html::activeHiddenInput($prestadoraTemp, 'tanda',['id'=>'hiddenPrestadoraTemp'])?>
-         
-           
-    </div>  
+
+
+    </div>
 
        <div class="col-sm-6">
         <div class="customer-form">
@@ -244,16 +244,16 @@ $this->registerJs($js);
                                         if (!$modelPrestadora->isNewRecord) {
                                             echo Html::activeHiddenInput($modelPrestadora, "[{$index}]id");
                                         }
-                                    ?> 
-                            
+                                    ?>
+
                                         <?php echo $form->field($modelPrestadora, "[{$index}]nro_afiliado", ['template' => "{label}
                                                 <div class='col-md-8'>{input}</div>
                                                 {hint}
                                                 {error}",
                                                 'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
-                                            ])->textInput(['maxlength' => true, 'class'=> $model->isNewRecord ? 'form-control crear':'form-control editar' ]) 
-                                        ?>      
-                                        <?php 
+                                            ])->textInput(['maxlength' => true, 'class'=> $model->isNewRecord ? 'form-control crear':'form-control editar' ])
+                                        ?>
+                                        <?php
                                                 $dataPrestadoras=ArrayHelper::map(app\models\Prestadoras::find()->where(['cobertura'=>1])->all(), 'id', 'descripcion');
                                                 echo $form->field($modelPrestadora, "[{$index}]Prestadoras_id", ['template' => "{label}
                                                 <div class='col-md-8'>{input}</div>
@@ -268,8 +268,8 @@ $this->registerJs($js);
                                                             'settings' => [
                                                                 'width' => '100%',
                                                             ],
-                                                ]);   
-                                        ?>  
+                                                ]);
+                                        ?>
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -277,26 +277,25 @@ $this->registerJs($js);
                 </div>
                 <?php DynamicFormWidget::end(); ?>
             </div>
-        </div>    
-    
+        </div>
+
     <br>
     <div class="" style="clear: both;">
-            
+
     </div>
-    
-       
-    </div>   
+
+
+    </div>
 </div>
    <div class="box-footer col-sm-12" >
     <div class="pull-right box-tools">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'id'=> 'enviar_paciente']) ?>
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-       
+            <?= Html::a('Cancelar', ['paciente/index'], ['class'=>'btn btn-danger']) ?>
     </div>
   </div>
 
 
         <?php ActiveForm::end(); ?>
-<?php 
-    $this->registerJsFile('@web/assets/admin/js/cipat_modal_paciente.js', ['depends' => [yii\web\AssetBundle::className()]]);    $this->registerJsFile('@web/assets/admin/js/cipat_modal_paciente.js', ['depends' => [yii\web\AssetBundle::className(),  'yii\web\JqueryAsset']]);   
+<?php
+    $this->registerJsFile('@web/assets/admin/js/cipat_modal_paciente.js', ['depends' => [yii\web\AssetBundle::className()]]);    $this->registerJsFile('@web/assets/admin/js/cipat_modal_paciente.js', ['depends' => [yii\web\AssetBundle::className(),  'yii\web\JqueryAsset']]);
 ?>

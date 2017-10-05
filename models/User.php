@@ -24,12 +24,13 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     /**
      * @inheritdoc
      */
+    public $files;
     public function rules()
     {
         return [
             [['username', 'email','status',  'password'], 'required'],
             [['status', 'created_at', 'updated_at'], 'integer'],
-        	[['email'], 'email'],
+        	   [['email'], 'email'],
             [['username', 'auth_key'], 'string', 'max' => 32],
             [['password_reset_token'], 'string', 'max' => 255],
             [['password'], 'string', 'max' => 30],
@@ -59,27 +60,27 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public static function tableName(){
         return 'user';
     }
-    
+
     public static function findIdentity($id){
 	return static::findOne($id);
     }
-    
+
     public static function findIdentityByAccessToken($token, $type = null){
 	throw new NotSupportedException();//I don't implement this method because I don't have any access token column in my database
     }
-    
+
     public function getId(){
 	return $this->id;
     }
- 
+
     public function getAuthKey(){
 	return $this->auth_key;//Here I return a value of my authKey column
     }
- 
+
     public function validateAuthKey($authKey){
 	// return $this->auth_key === $auth_key;
     }
-    
+
     public function validatePassword($password){
 	return $this->password === $password;
     }

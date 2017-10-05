@@ -72,7 +72,7 @@ use app\models\Prestadoras;
         <div class="pull-right box-tools">
             <div style="text-align: right;">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-             <button type="reset" class="btn btn-danger">Restablecer</button>
+             <?= Html::a('Cancelar', ['nomenclador/index'], ['class'=>'btn btn-danger']) ?>
             </div>
 
         </div>

@@ -5,7 +5,7 @@ use Empathy\Validators\DateTimeCompareValidator;
 use Yii;
 use app\models\Informe;
 use app\models\PacientePrestadora;
-use \Datetime;
+ use \Datetime;
 /**
  * This is the model class for table "Protocolo".
  *
@@ -167,6 +167,18 @@ class Protocolo extends \yii\db\ActiveRecord
    //     $pac = substr($paciente->nombreDniDescripcionNroAfiliado, 0, strpos($paciente->nombreDniDescripcionNroAfiliado, '('));
    //     return $pac;
     }
+    /*
+    public function getPacienteEdad()
+    {
+        $paciente= $this->hasOne(ViewPacientePrestadora::className(), ['id' => 'Paciente_prestadora_id'])->one();
+        $fecha1 = $paciente->fecha_nacimiento;
+        $fecha2 = date("Y-m-d");
+        $fecha = $fecha2 - $fecha1;
+        return $fecha;
+    }
+
+   */
+
     
     public function getPacienteEdad()
     {
@@ -180,6 +192,7 @@ class Protocolo extends \yii\db\ActiveRecord
         $d=(string)$diff->format('%y years, %m months');
         return $d;
     }
+    
     
     public function getCodigo()
     {

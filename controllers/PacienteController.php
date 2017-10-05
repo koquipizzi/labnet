@@ -167,34 +167,41 @@ class PacienteController extends Controller
         
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post())) {
-            $arrayPacientePrestadora=Yii::$app->request->post()['PacientePrestadora'];                       
+            if(!empty(Yii::$app->request->post()['PacientePrestadora'] )){
+                $arrayPacientePrestadora=Yii::$app->request->post()['PacientePrestadora']; 
+            }else{
+                 $arrayPacientePrestadora=null;
+            }
+           
+          
+            $modelsPrestadoras = $model->pacientePrestadoras;                      
+            $oldIDs = ArrayHelper::map($modelsPrestadoras, 'id', 'id');
+            $modelsPrestadoras = PacientePrestadora::createMultiple(PacientePrestadora::classname());
+            Model::loadMultiple($modelsPrestadoras, Yii::$app->request->post());
+            $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelsPrestadoras, 'id', 'id')));
+       
             $transaction = Yii::$app->db->beginTransaction();                          
             try {
-                    if ($model->save()){   
+                   if ($model->save()){   
+                        $flag=true;
+                        if (!empty($deletedIDs)) {
+                           PacientePrestadora::deleteAll(['id' => $deletedIDs]);
+                        }
                         if(!empty($arrayPacientePrestadora )){   
-                            $flag=true;
+
                             foreach ($arrayPacientePrestadora as $indexHouse => $modelPacientePrestadora) {
-                                      $pacientePrest =  new \app\models\PacientePrestadora();
-                                        if ($flag === false) {
-                                            break;
-                                        }
-                                     if(empty($modelPacientePrestadora['id'])){
-                                            $pacientePrest->Paciente_id = $model->id;
-                                            $pacientePrest->Prestadoras_id=$modelPacientePrestadora['Prestadoras_id'];
-                                            $pacientePrest->nro_afiliado=$modelPacientePrestadora['nro_afiliado'];
-                                            $pacientePrest->save();    
-                                     }else{
-                                           $pp= PacientePrestadora::find()->where(['id' => $modelPacientePrestadora['id'] ])->one();
-                                            $pp->Prestadoras_id=$modelPacientePrestadora['Prestadoras_id'];
-                                            $pp->nro_afiliado=$modelPacientePrestadora['nro_afiliado'];
-                                            $pp->save();
-                                            }     
-                                     }
+                                $pacientePrest =  new \app\models\PacientePrestadora();
+                                if ($flag === false) {
+                                    break;
+                                }
+                                    $pacientePrest->Paciente_id = $model->id;
+                                    $pacientePrest->Prestadoras_id=$modelPacientePrestadora['Prestadoras_id'];
+                                    $pacientePrest->nro_afiliado=$modelPacientePrestadora['nro_afiliado'];
+                                    $pacientePrest->save();    
+                                
                                 }
                             }
-                        
-
-
+                     }
                     if ($flag) {
                         $transaction->commit();
                        return $this->redirect(['index']);
@@ -229,6 +236,72 @@ class PacienteController extends Controller
             ]);
     }
 }
+
+/*
+ public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+        $modelsPrestadoras = $model->pacientePrestadoras;
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            $oldIDs = ArrayHelper::map($modelsPrestadoras, 'id', 'id');
+              $modelsPrestadoras = PacientePrestadora::createMultiple(PacientePrestadora::classname());
+            
+            Model::loadMultiple($modelsPrestadoras, Yii::$app->request->post());
+            $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelsPrestadoras, 'id', 'id')));
+
+            // validate all models
+            $valid = $model->validate();
+            $valid = Model::validateMultiple($modelsPrestadoras) && $valid;
+
+            if ($valid) {
+                $transaction = \Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $model->save(false)) {
+                        if (!empty($deletedIDs)) {
+                            PacientePrestadora::deleteAll(['id' => $deletedIDs]);
+                        }
+                        foreach ($modelsPrestadoras as $modelPrest) {
+                            $modelPrest->customer_id = $model->id;
+                            if (! ($flag = $modelPrest->save(false))) {
+                                $transaction->rollBack();
+                                break;
+                            }
+                        }
+                    }
+                    if ($flag) {
+                        $transaction->commit();
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                }
+            }
+        }
+          $PacientePrestadorasmultiple = PacientePrestadora::find()->where(['Paciente_id' => $id])->all();
+            $searchModel = new PacientePrestadoraSearch();
+            $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$id);
+            $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
+            $dataTipoDocumento = ArrayHelper::map(TipoDocumento::find()->asArray()->all(), 'id', 'descripcion');
+            $pacientePrestadora = new \app\models\PacientePrestadora();
+            $prestadoraTemp = new \app\models\PrestadoraTemp();
+            return $this->render('update', [
+                'model' => $model,
+                'dataPrestadoras' => $dataPrestadoras,
+                'dataLocalidad'=> $dataLocalidad,
+                'dataTipoDocumento'=> $dataTipoDocumento,
+                'pacientePrestadora'=> $pacientePrestadora,
+                'prestadoraTemp'=>$prestadoraTemp,
+                'PacientePrestadorasmultiple'=>(empty($PacientePrestadorasmultiple)) ? [new PacientePrestadora] : $PacientePrestadorasmultiple,
+
+            //    'tanda' => $tanda,
+            ]);
+    }
+
+*/
+
+
 
 
 

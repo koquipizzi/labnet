@@ -5,6 +5,7 @@ use Empathy\Validators\DateTimeCompareValidator;
 use Yii;
 use app\models\Informe;
 use app\models\PacientePrestadora;
+use \Datetime;
 /**
  * This is the model class for table "Protocolo".
  *
@@ -13,6 +14,7 @@ use app\models\PacientePrestadora;
  * @property string $fecha_entrega
  * @property string $anio
  * @property string $nombre
+* @property string $codigo
  * @property string $letra
  * @property integer $nro_secuencia
  * @property string $registro
@@ -171,8 +173,12 @@ class Protocolo extends \yii\db\ActiveRecord
         $paciente= $this->hasOne(ViewPacientePrestadora::className(), ['id' => 'Paciente_prestadora_id'])->one();
         $fecha1 = $paciente->fecha_nacimiento;
         $fecha2 = date("Y-m-d");
-        $fecha = $fecha2 - $fecha1;
-        return $fecha;
+        //$fecha = $fecha2 - $fecha1;
+        $date1 = new DateTime($fecha1);
+        $date2 = new DateTime("now");
+        $diff = $date1->diff($date2);
+        $d=(string)$diff->format('%y years, %m months');
+        return $d;
     }
     
     public function getCodigo()

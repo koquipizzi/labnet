@@ -16,7 +16,27 @@ use yii\data\ActiveDataProvider;
 use vova07\select2\Widget;
 use kartik\datecontrol\DateControl;
 use xj\bootbox\BootboxAsset;
+
+use wbraganca\dynamicform\DynamicFormWidget;
+$js = '
+jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
+    jQuery(".dynamicform_wrapper .panel-title-address").each(function(index) {
+        jQuery(this).html("Address: " + (index + 1))
+    });
+});
+
+jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
+    jQuery(".dynamicform_wrapper .panel-title-address").each(function(index) {
+        jQuery(this).html("Address: " + (index + 1))
+    });
+});
+';
+
+
+
+
 BootboxAsset::register($this);
+$this->registerJs($js);
 /* @var $this yii\web\View */
 /* @var $model app\models\Paciente */
 /* @var $form yii\widgets\ActiveForm */
@@ -177,116 +197,106 @@ BootboxAsset::register($this);
             ?>
             
             <?php echo Html::activeHiddenInput($prestadoraTemp, 'tanda',['id'=>'hiddenPrestadoraTemp'])?>
-            <div style="text-align: right;">
-                <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'id'=> 'enviar_paciente']) ?>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-            </div>    
-        </div>
-    </div>
-        
-        
          
-        <?php ActiveForm::end(); ?>        
-        <div class="col-lg-6 panel rounded shadow">
-            <div class="panel-body no-padding">
-                <div class="panel-heading addPrestadora" > 
-                    <div class="pull-left">
-                        <h3 class="panel-title">Prestadoras</h3>
+           
+    </div>  
+
+       <div class="col-sm-6">
+        <div class="customer-form">
+
+
+                <div class="padding-v-md">
+                    <div class="line line-dashed"></div>
+                </div>
+                <?php DynamicFormWidget::begin([
+                    'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                    'widgetBody' => '.container-items', // required: css class selector
+                    'widgetItem' => '.item', // required: css class
+                    'limit' => 100, // the maximum times, an element can be cloned (default 999)
+                    'min' => 0, // 0 or 1 (default 1)
+                    'insertButton' => '.add-item', // css class
+                    'deleteButton' => '.remove-item', // css class
+                    'model' => $PacientePrestadorasmultiple[0],
+                    'formId' => 'create-paciente-form',
+                    'formFields' => [
+                    'Paciente_id',
+                    'Prestadoras_id',
+                    'nro_afiliado',
+                    ],
+                ]); ?>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Prestadoras
+                        <button type="button" class="pull-right add-item btn btn-success btn-xs"><i class="fa fa-plus"></i> Agregar Prestadora</button>
+                        <div class="clearfix"></div>
                     </div>
-                    <div class="pull-right">
-                        <i class="glyphicon glyphicon-plus" onclick="addPrestadora();"></i>
-                    </div>                    
-                    <div class="clearfix"></div>
+                    <div class="panel-body container-items"><!-- widgetContainer -->
+                        <?php foreach ($PacientePrestadorasmultiple as $index => $modelPrestadora): ?>
+                            <div class="item panel panel-default"><!-- widgetBody -->
+                                <div class="panel-heading">
+                                    <span class="panel-title-address">Prestadora: <?= ($index + 1) ?></span>
+                                    <button type="button" class="pull-right remove-item btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="panel-body">
+                                    <?php
+                                        // necessary for update action.
+                                        if (!$modelPrestadora->isNewRecord) {
+                                            echo Html::activeHiddenInput($modelPrestadora, "[{$index}]id");
+                                        }
+                                    ?> 
+                            
+                                        <?php echo $form->field($modelPrestadora, "[{$index}]nro_afiliado", ['template' => "{label}
+                                                <div class='col-md-8'>{input}</div>
+                                                {hint}
+                                                {error}",
+                                                'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
+                                            ])->textInput(['maxlength' => true, 'class'=> $model->isNewRecord ? 'form-control crear':'form-control editar' ]) 
+                                        ?>      
+                                        <?php 
+                                                $dataPrestadoras=ArrayHelper::map(app\models\Prestadoras::find()->where(['cobertura'=>1])->all(), 'id', 'descripcion');
+                                                echo $form->field($modelPrestadora, "[{$index}]Prestadoras_id", ['template' => "{label}
+                                                <div class='col-md-8'>{input}</div>
+                                                {hint}
+                                                {error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
+                                                ])->widget(Widget::className(), [
+                                                            'options' => [
+                                                                'multiple' => false,
+                                                                'placeholder' => 'Choose item'
+                                                            ],
+                                                                'items' => $dataPrestadoras,
+                                                            'settings' => [
+                                                                'width' => '100%',
+                                                            ],
+                                                ]);   
+                                        ?>  
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
-                <div id="agregarPrestadora" style="display:none;" class="form-body">
-                <?php yii\widgets\Pjax::begin(['id' => 'new_prestadora']) ?>   
-                <?php $form2 = ActiveForm::begin([  'id'=>'create-prestadoraTemp-form', 
-                                                    'action' => '#',
-                    'options' => [
-                        'class' => 'form-horizontal mt-10',
-                        'id' => 'create-prestadoraTemp-form',
-                        'enableAjaxValidation' => true,                   
-                     ]
-            ]); ?>
-                <!--div onsubmit="return false;" id="create-prestadoraTemp-form" class="form-horizontal"-->
-                <?php 
-                $dataPrestadoras=ArrayHelper::map(app\models\Prestadoras::find()->where(['cobertura'=>1])->all(), 'id', 'descripcion');
-                echo $form2->field($prestadoraTemp, 'Prestadora_id', ['template' => "{label}
-                <div class='col-md-8'>{input}</div>
-                {hint}
-                {error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
-                ])->widget(Widget::className(), [
-                                    'options' => [
-                                        'multiple' => false,
-                                        'placeholder' => 'Choose item'
-                                    ],
-                                        'items' => $dataPrestadoras,
-                                    'settings' => [
-                                        'width' => '100%',
-                                    ],
-                            ]);   
-                ?>  
-                <?php echo $form2->field($prestadoraTemp, 'nro_afiliado', ['template' => "{label}
-                    <div class='col-md-8'>{input}</div>
-                    {hint}
-                    {error}",
-                    'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
-                 ])->textInput(['maxlength' => true, 'class'=> $model->isNewRecord ? 'form-control crear':'form-control editar' ]) ?>           
-
-                <div class="form-footer" style="text-align:right;">
-                <?php                      
-                    if ($model->isNewRecord)
-                        echo Html::Button('Agregar Prestadora',array('onclick'=>'send_prestadora();', 'class'=>'btn btn-success btn-stroke'));  
-                    else                         
-                        echo Html::Button('Agregar Prestadora',array('onclick'=>'send_prestadora_edit();', 'class'=>'btn btn-success btn-stroke'));  
-                    
-                    echo Html::activeHiddenInput($prestadoraTemp, 'tanda',['id'=>'hiddenPrestadoraTemp']);
-                    echo Html::Button('Cancelar',array('onclick'=>'$("#agregarPrestadora").toggle();', 'class'=>'btn btn-danger btn-stroke')).'<span> </span>';?>  
-                </div>
-                <?php ActiveForm::end(); ?>
-                </div>
-             </div>
-            <?php yii\widgets\Pjax::end() ?>
-
-            <div id="prestadorasTemp">
-                <?php Pjax::begin(['id' => 'prestadoras']);
-                    if ($model->isNewRecord ){
-                        $searchModel = new PrestadoratempSearch();
-                        $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$tanda);
-                        $prestadoraTemp = new Prestadoratemp();                        
-                    }
-                    else { 
-//                        $searchModel = new PacientePrestadoraSearch();
-//                        $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$model->id);
-//                        $prestadoraTemp = new app\models\PacientePrestadora(); 
-                $query = PacientePrestadora::find()->where(['Paciente_id' => $paciente]);
-                $dataPrestadoras = new ActiveDataProvider([
-                    'query' => $query,                       
-                ]);
-                $prestadoraTemp = new PacientePrestadora();                          
-                    }
-                    
-                ?>
-                <?= $this->render('//paciente/_grid', [
-                        'dataProvider' => $dataPrestadoras,
-                        'model'=> $prestadoraTemp
-                ]) ?>  
-                <?php Pjax::end(); ?>                        
+                <?php DynamicFormWidget::end(); ?>
             </div>
-            </div>
-        </div>
-
-        <br>
+        </div>    
+    
+    <br>
     <div class="" style="clear: both;">
-        <!--div style="text-align: right;">
-            <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'id'=> 'enviar_paciente']) ?>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-        </div-->         
+            
     </div>
-    </div>
-
+    
+       
+    </div>   
 </div>
+   <div class="box-footer col-sm-12" >
+    <div class="pull-right box-tools">
+            <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'id'=> 'enviar_paciente']) ?>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+       
+    </div>
+  </div>
 
+
+        <?php ActiveForm::end(); ?>
 <?php 
     $this->registerJsFile('@web/assets/admin/js/cipat_modal_paciente.js', ['depends' => [yii\web\AssetBundle::className()]]);    $this->registerJsFile('@web/assets/admin/js/cipat_modal_paciente.js', ['depends' => [yii\web\AssetBundle::className(),  'yii\web\JqueryAsset']]);   
 ?>

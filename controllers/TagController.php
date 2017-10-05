@@ -9,7 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
-use sjaakp\taggable\TagSuggestAction;
+use app\components\TagSuggestAction;
 
 
 /**

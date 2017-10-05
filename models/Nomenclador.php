@@ -66,6 +66,15 @@ class Nomenclador extends \yii\db\ActiveRecord
         return $this->hasOne(Prestadoras::className(), ['id' => 'Prestadoras_id']);
     }
 
+    public function getPrestadoraTexto()
+    {       
+        $prestadora = $this->hasOne(Prestadoras::className(), ['id' => 'Prestadoras_id'])->one();
+        if ($prestadora)
+            return $prestadora->descripcion;
+        return '';
+    }
+    
+
     /**
      * @return \yii\db\ActiveQuery
      */

@@ -5,7 +5,9 @@ namespace app\models;
 use Yii;
 use yii\helpers\ArrayHelper;
 //use dosamigos\taggable\Taggable;
-use sjaakp\taggable\TaggableBehavior;
+//use sjaakp\taggable\TaggableBehavior;
+use app\components\TagBehavior;
+use app\components\TaggableBehavior;
 
 
 /**
@@ -55,24 +57,17 @@ class Informe extends \yii\db\ActiveRecord
         return 'Informe';
     }
 
-   /* public function behaviors()
+    public function behaviors()
     {
-     /*   return [
-           
-            'taggable' => [
-                'class' => TaggableBehavior::className(),
-                'tagClass' => Tag::className(),
-                'junctionTable' => 'informe_tag_assn',
-            ]
-        ];*/
-       /* return [
-            'taggable' =>[
+        return [
+        TagBehavior::className(),
+        'taggable' =>[
                 'class' => TaggableBehavior::className(),
                 'tagClass' => Tag::className(),
                 'junctionTable' => 'informe_tag_assn',
             ],
         ];
-    }*/
+    }
 
     /**
      * @inheritdoc
@@ -103,6 +98,7 @@ class Informe extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'descripcion' => Yii::t('app', 'Descripción'),
+            'editorTags' => Yii::t('app', 'Etiquetas'),
             'observaciones' => Yii::t('app', 'Observaciones'),
             'material' => Yii::t('app', 'Material'),
             'tecnica' => Yii::t('app', 'Técnica'),
@@ -163,7 +159,6 @@ class Informe extends \yii\db\ActiveRecord
      */   
     public function beforeSave($insert)
     {
-     //   $component->attachBehaviors();
         if (parent::beforeSave($insert)) {
             if($this->Estudio_id==Estudio::getEstudioPap() && (strlen($this->titulo)<=1)){
                  $this->titulo = 'ESTUDIO DE CITOLOGIA EXFOLIATIVA (PAP)';
@@ -182,7 +177,7 @@ class Informe extends \yii\db\ActiveRecord
     */
    public function isPap($attribute,$params){
         if($this->Estudio_id==Estudio::getEstudioPap() && (strlen($this->titulo)<=1) ){
-            $this->addError($attribute, 'El titulo es requerido.');
+            $this->addError($attribute, 'El título es requerido.');
         }
     }
     

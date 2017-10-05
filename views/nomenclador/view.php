@@ -8,6 +8,7 @@ use yii\widgets\DetailView;
 $this->title = $model->descripcion;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Nomencladors'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$url ='index.php?r=nomenclador/index';
 ?>
 
 
@@ -15,8 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-header with-border">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="pull-right">
-                    <?= Html::a('<i class="fa fa-pencil"></i> Editar Nomenclador', ['nomenclador/update', 'id'=>$model->id], ['class'=>'btn btn-primary']) ?>
-                </div>                                                          <!-- como le paso el id a update ? -->
+                    <?= Html::a('<i class="fa fa-arrow-left"></i> Volver', $url, ['class'=>'btn btn-primary']) ?> 
+                    <?= Html::a('<i class="fa fa-pencil"></i> Editar ', ['nomenclador/update', 'id'=>$model->id], ['class'=>'btn btn-primary']) ?>
+                </div>                                                         
             </div>              
 
                 <?= DetailView::widget([
@@ -26,7 +28,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'descripcion',
                         'valor',
                         'coseguro',
-                        'Prestadoras_id',
+                        [
+                            'label'=>'Prestadora',
+                            'value'=>$model->getPrestadoraTexto(),
+                        ],
                     ],
                 ]) ?>
     </div>

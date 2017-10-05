@@ -19,7 +19,7 @@ use app\models\PrestadoratempSearch;
 use app\models\PacientePrestadoraSearch;
 use yii\data\ActiveDataProvider;
 use yii\web;
-
+use yii\base\Model;
 
 /**
  * PacienteController implements the CRUD actions for Paciente model.
@@ -96,44 +96,63 @@ class PacienteController extends Controller
     public function actionCreate()
     {
         $model = new Paciente();
+        $PacientePrestadorasmultiple = [new \app\models\PacientePrestadora()];
         if (isset($_POST['PrestadoraTemp']['tanda']))
             $tanda = $_POST['PrestadoraTemp']['tanda'];
         else  $tanda = time();
-        //var_dump($tanda);die();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+ 
+        
+        if ($model->load(Yii::$app->request->post())) {
+     
+               if ($model->save()){
+                    
+                    $modelsPacientePrestadora = PacientePrestadora::createMultiple(PacientePrestadora::classname());
+                    Model::loadMultiple($modelsPacientePrestadora, Yii::$app->request->post());
+                    $transaction = Yii::$app->db->beginTransaction();                          
+                    try {
+                            $flag=true;
+                            foreach ($modelsPacientePrestadora as $indexHouse => $modelPacientePrestadora) {
+                                if ($flag === false) {
+                                    break;
+                                }
 
-            $searchModel = new PrestadoratempSearch();
-            $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams, $tanda);
-            var_dump($dataPrestadoras);
-            die();
-            foreach($dataPrestadoras->getModels() as $record) {
-                $pac_prest = new PacientePrestadora();
-                $pac_prest->Paciente_id = $model->id;
-                $pac_prest->Prestadoras_id = $record['Prestadora_id'];
-                $pac_prest->nro_afiliado = $record['nro_afiliado'];
-                $pac_prest->save();
-            }
-            return $this->render('view', [
-                'model' => $model,
-            ]);
+                                $modelPacientePrestadora->Paciente_id = $model->id;
+
+                                if (!($flag = $modelPacientePrestadora->save(false))) {
+                                    break;
+                                } 
+                            }
+                            if ($flag) {
+                                $transaction->commit();
+                                return $this->redirect(['index']);
+                            } else {
+                                $transaction->rollBack();
+                            }
+                        } catch (Exception $e) {
+                            $transaction->rollBack();
+                             }
+                }
+
+           return $this->redirect(['index']);
         } else {
-            $prestadoraTemp = new \app\models\PrestadoraTemp();
-            $prestadoraTemp->tanda = $tanda;
-            $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
-            $dataTipoDocumento = ArrayHelper::map(TipoDocumento::find()->asArray()->all(), 'id', 'descripcion');
-            $pacientePrestadora = new \app\models\PacientePrestadora();
+                $prestadoraTemp = new \app\models\PrestadoraTemp();
+                $prestadoraTemp->tanda = $tanda;
+                $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
+                $dataTipoDocumento = ArrayHelper::map(TipoDocumento::find()->asArray()->all(), 'id', 'descripcion');
+                $pacientePrestadora = new \app\models\PacientePrestadora();
 
-            $searchModel = new PrestadoratempSearch();
-            $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$tanda);
-            return $this->render('create', [
-                'model' => $model,
-                'dataLocalidad'=> $dataLocalidad,
-                'dataTipoDocumento'=> $dataTipoDocumento,
-                'dataPrestadoras'=> $dataPrestadoras,
-                'pacientePrestadora'=> $pacientePrestadora,
-                'prestadoraTemp'=>$prestadoraTemp,
-                'tanda' => $tanda,
-            ]);
+                $searchModel = new PrestadoratempSearch();
+                $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$tanda);
+                return $this->render('create', [
+                    'model' => $model,
+                    'dataLocalidad'=> $dataLocalidad,
+                    'dataTipoDocumento'=> $dataTipoDocumento,
+                    'dataPrestadoras'=> $dataPrestadoras,
+                    'pacientePrestadora'=> $pacientePrestadora,
+                    'prestadoraTemp'=>$prestadoraTemp,
+                    'tanda' => $tanda,
+                    'PacientePrestadorasmultiple'=>$PacientePrestadorasmultiple,
+                ]);
         }
     }
 
@@ -145,20 +164,52 @@ class PacienteController extends Controller
      */
     public function actionUpdate($id)
     {
+        
         $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post())){
-            if ($model->validate()) {
-                // all inputs are valid
-            } else {
-                // validation failed: $errors is an array containing error messages
-                $errors = $model->errors;
-            }
+        if ($model->load(Yii::$app->request->post())) {
+            $arrayPacientePrestadora=Yii::$app->request->post()['PacientePrestadora'];                       
+            $transaction = Yii::$app->db->beginTransaction();                          
+            try {
+                    if ($model->save()){   
+                        if(!empty($arrayPacientePrestadora )){   
+                            $flag=true;
+                            foreach ($arrayPacientePrestadora as $indexHouse => $modelPacientePrestadora) {
+                                      $pacientePrest =  new \app\models\PacientePrestadora();
+                                        if ($flag === false) {
+                                            break;
+                                        }
+                                     if(empty($modelPacientePrestadora['id'])){
+                                            $pacientePrest->Paciente_id = $model->id;
+                                            $pacientePrest->Prestadoras_id=$modelPacientePrestadora['Prestadoras_id'];
+                                            $pacientePrest->nro_afiliado=$modelPacientePrestadora['nro_afiliado'];
+                                            $pacientePrest->save();    
+                                     }else{
+                                           $pp= PacientePrestadora::find()->where(['id' => $modelPacientePrestadora['id'] ])->one();
+                                            $pp->Prestadoras_id=$modelPacientePrestadora['Prestadoras_id'];
+                                            $pp->nro_afiliado=$modelPacientePrestadora['nro_afiliado'];
+                                            $pp->save();
+                                            }     
+                                     }
+                                }
+                            }
+                        
 
-            if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
 
-        } else {
+                    if ($flag) {
+                        $transaction->commit();
+                       return $this->redirect(['index']);
+                    } else {
+                        $transaction->rollBack();
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                    }                                    
+                        
+                    return $this->render('index', [
+                        'model' => $model,
+                    ]);   
+        }else {
+            $PacientePrestadorasmultiple = PacientePrestadora::find()->where(['Paciente_id' => $id])->all();
             $searchModel = new PacientePrestadoraSearch();
             $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$id);
             $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
@@ -172,10 +223,16 @@ class PacienteController extends Controller
                 'dataTipoDocumento'=> $dataTipoDocumento,
                 'pacientePrestadora'=> $pacientePrestadora,
                 'prestadoraTemp'=>$prestadoraTemp,
+                'PacientePrestadorasmultiple'=>(empty($PacientePrestadorasmultiple)) ? [new PacientePrestadora] : $PacientePrestadorasmultiple,
+
             //    'tanda' => $tanda,
             ]);
-        }
     }
+}
+
+
+
+
 
         public function actionChequear($id)
     {

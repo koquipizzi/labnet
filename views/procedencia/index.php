@@ -17,7 +17,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_procedencia.js', ['depen
              <h3 class="panel-title">Listado de <?= Html::encode($this->title) ?></h3>
          </div>
          <div class="pull-right">
-             <?= Html::a('<i class="fa fa-plus-circle"></i> Nueva Procedencia', ['Procedencia/create'], ['class'=>'btn btn-primary']) ?>
+             <?= Html::a('<i class="fa fa-plus-circle"></i> Nueva Procedencia', ['procedencia/create'], ['class'=>'btn btn-primary']) ?>
          </div>
          <div class="clearfix"></div>
      </div>

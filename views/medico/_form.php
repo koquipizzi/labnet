@@ -101,7 +101,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_add_forms.js', ['depends' => [
     <div class="box-footer" >
         <div class="pull-right box-tools">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? ' btn btn-info' : ' btn btn-primary']) ?>
-            <?= Html::resetButton(Yii::t('app', 'Cancel'), ['class' => ' btn btn-default']) ?>
+            <?= Html::a('Cancelar', ['medico/index'], ['class'=>'btn btn-danger']) ?>
         </div>
     </div>
         <?php ActiveForm::end(); ?>

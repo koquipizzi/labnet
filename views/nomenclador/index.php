@@ -1,9 +1,11 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
+use app\models\Prestadoras;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\NomencladorSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -41,6 +43,13 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_nomenclador.js');
             'descripcion',
             'valor',
             'coseguro',
+            [
+                'attribute' => 'Prestadora',
+                'value' => function ($model) {
+                    return $model->getPrestadoraTexto();
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'Prestadoras_id', ArrayHelper::map(Prestadoras::find()->asArray()->all(), 'id', 'descripcion'),['class'=>'form-control','prompt' => 'Select Category']),
+            ],
             ['class' => 'yii\grid\ActionColumn',
             'template' => '{view} {edit} {delete}',
             'contentOptions' =>['class' => 'table_class','style'=>'width:15%;'],

@@ -67,8 +67,7 @@ class ProcedenciaController extends Controller
         $model = new Procedencia();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-           // return $this->redirect(['view', 'id' => $model->id]);
-           return;
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -87,7 +86,7 @@ class ProcedenciaController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return;// $this->redirect(['view', 'id' => $model->id]);
+            $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,

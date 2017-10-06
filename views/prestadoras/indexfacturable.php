@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'label' => 'Localidad',
                         'attribute'=>'Localidad_id',
                         'value' => function ($data) {
-                            return  $data['nombre'];
+                            //return  $data['nombre'];
                         },
                         'filter' => Html::activeDropDownList($searchModel, 'Localidad_id', ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre'),['class'=>'form-control','prompt' => 'Localidad...']),
                     ],

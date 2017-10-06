@@ -24,13 +24,13 @@ use app\models\PacientePrestadora;
  * @property integer $Paciente_prestadora_id
  * @property integer $FacturarA_id
  * @property integer $numero_hospitalario
- * 
+ *
  * @property Informe[] $informes
  * @property Medico $medico
  * @property PacientePrestadora $pacientePrestadora
  * @property Prestadoras $facturarA
  * @property Procedencia $procedencia
- 
+
  */
 class Protocolo extends \yii\db\ActiveRecord
 {
@@ -52,7 +52,7 @@ class Protocolo extends \yii\db\ActiveRecord
                     [['Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id','fecha_entrega'],'required'],
                     [['anio'], 'string', 'max' => 4],
                     [['letra'], 'string', 'max' => 1],
-        //            [['nombre'], 'string'], 
+        //            [['nombre'], 'string'],
                     [['registro'], 'string', 'max' => 45],
                     [['observaciones'], 'string', 'max' => 255],
                     [['Medico_id'], 'exist', 'skipOnError' => true, 'targetClass' => Medico::className(), 'targetAttribute' => ['Medico_id' => 'id']],
@@ -61,7 +61,7 @@ class Protocolo extends \yii\db\ActiveRecord
                     [['Procedencia_id'], 'exist', 'skipOnError' => true, 'targetClass' => Procedencia::className(), 'targetAttribute' => ['Procedencia_id' => 'id']],
                     ['fecha_entrada', DateTimeCompareValidator::className(), 'compareValue' => date('Y-m-d'), 'operator' => '<='],
                     ['fecha_entrega', DateTimeCompareValidator::className(), 'compareValue' => date('Y-m-d'), 'operator' => '>='],
-             
+
             ];
     }
 
@@ -86,25 +86,25 @@ class Protocolo extends \yii\db\ActiveRecord
             'Pacienteprestadora' => Yii::t('app', 'Datos Paciente'),
             'numero_hospitalario' => Yii::t('app', 'Número Hospitalario'),
             'Codigo' => Yii::t('app', 'Código'),
-	
+
         ];
     }
 
-     
-   
-    
+
+
+
     /**
      * @return \yii\db\ActiveQuery
      */
     public static function getAllInformes($id)
-    {        
+    {
         return Informe::findAll(["Protocolo_id"=>$id]);
-    }    
+    }
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getInformes()
-    {        
+    {
         return $this->hasMany(Informe::className(), ['Protocolo_id' => 'id']);
     }
 
@@ -135,24 +135,24 @@ class Protocolo extends \yii\db\ActiveRecord
         return $procedencia;
     }
 
-    
+
     public function getPacienteprestadora()
     {
         $paciente= $this->hasOne(ViewPacientePrestadora::className(), ['id' => 'Paciente_prestadora_id'])->one();
         return $paciente->nombreDniDescripcionNroAfiliado;
     }
-    
+
     public function getPacienteDoc()
     {
         $paciente= $this->hasOne(ViewPacientePrestadora::className(), ['id' => 'Paciente_prestadora_id'])->one();
         $pac = $paciente->nro_documento;
         return $pac;
     }
-    
+
     public function getPacienteText()
     {
         $paciente= $this->hasOne(ViewPacientePrestadora::className(), ['id' => 'Paciente_prestadora_id'])->one();
-    //    var_dump($paciente); 
+    //    var_dump($paciente);
         $pac = substr($paciente->nombreDniDescripcionNroAfiliado, 0, strpos($paciente->nombreDniDescripcionNroAfiliado, '('));
         return $pac;
     }
@@ -160,7 +160,7 @@ class Protocolo extends \yii\db\ActiveRecord
     public function getPacienteTexto()
     {
         $pacientePrestadora= $this->hasOne(PacientePrestadora::className(), ['id' => 'Paciente_prestadora_id'])->one();
-    //       var_dump($pacientePrestadora->Paciente_id); 
+    //       var_dump($pacientePrestadora->Paciente_id);
         $paciente= Paciente::find()->where(['id' => $pacientePrestadora->Paciente_id])->one();
    //     var_dump($paciente); die();
         return $paciente->nombre;
@@ -179,7 +179,7 @@ class Protocolo extends \yii\db\ActiveRecord
 
    */
 
-    
+
     public function getPacienteEdad()
     {
         $paciente= $this->hasOne(ViewPacientePrestadora::className(), ['id' => 'Paciente_prestadora_id'])->one();
@@ -189,23 +189,23 @@ class Protocolo extends \yii\db\ActiveRecord
         $date1 = new DateTime($fecha1);
         $date2 = new DateTime("now");
         $diff = $date1->diff($date2);
-        $d=(string)$diff->format('%y years, %m months');
+        $d=(string)$diff->format('%y');
         return $d;
     }
-    
-    
+
+
     public function getCodigo()
     {
-    	$secuncia = sprintf("%06d", $this->nro_secuencia); 
-        $codigo= substr($this->anio,-2).$this->letra."-".$secuncia;    
+    	$secuncia = sprintf("%06d", $this->nro_secuencia);
+        $codigo= substr($this->anio,-2).$this->letra."-".$secuncia;
         return $codigo;
     }
     public function getNroSecuencia()
     {
     	$secuncia = sprintf("%06d", $this->nro_secuencia);
     	return $secuncia;
-    
-    }    
+
+    }
 
     public function getFechaEntrega()
     {
@@ -221,7 +221,7 @@ class Protocolo extends \yii\db\ActiveRecord
         $arr = explode('-',$fecha);
         return $arr[2].'-'.$arr[1].'-'.$arr[0];
     }
-    
+
     public function getFechaEntregaOrdenada()
     {
         $fecha= $this->fecha_entrega;
@@ -231,7 +231,7 @@ class Protocolo extends \yii\db\ActiveRecord
 
 
     public function getCobertura()
-    {  
+    {
     	$pacientePrestadora_id= Protocolo::find('Paciente_prestadora_id')->where("id=$this->id")->one()['Paciente_prestadora_id'];
         $cobertura_id = PacientePrestadora::find()->where("id=$pacientePrestadora_id")->one()['Prestadoras_id'];
         $cobertura = Prestadoras::find()->where("id=$cobertura_id")->one()['descripcion'];
@@ -240,5 +240,5 @@ class Protocolo extends \yii\db\ActiveRecord
 
 
 
-    
+
 }

@@ -18,7 +18,7 @@ use yii\db\Query;
 
 class SiteController extends Controller
 {
-      
+
     public function behaviors()
     {
         return [
@@ -66,7 +66,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $c = Paciente::find()->count();
-        $i = Informe::find()->count();
+        $infc = Informe::find()->count();
         $p = Informe::find()->where('Estudio_id = 1')->count();
         $m = Informe::find()->where('Estudio_id = 3')->count();
         $b = Informe::find()->where('Estudio_id = 2')->count();
@@ -105,11 +105,11 @@ class SiteController extends Controller
             $meses[] = $mes."-".$anio;
             $cantidades[] = $sql;
         }
-         return $this->render('index', ['c'=> $c, 'i'=> $i,  'p'=> $p,
+         return $this->render('index', ['c'=> $c, 'i'=> $infc,  'p'=> $p,
                             'm'=> $m,'b'=> $b, 'ci'=> $ci, 'in'=> $in,
                             'meses'=> $meses, 'cantidades'=> $cantidades,
-                            'propios'=> $propios, 
-                            'tags'=> $tagsLabels, 
+                            'propios'=> $propios,
+                            'tags'=> $tagsLabels,
                             'frequencies'=> $frequencies,
                             ]);
     }
@@ -129,13 +129,13 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         }
-        
+
   //      $this->layout = 'lay-account';
           $this->layout = 'main-login';
    //    $this->layout = '../site/login';
         return $this->render('login', [
             'model' => $model,
-        ]);        
+        ]);
     }
 
     /**

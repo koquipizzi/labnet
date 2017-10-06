@@ -67,7 +67,7 @@ $this->title = 'LabNET - Administración de Informes Patológicos';
         </div>
         <!-- /.col -->
      </div>
-        <!-- /.row -->   
+        <!-- /.row -->
 
     <div class="box box-default">
                  <div class="box-header with-border">
@@ -77,7 +77,7 @@ $this->title = 'LabNET - Administración de Informes Patológicos';
                 <!-- /.box-header -->
                 <div class="box-body">
                 <div class="row">
-                    <div class="col-lg-8">       
+                    <div class="col-lg-8">
                         <?= ChartJs::widget([
                                 'type' => 'line',
                                 'data' => [
@@ -86,7 +86,7 @@ $this->title = 'LabNET - Administración de Informes Patológicos';
                                         [
                                             'label' => 'Protocolos mensuales',
                                             'data' => $cantidades,
-                                    
+
                                         ]
                                     ],
                                 ],
@@ -97,7 +97,7 @@ $this->title = 'LabNET - Administración de Informes Patológicos';
                                 'clientOptions' => [
                                     'title' => [
                                         'display' => false,
-                                        'text' => 'Tipos de Estudios Analizados'            
+                                        'text' => 'Tipos de Estudios Analizados'
                                     ],
                                     'scales' => [
                                         'yAxes' => [
@@ -146,7 +146,7 @@ $this->title = 'LabNET - Administración de Informes Patológicos';
                             'clientOptions' => [
                                 'title' => [
                                     'display' => false,
-                                    'text' => 'Tipos de Estudios Analizados'            
+                                    'text' => 'Tipos de Estudios Analizados'
                                 ],
                                 'scales' => [
                             //          'yAxes' => [
@@ -209,7 +209,7 @@ $this->title = 'LabNET - Administración de Informes Patológicos';
                         'clientOptions' => [
                             'title' => [
                                 'display' => false,
-                                'text' => 'Tipos de Estudios Analizados'            
+                                'text' => 'Tipos de Estudios Analizados'
                             ],
                             'scales' => [
                         //          'yAxes' => [
@@ -250,9 +250,9 @@ $this->title = 'LabNET - Administración de Informes Patológicos';
                     'options' => array('class' => 'table table-striped '),
                  //   'filterModel' => $search,
                     'columns' => [
-                        //'id', 
-                        
-                        
+                        //'id',
+
+
                         [
                             'label' => 'Nro Protocolo',
                             'attribute' => 'codigo',
@@ -287,7 +287,7 @@ $this->title = 'LabNET - Administración de Informes Patológicos';
                         $val = "";
                         $idProtocolo = $model['id'];
                         $informe = app\models\Informe::findOne($model['informe_id']);
-                        $estado = $informe->workflowLastState; 
+                        $estado = $informe->workflowLastState;
                         $clase = " label-" . $estados[$estado];
                         $informes = app\models\Informe::find()->where(['=', 'Informe.Protocolo_id', $idProtocolo])->all();
                         $url = 'index.php?r=informe/update&id=' . $model['informe_id'];
@@ -304,7 +304,7 @@ $this->title = 'LabNET - Administración de Informes Patológicos';
                         ],
                     ],
                 ]);
-                Pjax::end() ?>  
+                Pjax::end() ?>
                 </div>
         </div>
          </div>
@@ -312,8 +312,7 @@ $this->title = 'LabNET - Administración de Informes Patológicos';
     </div>
 
     <div>
-     
-               
+
+
 
     </div>
-

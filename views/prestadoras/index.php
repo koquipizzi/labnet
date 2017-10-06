@@ -24,14 +24,14 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="pull-right">
                 <?= Html::a('<i class="fa fa-plus-circle"></i> Nueva Cobertura/OS', ['prestadoras/createprepaga'], ['class'=>'btn btn-primary']) ?>
-            </div>   
+            </div>
             <div class="clearfix"></div>
         </div>
 
-    
-  
 
-    <?php Pjax::begin(['id' => 'prestadoras']); ?>     
+
+
+    <?php Pjax::begin(['id' => 'prestadoras']); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'options'=>array('class'=>'table table-striped table-lilac'),
@@ -39,17 +39,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
            // ['class' => 'yii\grid\SerialColumn'],
             'descripcion',
-            [                
-                'attribute'=>'telefono', 
+            [
+                'attribute'=>'telefono',
                 'contentOptions' => ['style' => 'width:10%;'],
-            ],            
+            ],
             'email:email',
             'domicilio',
             [
                         'label' => 'Localidad',
                         'attribute'=>'Localidad_id',
                         'value' => function ($data) {
-                            return  $data['nombre'];
+                          //  return  $data['nombre'];
                         },
                         'filter' => Html::activeDropDownList($searchModel, 'Localidad_id', ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre'),['class'=>'form-control','prompt' => 'Localidad...']),
                     ],
@@ -99,11 +99,11 @@ $this->params['breadcrumbs'][] = $this->title;
          ],
     ]); ?>
 
-        
+
         <?php
-        
-       
-    Pjax::end(); ?>    
+
+
+    Pjax::end(); ?>
 
 
 <style>
@@ -114,11 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </style>
 
-<?php 
+<?php
     $this->registerJsFile('@web/assets/admin/js/cipat_modal_prestadora.js',
     ['depends' => [yii\web\AssetBundle::className()]]);
 ?>
-
-
-
-

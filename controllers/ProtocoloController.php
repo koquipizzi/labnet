@@ -105,7 +105,7 @@ class ProtocoloController extends Controller
         //  var_dump($qr); die();
           Yii::$app->response->format = Response::FORMAT_RAW;
           Yii::$app->response->headers->add('Content-Type', $qr->getContentType());
-        $text =   Url::to(['/informe//update', 'id' => $id]);
+        $text =   Url::to(['/informe/update', 'id' => $id]);
         return $qr
               ->setText($text)
               ->setLabel($id)

@@ -31,7 +31,7 @@ class m170613_192109_protocolo_codigo extends Migration
         $this->execute('alter table Protocolo drop codigo');
         $this->execute('DROP TRIGGER IF EXISTS bi_protocolo_codigo');
         $this->execute('DROP TRIGGER IF EXISTS bu_protocolo_codigo');
-        return false;
+       
     }
 
     /*

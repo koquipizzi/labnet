@@ -37,17 +37,10 @@ class m171005_193031_create_tabla_comments extends Migration
 
     public function safeDown()
     {
-        echo "m171005_193031_create_tabla_comments cannot be reverted.\n";
-        $this->dropColumn('{{%comment}}', 'url');
-
-        if (Yii::$app->db->schema->getTableSchema('{{%Comment}}') === null) {
-            $this->renameTable('{{%comment}}', '{{%Comment}}');
-        }
-        $this->dropColumn('{{%Comment}}', 'relatedTo');
-
-        $this->dropTable('{{%Comment}}');
+        
+        $this->dropTable('{{%comment}}');
   
-        return false;
+       
     }
 
     /*

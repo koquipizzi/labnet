@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Localidad;
+use app\models\Protocolo;
 use app\models\TipoDocumento;
 use yii\helpers\ArrayHelper;
 use yii\data\ArrayDataProvider;
@@ -162,7 +163,210 @@ class PacienteController extends Controller
      * @param integer $id
      * @return mixed
      */
+
     public function actionUpdate($id)
+    {
+        
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post())) {
+            if(!empty(Yii::$app->request->post()['PacientePrestadora'] )){
+                $arrayPacientePrestadora=Yii::$app->request->post()['PacientePrestadora']; 
+            }else{
+                 $arrayPacientePrestadora=null;
+            }                     
+            $transaction = Yii::$app->db->beginTransaction();                          
+            try {
+                $flag=true;
+                    if ($model->save()){   
+                       $modelsPrestadoras = $model->pacientePrestadoras;                      
+                        $oldIDs = ArrayHelper::map($modelsPrestadoras, 'id', 'id');
+                        //borrar las prestadoras que se elimnarion 
+                        foreach ($oldIDs as $value) {   
+                            $esta=false;
+                            if(!empty($arrayPacientePrestadora)){
+                                foreach ($arrayPacientePrestadora as $indexHouse => $modelPacientePrestadora) {         
+                                        if($modelPacientePrestadora['id']==$value){
+                                            $esta=true;  
+                                        }
+                                }
+                                //si el arrayPacientePrestadora no tiene una prestadora de las que posee el paciente, entonces 
+                                //hay que borrarla del paciente esta prestadora
+                                if($esta===false){
+                                    $pDelete= PacientePrestadora::find()->where(['id' => $value])->one();
+                                    $protocoloAsociado= Protocolo::find()->where(['Paciente_prestadora_id' => $pDelete->id])->one();
+                                    //borra si y solo si un protocolo no tiene la prestadora asociada
+                                    if(empty($protocoloAsociado)){
+                                            $pDelete->delete();
+                                    }
+                                }
+                            }else{
+                                //el arreglo arrayPacientePrestadora  esta vacio
+                                   $pDelete= PacientePrestadora::find()->where(['id' => $value])->one();
+                                   $protocoloAsociado= Protocolo::find()->where(['Paciente_prestadora_id' => $pDelete->id])->one();
+                                   //borra si y solo si un protocolo no tiene la prestadora asociada
+                                   if(empty($protocoloAsociado)){
+                                        $pDelete->delete();
+                                   }            
+                            }
+                           
+                        }
+                        //insertar o actualizar una tupla     
+                        if(!empty($arrayPacientePrestadora )){   
+                            foreach ($arrayPacientePrestadora as $indexHouse => $modelPacientePrestadora) {
+                                        if ($flag === false) {
+                                            break;
+                                        }
+                                        //si es una nueva prestadora entonces se debe la crea la tupla
+                                     if(empty($modelPacientePrestadora['id'])){
+                                            $pacientePrest =  new \app\models\PacientePrestadora();
+                                            $pacientePrest->Paciente_id = $model->id;
+                                            $pacientePrest->Prestadoras_id=$modelPacientePrestadora['Prestadoras_id'];
+                                            $pacientePrest->nro_afiliado=$modelPacientePrestadora['nro_afiliado'];
+                                            $pacientePrest->save();    
+                                     }else{
+                                            //la relacion con la prestadora ya existia y se realiza una modificaion 
+                                            $pp= PacientePrestadora::find()->where(['id' => $modelPacientePrestadora['id'] ])->one();
+                                            $pp->Prestadoras_id=$modelPacientePrestadora['Prestadoras_id'];
+                                             $pp->nro_afiliado=$modelPacientePrestadora['nro_afiliado'];
+                                             $pp->save();
+                                            }     
+                                     }
+                                }
+                            }
+                        
+                    if ($flag) {
+                        $transaction->commit();
+                       return $this->redirect(['index']);
+                    } else {
+                        $transaction->rollBack();
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                    }                                    
+                        
+                    return $this->render('index', [
+                        'model' => $model,
+                    ]);   
+        }else {
+            $PacientePrestadorasmultiple = PacientePrestadora::find()->where(['Paciente_id' => $id])->all();
+            $searchModel = new PacientePrestadoraSearch();
+            $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$id);
+            $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
+            $dataTipoDocumento = ArrayHelper::map(TipoDocumento::find()->asArray()->all(), 'id', 'descripcion');
+            $pacientePrestadora = new \app\models\PacientePrestadora();
+            $prestadoraTemp = new \app\models\PrestadoraTemp();
+            return $this->render('update', [
+                'model' => $model,
+                'dataPrestadoras' => $dataPrestadoras,
+                'dataLocalidad'=> $dataLocalidad,
+                'dataTipoDocumento'=> $dataTipoDocumento,
+                'pacientePrestadora'=> $pacientePrestadora,
+                'prestadoraTemp'=>$prestadoraTemp,
+                'PacientePrestadorasmultiple'=>(empty($PacientePrestadorasmultiple)) ? [new PacientePrestadora] : $PacientePrestadorasmultiple,
+
+            //    'tanda' => $tanda,
+            ]);
+    }
+}
+
+/*
+    public function actionUpdate($id)
+    {
+        
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post())) {
+            if(!empty(Yii::$app->request->post()['PacientePrestadora'] )){
+                $arrayPacientePrestadora=Yii::$app->request->post()['PacientePrestadora']; 
+            }else{
+                 $arrayPacientePrestadora=null;
+            }                     
+            $transaction = Yii::$app->db->beginTransaction();                          
+            try {
+                $flag=true;
+                    if ($model->save()){   
+                        $modelsPrestadoras = $model->pacientePrestadoras; 
+                        //borrar las prestadoras eliminadas
+                        foreach ($modelsPrestadoras as $modelo => $value) {   
+                            $esta=false;
+                            if(!empty($arrayPacientePrestadora)){
+                                foreach ($arrayPacientePrestadora as $indexHouse => $modelPacientePrestadora) {
+                                        if($modelPacientePrestadora['id']===$value['id']){
+                                            $esta=true;
+                                        }
+                                }
+                                if($esta===false){
+                                    $pDelete= PacientePrestadora::find()->where(['id' => $value['id']])->one();
+                                    $pDelete->delete();
+                                     $pDelete->save();
+                                     unset($arrayPacientePrestadora[$indexHouse]);
+                                }
+                            }
+                           
+                        }
+                        //insertar o actualizar una tupla     
+                        if(!empty($arrayPacientePrestadora )){   
+                            foreach ($arrayPacientePrestadora as $indexHouse => $modelPacientePrestadora) {
+                                      $pacientePrest =  new \app\models\PacientePrestadora();
+                                        if ($flag === false) {
+                                            break;
+                                        }
+                                     if(empty($modelPacientePrestadora['id'])){
+                                            $pacientePrest->Paciente_id = $model->id;
+                                            $pacientePrest->Prestadoras_id=$modelPacientePrestadora['Prestadoras_id'];
+                                            $pacientePrest->nro_afiliado=$modelPacientePrestadora['nro_afiliado'];
+                                            $pacientePrest->save();    
+                                     }else{
+                                           $pp= PacientePrestadora::find()->where(['id' => $modelPacientePrestadora['id'] ])->one();
+                                       
+                                            $pp->Prestadoras_id=$modelPacientePrestadora['Prestadoras_id'];
+                                            $pp->nro_afiliado=$modelPacientePrestadora['nro_afiliado'];
+                                            $pp->save();
+                                            }     
+                                     }
+                                }{
+                                 //    PacientePrestadora::deleteAll(['Paciente_id' => $model->id]);
+
+                                }
+                            }
+                        
+
+
+                    if ($flag) {
+                        $transaction->commit();
+                       return $this->redirect(['index']);
+                    } else {
+                        $transaction->rollBack();
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                    }                                    
+                        
+                    return $this->render('index', [
+                        'model' => $model,
+                    ]);   
+        }else {
+            $PacientePrestadorasmultiple = PacientePrestadora::find()->where(['Paciente_id' => $id])->all();
+            $searchModel = new PacientePrestadoraSearch();
+            $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$id);
+            $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
+            $dataTipoDocumento = ArrayHelper::map(TipoDocumento::find()->asArray()->all(), 'id', 'descripcion');
+            $pacientePrestadora = new \app\models\PacientePrestadora();
+            $prestadoraTemp = new \app\models\PrestadoraTemp();
+            return $this->render('update', [
+                'model' => $model,
+                'dataPrestadoras' => $dataPrestadoras,
+                'dataLocalidad'=> $dataLocalidad,
+                'dataTipoDocumento'=> $dataTipoDocumento,
+                'pacientePrestadora'=> $pacientePrestadora,
+                'prestadoraTemp'=>$prestadoraTemp,
+                'PacientePrestadorasmultiple'=>(empty($PacientePrestadorasmultiple)) ? [new PacientePrestadora] : $PacientePrestadorasmultiple,
+
+            //    'tanda' => $tanda,
+            ]);
+    }
+}
+/*
+ public function actionUpdate($id)
     {
         
         $model = $this->findModel($id);
@@ -173,22 +377,26 @@ class PacienteController extends Controller
                  $arrayPacientePrestadora=null;
             }
            
-          
+            
             $modelsPrestadoras = $model->pacientePrestadoras;                      
             $oldIDs = ArrayHelper::map($modelsPrestadoras, 'id', 'id');
+
+
+            $modelsPrestadoras= [new PacientePrestadora];
             $modelsPrestadoras = PacientePrestadora::createMultiple(PacientePrestadora::classname());
             Model::loadMultiple($modelsPrestadoras, Yii::$app->request->post());
+            var_dump($modelsPrestadoras);die();
             $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelsPrestadoras, 'id', 'id')));
-       
+           // var_dump(array_filter(ArrayHelper::map($modelsPrestadoras, 'id', 'id')));die();
             $transaction = Yii::$app->db->beginTransaction();                          
             try {
-                   if ($model->save()){   
+                   if ($model->save()){
+                     //   Protocolo::find()->where(['Paciente_prestadora_id' => $id])->all();   
                         $flag=true;
                         if (!empty($deletedIDs)) {
                            PacientePrestadora::deleteAll(['id' => $deletedIDs]);
                         }
                         if(!empty($arrayPacientePrestadora )){   
-
                             foreach ($arrayPacientePrestadora as $indexHouse => $modelPacientePrestadora) {
                                 $pacientePrest =  new \app\models\PacientePrestadora();
                                 if ($flag === false) {
@@ -231,55 +439,67 @@ class PacienteController extends Controller
                 'pacientePrestadora'=> $pacientePrestadora,
                 'prestadoraTemp'=>$prestadoraTemp,
                 'PacientePrestadorasmultiple'=>(empty($PacientePrestadorasmultiple)) ? [new PacientePrestadora] : $PacientePrestadorasmultiple,
-
             //    'tanda' => $tanda,
             ]);
     }
 }
 
+
 /*
  public function actionUpdate($id)
     {
+        
         $model = $this->findModel($id);
-        $modelsPrestadoras = $model->pacientePrestadoras;
-
         if ($model->load(Yii::$app->request->post())) {
-
+            if(!empty(Yii::$app->request->post()['PacientePrestadora'] )){
+                $arrayPacientePrestadora=Yii::$app->request->post()['PacientePrestadora']; 
+            }else{
+                 $arrayPacientePrestadora=null;
+            }
+           
+          
+            $modelsPrestadoras = $model->pacientePrestadoras;                      
             $oldIDs = ArrayHelper::map($modelsPrestadoras, 'id', 'id');
-              $modelsPrestadoras = PacientePrestadora::createMultiple(PacientePrestadora::classname());
-            
+            $modelsPrestadoras = PacientePrestadora::createMultiple(PacientePrestadora::classname());
             Model::loadMultiple($modelsPrestadoras, Yii::$app->request->post());
             $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelsPrestadoras, 'id', 'id')));
-
-            // validate all models
-            $valid = $model->validate();
-            $valid = Model::validateMultiple($modelsPrestadoras) && $valid;
-
-            if ($valid) {
-                $transaction = \Yii::$app->db->beginTransaction();
-                try {
-                    if ($flag = $model->save(false)) {
+       
+            $transaction = Yii::$app->db->beginTransaction();                          
+            try {
+                   if ($model->save()){   
+                        $flag=true;
                         if (!empty($deletedIDs)) {
-                            PacientePrestadora::deleteAll(['id' => $deletedIDs]);
+                           PacientePrestadora::deleteAll(['id' => $deletedIDs]);
                         }
-                        foreach ($modelsPrestadoras as $modelPrest) {
-                            $modelPrest->customer_id = $model->id;
-                            if (! ($flag = $modelPrest->save(false))) {
-                                $transaction->rollBack();
-                                break;
+                        if(!empty($arrayPacientePrestadora )){   
+                            foreach ($arrayPacientePrestadora as $indexHouse => $modelPacientePrestadora) {
+                                $pacientePrest =  new \app\models\PacientePrestadora();
+                                if ($flag === false) {
+                                    break;
+                                }
+                                    $pacientePrest->Paciente_id = $model->id;
+                                    $pacientePrest->Prestadoras_id=$modelPacientePrestadora['Prestadoras_id'];
+                                    $pacientePrest->nro_afiliado=$modelPacientePrestadora['nro_afiliado'];
+                                    $pacientePrest->save();    
+                                
+                                }
                             }
-                        }
-                    }
+                     }
                     if ($flag) {
                         $transaction->commit();
-                        return $this->redirect(['view', 'id' => $model->id]);
+                       return $this->redirect(['index']);
+                    } else {
+                        $transaction->rollBack();
                     }
                 } catch (Exception $e) {
                     $transaction->rollBack();
-                }
-            }
-        }
-          $PacientePrestadorasmultiple = PacientePrestadora::find()->where(['Paciente_id' => $id])->all();
+                    }                                    
+                        
+                    return $this->render('index', [
+                        'model' => $model,
+                    ]);   
+        }else {
+            $PacientePrestadorasmultiple = PacientePrestadora::find()->where(['Paciente_id' => $id])->all();
             $searchModel = new PacientePrestadoraSearch();
             $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$id);
             $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
@@ -294,18 +514,11 @@ class PacienteController extends Controller
                 'pacientePrestadora'=> $pacientePrestadora,
                 'prestadoraTemp'=>$prestadoraTemp,
                 'PacientePrestadorasmultiple'=>(empty($PacientePrestadorasmultiple)) ? [new PacientePrestadora] : $PacientePrestadorasmultiple,
-
             //    'tanda' => $tanda,
             ]);
     }
-
+}
 */
-
-
-
-
-
-
 
         public function actionChequear($id)
     {

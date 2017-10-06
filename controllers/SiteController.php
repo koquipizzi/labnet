@@ -80,14 +80,15 @@ class SiteController extends Controller
 
         $tagsLabels = [];
         $frequencies = [];
-        for ($i = 0; $i < 5; $i++)
-        {
-            $tagsLabels[] = $tags[$i]['name'];
-            $frequencies[] = $tags[$i]['frequency'];
+        if(!empty($tags)){
+            for ($i = 0; $i < 5; $i++)
+            {
+                $tagsLabels[] = $tags[$i]['name'];
+                $frequencies[] = $tags[$i]['frequency'];
+            }
+    //     $model = Tag::findBySql($sql)->all();
+            //$tags = Tag::find()->all();
         }
-   //     $model = Tag::findBySql($sql)->all();
-        //$tags = Tag::find()->all();
-
         $searchProtocolos = new ProtocoloSearch();
         $propios = $searchProtocolos->search_asignados_index(2, NULL);
 

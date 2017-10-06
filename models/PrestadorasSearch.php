@@ -46,14 +46,14 @@ class PrestadorasSearch extends Prestadoras
 
         if($tipoDeEntidad==="C"){
           // $query =  Prestadoras::find()->where(['cobertura'=>1])->all();
-          $query = (new Query())->from('Prestadoras')->where(['cobertura' => 1]); 
+          $query = (new Query())->from('Prestadoras')->where(['cobertura' => 1]);
 //         $query = (new \yii\db\Query())->select('*')->from('Prestadoras')->where(['cobertura'=>1]);
         }elseif ($tipoDeEntidad==="F"){
      //       $query =  Prestadoras::find()->where(['cobertura'=>0])->all();
             $query = (new Query())->from('Prestadoras')->where(['cobertura' => 0]);
 //          $query = (new \yii\db\Query())->select('*')->from('Prestadoras')->where(['cobertura'=>0]);
         }
-        $query->join('LEFT JOIN', 'Localidad', 'Localidad.id = Prestadoras.Localidad_id');
+      //  $query->join('LEFT JOIN', 'Localidad', 'Localidad.id = Prestadoras.Localidad_id');
 
 
         // add conditions that should always apply here

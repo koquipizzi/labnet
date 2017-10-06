@@ -25,6 +25,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      * @inheritdoc
      */
     public $files;
+    public $avatar;
     public function rules()
     {
         return [

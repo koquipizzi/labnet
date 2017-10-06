@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <div class="verLABnet">
-      <?php 
+      <?php
       DetailView::widget([
       		'model' => $model,
       		'attributes' => [
@@ -30,4 +30,3 @@ $this->params['breadcrumbs'][] = $this->title;
 ]);
 ?>
  </div>
-

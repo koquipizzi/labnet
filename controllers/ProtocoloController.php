@@ -394,7 +394,7 @@ class ProtocoloController extends Controller
                             $workflow->Estado_id=1;//estado 1 es pendiente 
                             $workflow->fecha_inicio = $fecha;           
                             $workflow->save();
-                            if (!empty($modelsNomenclador) && is_array($modelsNomenclador) && array_key_exists($indexHouse,$modelsNomenclador['informe_nom'])
+                            if (!empty($modelsNomenclador) && is_array($modelsNomenclador) &&  array_key_exists('informe_nom',$modelsNomenclador) && array_key_exists($indexHouse,$modelsNomenclador['informe_nom'])
                              ) {
                                 foreach ($modelsNomenclador['informe_nom'][$indexHouse] as $index => $modelNom) {
                                     $informeNomenclador= new InformeNomenclador();

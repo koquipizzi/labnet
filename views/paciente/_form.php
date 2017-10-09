@@ -30,9 +30,9 @@ jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
         jQuery(this).html("Prestadora: " + (index + 1))
     });
 });
+
+
 ';
-
-
 
 
 BootboxAsset::register($this);
@@ -208,7 +208,9 @@ $this->registerJs($js);
                 <div class="padding-v-md">
                     <div class="line line-dashed"></div>
                 </div>
-                <?php DynamicFormWidget::begin([
+                <?php
+                
+                 DynamicFormWidget::begin([
                     'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                     'widgetBody' => '.container-items', // required: css class selector
                     'widgetItem' => '.item', // required: css class
@@ -259,16 +261,7 @@ $this->registerJs($js);
                                                 <div class='col-md-8'>{input}</div>
                                                 {hint}
                                                 {error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
-                                                ])->widget(Widget::className(), [
-                                                            'options' => [
-                                                                'multiple' => false,
-                                                                'placeholder' => 'Choose item'
-                                                            ],
-                                                                'items' => $dataPrestadoras,
-                                                            'settings' => [
-                                                                'width' => '100%',
-                                                            ],
-                                                ]);
+                                                ])->dropDownList( $dataPrestadoras, ['prompt' => ''])->error([ 'style' => 'float: left;']) 
                                         ?>
                                 </div>
                             </div>

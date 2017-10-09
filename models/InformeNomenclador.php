@@ -31,7 +31,7 @@ class InformeNomenclador extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_informe', 'id_nomenclador'], 'required'],
+            [['id_informe', 'id_nomenclador','cantidad'], 'required'],
             [['id_informe', 'id_nomenclador', 'cantidad'], 'integer'],
             [['cantidad'], 'mayorACero'],
             [['id_informe'], 'exist', 'skipOnError' => true, 'targetClass' => Informe::className(), 'targetAttribute' => ['id_informe' => 'id']],

@@ -394,7 +394,7 @@ class ProtocoloController extends Controller
                             $workflow->fecha_inicio = $fecha;           
                             $workflow->save();
                            
-                            if (!empty($modelsNomenclador) && is_array($modelsNomenclador[$indexHouse])) {
+                            if (!empty($modelsNomenclador) && is_array($modelsNomenclador)  && array_key_exists($indexHouse,$modelsNomenclador) ) {
                                 foreach ($modelsNomenclador[$indexHouse] as $index => $modelNom) {
                                     $informeNomenclador= new InformeNomenclador();
                                     $informeNomenclador->id_informe=$modelInforme->id;

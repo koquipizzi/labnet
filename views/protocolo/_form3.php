@@ -291,7 +291,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         <div class="clearfix"></div>
                     </div>
                     <div class="box-body no-padding" style="margin-top:5px;">
-                        <?  
+                          <?php  
                              $dataEstudio=ArrayHelper::map(Estudio::find()->asArray()->all(), 'id', 'descripcion');
                             // necessary for update action.
                             if (!$modelInforme->isNewRecord) {

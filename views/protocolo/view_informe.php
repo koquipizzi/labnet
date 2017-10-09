@@ -19,7 +19,7 @@ $nro_afiliado = PacientePrestadora::find()->where(['id' => $model->Paciente_pres
                             <span class="pull-left text-capitalize">Paciente</span>
                         </td>
                         <td>
-                            <span class="pull-left text-strong"><?= $model->pacienteText ?></span>
+                            <span class="pull-left text-strong"><?= $model->pacienteTexto ?></span>
                         </td>
                     </tr>
                     <tr>

@@ -26,7 +26,7 @@ use yii\helpers\Html;
                     Paciente:
                 </div>
                 <div class="descriptionProtocoloPaciente"  >
-                         <?php echo $modelp->pacienteText;  ?>
+                         <?php echo $modelp->pacienteTexto;  ?>
                 </div>
             </div>          
             <div   class="ContainerDataEdad">

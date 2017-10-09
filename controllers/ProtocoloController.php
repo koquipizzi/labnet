@@ -362,13 +362,13 @@ class ProtocoloController extends Controller
             $modelsInformes = Informe::createMultiple(Informe::classname());
             Model::loadMultiple($modelsInformes, Yii::$app->request->post());
             $valid = $mdlProtocolo->validate();
-            if (!empty($_POST['InformeNomenclador'][0][0])) {
+            if (!empty($_POST['InformeNomenclador'])  && is_array($modelsNomenclador) ) {
                 foreach ($_POST['InformeNomenclador'] as $indexInforme => $nomencladores) {
                     foreach ($nomencladores as $index => $nom) {
                         $data['InformeNomenclador'] = $nom;
                         $modelInformeNomenclador = new InformeNomenclador;
                         $modelInformeNomenclador->load($data);
-                        $modelsNomenclador[$indexInforme][$index] = $modelInformeNomenclador;
+                        $modelsNomenclador['informe_nom'][$indexInforme][$index] = $modelInformeNomenclador;
                     }
                 }
             }
@@ -378,6 +378,7 @@ class ProtocoloController extends Controller
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
                     if ($flag = $mdlProtocolo->save(false)) {
+                        // model informe 
                         foreach ($modelsInformes as $indexHouse => $modelInforme) {
                             if ($flag === false) {
                                 break;
@@ -393,9 +394,9 @@ class ProtocoloController extends Controller
                             $workflow->Estado_id=1;//estado 1 es pendiente 
                             $workflow->fecha_inicio = $fecha;           
                             $workflow->save();
-                           
-                            if (!empty($modelsNomenclador) && is_array($modelsNomenclador)  && array_key_exists($indexHouse,$modelsNomenclador) ) {
-                                foreach ($modelsNomenclador[$indexHouse] as $index => $modelNom) {
+                            if (!empty($modelsNomenclador) && is_array($modelsNomenclador) && array_key_exists($indexHouse,$modelsNomenclador['informe_nom'])
+                             ) {
+                                foreach ($modelsNomenclador['informe_nom'][$indexHouse] as $index => $modelNom) {
                                     $informeNomenclador= new InformeNomenclador();
                                     $informeNomenclador->id_informe=$modelInforme->id;
                                     $informeNomenclador->id_nomenclador=$modelNom->id_nomenclador;

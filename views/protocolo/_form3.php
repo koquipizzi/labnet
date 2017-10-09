@@ -259,8 +259,8 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
         'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
         'widgetBody' => '.container-items', // required: css class selector
         'widgetItem' => '.item', // required: css class
-        'limit' => 4, // the maximum times, an element can be cloned (default 999)
-        'min' => 0, // 0 or 1 (default 1)
+        'limit' => 100, // the maximum times, an element can be cloned (default 999)
+        'min' => 1, // 0 or 1 (default 1)
         'insertButton' => '.add-item', // css class
         'deleteButton' => '.remove-item', // css class
         'model' => $modelsInformes[0],
@@ -291,7 +291,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         <div class="clearfix"></div>
                     </div>
                     <div class="box-body no-padding" style="margin-top:5px;">
-                        <?php
+                        <?  
                              $dataEstudio=ArrayHelper::map(Estudio::find()->asArray()->all(), 'id', 'descripcion');
                             // necessary for update action.
                             if (!$modelInforme->isNewRecord) {

@@ -104,10 +104,29 @@ class LaboratorioController extends Controller
 {
       
    $model = \app\models\Laboratorio::find('id')->one();
-        if(!isset($model)){
-            $model= new \app\models\Laboratorio();
-            $model->save();
-        }
+ //  CAda vez que  agregue una nuva imagen 
+ //1 verificar que la carpeta logo exista sino crear
+
+ //2 si ya existe un archivo borrarlo
+ //
+   //consultar x la carpeta 
+ 
+    $carpeta = Yii::getAlias('@app').'/web/uploads/logo';
+    if (!file_exists($carpeta)) {
+        mkdir($carpeta, 0777, true);
+    }
+/*
+   if(!empty($model->web_path)){
+      unlike( Yii::getAlias('@app').'/web'.$model->web_path);
+      $model->web_path='';
+      $model->save();
+   }
+*/
+    
+    if(!isset($model)){
+        $model= new \app\models\Laboratorio();
+        $model->save();
+    }
         // Load images
         $img = UploadedFile::getInstances($model,'files');
         $image=$img[0];
@@ -132,7 +151,12 @@ class LaboratorioController extends Controller
     public function actionFirmadigital($id=null)
 {
       
-   $model = \app\models\Laboratorio::find('id')->one();
+        $carpeta = Yii::getAlias('@app').'/web/uploads/firma';
+        if (!file_exists($carpeta)) {
+            mkdir($carpeta, 0777, true);
+        }
+
+        $model = \app\models\Laboratorio::find('id')->one();
         if(!isset($model)){
             $model= new \app\models\Laboratorio();
             $model->save();
@@ -152,7 +176,6 @@ class LaboratorioController extends Controller
         $filename = "Firma_Digital_".$name.".{$ext}";
         $model->path_firma = $model->getImageFilePathFirma() . $filename;
         $model->web_path_firma = $model->getUrlImageFolderFirma()."/". $filename;
-//         var_dump( $filename); var_dump(  $model->path_firma); die();
         if ($image->saveAs($model->path_firma, true)){
                 $model->save();
         }

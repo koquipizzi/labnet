@@ -13,6 +13,7 @@ use yii\imagine\Image;
 use Imagine\Image\Box;
 use Imagine;
 use yii\helpers\BaseFileHelper;
+use yii\db\QueryBuilder;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -73,6 +74,22 @@ class UserController extends Controller
         $model->status=1;
         if ($model->load(Yii::$app->request->post()) &&  $model->save()) {
 
+            $rolExist = (new \yii\db\Query())
+                ->select(['name'])
+                ->from('auth_item')
+                ->where(['name' => 'rolDefault', 'type'=>'1'])
+                ->limit(1)
+                ->all();
+
+            if($rolExist){
+
+                Yii::$app->db->createCommand()->insert('auth_assignment', [
+                    'item_name' => 'rolDefault',
+                    'user_id' =>  $model->id,
+                ])->execute();
+
+                  
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [

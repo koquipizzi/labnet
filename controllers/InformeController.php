@@ -516,7 +516,7 @@ class InformeController extends Controller {
 				$workf->Informe_id = $id;
 				$workf->Responsable_id = \Yii::$app->user->getId ();
 				$workf->fecha_inicio = $fecha;
-							$workf->fecha_fin = $fecha;
+				$workf->fecha_fin = $fecha;
 				$workf->save ();  
 			}
                 
@@ -589,13 +589,13 @@ class InformeController extends Controller {
 		return $pdf;
 	}
         public function actionMail($id=null,$estudio=null){
-		   $id = 70982;
+		    $id = 70982;
 			$pdf = $this->papreducido($id);
 			$mpdf= $pdf->api;
 
 			//$mpdf->WriteHTML($pdf->render()); //pdf is a name of view file responsible for this pdf document
 			$path = $mpdf->Output('', 'S'); 
-			$attachment = new Swift_Attachment($pdf, 'filename.pdf', 'application/pdf');
+	//		$attachment = new Swift_Attachment($pdf, 'filename.pdf', 'application/pdf');
 
   
 			if (Yii::$app->mailer->compose()
@@ -604,7 +604,8 @@ class InformeController extends Controller {
 			->setSubject('Message subject')
 			->setTextBody('Plain text content')
 			->setHtmlBody('<b>HTML content</b>')
-			->attachContent($path, ['fileName' => 'Invoice #.pdf',   'contentType' => 'application/pdf'])
+			->attach($path)
+		//	->attachContent($path, ['fileName' => 'Invoice #.pdf',   'contentType' => 'application/pdf'])
 			->send())
 				$this->redirect('//protocolo/index');
 			return 0;
@@ -892,9 +893,9 @@ class InformeController extends Controller {
 						'title' => 'Informe PAP' 
 				],
 				'methods' => [ 
-						'SetHeader' => [ 
-								$header 
-						],
+					//	'SetHeader' => [ 
+					//			$header 
+					//	],
 						'SetFooter' => [ 
 								$laboratorio->direccion.'|web: '.$laboratorio->web.'|Tel.:'.$laboratorio->telefono 
 						] 
@@ -988,14 +989,14 @@ class InformeController extends Controller {
 	}
         
         public function actionPrintmole($id) {
-                //Datos generales del Laboratorio
-                $laboratorio = Laboratorio::find()->where(['id' => 1])->one();
-		$model = $this->findModel ( $id );
-		if ($model) {
-			$modelp = $model->protocolo;
-		}
+            //Datos generales del Laboratorio
+			$laboratorio = Laboratorio::find()->where(['id' => 1])->one();
+			$model = $this->findModel ( $id );
+			if ($model) {
+				$modelp = $model->protocolo;
+			}
 		
-		$pdf = new Pdf ( [
+			$pdf = new Pdf ( [
                     // 'mode' => Pdf::MODE_CORE,
                     'mode' => Pdf::MODE_BLANK,
                     // A4 paper format
@@ -1025,7 +1026,7 @@ class InformeController extends Controller {
                                                     $laboratorio->direccion.'|web: '.$laboratorio->web.'|Tel.:'.$laboratorio->telefono 
                                     ] 
                     ] 
-		] );
+			] );
 		
 		return $pdf->render ();
 	}
@@ -1062,9 +1063,9 @@ class InformeController extends Controller {
 						'title' => 'Estudio de Citología Especial' 
 				],
 				'methods' => [ 
-						'SetHeader' => [ 
-								'Sistema LABnet' 
-						],
+				//		'SetHeader' => [ 
+				//				'Sistema LABnet' 
+				//		],
 						'SetFooter' => [ 
 								$laboratorio->direccion.'|web: '.$laboratorio->web.'|Tel.:'.$laboratorio->telefono 
 						] 

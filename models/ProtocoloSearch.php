@@ -93,14 +93,15 @@ class ProtocoloSearch extends Protocolo
         }
 
         $fieldList = '
-            distinct(Protocolo.id) as idp, 
-            Protocolo.* , 
-            Paciente.nombre, 
-            Paciente.nro_documento,
-            Workflow.Informe_id,
-            Workflow.fecha_inicio,
-            Workflow.id as WorkFlow_ID,
-            Workflow.Estado_id					
+        distinct Protocolo.id, Informe.id as iip, 
+        Protocolo.* , 
+        Protocolo.id as idp,
+        Paciente.nombre, 
+        Paciente.nro_documento,
+        Workflow.Informe_id,
+        Workflow.fecha_inicio,
+        Workflow.id as WorkFlow_ID,
+        Workflow.Estado_id				
         ';
         $fromTables = '
             Protocolo
@@ -1193,7 +1194,7 @@ class ProtocoloSearch extends Protocolo
         if (isset($params['ProtocoloSearch']['nro_documento']) && ($params['ProtocoloSearch']['nro_documento'] <> "") )
             $consulta = $consulta." and Paciente.nro_documento like '%".$params['ProtocoloSearch']['nro_documento']."%'";
         
-       if(isset($params['ProtocoloSearch']['fecha_entrada']) && ($params['ProtocoloSearch']['fecha_entrada'] <> "")) 
+        if(isset($params['ProtocoloSearch']['fecha_entrada']) && ($params['ProtocoloSearch']['fecha_entrada'] <> "")) 
             { 
                 list($start_date, $end_date) = explode(' - ', $params['ProtocoloSearch']['fecha_entrada']); 
        
@@ -1251,8 +1252,7 @@ class ProtocoloSearch extends Protocolo
 
         $dataProvider_asignados->setSort([
             'attributes' => [
-        //     'id',
-        'fecha_entrega',
+            'fecha_entrega',
                 'nombre'=> [
                     'asc' => ['Paciente.nombre' => SORT_ASC],
                     'desc' => ['Paciente.nombre' => SORT_DESC],

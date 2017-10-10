@@ -548,21 +548,9 @@ class ProtocoloController extends Controller
                              ]);
         }
     }
-        
 
 
-
-    public function actionViewkoko($id)
-        {
-            $model = $this->findModel($id);
-            $informes = $model->informes;
-
-            return $this->render('view', [
-                'model' => $model,
-                'informes' => $informes,
-            ]);
-        }
-        /**
+    /**
      * Creates a new Protocolo model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      *@param boolean $ajax
@@ -597,10 +585,7 @@ class ProtocoloController extends Controller
                 $connection = \Yii::$app->db;
                 $transaction = $connection->beginTransaction();
                 try {     
-             //       $fechaEntrada = date_format($fecha, 'Y-m-d');
-                //    $mdlProtocolo->fecha_entrada = $fechaEntrada;
                     $mdlProtocolo->save();
-                //    var_dump($mdlProtocolo); die();
                     foreach ($estudios as $estudio_id){   
                         $informe= new Informe();
                         $workflow= new Workflow();
@@ -615,18 +600,6 @@ class ProtocoloController extends Controller
                         $workflow->Estado_id=1;//estado 1 es pendiente 
                         $workflow->fecha_inicio = $fecha;
                         $workflow->save();
-                     /*   $nomencladoresPorInforme= InformeNomencladorTemporal::find()
-                        							->where([
-                                                    	   	'id_informeTemp' => $mdl->id,
-                                                      		])->all();
-
-                        foreach ($nomencladoresPorInforme as $obj=>$mdlNomenclador) {
-                            $informeNomenclador= new InformeNomenclador();
-                            $informeNomenclador->id_nomenclador=$mdlNomenclador->id_nomenclador;
-                            $informeNomenclador->id_informe=$informe->id;
-                            $informeNomenclador->save();
-                        }*/
-                        //}
                     }                             
                     $transaction->commit();
                 } 
@@ -681,90 +654,7 @@ class ProtocoloController extends Controller
        // var_dump($estudios); die();
 
      /*   if ($mdlProtocolo->load(Yii::$app->request->post())) {
-            $modelSecuencia->save();
-            $secuencia=sprintf("%06d", $modelSecuencia->secuencia);
-            $mdlProtocolo->nro_secuencia=$secuencia;
-            $idSession=Yii::$app->session->getId();
-            $tanda=Yii::$app->request->post()['tanda'];
-            $informesTemp=InformeTemp::find()
-            		->where([
-                                'session_id' => $idSession,
-                                'tanda'=>$tanda
-                     ])->all();            
-            if(empty($informesTemp)===false){
-                $connection = \Yii::$app->db;
-                $transaction = $connection->beginTransaction();
-                try {     
-                    $fechaEntrada = date("Y-m-d"); 
-                    $mdlProtocolo->fecha_entrada = $fechaEntrada;
-                    $mdlProtocolo->save();
-                    foreach ($informesTemp as $objeto=>$mdl){   
-                        $informe= new Informe();
-                      //  var_dump($informe); die();
-                        $workflow= new Workflow();
-                        foreach ($informe as $k=>$v){
-                            if($k != 'id'){  
-                                if ($k != 'id_old')
-                                $informe[$k]= $mdl[$k];
-                            }
-                        } //die();
-                        $edad= $mdlProtocolo->getPacienteEdad();
-                        $informe->edad= $edad;
-                        $informe->Protocolo_id= $mdlProtocolo->id;
-                        $informe->titulo= $informe->estudio->titulo;
-                        $informe->save();
-                       // var_dump($informe); die();
-                        $workflow->Informe_id= $informe->id;
-                        $workflow->Estado_id=1;//estado 1 es pendiente 
-                        $workflow->fecha_inicio = $fecha;
-                        $workflow->save();
-                        $nomencladoresPorInforme= InformeNomencladorTemporal::find()
-                        							->where([
-                                                    	   	'id_informeTemp' => $mdl->id,
-                                                      		])->all();
 
-                        foreach ($nomencladoresPorInforme as $obj=>$mdlNomenclador) {
-                            $informeNomenclador= new InformeNomenclador();
-                            $informeNomenclador->id_nomenclador=$mdlNomenclador->id_nomenclador;
-                            $informeNomenclador->id_informe=$informe->id;
-                            $informeNomenclador->save();
-                        }
-                    }                             
-                    $transaction->commit();
-                } 
-                catch (\Exception $e) {
-                            $transaction->rollBack();
-                            throw $e;
-                }
-                Yii::$app->response->redirect(['protocolo/view','id' => $mdlProtocolo->id]);
-            }else {
-                    \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                     return ['rta'=>'error', 'message'=>''];die();
-                }
-        }
-        else {
-            $tanda=time();
-            Yii::$app->session->set('tanda', $tanda);
-            $nomenclador= new Nomenclador();
-            $searchModel = new InformeTempSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $tanda);
-            $fechaEntrada= date("d-m");
-            $anio= date("Y");
-            $mdlProtocolo->fecha_entrada= $fechaEntrada;
-            $mdlProtocolo->anio=$anio;
-            $mdlProtocolo->letra="A";
-            return $this->render('_form_protocolo', [
-                            'paciente' => $paciente,
-                            'prestadora'=> $prestadora,
-                            'pacprest' => $pacprest,
-                            'model' => $mdlProtocolo,
-                            'searchModel' =>$searchModel ,
-                            'Estudio' => $Estudio,
-                            'dataProvider' => $dataProvider,
-                            'informe'=>$informetemp,
-                            'nomenclador'=>$nomenclador,
-                            "tanda"=>$tanda,
-                             ]);
         }*/
     }
         

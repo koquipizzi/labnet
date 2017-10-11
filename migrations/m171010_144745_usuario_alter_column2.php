@@ -6,8 +6,8 @@ class m171010_144745_usuario_alter_column2 extends Migration
 {
     public function safeUp()
     {
-        $this->alterColumn("user","created_at",$this->date()->null());
-        $this->alterColumn("user","updated_at",$this->date()->null());
+        $this->alterColumn("user","created_at",$this->integer(11)->null());
+        $this->alterColumn("user","updated_at",$this->integer(11)->null());
     }
 
     public function safeDown()

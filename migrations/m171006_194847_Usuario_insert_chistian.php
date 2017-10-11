@@ -7,7 +7,7 @@ class m171006_194847_Usuario_insert_chistian extends Migration
     public function safeUp()
     {
         
-        $this->execute("INSERT INTO `user` (`id`, `username`, `auth_key`, `password_reset_token`, `email`, `status`,0, 0, `password`, `password_hash`) VALUES (NULL, 'christian', '', NULL, 'christian@gmail.com', '10', '', '', 'christian', NULL)");
+        $this->execute("INSERT INTO `user` (`id`, `username`, `auth_key`, `password_reset_token`, `email`, `status`, `created_at`, `updated_at`, `password`, `password_hash`) VALUES (NULL, 'christian', '', NULL, 'christian@gmail.com', '10', 0, 0, 'christian', NULL)");
         $this->execute("
                         INSERT INTO `auth_assignment` (`item_name`, `user_id`, `created_at`) 
                         select 'Medico',u.id, now()

@@ -96,7 +96,7 @@ class ProtocoloSearch extends Protocolo
     }
     
 
-        /**
+    /**
     * Filtro de numero de documento
     */
     private function nroDocumentoFilter($params, &$where, &$queryParams) {
@@ -112,30 +112,29 @@ class ProtocoloSearch extends Protocolo
     private function fechaEntradaFilter($params, &$where, &$queryParams) {
         if($this->paramExists($params, 'fecha_entrada')) {
             list($fechaInicio,$fechaFin)= explode('-',$params['fecha_entrada']);
-           
-
-           
-
-           // $fechaInicio = new \DateTime($fechaInicio);
-            //$fechaInicio->format('Y-m-d'); 
-            //$fechaFin = new \DateTime($fechaFin);
-            //$fechaFin->format('Y-m-d'); 
-            
-           // $fechaInicio='STR_TO_DATE('.$fechaInicio.',%d/%m/%Y)';
-           // $fechaFin='STR_TO_DATE('.$fechaFin.',%d/%m/%Y)';
-           // $fechaFin=STR_TO_DATE($fechaFin, '%d/%m/%Y');
-          
-           // $queryParams[':fecha_inicio'] = DATE_FORMAT($fechaInicio,'%Y%m%d') ;
-           // $queryParams[':fecha_fin'] = DATE_FORMAT($fechaFin,'%Y%m%d') ;
             $queryParams[':fecha_inicio'] = trim($fechaInicio);
             $queryParams[':fecha_fin']    = trim($fechaFin);
             $where = $this->addWhereSentence($where, "Protocolo.fecha_entrada BETWEEN STR_TO_DATE(:fecha_inicio,'%d/%m/%Y') AND STR_TO_DATE(:fecha_fin,'%d/%m/%Y')");
-           
         }
     }
 
-
+    /**
+    * Filtro de Código
+    */
+    private function codigoFilter($params, &$where, &$queryParams) {
+        if($this->paramExists($params, 'codigo')) {
+            $queryParams[':codigo'] = "%".$params['codigo']."%";
+            $where = $this->addWhereSentence($where, "Paciente.nombre like :codigo");
+        }
+    }
     
+
+
+
+
+
+
+
 
 
 
@@ -147,7 +146,8 @@ class ProtocoloSearch extends Protocolo
      * @return ActiveDataProvider
      */
     public function search($params)
-    {       
+    {     
+        
         $queryParams = [];
         $where = '';
         $formParams = [];
@@ -182,39 +182,13 @@ class ProtocoloSearch extends Protocolo
         $this->nombreFilter($formParams, $where, $queryParams);
         
         $this->nroDocumentoFilter($formParams, $where, $queryParams);
-//var_dump($params);die();
 
-         $this->fechaEntradaFilter($formParams, $where, $queryParams);
-        
-/*            
-        if (isset($params['ProtocoloSearch']['nro_secuencia']) && ($params['ProtocoloSearch']['nro_secuencia'] <> "") )
-            $query = $query." and Protocolo.nro_secuencia = ".$params['ProtocoloSearch']['nro_secuencia'];
-        
-        if (isset($params['ProtocoloSearch']['nombre']) && ($params['ProtocoloSearch']['nombre'] <> "") )
-            $query = $query." and Paciente.nombre like '%".$params['ProtocoloSearch']['nombre']."%'";
-        
-       
-        if (isset($params['ProtocoloSearch']['nro_documento']) && ($params['ProtocoloSearch']['nro_documento'] <> "") )
-            $query = $query." and Paciente.nro_documento like '%".$params['ProtocoloSearch']['nro_documento']."%'";
+        $this->fechaEntradaFilter($formParams, $where, $queryParams);
+         
+        $this->codigoFilter($formParams, $where, $queryParams);
+
+          /*
           
- /*       if (isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "") ){
-            $str =  $params['ProtocoloSearch']['fecha_entrega']; 
-            $dia = substr($str,0,2);
-            $mes = substr($str,3,2);
-            $anio = substr($str,6,4);
-            $time = $anio."-".$mes."-".$dia;
-            $query = $query." and Protocolo.fecha_entrega like '".$time."%'";
-        }
-        
-        if (isset($params['ProtocoloSearch']['fecha_entrada']) && ($params['ProtocoloSearch']['fecha_entrada'] <> "") ){
-            $str =  $params['ProtocoloSearch']['fecha_entrada']; 
-            $dia = substr($str,0,2);
-            $mes = substr($str,3,2);
-            $anio = substr($str,6,4);
-            $time = $anio."-".$mes."-".$dia;
-            $query = $query." and Protocolo.fecha_entrada like '".$time."%'";
-        }
-  *   
         if (isset($params['ProtocoloSearch']['codigo']) && ($params['ProtocoloSearch']['codigo'] <> "") )
             {
                 $nro = ltrim($params['ProtocoloSearch']['codigo'], '0');
@@ -223,21 +197,6 @@ class ProtocoloSearch extends Protocolo
                     . "or Protocolo.nro_secuencia like '%".$nro."%')";
             }
 
-        if(isset($params['ProtocoloSearch']['fecha_entrada']) && ($params['ProtocoloSearch']['fecha_entrada'] <> "")) 
-            { 
-                list($start_date, $end_date) = explode(' - ', $params['ProtocoloSearch']['fecha_entrada']); 
-       
-                $dia = substr($start_date,0,2);
-                $mes = substr($start_date,3,2);
-                $anio = substr($start_date,6,4);
-                $time = $anio."-".$mes."-".$dia;
-
-                $dia2 = substr($end_date,0,2);
-                $mes2 = substr($end_date,3,2);
-                $anio2 = substr($end_date,6,4);
-                $time2 = $anio2."-".$mes2."-".$dia2;
-                $query = $query." and  Protocolo.fecha_entrada between '".$time."' and '".$time2."'";
-            } 
         
         if(isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "")) 
             { 
@@ -264,17 +223,11 @@ class ProtocoloSearch extends Protocolo
             FROM {$fromTables}
             {$where}
         ";
-        //var_dump($query);die();
         $consultaCant = "
             SELECT count(*) as total
             FROM {$fromTables}
             {$where}
         ";
-
-// var_dump($queryParams); 
-// echo "search";
-// die();       
-
         $itemsCount = Yii::$app->db->createCommand(
             $consultaCant, 
             $queryParams
@@ -307,9 +260,6 @@ class ProtocoloSearch extends Protocolo
                     'pageSize' => 50,
             ],
         ]);
-        
-
-
         
         if (!($this->load($params) && $this->validate())) {
                 return $dataProvider;

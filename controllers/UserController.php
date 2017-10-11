@@ -72,6 +72,8 @@ class UserController extends Controller
     {
         $model = new User();
         $model->status=1;
+        $fecha= new \DateTime('now', new \DateTimeZone('UTC'));
+        $model->created_at=$fecha->getTimestamp();
         if ($model->load(Yii::$app->request->post()) &&  $model->save()) {
 
             $rolExist = (new \yii\db\Query())

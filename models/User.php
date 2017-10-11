@@ -30,8 +30,8 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return [
             [['username', 'email','status',  'password'], 'required'],
-            [['status', 'created_at', 'updated_at'], 'integer'],
-        	   [['email'], 'email'],
+            [['created_at', 'updated_at','status'], 'integer'],
+            [['email'], 'email'],
             [['username', 'auth_key'], 'string', 'max' => 32],
             [['password_reset_token'], 'string', 'max' => 255],
             [['password'], 'string', 'max' => 30],

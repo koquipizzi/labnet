@@ -48,16 +48,14 @@ class ProtocoloSearch extends Protocolo
         return array_merge(parent::attributes(), ['nombre', 'nro_documento', 'codigo']);
     }
 
-    private function nroSecuenciaFilter() {
-
-    }
-
+  
 
 
     private function paramExists($params, $key) {
         return
             is_array($params)
-            && array_key_exists($key, $params);
+            && array_key_exists($key, $params)
+            && (!empty($params[$key]));
     }
 
     private function addWhereSentence($where, $sentence, $connector = 'AND') {
@@ -75,6 +73,71 @@ class ProtocoloSearch extends Protocolo
             $where = $this->addWhereSentence($where, "Workflow.Estado_id = :estado_id");
         }
     }
+
+    /**
+    * Filtro de Nro de Secuencia
+    */
+    private function nroSecuenciaFilter($params, &$where, &$queryParams) {
+        if($this->paramExists($params, 'nro_secuencia')) {
+            $queryParams[':nro_secuencia'] = $params['nro_secuencia'];
+            $where = $this->addWhereSentence($where, "Protocolo.nro_secuencia = :nro_secuencia");
+        }
+    }
+
+
+    /**
+    * Filtro de Nombre
+    */
+    private function nombreFilter($params, &$where, &$queryParams) {
+        if($this->paramExists($params, 'nombre')) {
+            $queryParams[':nombre'] = "%".$params['nombre']."%";
+            $where = $this->addWhereSentence($where, "Paciente.nombre like :nombre");
+        }
+    }
+    
+
+        /**
+    * Filtro de numero de documento
+    */
+    private function nroDocumentoFilter($params, &$where, &$queryParams) {
+        if($this->paramExists($params, 'nro_documento')) {
+            $queryParams[':nro_documento'] = "%".$params['nro_documento']."%";
+            $where = $this->addWhereSentence($where, "Paciente.nro_documento like :nro_documento");
+        }
+    }
+    
+    /**
+    * Filtro de fecha de entrega
+    */
+    private function fechaEntradaFilter($params, &$where, &$queryParams) {
+        if($this->paramExists($params, 'fecha_entrada')) {
+            list($fechaInicio,$fechaFin)= explode('-',$params['fecha_entrada']);
+           
+
+           
+
+           // $fechaInicio = new \DateTime($fechaInicio);
+            //$fechaInicio->format('Y-m-d'); 
+            //$fechaFin = new \DateTime($fechaFin);
+            //$fechaFin->format('Y-m-d'); 
+            
+           // $fechaInicio='STR_TO_DATE('.$fechaInicio.',%d/%m/%Y)';
+           // $fechaFin='STR_TO_DATE('.$fechaFin.',%d/%m/%Y)';
+           // $fechaFin=STR_TO_DATE($fechaFin, '%d/%m/%Y');
+          
+           // $queryParams[':fecha_inicio'] = DATE_FORMAT($fechaInicio,'%Y%m%d') ;
+           // $queryParams[':fecha_fin'] = DATE_FORMAT($fechaFin,'%Y%m%d') ;
+            $queryParams[':fecha_inicio'] = trim($fechaInicio);
+            $queryParams[':fecha_fin']    = trim($fechaFin);
+            $where = $this->addWhereSentence($where, "Protocolo.fecha_entrada BETWEEN STR_TO_DATE(:fecha_inicio,'%d/%m/%Y') AND STR_TO_DATE(:fecha_fin,'%d/%m/%Y')");
+           
+        }
+    }
+
+
+    
+
+
 
     /**
      * Creates data provider instance with search query applied
@@ -113,6 +176,15 @@ class ProtocoloSearch extends Protocolo
         ';
 
         $this->estadoFilter($formParams, $where, $queryParams);
+
+        $this->nroSecuenciaFilter($formParams, $where, $queryParams);
+
+        $this->nombreFilter($formParams, $where, $queryParams);
+        
+        $this->nroDocumentoFilter($formParams, $where, $queryParams);
+//var_dump($params);die();
+
+         $this->fechaEntradaFilter($formParams, $where, $queryParams);
         
 /*            
         if (isset($params['ProtocoloSearch']['nro_secuencia']) && ($params['ProtocoloSearch']['nro_secuencia'] <> "") )
@@ -192,7 +264,7 @@ class ProtocoloSearch extends Protocolo
             FROM {$fromTables}
             {$where}
         ";
-
+        //var_dump($query);die();
         $consultaCant = "
             SELECT count(*) as total
             FROM {$fromTables}
@@ -246,6 +318,14 @@ class ProtocoloSearch extends Protocolo
         return $dataProvider;
     }
     
+
+
+
+
+
+
+
+
 
      /**
      * Creates data provider instance with search query applied

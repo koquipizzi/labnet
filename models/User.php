@@ -98,4 +98,9 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
  //       return $this->Username;
  //       // your custom code
  //   }
+
+ public function getfechacreate(){
+    return  date('m/d/Y', $this->created_at); 
+
+ }
 }

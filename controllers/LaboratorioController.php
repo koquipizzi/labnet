@@ -105,7 +105,7 @@ class LaboratorioController extends Controller
       
    $model = \app\models\Laboratorio::find('id')->one();
  
-    $carpeta = Yii::getAlias('@app').'/web/uploads/logo';
+    $carpeta = Yii::getAlias('@webroot').'/uploads/logo';
     if (!file_exists($carpeta)) {
         mkdir($carpeta, 0755, true);
     }
@@ -145,7 +145,7 @@ class LaboratorioController extends Controller
     public function actionFirmadigital($id=null)
 {
       
-        $carpeta = Yii::getAlias('@app').'/web/uploads/firma';
+        $carpeta = Yii::getAlias('@webroot').'/uploads/firma';
         if (!file_exists($carpeta)) {
             mkdir($carpeta, 0755, true);
         }

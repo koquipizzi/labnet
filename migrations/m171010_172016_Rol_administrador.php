@@ -40,7 +40,11 @@ class m171010_172016_Rol_administrador extends Migration
                 and child='/*'
                 and aic.parent=ai.name 
                 and ai.type=1
-                )LIMIT 1;
+                )
+                and exists(
+                    select * from auth_item where name='/*'
+                )
+                LIMIT 1;
              "
         );
 

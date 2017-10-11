@@ -34,7 +34,11 @@ class m171010_192114_rol_default extends Migration
                 and child='/site/*'
                 and aic.parent=ai.name 
                 and ai.type=1
-                )LIMIT 1;
+                )
+               and exists(
+                    select * from auth_item where name='/site/*'
+                )
+                LIMIT 1;
              "
         );
 
@@ -53,7 +57,11 @@ class m171010_192114_rol_default extends Migration
                 and child='/protocolo/*'
                 and aic.parent=ai.name 
                 and ai.type=1
-                )LIMIT 1;
+                )
+               and exists(
+                    select * from auth_item where name='/protocolo/*'
+                )
+                LIMIT 1;
              "
         );
 
@@ -72,7 +80,13 @@ class m171010_192114_rol_default extends Migration
                 and child='/paciente/index'
                 and aic.parent=ai.name 
                 and ai.type=1
-                )LIMIT 1;
+               
+                )
+                 and exists(
+                    select * from auth_item where name='/paciente/index'
+                )
+                
+                LIMIT 1;
              "
         );
 
@@ -87,7 +101,11 @@ class m171010_192114_rol_default extends Migration
                 and child='/paciente/create'
                 and aic.parent=ai.name 
                 and ai.type=1
-                )LIMIT 1;
+                )
+                 and exists(
+                    select * from auth_item where name='/paciente/index'
+                )
+                LIMIT 1;
              "
         );
 
@@ -102,7 +120,11 @@ class m171010_192114_rol_default extends Migration
                 and child='/paciente/buscar'
                 and aic.parent=ai.name 
                 and ai.type=1
-                )LIMIT 1;
+                )
+                 and exists(
+                    select * from auth_item where name='/paciente/buscar'
+                )
+                LIMIT 1;
              "
         );
 
@@ -123,12 +145,17 @@ class m171010_192114_rol_default extends Migration
                 and child='/medico/index'
                 and aic.parent=ai.name 
                 and ai.type=1
-                )LIMIT 1;
+                )
+                and exists(
+                    select * from auth_item where name='/medico/index'
+                )
+                LIMIT 1;
              "
         );      
         
          $this->execute(
              "
+             
                 insert into auth_item_child (parent,child) 
                 select * from (select 'rolDefault','/medico/create' ) as tmp
                 where not EXISTS (
@@ -138,7 +165,11 @@ class m171010_192114_rol_default extends Migration
                 and child='/medico/create' 
                 and aic.parent=ai.name 
                 and ai.type=1
-                )LIMIT 1;
+                )
+                and exists(
+                    select * from auth_item where name='/medico/index'
+                )
+                LIMIT 1;
              "
         );          
 

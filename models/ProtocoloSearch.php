@@ -107,7 +107,7 @@ class ProtocoloSearch extends Protocolo
     }
     
     /**
-    * Filtro de fecha de entrega
+    * Filtro de fecha de entrada
     */
     private function fechaEntradaFilter($params, &$where, &$queryParams) {
         if($this->paramExists($params, 'fecha_entrada')) {
@@ -124,13 +124,22 @@ class ProtocoloSearch extends Protocolo
     private function codigoFilter($params, &$where, &$queryParams) {
         if($this->paramExists($params, 'codigo')) {
             $queryParams[':codigo'] = "%".$params['codigo']."%";
-            $where = $this->addWhereSentence($where, "Paciente.nombre like :codigo");
+            $where = $this->addWhereSentence($where, "Protocolo.codigo like :codigo");
         }
     }
     
-
-
-
+    /**
+    * Filtro de fecha entrega
+    */
+    private function fechaEntregaFilter($params, &$where, &$queryParams) {
+          if($this->paramExists($params, 'fecha_entrega')) {
+            list($fechaInicio,$fechaFin)= explode('-',$params['fecha_entrega']);
+            $queryParams[':fecha_inicio'] = trim($fechaInicio);
+            $queryParams[':fecha_fin']    = trim($fechaFin);
+            $where = $this->addWhereSentence($where, "Protocolo.fecha_entrega BETWEEN STR_TO_DATE(:fecha_inicio,'%d/%m/%Y') AND STR_TO_DATE(:fecha_fin,'%d/%m/%Y')");
+        }
+    }
+      
 
 
 
@@ -147,7 +156,7 @@ class ProtocoloSearch extends Protocolo
      */
     public function search($params)
     {     
-        
+       
         $queryParams = [];
         $where = '';
         $formParams = [];
@@ -187,33 +196,8 @@ class ProtocoloSearch extends Protocolo
          
         $this->codigoFilter($formParams, $where, $queryParams);
 
-          /*
-          
-        if (isset($params['ProtocoloSearch']['codigo']) && ($params['ProtocoloSearch']['codigo'] <> "") )
-            {
-                $nro = ltrim($params['ProtocoloSearch']['codigo'], '0');
-                $query = $query." and (Protocolo.anio like '%".$params['ProtocoloSearch']['codigo']."%'"
-                    . "or Protocolo.letra like '%".$params['ProtocoloSearch']['codigo']."%'"
-                    . "or Protocolo.nro_secuencia like '%".$nro."%')";
-            }
+        $this->fechaEntregaFilter($formParams, $where, $queryParams);
 
-        
-        if(isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "")) 
-            { 
-                list($start_date, $end_date) = explode(' - ', $params['ProtocoloSearch']['fecha_entrega']); 
-       
-                $dia = substr($start_date,0,2);
-                $mes = substr($start_date,3,2);
-                $anio = substr($start_date,6,4);
-                $time = $anio."-".$mes."-".$dia;
-
-                $dia2 = substr($end_date,0,2);
-                $mes2 = substr($end_date,3,2);
-                $anio2 = substr($end_date,6,4);
-                $time2 = $anio2."-".$mes2."-".$dia2;
-                $query = $query." and  Protocolo.fecha_entrega between '".$time."' and '".$time2."'";
-            } 
- */
         if(!empty($where)) {
             $where = " WHERE {$where} ";
         }
@@ -232,8 +216,7 @@ class ProtocoloSearch extends Protocolo
             $consultaCant, 
             $queryParams
         )->queryScalar();
-        
-        // $query = $query." order by Protocolo.id desc;";
+
         $dataProvider = new \yii\data\SqlDataProvider([
             'sql' => $query,
             'params' => $queryParams,

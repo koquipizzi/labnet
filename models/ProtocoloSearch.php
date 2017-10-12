@@ -183,6 +183,7 @@ class ProtocoloSearch extends Protocolo
             JOIN view_informe_ult_workflow ON Informe.id = view_informe_ult_workflow.Informe_id
             JOIn Workflow ON view_informe_ult_workflow.id = Workflow.id 
         ';
+        
 
         $this->estadoFilter($formParams, $where, $queryParams);
 
@@ -310,9 +311,9 @@ class ProtocoloSearch extends Protocolo
 
         $this->fechaEntregaFilter($formParams, $where, $queryParams);
 
-        
 
         if(!empty($where)) {
+            $where.="group by Protocolo.id";
             $where = " WHERE {$where} ";
         }
 
@@ -374,6 +375,119 @@ class ProtocoloSearch extends Protocolo
 
 
 
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    
+     public function searchTodos($params)
+    {     
+       
+        $queryParams = [];
+        $where = '';
+        $formParams = [];
+        if(array_key_exists('ProtocoloSearch',$params)) {
+            $formParams = $params['ProtocoloSearch'];
+        }
+
+
+        $fieldList = '
+                DISTINCT(Protocolo.id ),
+                Protocolo.codigo,
+                Protocolo.fecha_entrada,
+                Protocolo.fecha_entrega,
+                Paciente.nombre,
+                Paciente.nro_documento			
+        ';
+        $fromTables = '
+                Protocolo
+                LEFT JOIN
+                Informe ON Protocolo.id = Informe.Protocolo_id
+                LEFT JOIN
+                Paciente_prestadora ON Protocolo.Paciente_prestadora_id = Paciente_prestadora.id
+                LEFT JOIN
+                Paciente ON Paciente_prestadora.Paciente_id = Paciente.id
+                JOIN
+                view_informe_ult_workflow ON Informe.id = view_informe_ult_workflow.Informe_id
+                JOIN
+                Workflow ON view_informe_ult_workflow.id = Workflow.id
+        ';
+
+
+        $this->nombreFilter($formParams, $where, $queryParams);
+        
+        $this->nroDocumentoFilter($formParams, $where, $queryParams);
+
+        $this->fechaEntradaFilter($formParams, $where, $queryParams);
+         
+        $this->codigoFilter($formParams, $where, $queryParams);
+
+        $this->fechaEntregaFilter($formParams, $where, $queryParams);
+
+        
+
+        if(!empty($where)) {
+            $where.="group by Protocolo.id";
+            $where = " WHERE {$where} ";
+
+        }
+
+        $query = "
+            SELECT {$fieldList}
+            FROM {$fromTables}
+            {$where}
+        ";
+        $consultaCant = "
+            SELECT count(*) as total
+            FROM {$fromTables}
+            {$where}
+        ";
+        $itemsCount = Yii::$app->db->createCommand(
+            $consultaCant, 
+            $queryParams
+        )->queryScalar();
+
+        $dataProvider = new \yii\data\SqlDataProvider([
+            'sql' => $query,
+            'params' => $queryParams,
+             'sort' => [
+                'defaultOrder' => ['fecha_entrega' => SORT_ASC],
+                'attributes' => [
+                     'nombre',
+                     'fecha_entrada',
+                     'fecha_entrega',
+                     'codigo',
+                     
+                    'nro_documento' => [
+                        'asc' => ['Paciente.nro_documento' => SORT_ASC],
+                        'desc' => ['Paciente.nro_documento' => SORT_DESC],
+                    ],
+                    'id' => [
+                        'asc' => [new Expression('id')],
+                        'desc' => [new Expression('id DESC ')],
+                        'default' => SORT_DESC,
+                    ],
+                    
+                    
+                ],
+            ],
+            'totalCount' => $itemsCount,
+            'key'        => 'id' ,
+            'pagination' => [
+                    'pageSize' => 50,
+            ],
+        ]);
+        
+        if (!($this->load($params) && $this->validate())) {
+                return $dataProvider;
+            }
+
+        return $dataProvider;
+    }
+    
 
 
 

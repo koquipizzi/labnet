@@ -55,9 +55,6 @@ class ProtocoloController extends Controller
      */
     public function actionIndex()
     {
-
-// error_reporting(E_ALL);
-// ini_set("display_errors", 1);
         
         $searchModel = new ProtocoloSearch();
         $searchModelAsig = new ProtocoloSearch();
@@ -66,25 +63,12 @@ class ProtocoloController extends Controller
         $params['ProtocoloSearch']['estado_id'] = 1;
 
         $dataProvider = $searchModel->searchPendiente($params);
-
-       // $dataProviderPendientes = $searchModel->search_pendientes(Yii::$app->request->queryParams);
-       // $dataProviderTerminados = $searchModel->search_terminados(Yii::$app->request->queryParams);
-      //  $dataProviderEntregados = $searchModel->search_entregados(Yii::$app->request->queryParams);
         $loggedUserId = Yii::$app->user->id;
-      //  $dataProvider_asignados = $searchModelAsig->search_asignados($loggedUserId);
-     //   $dataProviderTodosLosProtocolos= $searchModel->searchAll(Yii::$app->request->queryParams);
-        //pendientes 
-     //   $query = Protocolo::find()->where(['status' => 1]);
-
         return $this->render('index_pendientes', [
             'searchModel' => $searchModel,
             'searchModelAsig' => $searchModelAsig,
             'dataProvider' => $dataProvider,
-//            'dataProviderPendientes' => $dataProviderPendientes,
-//            'dataProviderEntregados' => $dataProviderEntregados,
-//            'dataProvider_asignados' =>  $dataProvider_asignados,
-//            'dataProviderTerminados' => $dataProviderTerminados,
-//            'dataProviderTodosLosProtocolos'=>$dataProviderTodosLosProtocolos
+
         ]);
     }
 
@@ -201,12 +185,12 @@ class ProtocoloController extends Controller
         $models = $provider->getModels();
 
         $searchModel = new ProtocoloSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->searchTodos(Yii::$app->request->queryParams);
         $loggedUserId = Yii::$app->user->id;
-        $dataProviderTodosLosProtocolos= $searchModel->searchAll(Yii::$app->request->queryParams);
+        $dataProviderTodosLosProtocolos= $searchModel->searchTodos(Yii::$app->request->queryParams);
         //pendientes 
         $query = Protocolo::find()->where(['status' => 1]);
-
+//var_dump( $query);die();
         return $this->render('_all', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

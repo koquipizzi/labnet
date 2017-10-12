@@ -902,7 +902,7 @@ class ProtocoloSearch extends Protocolo
         'fecha_entrega',
         'fecha_entrada',
         'codigo',
-        
+
                 'nombre'=> [
                     'asc' => ['Paciente.nombre' => SORT_ASC],
                     'desc' => ['Paciente.nombre' => SORT_DESC],
@@ -1077,18 +1077,20 @@ class ProtocoloSearch extends Protocolo
         $dataProvider = new \yii\data\SqlDataProvider([
             'sql' => $query,
             'sort' => [
-                 'defaultOrder' => ['id' => SORT_DESC],
+                 'defaultOrder' => ['fecha_entrega' => SORT_ASC],
                 'attributes' => [
-                     'nombre',
+                    'fecha_entrega',
+                    'fecha_entrada',
+                    'codigo',
+
+                    'nombre'=> [
+                        'asc' => ['Paciente.nombre' => SORT_ASC],
+                        'desc' => ['Paciente.nombre' => SORT_DESC],
+                    ],
                     'nro_documento' => [
                         'asc' => ['Paciente.nro_documento' => SORT_ASC],
                         'desc' => ['Paciente.nro_documento' => SORT_DESC],
-                    ],
-                    'id' => [
-                        'asc' => [new Expression('id')],
-                        'desc' => [new Expression('id DESC ')],
-                        'default' => SORT_DESC,
-                    ],
+                    ]
                     
                     
                 ],

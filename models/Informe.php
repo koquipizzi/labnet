@@ -210,9 +210,15 @@ class Informe extends \yii\db\ActiveRecord
      */
     public function getWorkflowLastState()
     {
-        $ls =$this->hasOne(Workflow::className(), ['Informe_id' => 'id'])->orderBy('fecha_fin DESC')->one();
-        $estado= $ls['Estado_id'];
-        return $estado;
+       $informeEstado= $this->findBySql("
+    			select w.Estado_id as id
+                from view_informe_ult_workflow vi
+                     join 
+                     Workflow w
+                     ON(vi.id=w.id)
+                where vi.informe_id=$this->id")->asArray()->one();
+              
+        return  $informeEstado['id'];
     }
     
     public function getCurrentWorkflow()
@@ -260,8 +266,16 @@ class Informe extends \yii\db\ActiveRecord
     
     public function setWorkflowLastState()
     {
-        $ls =$this->hasOne(Workflow::className(), ['Informe_id' => 'id'])->orderBy('id DESC')->one();
-        return $ls['Estado_id'];    
+        $informeEstado= $this->findBySql("
+        select w.Estado_id as id
+        from view_informe_ult_workflow vi
+            join 
+            Workflow w
+            ON(vi.id=w.id)
+        where vi.informe_id=$this->id")->asArray()->one();
+            
+        return  $informeEstado['id'];
+
     }
 
     /**

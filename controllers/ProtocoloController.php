@@ -65,7 +65,7 @@ class ProtocoloController extends Controller
         $params = Yii::$app->request->queryParams;
         $params['ProtocoloSearch']['estado_id'] = 1;
 
-        $dataProvider = $searchModel->search($params);
+        $dataProvider = $searchModel->searchPendiente($params);
 
        // $dataProviderPendientes = $searchModel->search_pendientes(Yii::$app->request->queryParams);
        // $dataProviderTerminados = $searchModel->search_terminados(Yii::$app->request->queryParams);

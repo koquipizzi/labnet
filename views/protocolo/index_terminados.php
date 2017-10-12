@@ -166,7 +166,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 'class' => 'label ' . $clase . ' rounded protoClass2',
                                                 'value' => "$url",
                                                 'data-id' => $model['informe_id'],
-                                                'data-protocolo' => $model['id'],
                                     ]);
                                     $val = $val . "<br /><span></span>";
                                     return $val;

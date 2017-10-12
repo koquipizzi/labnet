@@ -919,196 +919,120 @@ class ProtocoloSearch extends Protocolo
             }
         return $dataProvider_asignados;
     }
-    
-    public function search_entregados2($params)
-    {
-        //falta poner que workflow es un estado pendiente!!!
-        //kkkkk
-        $consulta = "Select
-                        Protocolo.id,
-                        Workflow_Q.Informe_id,
-                        Workflow_Q.fecha_inicio,
+
+
+       
+     public function search_entregados($params)
+    {     
+       
+        $queryParams = [];
+        $where = 'Workflow.Estado_id = 6';
+        $formParams = [];
+        if(array_key_exists('ProtocoloSearch',$params)) {
+            $formParams = $params['ProtocoloSearch'];
+        }
+
+        $fieldList = '
+                        Protocolo.id,    
+                        Protocolo.codigo,
                         Protocolo.fecha_entrada,
                         Protocolo.fecha_entrega,
-                        Workflow_Q.workflow_id,
-                        Paciente.nombre as pacienteText
-                    From Protocolo
-                    JOIN Informe ON (Protocolo.id = Informe.Protocolo_id)
-                    JOIN Paciente_prestadora ON (Paciente_prestadora.id = Protocolo.Paciente_prestadora_id)
-                    JOIN Paciente ON (Paciente_prestadora.Paciente_id = Paciente.id)
-                    JOIN (
-                            Select
-                                    Workflow.Informe_id,
-                                    max(Workflow.fecha_inicio) as fecha_inicio,
-                                    max(Workflow.id) as workflow_id
-                            From Workflow 
-                            WHERE Workflow.Estado_id = 6
-                            GROUP BY Workflow.Informe_id
-                    ) as Workflow_Q ON (Informe.id = Workflow_Q.Informe_id)";
-        
-        $consultaCant = "Select
-                        count(Protocolo.id) as total                        
-                    From Protocolo
-                    JOIN Informe ON (Protocolo.id = Informe.Protocolo_id)
-                    JOIN (
-                            Select
-                                    Workflow.Informe_id,
-                                    max(Workflow.fecha_inicio) as fecha_inicio,
-                                    max(Workflow.id) as workflow_id
-                            From Workflow 
-                            WHERE Workflow.Estado_id = 4
-                            GROUP BY Workflow.Informe_id
-                    ) as Workflow_Q ON (Informe.id = Workflow_Q.Informe_id)
-                    ";
-     // return total items count for this sql query
-       // $itemsCount = \Yii::$app->db->createCommand($consulta)->queryScalar();
-        
-        $command =  \Yii::$app->db->createCommand($consultaCant);
-        $results = $command->queryAll();
-        $itemsCount = (int)$results[0]["total"];  
-
-        // build a SqlDataProvider with a pagination with 10 items for page
-
-        $dataProvider = new \yii\data\SqlDataProvider([
-            'sql' => $consulta,
-            'totalCount' => $itemsCount,
-            'pagination' => [
-                    'pageSize' => 10,
-            ],
-        ]);
-
-//        var_dump($dataProvider); die();
-        // get the user records in the current page
-        $models = $dataProvider->getModels();      
-        return $dataProvider;
-    }
-    
-    public function search_entregados($params)
-    {
-        
-        $query = "Select 
-                        Protocolo.* , 
+                        Protocolo.letra,
+                        Protocolo.nro_secuencia,
                         Paciente.nro_documento,                        
-                        Workflow_Q.fecha_inicio,
-                        Workflow_Q.workflow_id,
+                        Workflow.fecha_inicio,
+                        Workflow.id AS workflow_id,
                         Informe.id as informe_id,
                         Informe.Estudio_id,
                         Paciente.nombre as nombre,
-                        Estudio.nombre as nombre_estudio
-                    From Protocolo
-                    JOIN Informe ON (Protocolo.id = Informe.Protocolo_id)
-                    JOIN (
-                            Select
-                                    Workflow.Informe_id,
-                                    max(Workflow.fecha_inicio) as fecha_inicio,
-                                    max(Workflow.id) as workflow_id
-                            From Workflow 
-                            WHERE Workflow.Estado_id = 6
-                            GROUP BY Workflow.Informe_id
-                    ) as Workflow_Q ON (Informe.id = Workflow_Q.Informe_id)
-                     LEFT JOIN `Paciente_prestadora` pp ON `Protocolo`.`Paciente_prestadora_id` = pp.`id`
-                    LEFT JOIN `Paciente` ON pp.`Paciente_id` = `Paciente`.`id`
-                    JOIN Estudio ON (Informe.Estudio_id = Estudio.id)
-                   ";
-        
-        if (isset($params['ProtocoloSearch']['nro_secuencia']) && ($params['ProtocoloSearch']['nro_secuencia'] <> "") )
-            $query = $query." and Protocolo.nro_secuencia = ".$params['ProtocoloSearch']['nro_secuencia'];
-        
-        if (isset($params['ProtocoloSearch']['nombre']) && ($params['ProtocoloSearch']['nombre'] <> "") )
-            $query = $query." and Paciente.nombre like '%".$params['ProtocoloSearch']['nombre']."%'";
-        
-       
-        if (isset($params['ProtocoloSearch']['nro_documento']) && ($params['ProtocoloSearch']['nro_documento'] <> "") )
-            $query = $query." and Paciente.nro_documento like '%".$params['ProtocoloSearch']['nro_documento']."%'";
-          
-      if(isset($params['ProtocoloSearch']['fecha_entrada']) && ($params['ProtocoloSearch']['fecha_entrada'] <> "")) 
-            { 
-                list($start_date, $end_date) = explode(' - ', $params['ProtocoloSearch']['fecha_entrada']); 
-       
-                $dia = substr($start_date,0,2);
-                $mes = substr($start_date,3,2);
-                $anio = substr($start_date,6,4);
-                $time = $anio."-".$mes."-".$dia;
+                        Estudio.nombre as nombre_estudio,
+                        Workflow.Estado_id			
+        ';
+        $fromTables = '
+                Protocolo
+                JOIN Informe ON (Protocolo.id = Informe.Protocolo_id)
+                LEFT JOIN     Paciente_prestadora ON Protocolo.Paciente_prestadora_id = Paciente_prestadora.id
+                LEFT JOIN     Paciente ON Paciente_prestadora.Paciente_id = Paciente.id
+                JOIN          view_informe_ult_workflow ON Informe.id = view_informe_ult_workflow.Informe_id
+                LEFT JOIN     Workflow ON view_informe_ult_workflow.id = Workflow.id
+				JOIN          Estudio ON (Informe.Estudio_id = Estudio.id)
+        ';
 
-                $dia2 = substr($end_date,0,2);
-                $mes2 = substr($end_date,3,2);
-                $anio2 = substr($end_date,6,4);
-                $time2 = $anio2."-".$mes2."-".$dia2;
-                $query = $query." and  Protocolo.fecha_entrada between '".$time."' and '".$time2."'";
-            } 
-        
-        if(isset($params['ProtocoloSearch']['fecha_entrega']) && ($params['ProtocoloSearch']['fecha_entrega'] <> "")) 
-            { 
-                list($start_date, $end_date) = explode(' - ', $params['ProtocoloSearch']['fecha_entrega']); 
-       
-                $dia = substr($start_date,0,2);
-                $mes = substr($start_date,3,2);
-                $anio = substr($start_date,6,4);
-                $time = $anio."-".$mes."-".$dia;
 
-                $dia2 = substr($end_date,0,2);
-                $mes2 = substr($end_date,3,2);
-                $anio2 = substr($end_date,6,4);
-                $time2 = $anio2."-".$mes2."-".$dia2;
-                $query = $query." and  Protocolo.fecha_entrega between '".$time."' and '".$time2."'";
-            } 
-        if (isset($params['ProtocoloSearch']['codigo']) && ($params['ProtocoloSearch']['codigo'] <> "") )
-            {
-                $nro = ltrim($params['ProtocoloSearch']['codigo'], '0');
-                $query = $query." and (Protocolo.anio like '%".$params['ProtocoloSearch']['codigo']."%'"
-                    . "or Protocolo.letra like '%".$params['ProtocoloSearch']['codigo']."%'"
-                    . "or Protocolo.nro_secuencia like '%".$nro."%')";
-               // die($query);
-            }
+        $this->nombreFilter($formParams, $where, $queryParams);
+        
+        $this->nroDocumentoFilter($formParams, $where, $queryParams);
+
+        $this->fechaEntradaFilter($formParams, $where, $queryParams);
+         
+        $this->codigoFilter($formParams, $where, $queryParams);
+
+        $this->fechaEntregaFilter($formParams, $where, $queryParams);
+
+        
+
+        if(!empty($where)) {
             
-        
-        $consultaCant = "Select
-                        count(tt.codigo) as total from (";
-        
-        $consultaCant = $consultaCant.$query." ) as tt";
-        
- //       $order = " order by Protocolo.id desc;";
-///$query = $query.$order;
-        
-        $command =  \Yii::$app->db->createCommand($consultaCant);
-        $results = $command->queryAll();
-        $itemsCount = (int)$results[0]["total"];  
+            $where = " WHERE {$where} ";
+
+        }
+
+        $query = "
+            SELECT {$fieldList}
+            FROM {$fromTables}
+            {$where}
+        ";
+        $consultaCant = "
+            SELECT count(*) as total
+            FROM {$fromTables}
+            {$where}
+        ";
+        $itemsCount = Yii::$app->db->createCommand(
+            $consultaCant, 
+            $queryParams
+        )->queryScalar();
 
         $dataProvider = new \yii\data\SqlDataProvider([
             'sql' => $query,
-            'sort' => [
-                 'defaultOrder' => ['fecha_entrega' => SORT_ASC],
+            'params' => $queryParams,
+             'sort' => [
+                'defaultOrder' => ['fecha_entrega' => SORT_ASC],
                 'attributes' => [
-                    'fecha_entrega',
-                    'fecha_entrada',
-                    'codigo',
-
-                    'nombre'=> [
-                        'asc' => ['Paciente.nombre' => SORT_ASC],
-                        'desc' => ['Paciente.nombre' => SORT_DESC],
-                    ],
+                     'nombre',
+                     'fecha_entrada',
+                     'fecha_entrega',
+                     'codigo',
+                     
                     'nro_documento' => [
                         'asc' => ['Paciente.nro_documento' => SORT_ASC],
                         'desc' => ['Paciente.nro_documento' => SORT_DESC],
-                    ]
+                    ],
+                    'id' => [
+                        'asc' => [new Expression('id')],
+                        'desc' => [new Expression('id DESC ')],
+                        'default' => SORT_DESC,
+                    ],
                     
                     
                 ],
-            ], 
+            ],
             'totalCount' => $itemsCount,
+            'key'        => 'id' ,
             'pagination' => [
-                    'pageSize' => 100,
+                    'pageSize' => 50,
             ],
         ]);
-
-  
         
         if (!($this->load($params) && $this->validate())) {
-            return $dataProvider;
-        }
-     
+                return $dataProvider;
+            }
+
         return $dataProvider;
     }
+
+
+
+
 
 
     

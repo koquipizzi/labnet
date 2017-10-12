@@ -8,7 +8,7 @@ use mdm\admin\components\Helper;
 use jino5577\daterangepicker\DateRangePicker;
 use app\models\Informe;
 
-$this->title = Yii::t('app', 'Protocolos');
+$this->title = Yii::t('app', 'Estudios');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php
@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
       <div class="header-content">
             <div class="pull-left">
-                <h3 class="panel-title">Protocolos Terminados</h3>
+                <h3 class="panel-title">Estudios Terminados</h3>
             </div>
             <div class="pull-right">
                 <?= Html::a('<i class="fa fa-plus-circle"></i> Nuevo Protocolo', ['paciente/buscar'], ['class'=>'btn btn-success']) ?>
@@ -139,13 +139,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'contentOptions' => ['style' => 'width:30%;'],
                                         'value' => function ($model, $key, $index, $widget) {
                                     $estados = array(
-                                        "1" => "danger",
-                                        "2" => "inverse",
-                                        "3" => "success",
-                                        "4" => "warning",
-                                        "5" => "primary",
-                                        "6" => "default",
-                                    );
+                                                        "1" => "danger",
+                                                        "2" => "inverse",
+                                                        "3" => "success",
+                                                        "4" => "warning",
+                                                        "5" => "primary",
+                                                        "6" => "default",
+                                                        );
                                     $estadosLeyenda = array(
                                         "1" => "INFORME PENDIENTE",
                                         "2" => "INFORME DESCARTADO",

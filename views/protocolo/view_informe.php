@@ -3,7 +3,9 @@
 use app\models\Informe;
 use app\models\PacientePrestadora;
 $nro_afiliado = PacientePrestadora::find()->where(['id' => $model->Paciente_prestadora_id])->one()->nro_afiliado;
-
+if( empty($nro_afiliado) ){
+    $nro_afiliado='No tiene, es particular.';
+}
 ?>
                 <table class="table table-striped">
                     <tbody>

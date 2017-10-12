@@ -7,7 +7,7 @@ use yii\grid\GridView;
 use mdm\admin\components\Helper;
 use jino5577\daterangepicker\DateRangePicker;
 
-$this->title = Yii::t('app', 'Protocolos');
+$this->title = Yii::t('app', 'Estudios');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php
@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="header-content">
             <div class="pull-left">
-                <h3 class="panel-title">Protocolos Entregados</h3>
+                <h3 class="panel-title">Estudios Entregados</h3>
             </div>
              <div class="pull-right">
                 <?= Html::a('<i class="fa fa-plus-circle"></i> Nuevo Protocolo', ['paciente/buscar'], ['class'=>'btn btn-success']) ?>

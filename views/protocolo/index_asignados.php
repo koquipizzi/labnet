@@ -6,7 +6,7 @@ use yii\bootstrap\Modal;
 use yii\grid\GridView;
 use jino5577\daterangepicker\DateRangePicker;
 
-$this->title = Yii::t('app', 'Protocolos');
+$this->title = Yii::t('app', 'Estudios');
 $this->params['breadcrumbs'][] = $this->title;
 
     $this->registerJsFile('@web/assets/admin/js/cipat_modal_protocolo.js', ['depends' => [yii\web\AssetBundle::className()]]);
@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="header-content">
             <div class="pull-left">
-                <h3 class="panel-title">Protocolos asignados a mí</h3>
+                <h3 class="panel-title">Estudios asignados a mí</h3>
             </div>
             <div class="pull-right">
                 <?= Html::a('<i class="fa fa-plus-circle"></i> Nuevo Protocolo', ['paciente/buscar'], ['class'=>'btn btn-success']) ?>
@@ -123,14 +123,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'contentOptions' => ['style' => 'width:30%;'],
                             'value' => function ($model, $key, $index, $widget) {
-                        $estados = array(
-                            "1" => "danger",
-                            "2" => "inverse",
-                            "3" => "success",
-                            "4" => "warning",
-                            "5" => "primary",
-                            "6" => "default",
-                        );
+                            $estados = array(
+                                                "1" => "danger",
+                                                "2" => "inverse",
+                                                "3" => "success",
+                                                "4" => "warning",
+                                                "5" => "primary",
+                                                "6" => "default",
+                                                );
                         $estadosLeyenda = array(
                             "1" => "INFORME PENDIENTE",
                             "2" => "INFORME DESCARTADO",

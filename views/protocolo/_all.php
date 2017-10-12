@@ -15,9 +15,9 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
         <div class="header-content">
             <div class="pull-left">
-                <h3 class="panel-title">Protocolos Terminados</h3>
-                <i class="fa fa-stop"></i>
-                <span class="text-strong"> Informes</span>
+                <h3 class="panel-title">Todos los Protocolos y sus Estudios</h3>
+                
+            
             </div>
                 <div class="pull-right">
                     <?= Html::a('<i class="fa fa-plus-circle"></i> Nuevo Protocolo', ['paciente/buscar'], ['class'=>'btn btn-success']) ?>
@@ -114,35 +114,43 @@ $this->params['breadcrumbs'][] = $this->title;
                     'label' => 'Informes',
                     'format' => 'raw',
                     'contentOptions' => ['style' => 'width:20%;'],
-                    'value'=>function ($model, $key, $index, $widget) {
-                        $estados = array(
-                            "1" => "danger",
-                            "2" => "inverse",
-                            "3" => "success",
-                            "4" => "warning",
-                            "5" => "primary",
-                            "6" => "lilac",
-                        );
-                        $val = "";
-                        $idProtocolo = $model['id'];
-                        $informes = app\models\Informe::find()->where(['=','Informe.Protocolo_id',$idProtocolo])->all();
-                        //var_dump($model['id']); die();
-                        foreach ($informes as $inf){
-                            // $val = $val.$inf->estudio->nombre." ";
-                            $estado = $inf->workflowLastState;
-                            $clase = " label-default";
-
-                            $url ='index.php?r=informe/update&id='.$inf->id;
-                            $val = $val. Html::a(Html::encode($inf->estudio->nombre),$url,[
-                                    'title' => Yii::t('app', 'Editar'),
-                                    'class'=>'label '. $clase.' rounded protoClass2',
-                                    'value'=> "$url",
-                                    'data-id'=> "$inf->id",
-                                    'data-protocolo'=> "$inf->Protocolo_id",
-                        ]);
-                        $val = $val."<br/><span></span>";}
-                        return $val;
-                    },
+                      'value'=>function ($model, $key, $index, $widget) {
+                                $estados = array(
+                                    "1" => "danger",
+                                    "2" => "inverse",
+                                    "3" => "success",
+                                    "4" => "warning",
+                                    "5" => "primary",
+                                    "6" => "default",
+                                );
+                                $estadosLeyenda = array(
+                                    "1" => "INFORME PENDIENTE",
+                                    "2" => "INFORME DESCARTADO",
+                                    "3" => "EN PROCESO",
+                                    "4" => "INFORME PAUSADO",
+                                    "5" => "FINALIZADO",
+                                    "6" => "ENTREGADO",
+                                );
+                                $val = " ";
+                                $idProtocolo = $model['id'];
+                                $informes = app\models\Informe::find()->where(['=','Informe.Protocolo_id',$idProtocolo])->all();
+                                //var_dump($model['id']); die();
+                                foreach ($informes as $inf){
+                                 //   var_dump($inf);
+                                    $estado = $inf->workflowLastState;
+                                    $clase = " label-".$estados[$estado];
+                                    $url ='index.php?r=informe/update&id='.$inf->id;
+                                    $val = $val. Html::a(Html::encode($inf->estudio->nombre),$url,[
+                                            'title' => "$estadosLeyenda[$estado]",
+                                            'class'=>'label '. $clase.' rounded protoClass2',
+                                            'value'=> "$url",
+                                            'data-id'=> "$inf->id",
+                                            'data-protocolo'=> "$inf->Protocolo_id",
+                                    ]);
+                                    $val = $val."<br /><span></span>";
+                                }
+                                return $val;
+                            },
                 ],
                 ],
 

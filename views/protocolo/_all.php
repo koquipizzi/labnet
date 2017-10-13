@@ -116,13 +116,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'contentOptions' => ['style' => 'width:20%;'],
                       'value'=>function ($model, $key, $index, $widget) {
                                 $estados = array(
-                                    "1" => "danger",
-                                    "2" => "info",
-                                    "3" => "success",
-                                    "4" => "warning",
-                                    "5" => "primary",
-                                    "6" => "default",
-                                );
+                                                    "1" => "danger",
+                                                    "2" => "default",
+                                                    "3" => "success",
+                                                    "4" => "warning",
+                                                    "5" => "primary",
+                                                    "6" => "info",
+                                                    );
                                 $estadosLeyenda = array(
                                     "1" => "INFORME PENDIENTE",
                                     "2" => "INFORME DESCARTADO",

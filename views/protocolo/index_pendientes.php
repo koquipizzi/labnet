@@ -127,11 +127,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value'=>function ($model, $key, $index, $widget) {
                               $estados = array(
                                                 "1" => "danger",
-                                                "2" => "info",
+                                                "2" => "default",
                                                 "3" => "success",
                                                 "4" => "warning",
                                                 "5" => "primary",
-                                                "6" => "default",
+                                                "6" => "info",
                                                 );
                                 $estadosLeyenda = array(
                                     "1" => "INFORME PENDIENTE",

@@ -138,22 +138,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'format' => 'raw',
                                         'contentOptions' => ['style' => 'width:30%;'],
                                         'value' => function ($model, $key, $index, $widget) {
-                                    $estados = array(
-                                                        "1" => "danger",
-                                                        "2" => "inverse",
-                                                        "3" => "success",
-                                                        "4" => "warning",
-                                                        "5" => "primary",
-                                                        "6" => "default",
+                                        $estados = array(
+                                                            "1" => "danger",
+                                                            "2" => "default",
+                                                            "3" => "success",
+                                                            "4" => "warning",
+                                                            "5" => "primary",
+                                                            "6" => "info",
                                                         );
-                                    $estadosLeyenda = array(
-                                        "1" => "INFORME PENDIENTE",
-                                        "2" => "INFORME DESCARTADO",
-                                        "3" => "EN PROCESO",
-                                        "4" => "INFORME PAUSADO",
-                                        "5" => "FINALIZADO",
-                                        "6" => "ENTREGADO",
-                                    );
+                                         $estadosLeyenda = array(
+                                            "1" => "INFORME PENDIENTE",
+                                            "2" => "INFORME DESCARTADO",
+                                            "3" => "EN PROCESO",
+                                            "4" => "INFORME PAUSADO",
+                                            "5" => "FINALIZADO",
+                                            "6" => "ENTREGADO",
+                                          );
                                     $val = "";
                                     $idProtocolo = $model['id'];
                                     $informe = app\models\Informe::findOne($model['informe_id']);

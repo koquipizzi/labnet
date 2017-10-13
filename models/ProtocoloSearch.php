@@ -828,7 +828,7 @@ class ProtocoloSearch extends Protocolo
                     JOIN Paciente ON (Paciente_prestadora.Paciente_id = Paciente.id)
 					JOIN view_informe_ult_workflow ON (Informe.id = view_informe_ult_workflow.Informe_id)
 					JOIn Workflow on view_informe_ult_workflow.id = Workflow.id 
-					WHERE Workflow.Estado_id <  5        
+					WHERE Workflow.Estado_id =3 or  Workflow.Estado_id =4     
                     AND Workflow.Responsable_id = ".$loggedUserId;
         
         if (isset($params['ProtocoloSearch']['nro_secuencia']) && ($params['ProtocoloSearch']['nro_secuencia'] <> "") )

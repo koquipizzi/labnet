@@ -57,7 +57,13 @@ use mdm\admin\components\Helper;
                             ['label' => 'Médicos', 'icon' => 'user-md', 'url' => ['/medico'],],
                             ['label' => 'Usuarios', 'icon' => 'user', 'url' => ['/user'],],
                             ['label' => 'Administrativos', 'icon' => 'user-circle-o', 'url' => ['/user'],],
-                            ['label' => 'Admin Usuarios', 'icon' => 'group', 'url' => ['/user'],],
+                             ['label' => 'Admin Usuarios', 'icon' => 'group', 'url' => ['/admin/assignment'],],
+                             
+                          
+                                
+                                                                 
+                               
+
                           /*  [
                                 'label' => 'Level One',
                                 'icon' => 'fa fa-circle-o',

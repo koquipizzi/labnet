@@ -795,7 +795,7 @@ class ProtocoloSearch extends Protocolo
 
 
 
-  
+
 
       public function search_asignados($id=null, $params=NULL)
     {

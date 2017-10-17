@@ -410,11 +410,7 @@ Pjax::end();
                                         ?>
                                     </div>
                                 </div> 
-                                <h3>Imágenes del informe
-                                            <span>
-                                            <?php echo Html::a('<i class="fa fa-retweet"></i>', ['refresh', 'id' => $model->id], ['class' => 'refresh btn btn-success']); ?>
-                                            </span>
-                                        </h3>
+                                <h3>Imágenes del informe</h3>
                                         <?php Pjax::begin(['id' => 'galeriar', 'enablePushState' => TRUE]); ?>    
                                         <div class="content-galeria">
                                     

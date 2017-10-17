@@ -19,20 +19,12 @@ use amilna\elevatezoom\ElevateZoom;
              data-minheight="600"
              data-maxheight="100%">
                  <?php
-//                 $widget = \kotchuprik\fotorama\Widget::begin([
-//                             'version' => '4.5.2',
-//                             'options' => [
-//                                 'nav' => 'thumbs',
-//                             ],
-//                 ]);
                  $images = [];
                  foreach ($dataproviderMultimedia->getModels() as $img)
                  {
                  //   echo Html::img('@web' . $img->webPath);
                     $images[]= Yii::$app->urlManager->baseUrl.$img->webPath;
                  }
-
-//                 $widget->end();
                  ?>
         </div>
        

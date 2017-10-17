@@ -23,7 +23,7 @@ use yii\helpers\Html;
                             <td style="white-space:nowrap; width: 3cm; font-weight: bold;">EDAD </td><td><?php echo $model->edad == 0 ? "Sin datos" : $model->edad; ?> </td>
                         </tr>
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">COBERTURA </td><td><?php echo $modelp->procedencia->descripcion; ?>  </td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">COBERTURA </td><td><?php echo $modelp->cobertura; ?>  </td>
                         </tr>
                     </table>
                 </td>

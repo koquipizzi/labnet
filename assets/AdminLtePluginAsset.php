@@ -12,7 +12,7 @@ class AdminLtePluginAsset extends AssetBundle
 {
     public $sourcePath = '@vendor/almasaeed2010/adminlte/plugins';
     public $js = [
-        'datatables/p.min.js',
+        'datatables/dataTables.bootstrap.min.js',
         // more plugin Js here
     ];
     public $css = [

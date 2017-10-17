@@ -97,7 +97,9 @@ use yii\helpers\Html;
             <?php echo nl2br($model->observaciones); ?>
         </div>
     </div>
-    
+    <div style="position: fixed; margin-right: 35px; text-align: right;">
+        <img src="<?php echo Yii::getAlias('@webroot').'/images/firma/firma.jpg'; ?>" width="120"  \/>  
+    </div>
 </div>
 
 <div class="footer" style="position: fixed; bottom: -5px; text-align: center; font-size: 11px; width:100%">

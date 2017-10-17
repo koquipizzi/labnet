@@ -35,8 +35,9 @@ use mdm\admin\components\Helper;
 
         <?php echo dmstr\widgets\Menu::widget(
             [
-                'options' => ['class' => 'sidebar-menu'],
+                'options' => ['class' => 'sidebar-menu', 'data-widget' => 'tree'],
                 'items' => [
+                    
                     ['label' => 'LabNET', 'options' => ['class' => 'header']],
                     ['label' => 'Nuevo Protocolo', 'icon' => 'fa fa-file-code-o', 'url' => ['/paciente/buscar']],
                     ['label' => 'PROTOCOLOS', 'options' => ['class' => 'header']],
@@ -52,8 +53,9 @@ use mdm\admin\components\Helper;
                         'label' => 'Personas',
                         'icon' => 'fa fa-group',
                         'url' => '#',
+                        'class'=>'treeview',
                         'items' => [
-                            ['label' => 'Pacientes', 'icon' => 'user-circle', 'url' => ['/paciente'],],
+                            ['label' => 'Pacientes', 'options' => ['class' => 'treeview'],'icon' => 'user-circle', 'url' => ['/paciente'],],
                             ['label' => 'Médicos', 'icon' => 'user-md', 'url' => ['/medico'],],
                             ['label' => 'Usuarios', 'icon' => 'user', 'url' => ['/user'],],
                             ['label' => 'Administrativos', 'icon' => 'user-circle-o', 'url' => ['/user'],],

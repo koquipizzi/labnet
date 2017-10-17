@@ -98,15 +98,15 @@ class Laboratorio extends \yii\db\ActiveRecord
     
        public function getImageFilePathFirma()
     {
-    	if( substr(Yii::$app->params['uploadPathFirmaDigita'],-1) == DIRECTORY_SEPARATOR ){
-    		return Yii::$app->params['uploadPathFirmaDigita'];
+    	if( substr(Yii::$app->params['uploadPathFirmaDigital'],-1) == DIRECTORY_SEPARATOR ){
+    		return Yii::$app->params['uploadPathFirmaDigital'];
     	}
-    	return Yii::$app->params['uploadPathFirmaDigita'] . DIRECTORY_SEPARATOR;
+    	return Yii::$app->params['uploadPathFirmaDigital'] . DIRECTORY_SEPARATOR;
     }
     
     public function getUrlImageFolderFirma()
     {
-    	return Yii::$app->params['urlImageFolderFirmaDigita'];
+    	return Yii::$app->params['urlImageFolderFirmaDigital'];
     }
     
 }

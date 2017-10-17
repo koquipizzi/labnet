@@ -1,4 +1,5 @@
 assets/*
+uploads/*
 !assets/.gitignore
 !assets/admin
 !assets/admin/*

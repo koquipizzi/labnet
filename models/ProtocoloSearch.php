@@ -830,8 +830,8 @@ class ProtocoloSearch extends Protocolo
 					WHERE Workflow.Estado_id >=3 and Workflow.Estado_id <=4      
                     AND Workflow.Responsable_id = ".$loggedUserId;
         
-        if (isset($params['ProtocoloSearch']['nro_secuencia']) && ($params['ProtocoloSearch']['nro_secuencia'] <> "") )
-            $consulta = $consulta." and Protocolo.nro_secuencia = ".$params['ProtocoloSearch']['nro_secuencia'];
+        if (isset($params['ProtocoloSearch']['codigo']) && ($params['ProtocoloSearch']['codigo'] <> "") )
+            $consulta = $consulta." and Protocolo.codigo like '%" .$params['ProtocoloSearch']['codigo'] ."%'";
         
         if (isset($params['ProtocoloSearch']['nombre']) && ($params['ProtocoloSearch']['nombre'] <> "") )
             $consulta = $consulta." and Paciente.nombre like '%".$params['ProtocoloSearch']['nombre']."%'";
@@ -894,6 +894,7 @@ class ProtocoloSearch extends Protocolo
             'attributes' => [
         //     'id',
         'fecha_entrega',
+        'codigo',
                 'nombre'=> [
                     'asc' => ['Paciente.nombre' => SORT_ASC],
                     'desc' => ['Paciente.nombre' => SORT_DESC],

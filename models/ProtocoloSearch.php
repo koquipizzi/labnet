@@ -898,10 +898,9 @@ class ProtocoloSearch extends Protocolo
 
         $dataProvider_asignados->setSort([
             'attributes' => [
-        //     'id',
-        'fecha_entrega',
-        'fecha_entrada',
-        'codigo',
+            'fecha_entrega',
+            'fecha_entrada',
+            'codigo',
 
                 'nombre'=> [
                     'asc' => ['Paciente.nombre' => SORT_ASC],

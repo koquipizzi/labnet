@@ -831,7 +831,7 @@ class ProtocoloSearch extends Protocolo
                     AND Workflow.Responsable_id = ".$loggedUserId;
         
         if (isset($params['ProtocoloSearch']['codigo']) && ($params['ProtocoloSearch']['codigo'] <> "") )
-            $consulta = $consulta." and Protocolo.codigo like '%" .$params['ProtocoloSearch']['codigo'] ."%'";
+            $consulta = $consulta." and Protocolo.codigo like '%".$params['ProtocoloSearch']['codigo']."%'";
         
         if (isset($params['ProtocoloSearch']['nombre']) && ($params['ProtocoloSearch']['nombre'] <> "") )
             $consulta = $consulta." and Paciente.nombre like '%".$params['ProtocoloSearch']['nombre']."%'";
@@ -868,15 +868,7 @@ class ProtocoloSearch extends Protocolo
                 $time2 = $anio2."-".$mes2."-".$dia2;
                 $consulta = $consulta." and  Protocolo.fecha_entrega between '".$time."' and '".$time2."'";
             }   
-        if (isset($params['ProtocoloSearch']['codigo']) && ($params['ProtocoloSearch']['codigo'] <> "") )
-            {
-                $nro = ltrim($params['ProtocoloSearch']['codigo'], '0');
-                $consulta = $consulta." and (Protocolo.anio like '%".$params['ProtocoloSearch']['codigo']."%'"
-                    . "or Protocolo.letra like '%".$params['ProtocoloSearch']['codigo']."%'"
-                    . "or Protocolo.nro_secuencia like '%".$nro."%')";
-               // die($query);
-            }
-            
+
        
         $consultaCant = "select count(tt.id) as total from ( ".$consulta." ) as tt";
         $command =  \Yii::$app->db->createCommand($consultaCant);

@@ -55,7 +55,7 @@ use mdm\admin\components\Helper;
                         'url' => '#',
                         'class'=>'treeview',
                         'items' => [
-                            ['label' => 'Pacientes', 'options' => ['class' => 'treeview'],'icon' => 'user-circle', 'url' => ['/paciente'],],
+                            ['label' => 'Pacientes','icon' => 'user-circle', 'url' => ['/paciente'],],
                             ['label' => 'Médicos', 'icon' => 'user-md', 'url' => ['/medico'],],
                             ['label' => 'Usuarios', 'icon' => 'user', 'url' => ['/user'],],
                             ['label' => 'Administrativos', 'icon' => 'user-circle-o', 'url' => ['/user'],],

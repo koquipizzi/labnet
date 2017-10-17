@@ -797,8 +797,7 @@ class ProtocoloSearch extends Protocolo
 
   
 
-    
-    public function search_asignados($id=null, $params=NULL)
+      public function search_asignados($id=null, $params=NULL)
     {
         if (isset($id))
             $loggedUserId = $id;
@@ -828,7 +827,7 @@ class ProtocoloSearch extends Protocolo
                     JOIN Paciente ON (Paciente_prestadora.Paciente_id = Paciente.id)
 					JOIN view_informe_ult_workflow ON (Informe.id = view_informe_ult_workflow.Informe_id)
 					JOIn Workflow on view_informe_ult_workflow.id = Workflow.id 
-					WHERE Workflow.Estado_id =3 or  Workflow.Estado_id =4     
+					WHERE Workflow.Estado_id >=3 and Workflow.Estado_id <=4      
                     AND Workflow.Responsable_id = ".$loggedUserId;
         
         if (isset($params['ProtocoloSearch']['nro_secuencia']) && ($params['ProtocoloSearch']['nro_secuencia'] <> "") )
@@ -848,7 +847,6 @@ class ProtocoloSearch extends Protocolo
                 $mes = substr($start_date,3,2);
                 $anio = substr($start_date,6,4);
                 $time = $anio."-".$mes."-".$dia;
-
                 $dia2 = substr($end_date,0,2);
                 $mes2 = substr($end_date,3,2);
                 $anio2 = substr($end_date,6,4);
@@ -864,7 +862,6 @@ class ProtocoloSearch extends Protocolo
                 $mes = substr($start_date,3,2);
                 $anio = substr($start_date,6,4);
                 $time = $anio."-".$mes."-".$dia;
-
                 $dia2 = substr($end_date,0,2);
                 $mes2 = substr($end_date,3,2);
                 $anio2 = substr($end_date,6,4);
@@ -882,11 +879,9 @@ class ProtocoloSearch extends Protocolo
             
        
         $consultaCant = "select count(tt.id) as total from ( ".$consulta." ) as tt";
-
         $command =  \Yii::$app->db->createCommand($consultaCant);
         $results = $command->queryAll();
         $itemsCount = (int)$results[0]["total"];       
-
         $dataProvider_asignados = new \yii\data\SqlDataProvider([
             'sql' => $consulta,
             'sort'=> ['defaultOrder' => ['fecha_entrega'=> SORT_ASC]], 
@@ -895,13 +890,11 @@ class ProtocoloSearch extends Protocolo
                     'pageSize' => 50,
             ],
         ]);
-
         $dataProvider_asignados->setSort([
             'attributes' => [
-            'fecha_entrega',
-            'fecha_entrada',
-            'codigo',
-
+                'fecha_entrega',
+                'fecha_entrada',
+                'codigo',
                 'nombre'=> [
                     'asc' => ['Paciente.nombre' => SORT_ASC],
                     'desc' => ['Paciente.nombre' => SORT_DESC],
@@ -912,13 +905,11 @@ class ProtocoloSearch extends Protocolo
                 ]
             ]
         ]);
-
         if (!($this->load($params) && $this->validate())) {
                 return $dataProvider_asignados;
             }
         return $dataProvider_asignados;
     }
-
 
        
      public function search_entregados($params)

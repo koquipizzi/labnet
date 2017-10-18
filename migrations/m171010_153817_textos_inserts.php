@@ -22,10 +22,9 @@ class m171010_153817_textos_inserts extends Migration
 
             if($sql!=='') {
                 $this->execute($key." ".str_replace("\'","'",addslashes($sql)));
-                echo " EXECUCIÓN NRO: ".$i."\n";
             }
             if($i>50000) {
-                die('Salio porque Nunca Termina');
+                die('error - Salio porque Nunca Termina');
             }
         }
     }

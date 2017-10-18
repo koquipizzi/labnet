@@ -83,8 +83,10 @@ echo execut\widget\TreeView::widget([
 ?>
 <div class="panel-body no-padding">
 
-    <?php $form = ActiveForm::begin([             
-            'action' => '/index.php?r=textos/customtext',
+    <?php 
+        $url= Yii::$app->getUrlManager()->createUrl('textos/customtext') ;
+        $form = ActiveForm::begin([             
+            'action' =>$url,
             'options' => [
                 'class' => 'form-horizontal mt-10',
                 'id' => 'create-autotexto-form',               
@@ -123,12 +125,7 @@ echo execut\widget\TreeView::widget([
             'labelOptions' => [ 'class' => 'col-md-2  control-label' ]
     ])->textInput(['maxlength' => true]) ?>
 
-<?= $form->field($model, 'macro', ['template' => "{label}
-            <div class='col-md-9'>{input}</div>
-            {hint}
-            {error}",
-            'labelOptions' => [ 'class' => 'col-md-2  control-label' ]
-    ])->textarea(['rows' => 6])->label('Tipo de Estudio') ?>
+
     
     <?= $form->field($model, 'material', ['template' => "{label}
             <div class='col-md-9'>{input}</div>

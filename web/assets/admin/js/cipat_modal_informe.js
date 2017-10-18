@@ -246,6 +246,7 @@
                         return false;
                 }
             }); 
+
             e.preventDefault();
             e.stopImmediatePropagation();
             var form = $(this);                       
@@ -261,6 +262,8 @@
                     data   : form.serialize(),
                     success: function (response) 
                     {
+                     
+                        
                         if (response.rdo == 'ko'){
                             var n = noty({
                                 text: 'El código debe ser único',

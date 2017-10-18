@@ -22,12 +22,12 @@ class TextosController extends Controller
     public function behaviors()
     {
         return [
-//            'verbs' => [
-//                'class' => VerbFilter::className(),
-//                'actions' => [
-//                    'delete' => ['POST'],
-//                ],
-//            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'customtext' => ['POST'],
+                ],
+            ], 
         ];
     }
 
@@ -72,10 +72,11 @@ class TextosController extends Controller
     public function actionCustomtext(){
         $model = new Textos();
         $request = Yii::$app->request;
-        
+
         if ($request->isAjax){
             if ($model->load(Yii::$app->request->post())) {
                 if (Textos::find()->where( [ 'codigo' => $model->codigo ] )->exists()){
+                    
                     \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                     return [
                         'rdo' => 'ko',
@@ -84,6 +85,7 @@ class TextosController extends Controller
                 }
                 else {
                     $model->save();
+                   
                     \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                     return [
                         'rdo' => 'ok',
@@ -111,8 +113,8 @@ class TextosController extends Controller
                 
                 if (isset($_POST['Informe']['material']))
                     $model->material = $_POST['Informe']['material'];
-                if (isset($_POST['Informe']['tipo']))
-                    $model->macro = $_POST['Informe']['tipo'];
+                /*if (isset($_POST['Informe']['tipo']))
+                    $model->macro = $_POST['Informe']['tipo'];*/
                 if (isset($_POST['Informe']['tecnica']))    
                     $model->tecnica = $_POST['Informe']['tecnica'];
                 if (isset($_POST['Informe']['descripcion']))

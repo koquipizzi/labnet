@@ -21,7 +21,13 @@ class m171010_153817_textos_inserts extends Migration
             $textos = substr($textos,strpos($textos,$key)+$key_len);
 
             if($sql!=='') {
-                $this->execute($key." ".str_replace("\'","'",addslashes($sql)));
+                $this->execute($key." ".
+                    str_replace("\\n","\n",
+                    str_replace("\'","'",
+                        addslashes($sql)
+                    )
+                    )
+                );
             }
             if($i>50000) {
                 die('error - Salio porque Nunca Termina');

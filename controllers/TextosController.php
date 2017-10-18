@@ -153,22 +153,20 @@ class TextosController extends Controller
                     $model->codigo = $_POST['Textos']['codigo'];
             }
 
-            if ($model->estudio_id == 4) //cito
+            if ($model->estudio_id == '4'){//cito
+            
                 $data = $this->renderAjax('_form_pop_cito', ['model' => $model]);
-            if ($model->estudio_id == 1) //pap
+            }
+            else if ($model->estudio_id == 1){ //pap
                 $data = $this->renderAjax('_form_pop', ['model' => $model]);
-            if ($model->estudio_id == 3) //mole
+            }
+            else if ($model->estudio_id == 3){ //mole
                 $data = $this->renderAjax('_form_pop_mole', ['model' => $model]);
-
-          /*  if ($model->save()) {
-                $data = $this->renderAjax('_form_pop', [
-                'model' => $model
-            ]);*/
-
-   // $model->load($_POST['Informe']);
-           // if ($model->save()) {
-            else $data = $this->renderAjax('_form_pop', [
+            }else{
+              
+                 $data = $this->renderAjax('_form_pop', [
                 'model' => $model]);
+             } 
          //   }
 
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

@@ -83,8 +83,10 @@ echo execut\widget\TreeView::widget([
 ?>
 <div class="panel-body no-padding">
 
-    <?php $form = ActiveForm::begin([             
-            'action' => '/index.php?r=textos/customtext',
+     <?php 
+        $url= Yii::$app->getUrlManager()->createUrl('textos/customtext') ;
+        $form = ActiveForm::begin([             
+            'action' =>$url,
             'options' => [
                 'class' => 'form-horizontal mt-10',
                 'id' => 'create-autotexto-form',               

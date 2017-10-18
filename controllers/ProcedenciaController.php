@@ -102,18 +102,14 @@ class ProcedenciaController extends Controller
      */
     public function actionDelete($id) {
 
-        try {
-            if($this->findModel($id)->delete()){
-                if (Yii::$app->getRequest()->isAjax) {
-                    return 'ok';
-                }
-            }
-        } catch (\yii\db\IntegrityException $exc) {
-            return 'error';
-                        //notificar catch
+        if ($this->findModel($id)->delete()){
+             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                     return ['rta'=>'ok', 'message'=>''];die();
         }
-
-        return $this->redirect(['index']);
+        else {
+             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                     return ['rta'=>'error', 'message'=>''];die();
+        }
     }
 
     /**

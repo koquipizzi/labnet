@@ -246,6 +246,7 @@
                         return false;
                 }
             }); 
+            var $url = 'index.php?r=textos/customtext'; 
             e.preventDefault();
             e.stopImmediatePropagation();
             var form = $(this);                       
@@ -256,11 +257,13 @@
                 }
                 // submit form
             $.ajax({
-                    url    : form.attr("action"),
+                    url    : $url,
                     type   : "post",
                     data   : form.serialize(),
                     success: function (response) 
                     {
+                     
+                        
                         if (response.rdo == 'ko'){
                             var n = noty({
                                 text: 'El código debe ser único',

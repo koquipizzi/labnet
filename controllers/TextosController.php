@@ -234,24 +234,14 @@ class TextosController extends Controller
      */
     public function actionDelete($id)
     {
-        try {
-            if($this->findModel($id)->delete()){
-                if (Yii::$app->getRequest()->isAjax) {
-                    $dataProvider = new ActiveDataProvider([
-                        'query' => Textos::find()
-                    ]);
-                    $searchModel = new TextosSearch();
-                    return $this->render('index', [
-                       'dataProvider' => $dataProvider,
-                       'searchModel' => $searchModel
-                    ]);
-                }
-            }
-        } catch (\yii\db\IntegrityException $exc) {
-
+       if ($this->findModel($id)->delete()){
+             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                     return ['rta'=>'ok', 'message'=>''];die();
         }
-
-        return $this->redirect(['index']);
+        else {
+             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                     return ['rta'=>'error', 'message'=>''];die();
+        }
     }
 
     /**

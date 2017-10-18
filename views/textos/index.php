@@ -5,6 +5,9 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
+use xj\bootbox\BootboxAsset;
+BootboxAsset::register($this);
+
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\TextosSearch */

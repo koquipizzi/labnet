@@ -134,37 +134,16 @@ class LocalidadController extends Controller
      */
     public function actionDelete($id) {
 
-        try {
-            if($this->findModel($id)->delete()){
-                if (Yii::$app->getRequest()->isAjax) {
-                    $dataProvider = new ActiveDataProvider([
-                        'query' => Localidad::find()
-                    ]);
-                    $searchModel = new LocalidadSearch();
-                    return $this->renderAjax('index', [
-                       'dataProvider' => $dataProvider,
-                        'searchModel' => $searchModel
-                    ]);
-                }
-            }
-        } catch (\yii\db\IntegrityException $exc) {
-//            Yii::$app->session->setFlash('error',
-//                [
-//                    //'type' => 'error',
-//                    'icon' => 'fa fa-users',
-//                    'message' => 'Localidad posee elementos relacionados',
-//                    'title' => 'Error de Borrado',
-//                    'positonY' => 'top',
-//                    'positonX' => 'left'
-//                ]
-//            );
-           // return $this->redirect(redirect(['index']);
-
+        if ($this->findModel($id)->delete()){
+                    \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                            return ['rta'=>'ok', 'message'=>''];die();
         }
-
-        return $this->redirect(['index']);
+        else {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return ['rta'=>'error', 'message'=>''];die();
+        
+        }
     }
-
     public function beforeAction($action) {
         $this->enableCsrfValidation = false;
         return parent::beforeAction($action);

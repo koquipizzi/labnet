@@ -27,11 +27,10 @@ class m170613_192109_protocolo_codigo extends Migration
 
     public function safeDown()
     {
-        echo "m170613_192109_protocolo_codigo cannot be reverted.\n";
-        $this->execute('alter table Protocolo drop codigo');
+        //echo "m170613_192109_protocolo_codigo cannot be reverted.\n";
         $this->execute('DROP TRIGGER IF EXISTS bi_protocolo_codigo');
         $this->execute('DROP TRIGGER IF EXISTS bu_protocolo_codigo');
-       
+        $this->execute('alter table Protocolo drop codigo');       
     }
 
     /*

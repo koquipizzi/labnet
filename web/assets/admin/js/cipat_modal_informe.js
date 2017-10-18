@@ -246,7 +246,7 @@
                         return false;
                 }
             }); 
-            var $url = 'index.php?r=textos/customtext'; 
+
             e.preventDefault();
             e.stopImmediatePropagation();
             var form = $(this);                       
@@ -257,7 +257,7 @@
                 }
                 // submit form
             $.ajax({
-                    url    : $url,
+                    url    : form.attr("action"),
                     type   : "post",
                     data   : form.serialize(),
                     success: function (response) 

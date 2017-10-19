@@ -491,6 +491,7 @@ class InformeController extends Controller {
 	}
         
        public function actionEntregar($accion,$estudio=null,$id) {
+		   
              //obtine el utlimo estado 
             $ultimoEstado=null;
             $ultimoEstado = Workflow::find ( 'id' )->where ( [
@@ -628,8 +629,8 @@ class InformeController extends Controller {
 				// portrait orientation
 				'orientation' => Pdf::ORIENT_PORTRAIT,
 				// stream to browser inline
-				'destination' => Pdf::DEST_BROWSER,
-                                'cssFile' => '@app/web/css/print/print.css',
+				'destination' => Pdf::DEST_BROWSER,                
+				'cssFile' => '@app/web/css/print/informe.css',
 				'cssInline' => '* {font-size:14px;}',
 				// set mPDF properties on the fly
 				

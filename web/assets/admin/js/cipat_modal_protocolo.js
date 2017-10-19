@@ -541,3 +541,37 @@
                             });
                     
             };
+ $(document).on('ready pjax:success', function () {   
+    $('.finalizado').on('click', function (e) {
+        e.preventDefault();
+        var $url =$(this).attr('href'); 
+        $.ajax({
+                type: "GET",
+                url: $url,               
+                dataType: "JSON",
+                success: function(response) {  
+                    if(response.rta=='error'){                   
+                        var n = noty({
+                                type: 'success',
+                                text:  response.message,
+                                layout: 'topRight',
+                                theme: 'relax',
+                                timeout: 3000,
+                                animation: {
+                                    open: {height: 'toggle'},
+                                    close: {height: 'toggle'},
+                                    easing: 'swing',
+                                    speed: 500 // opening & closing animation speed
+                                }
+                            }); 
+                             
+                    }
+                }
+            });
+            
+        });
+        
+       
+ });
+
+              

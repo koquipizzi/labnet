@@ -83,7 +83,7 @@ echo execut\widget\TreeView::widget([
 ?>
 <div class="panel-body no-padding">
 
-     <?php 
+    <?php 
         $url= Yii::$app->getUrlManager()->createUrl('textos/customtext') ;
         $form = ActiveForm::begin([             
             'action' =>$url,
@@ -124,6 +124,8 @@ echo execut\widget\TreeView::widget([
             {error}",
             'labelOptions' => [ 'class' => 'col-md-2  control-label' ]
     ])->textInput(['maxlength' => true]) ?>
+
+
     
     <?= $form->field($model, 'material', ['template' => "{label}
             <div class='col-md-9'>{input}</div>
@@ -138,20 +140,20 @@ echo execut\widget\TreeView::widget([
             {error}",
             'labelOptions' => [ 'class' => 'col-md-2  control-label' ]
     ])->textarea(['rows' => 6]) ?>
-    
+
     <?= $form->field($model, 'macro', ['template' => "{label}
             <div class='col-md-9'>{input}</div>
             {hint}
             {error}",
             'labelOptions' => [ 'class' => 'col-md-2  control-label' ]
-    ])->textarea(['rows' => 6])->label('Método') ?>
-
+    ])->textarea(['rows' => 6]) ?>
+    
     <?= $form->field($model, 'micro', ['template' => "{label}
-        <div class='col-md-9'>{input}</div>
-        {hint}
-        {error}",
-        'labelOptions' => [ 'class' => 'col-md-2  control-label' ]
-    ])->textarea(['rows' => 6])->label('Resultado') ?>
+            <div class='col-md-9'>{input}</div>
+            {hint}
+            {error}",
+            'labelOptions' => [ 'class' => 'col-md-2  control-label' ]
+    ])->textarea(['rows' => 6])?>
     
     <?= $form->field($model, 'diagnos', ['template' => "{label}
             <div class='col-md-9'>{input}</div>

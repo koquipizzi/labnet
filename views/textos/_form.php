@@ -1,19 +1,14 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
-
-
 use yii\web\JsExpression;
 use execut\widget\TreeView;
 use app\controllers\AutoTextTreeController;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 use kartik\widgets\FileInput;
-
-
 $onSelect = new JsExpression(<<<JS
 function (undefined, item) {
     if (item.href !== location.pathname) {
@@ -23,7 +18,6 @@ function (undefined, item) {
             timeout: null
         });
     }
-
     var otherTreeWidgetEl = $('.treeview.small').not($(this)),
         otherTreeWidget = otherTreeWidgetEl.data('treeview'),
         selectedEl = otherTreeWidgetEl.find('.node-selected');
@@ -34,10 +28,13 @@ function (undefined, item) {
 JS
 );
 
-$estudio = 1;
+
+
+
+
+$estudio = $model->estudio_id;
 $id = $model->id;
 $query = "SELECT * FROM Textos where `estudio_id` = '".$estudio."' ";
-
 $result = \app\models\Textos::findBySql($query)->all();
 //var_dump($result); die();
 $tree = new AutoTextTreeController();
@@ -45,9 +42,7 @@ foreach ($result as $row){
     $url = Url::to(['',  'id' => $id, 'idtexto'=> $row['id']]);
     $tree->merge($row['codigo'], $url);
 }
-
 $items2 = $tree->getTree();
-
 $this->registerCss(".treeview {
                                 float:left;
                                 width:100%;
@@ -55,11 +50,10 @@ $this->registerCss(".treeview {
                                 height: 200px;
                             }             
 ");
-
 echo execut\widget\TreeView::widget([
     'data' => $items2,
     'size' => TreeView::SIZE_SMALL,
-    'header'=> 'Seleccione Tipo de Estudio',
+    'header'=> 'Guia del arbol de textos',
     'searchOptions' => [
         'inputOptions' => [
             'placeholder' => 'Buscar Estudio...'
@@ -69,8 +63,6 @@ echo execut\widget\TreeView::widget([
         'onNodeSelected' => $onSelect,
     ],
 ]);
-
-
 ?>
 <div class="panel-body no-padding">
 

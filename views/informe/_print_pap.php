@@ -71,25 +71,8 @@ use yii\helpers\Html;
                 <tr><td class="pap_labels_cito">CALIDAD DE MUESTRA</td> <td  class="pap_desc_cito"><?php echo $model->calidad ? Leyenda::findOne(['id' => $model->calidad ])->texto : ""  ?></td></tr>
                 <tr><td class="pap_labels_cito">ASPECTO</td>            <td  class="pap_desc_cito"><?php echo $model->aspecto ? Leyenda::findOne(['id' => $model->aspecto ])->texto : ""  ?></td></tr>
                 <tr><td class="pap_labels_cito">FLORA</td>              <td  class="pap_desc_cito"><?php echo $model->flora ? Leyenda::findOne(['id' => $model->flora ])->texto : ""  ?></td></tr>
-                <tr><td class="pap_labels_cito">LEUCOCITOS</td>         <td  class="pap_desc_cito">
-                <?php 
-                    if(!empty(Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->leucositos])->texto)){
-                        echo Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->leucositos])->texto;
-                    }else{
-                        echo "sin registro.";
-                    }
-                 ?>
-                
-                </td></tr>
-                <tr><td class="pap_labels_cito">HEMATIES</td>           <td  class="pap_desc_cito">
-                <?php 
-                    if(!empty(Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->hematies])->texto)){
-                        echo Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->hematies])->texto;
-                    }else{
-                        echo "sin registro.";
-                    }
-                 ?>
-                </td></tr>
+                <tr><td class="pap_labels_cito">LEUCOCITOS</td>         <td  class="pap_desc_cito"><?php echo $model->leucositos ? Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->leucositos])->texto : ""?></td></tr>
+                <tr><td class="pap_labels_cito">HEMATIES</td>           <td  class="pap_desc_cito"><?php echo $model->hematies ? Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->hematies])->texto : "" ?></td></tr>
                 <tr><td class="pap_labels_cito">OTROS ELEMENTOS</td>    <td  class="pap_desc_cito"><?php echo $model->otros ? Leyenda::findOne(['id' => $model->otros ])->texto : ""  ?></td></tr>
                 <tr><td class="pap_labels_cito">MICROORGANISMOS</td>    <td  class="pap_desc_cito"><?php echo $model->microorganismos ? Leyenda::findOne(['id' => $model->microorganismos ])->texto : ""  ?></td></tr>
             </table>

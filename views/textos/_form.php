@@ -27,7 +27,12 @@ function (undefined, item) {
 }
 JS
 );
-$estudio = 1;
+
+
+
+
+
+$estudio = $model->estudio_id;
 $id = $model->id;
 $query = "SELECT * FROM Textos where `estudio_id` = '".$estudio."' ";
 $result = \app\models\Textos::findBySql($query)->all();
@@ -48,7 +53,7 @@ $this->registerCss(".treeview {
 echo execut\widget\TreeView::widget([
     'data' => $items2,
     'size' => TreeView::SIZE_SMALL,
-    'header'=> 'Seleccione Tipo de Estudio',
+    'header'=> 'Guia del arbol de textos',
     'searchOptions' => [
         'inputOptions' => [
             'placeholder' => 'Buscar Estudio...'

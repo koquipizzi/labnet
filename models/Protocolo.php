@@ -149,6 +149,13 @@ class Protocolo extends \yii\db\ActiveRecord
         return $pac;
     }
 
+    public function getPacienteMail()
+    {
+        $pacientePrestadora= $this->hasOne(PacientePrestadora::className(), ['id' => 'Paciente_prestadora_id'])->one();
+        $paciente= Paciente::find()->where(['id' => $pacientePrestadora->Paciente_id])->one();
+        return $paciente->email;
+    }
+
     public function getPacienteText()
     {
         $paciente= $this->hasOne(ViewPacientePrestadora::className(), ['id' => 'Paciente_prestadora_id'])->one();

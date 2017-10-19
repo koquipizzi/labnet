@@ -490,16 +490,24 @@ class InformeController extends Controller {
 		}
 	}
         
-       public function actionEntregar($accion,$estudio=null,$id) {
-		   
-             //obtine el utlimo estado 
-            $ultimoEstado=null;
-            $ultimoEstado = Workflow::find ( 'id' )->where ( [
-                            'Informe_id' => $id
-                                ] )->orderBy ( [
-                                                '(id)' => SORT_DESC
-                                ] )->one ();
-            if (! is_null ( $ultimoEstado ) ) {
+   public function actionEntregar($accion,$estudio=null,$id) {
+		$model = $this->findModel ( $id );
+		if ($model) {
+			$modelp = $model->protocolo;
+		}else{
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+				return ['rta'=>'error', 'message'=>'Fallo'];die();
+		}
+		
+		if(!empty($modelp->pacienteMail)){	
+			//obtine el utlimo estado 
+			$ultimoEstado=null;
+			$ultimoEstado = Workflow::find ( 'id' )->where ( [
+							'Informe_id' => $id
+								] )->orderBy ( [
+												'(id)' => SORT_DESC
+								] )->one ();
+			if (! is_null ( $ultimoEstado ) ) {
 				/**
 				* actualiza el workflow que contiene el estado pendiente
 				*/
@@ -520,35 +528,38 @@ class InformeController extends Controller {
 				$workf->fecha_fin = $fecha;
 				$workf->save ();  
 			}
-                
-            if($accion==="print" && isset($estudio)){
-                switch ($estudio){
-                    case \app\models\Estudio::getEstudioPap(): //pap
-                        $this->actionPrintpap($id,$web=null);
-                        break;
-                    case \app\models\Estudio::getEstudioBiopsia(): //biopsia
-                        $this->actionPrintanatomo($id);
-                        break;
-                    case \app\models\Estudio::getEstudioMolecular(): //molecular
-                        $this->actionPrintmole($id);
-                        break;
-                    case \app\models\Estudio::getEstudioCitologia(): //citologia
-                        $this->actionPrintcito($id);
-                        break;
-                    case \app\models\Estudio::getEstudioInmuno(): //IMQ
-                         $this->actionPrintinf($id);
-                        break;
-                }
-            }else if($accion==="publicar"){
-                
-            }else{//mail
-				if ($this->actionMailing($id))
+				
+			if($accion==="print" && isset($estudio)){
+				switch ($estudio){
+					case \app\models\Estudio::getEstudioPap(): //pap
+						$this->actionPrintpap($id,$web=null);
+						break;
+					case \app\models\Estudio::getEstudioBiopsia(): //biopsia
+						$this->actionPrintanatomo($id);
+						break;
+					case \app\models\Estudio::getEstudioMolecular(): //molecular
+						$this->actionPrintmole($id);
+						break;
+					case \app\models\Estudio::getEstudioCitologia(): //citologia
+						$this->actionPrintcito($id);
+						break;
+					case \app\models\Estudio::getEstudioInmuno(): //IMQ
+						$this->actionPrintinf($id);
+						break;
+				}
+			}else if($accion==="publicar"){
+				
+			}else{//mail
+				if ($this->actionMailing($model))
 					return $this->redirect ( [ 
 						'//protocolo/terminados' 
 				] );	
-            }
-                
-       }
+			}
+		}else{
+				\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+				return ['rta'=>'error', 'message'=>'Error, el paciente no tiene mail.'];die();
+		}     
+	}
       
 	   
 	public function papreducido($id) {
@@ -593,13 +604,13 @@ class InformeController extends Controller {
 		return $pdf;
 	}
 	
-	public function actionMailing($id=null,$estudio=null){
+	public function actionMailing($model=null,$estudio=null){
 		$laboratorio = Laboratorio::find()->where(['id' => 1])->one();
-		$model = $this->findModel ( $id );
 		
 		if ($model) {
 			$modelp = $model->protocolo;
 		}
+	
 		$estudio = $model->Estudio_id; 
 		switch ($estudio){
 			case \app\models\Estudio::getEstudioPap(): //pap

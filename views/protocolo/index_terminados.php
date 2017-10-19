@@ -7,7 +7,8 @@ use yii\grid\GridView;
 use mdm\admin\components\Helper;
 use jino5577\daterangepicker\DateRangePicker;
 use app\models\Informe;
-
+use xj\bootbox\BootboxAsset;
+BootboxAsset::register($this);
 $this->title = Yii::t('app', 'Estudios');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -40,14 +41,13 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="clearfix"></div>
         </div>
-
-
+ 
             <!-- Start tabs content -->
             <div style="margin-top: 10px;">
                 <?php
                 $this->registerCss(".hasDatepicker {
                                     width:90px;}");
-                Pjax::begin(['id' => 'terminados']);
+                Pjax::begin(['id' => 'terminados', 'enablePushState' => FALSE]);
 
                                 echo GridView::widget([
                                 'dataProvider' => $dataProvider_terminados,
@@ -188,14 +188,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                                     return Html::a(" <span class='fa fa-print'></span>",$urlPrint,[
                                                         'title' => Yii::t('app', 'Descargar/imprimir'),
-                                                        'class'=>'btn btn-primary btn-xs',
+                                                        'class'=>'btn btn-primary btn-xs ',
                                                         'value'=> "$urlPrint",
                                                         'data-id'=> "$data",
                                                         'data-protocolo'=> "$data",
                                                         'target'=>'_blank',
                                                     ])."  " .Html::a(" <span class='fa fa-envelope'></span>",$url,[
                                                         'title' => Yii::t('app', 'Enviar por Mail'),
-                                                        'class'=>'btn bg-olive btn-xs',
+                                                        'class'=>'btn bg-olive btn-xs finalizado',
                                                         'value'=> "$url",
                                                         'data-id'=> "$data",
                                                         'data-protocolo'=> "$data",

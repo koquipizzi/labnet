@@ -139,7 +139,7 @@ echo execut\widget\TreeView::widget([
             'labelOptions' => [ 'class' => 'col-md-2  control-label' ]
     ])->textarea(['rows' => 6]) ?>
     
-    <?= $form->field($model, 'macro', ['template' => "{label}
+    <?= $form->field($model, 'micro', ['template' => "{label}
             <div class='col-md-9'>{input}</div>
             {hint}
             {error}",

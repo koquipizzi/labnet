@@ -132,7 +132,7 @@ class TextosController extends Controller
                 if (isset($_POST['codigo']))
                     $model->codigo = $_POST['codigo'];
                 if (isset($_POST['Informe']['citologia']))
-                    $model->macro = $_POST['Informe']['citologia'];                    
+                    $model->micro = $_POST['Informe']['citologia'];                    
             }
             if (isset($_POST['Textos'])){
                 if (isset($_POST['Textos']['material']))

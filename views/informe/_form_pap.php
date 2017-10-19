@@ -199,25 +199,23 @@ Pjax::end();
                                                         'labelOptions' => [ 'class' => 'col-md-1 control-label', 'style' => 'float:left;']
                                                     ])->input(['maxlength' => true, 'rows' => 6, 'cols' => 20]);
                                             
-                                                $dataMaterial = ArrayHelper::map(Leyenda::getMaterialPAP(), 'id', 'texto');
+                                                
                                               echo $form->field($model, 'material', ['template' => "{label}
                                                             <div class='col-md-12'>{input}</div>
                                                             {hint}
                                                             {error}",
                                                             'labelOptions' => [ 'class' => 'col-md-6  control-label']
-                                                        ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20, 
-                                                            'value'=> $dataMaterial[60]
+                                                        ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20
 
                                                             ]);  
                                                 
-                                             $dataMaterial = ArrayHelper::map(Leyenda::getMTecnicaPAP(), 'id', 'texto');
+                                             
                                               echo $form->field($model, 'tecnica', ['template' => "{label}
                                                             <div class='col-md-12'>{input}</div>
                                                             {hint}
                                                             {error}",
                                                             'labelOptions' => [ 'class' => 'col-md-6  control-label']
-                                                        ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20, 
-                                                            'value'=>$dataMaterial[61]
+                                                        ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20
                                                             ]);  
                                               
                                             ?>

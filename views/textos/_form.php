@@ -34,7 +34,7 @@ JS
 $estudio = $model->estudio_id;
 $id = $model->id;
 $query = "SELECT * FROM Textos where `estudio_id` = '".$estudio."' ";
-$result = \app\models\Textos::findBySql($query)->all();
+$result = \app\models\Textos::find()->all();
 //var_dump($result); die();
 $tree = new AutoTextTreeController();
 foreach ($result as $row){
@@ -52,7 +52,7 @@ $this->registerCss(".treeview {
 echo execut\widget\TreeView::widget([
     'data' => $items2,
     'size' => TreeView::SIZE_SMALL,
-    'header'=> 'Guia del arbol de textos',
+    'header'=> 'Guía del arbol de textos para los tipos de estudio.',
     'searchOptions' => [
         'inputOptions' => [
             'placeholder' => 'Buscar Estudio...'

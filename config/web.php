@@ -5,21 +5,21 @@ $params = require(__DIR__ . '/params.php');
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log', 'audit'],
+    'bootstrap' => ['log'],//, 'audit'
     'language'=>'es', // spanish
     'params' => $params,
     'modules' => [
         'simplechat' => [
             'class' => 'bubasuma\simplechat\Module',
         ],
-         'audit' => [
-             'class' => 'bedezign\yii2\audit\Audit',
+       //  'audit' => [
+       //      'class' => 'bedezign\yii2\audit\Audit',
  		//	'panelsMerge' => [
  		//		'app/views' => [
  		//			'class' => '@app\views\panels\ViewsPanel',
  		//		],
  		//	],
- 		],
+		//],
 
          'comment' => [
             'class' => 'yii2mod\comments\Module',
@@ -190,7 +190,7 @@ $config = [
 		'allowActions' => [
 			'admin/*', // add or remove allowed actions to this list
             'comment/*',
-            'audit/*',
+         //   'audit/*',
             'debug/*'
 		]
     ],

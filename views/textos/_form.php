@@ -31,7 +31,6 @@ JS
 
 
 
-
 $estudio = $model->estudio_id;
 $id = $model->id;
 $query = "SELECT * FROM Textos where `estudio_id` = '".$estudio."' ";
@@ -63,6 +62,8 @@ echo execut\widget\TreeView::widget([
         'onNodeSelected' => $onSelect,
     ],
 ]);
+
+
 ?>
 <div class="panel-body no-padding">
 
@@ -151,6 +152,13 @@ echo execut\widget\TreeView::widget([
         </div>
     </div>
 
-    <?php ActiveForm::end(); ?>
+    <?php ActiveForm::end(); 
+   
+ 
+
+
+    
+    ?>
 
 </div>
+

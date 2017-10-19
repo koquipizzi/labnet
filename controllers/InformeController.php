@@ -125,7 +125,7 @@ class InformeController extends Controller {
                 case 1: //pap
                     $model->material = $texto->material;
                     $model->tecnica = $texto->tecnica;
-                    $model->citologia = $texto->micro;
+                    $model->citologia = $texto->macro;
                     $model->diagnostico = $texto->diagnos;
                     $model->observaciones = $texto->observ;
 		//			var_dump($model); die();

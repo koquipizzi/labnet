@@ -155,7 +155,7 @@ class TextosController extends Controller
                     $model->codigo = $_POST['Textos']['codigo'];
             }
 
-            if ($model->estudio_id == '4'){//cito
+            if ($model->estudio_id == 4){//cito
             
                 $data = $this->renderAjax('_form_pop_cito', ['model' => $model]);
             }
@@ -166,7 +166,7 @@ class TextosController extends Controller
                 $data = $this->renderAjax('_form_pop_mole', ['model' => $model]);
             }else{
               
-                 $data = $this->renderAjax('_form_pop', [
+                 $data = $this->renderAjax('_form_pop_biop_inmuno.php', [
                 'model' => $model]);
              } 
          //   }

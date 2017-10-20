@@ -501,19 +501,19 @@ class InformeController extends Controller {
 		
 
 			//obtine el utlimo estado 
+			$idUltimoWorkflow=$model->getWorkflowLastStateId();
 			$ultimoEstado=null;
 			$ultimoEstado = Workflow::find ( 'id' )->where ( [
-							'Informe_id' => $id
+							'id' => $idUltimoWorkflow
 								] )->orderBy ( [
 												'(id)' => SORT_DESC
 								] )->one ();
-			
-
+		
 
 			if (! is_null ( $ultimoEstado ) ) {
 
 				$estado_entregado= Workflow::estadoEntregado(); 	
-				if($ultimoEstado->id==$estado_entregado){
+				if($ultimoEstado->Estado_id==$estado_entregado){
 					$estado_actual=$estado_entregado;
 				}else{
 					$estado_actual=5;

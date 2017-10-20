@@ -505,11 +505,8 @@ class InformeController extends Controller {
 			$ultimoEstado=null;
 			$ultimoEstado = Workflow::find ( 'id' )->where ( [
 							'id' => $idUltimoWorkflow
-								] )->orderBy ( [
-												'(id)' => SORT_DESC
-								] )->one ();
+								] )->one();
 		
-
 			if (! is_null ( $ultimoEstado ) ) {
 
 				$estado_entregado= Workflow::estadoEntregado(); 	
@@ -571,6 +568,7 @@ class InformeController extends Controller {
 			}else{//mail
 					if(!empty($modelp->pacienteMail)){	
 						if ($this->actionMailing($model)){
+					
 							if($estado_actual==5){//finalizado
 								return $this->redirect ( [ 
 											'//protocolo/terminados' 

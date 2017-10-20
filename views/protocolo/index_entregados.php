@@ -195,12 +195,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                     'target'=>'_blank',
                                                                 ])." ".Html::a("<i class='fa fa-envelope'></i>",$url,[
                                                                     'title' => Yii::t('app', 'Enviar por Mail'),
-                                                                    'class'=>'btn btn-primary btn-xs ',
+                                                                    'class'=>'btn btn-primary btn-xs finalizado ',
                                                                     'value'=> "$url",
                                                                     'data-id'=> "$data",
                                                                     'data-protocolo'=> "$data",
                                                                 ])
-                                                                . " ".Html::a("<i class='fa fa-cloud-upload'></i>",$url,[
+                                                                . " ".Html::a("<i class='fa fa-cloud-upload'></i>",$urlPublicar,[
                                                                     'title' => Yii::t('app', 'Publicar en WEB'),
                                                                     'class'=>'btn btn-primary btn-xs ',
                                                                     'value'=> "$urlPublicar",

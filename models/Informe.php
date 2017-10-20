@@ -221,6 +221,22 @@ class Informe extends \yii\db\ActiveRecord
         return  $informeEstado['id'];
     }
     
+    
+        /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWorkflowLastStateId()
+    {
+       $workflowId= $this->findBySql("
+    			select vi.id
+                from view_informe_ult_workflow vi
+                    ")->asArray()->one();
+              
+        return  $workflowId['id'];
+    }
+    
+
+
     public function getCurrentWorkflow()
     {
         $ls =$this->hasOne(Workflow::className(), ['Informe_id' => 'id'])->orderBy('fecha_fin DESC')->one();

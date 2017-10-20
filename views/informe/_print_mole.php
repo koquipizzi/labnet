@@ -62,19 +62,19 @@ use yii\helpers\Html;
             METODO
         </div>    
         <div class="pap_desc">
-            <?php echo nl2br($model->metodo); ?>
+            <?php echo nl2br($model->macroscopia); ?>
         </div>        
         <div class="pap_labels">            
             RESULTADO
         </div> 
         <div class="pap_desc">
-            <?php echo nl2br($model->macroscopia);  ?>
+            <?php echo nl2br($model->microscopia);  ?>
         </div>
         <div class="pap_labels">
             DIAGNÓSTICO
         </div> 
         <div class="pap_desc">
-            <?php echo nl2br($model->microscopia);  ?>
+            <?php echo nl2br($model->diagnostico);  ?>
         </div>
         <div class="pap_labels">
             OBSERVACIONES

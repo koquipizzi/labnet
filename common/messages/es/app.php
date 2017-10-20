@@ -21,7 +21,7 @@ return [
     ' Eliminar ' => '',
     'Actualizar AutoTextos' => '',
     'Admin' => '',
-    'Are you sure you want to delete this item?' => '',
+    'Are you sure you want to delete this item?' => 'Confirma que desea eliminar el elemnto?',
     'Aspecto' => '',
     'Auth Key' => '',
     'AutoTextos' => '',

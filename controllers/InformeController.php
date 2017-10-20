@@ -654,7 +654,7 @@ class InformeController extends Controller {
 							$vista = '_print_inf_cito';
 							break;
 						case \app\models\Estudio::getEstudioInmuno(): //IMQ
-							$vista = '_print_inf_inmuno';
+							$vista = '_print_inf';
 							break;
 					}
 

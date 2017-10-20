@@ -121,6 +121,7 @@ class InformeController extends Controller {
 	}
 	
         public function cargarModelo(&$model, $texto) {
+			
             switch ($model->estudio->id){
                 case 1: //pap
                     $model->material = $texto->material;
@@ -141,8 +142,8 @@ class InformeController extends Controller {
                 case 3: //molecular
                     $model->material = $texto->material;
                     $model->tecnica = $texto->tecnica;
-                    $model->metodo = $texto->macro;
-                    $model->resultado = $texto->micro;
+                    $model->macroscopia = $texto->macro;
+                    $model->microscopia = $texto->micro;
                     $model->diagnostico = $texto->diagnos;
                     $model->observaciones = $texto->observ;
                     break;
@@ -323,6 +324,7 @@ class InformeController extends Controller {
                     if (isset($_GET['idtexto'])) {
                         $textoModel = new \app\models\Textos();
                         $texto = $textoModel->find()->where(['=', 'id', $_GET['idtexto']])->one(); //findModel($_GET['idtexto']);
+						
                         $this->cargarModelo($model, $texto);      
                         $codigo = $texto->codigo;
                         $model->save();

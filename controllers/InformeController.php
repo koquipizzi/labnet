@@ -499,7 +499,7 @@ class InformeController extends Controller {
 				return ['rta'=>'error', 'message'=>'Fallo'];die();
 		}
 		
-		if(!empty($modelp->pacienteMail)){	
+
 			//obtine el utlimo estado 
 			$ultimoEstado=null;
 			$ultimoEstado = Workflow::find ( 'id' )->where ( [
@@ -548,18 +548,22 @@ class InformeController extends Controller {
 						break;
 				}
 			}else if($accion==="publicar"){
-				
-			}else{//mail
-				if ($this->actionMailing($model))
 					return $this->redirect ( [ 
-						'//protocolo/terminados' 
-				] );	
-			}
-		}else{
-				\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-				return ['rta'=>'error', 'message'=>'Error, el paciente no tiene mail.'];die();
-		}     
-	}
+								'//protocolo/terminados' 
+						] );
+			}else{//mail
+					if(!empty($modelp->pacienteMail)){	
+						if ($this->actionMailing($model))
+							return $this->redirect ( [ 
+								'//protocolo/terminados' 
+						] );	
+					}else{
+						\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+						return ['rta'=>'error', 'message'=>'Error, el paciente no tiene mail.'];die();
+					}  	
+				}
+		}   
+	
       
 	   
 	public function papreducido($id) {
@@ -604,7 +608,7 @@ class InformeController extends Controller {
 		return $pdf;
 	}
 	
-	public function actionMailing($model=null,$estudio=null,$modelp){
+	public function actionMailing($model=null,$estudio=null){
 		$laboratorio = Laboratorio::find()->where(['id' => 1])->one();
 		
 		if ($model) {

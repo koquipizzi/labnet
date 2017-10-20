@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php
                 $this->registerCss(".hasDatepicker {
                                     width:90px;}");
-                Pjax::begin(['id' => 'terminados', 'enablePushState' => FALSE]);
+                Pjax::begin(['id' => 'terminados']);
 
                                 echo GridView::widget([
                                 'dataProvider' => $dataProvider_terminados,
@@ -199,7 +199,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                         'value'=> "$url",
                                                         'data-id'=> "$data",
                                                         'data-protocolo'=> "$data",
-                                                    ])."  " . Html::a("<i class='fa fa-cloud-upload'></i>",$url,[
+                                                    ])."  " . Html::a("<i class='fa fa-cloud-upload'></i>",$urlPublicar,[
                                                         'title' => Yii::t('app', 'Publicar en WEB'),
                                                         'class'=>'btn btn-primary btn-xs',
                                                         'value'=> "$urlPublicar",

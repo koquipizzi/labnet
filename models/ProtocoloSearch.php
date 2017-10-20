@@ -112,22 +112,13 @@ class ProtocoloSearch extends Protocolo
     private function fechaEntradaFilter($params, &$where, &$queryParams) {
         if($this->paramExists($params, 'fecha_entrada')) {
             list($fechaInicio,$fechaFin)= explode('-',$params['fecha_entrada']);
-            $queryParams[':fecha_inicio'] = trim($fechaInicio);
-            $queryParams[':fecha_fin']    = trim($fechaFin);
-            $where = $this->addWhereSentence($where, "Protocolo.fecha_entrada BETWEEN STR_TO_DATE(:fecha_inicio,'%d/%m/%Y') AND STR_TO_DATE(:fecha_fin,'%d/%m/%Y')");
+            $queryParams[':fecha_inicio_fe'] = trim($fechaInicio);
+            $queryParams[':fecha_fin_fe']    = trim($fechaFin);
+            $where = $this->addWhereSentence($where, "Protocolo.fecha_entrada BETWEEN STR_TO_DATE(:fecha_inicio_fe,'%d/%m/%Y') AND STR_TO_DATE(:fecha_fin_fe,'%d/%m/%Y')");
         }
     }
 
-    /**
-    * Filtro de Código
-    */
-    private function codigoFilter($params, &$where, &$queryParams) {
-        if($this->paramExists($params, 'codigo')) {
-            $queryParams[':codigo'] = "%".$params['codigo']."%";
-            $where = $this->addWhereSentence($where, "Protocolo.codigo like :codigo");
-        }
-    }
-    
+ 
     /**
     * Filtro de fecha entrega
     */
@@ -141,7 +132,16 @@ class ProtocoloSearch extends Protocolo
     }
       
 
-
+   /**
+    * Filtro de Código
+    */
+    private function codigoFilter($params, &$where, &$queryParams) {
+        if($this->paramExists($params, 'codigo')) {
+            $queryParams[':codigo'] = "%".$params['codigo']."%";
+            $where = $this->addWhereSentence($where, "Protocolo.codigo like :codigo");
+        }
+    }
+    
 
 
 
@@ -217,7 +217,6 @@ class ProtocoloSearch extends Protocolo
             $consultaCant, 
             $queryParams
         )->queryScalar();
-
         $dataProvider = new \yii\data\SqlDataProvider([
             'sql' => $query,
             'params' => $queryParams,
@@ -331,7 +330,7 @@ class ProtocoloSearch extends Protocolo
             $consultaCant, 
             $queryParams
         )->queryScalar();
-
+    
         $dataProvider = new \yii\data\SqlDataProvider([
             'sql' => $query,
             'params' => $queryParams,

@@ -229,7 +229,8 @@ class Informe extends \yii\db\ActiveRecord
     {
        $workflowId= $this->findBySql("
     			select vi.id
-                from view_informe_ult_workflow vi
+                from view_informe_ult_workflow vi 
+                where informe_id={$this->id}
                     ")->asArray()->one();
               
         return  $workflowId['id'];

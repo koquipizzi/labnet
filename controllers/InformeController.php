@@ -507,7 +507,17 @@ class InformeController extends Controller {
 								] )->orderBy ( [
 												'(id)' => SORT_DESC
 								] )->one ();
+			
+
+
 			if (! is_null ( $ultimoEstado ) ) {
+
+				$estado_entregado= Workflow::estadoEntregado(); 	
+				if($ultimoEstado->id==$estado_entregado){
+					$estado_actual=$estado_entregado;
+				}else{
+					$estado_actual=5;
+				}
 				/**
 				* actualiza el workflow que contiene el estado pendiente
 				*/
@@ -521,7 +531,7 @@ class InformeController extends Controller {
 				* @var \app\models\Workflow $workf
 				*/
 				$workf = new Workflow ();
-				$workf->Estado_id = Workflow::estadoEntregado(); 
+				$workf->Estado_id = $estado_entregado; 
 				$workf->Informe_id = $id;
 				$workf->Responsable_id = \Yii::$app->user->getId ();
 				$workf->fecha_inicio = $fecha;
@@ -548,15 +558,29 @@ class InformeController extends Controller {
 						break;
 				}
 			}else if($accion==="publicar"){
+				if($estado_actual==5){
 					return $this->redirect ( [ 
 								'//protocolo/terminados' 
 						] );
+				}else{
+					return $this->redirect ( [ 
+								'//protocolo/entregados' 
+						] );
+				}
+					
 			}else{//mail
 					if(!empty($modelp->pacienteMail)){	
-						if ($this->actionMailing($model))
-							return $this->redirect ( [ 
-								'//protocolo/terminados' 
-						] );	
+						if ($this->actionMailing($model)){
+							if($estado_actual==5){//finalizado
+								return $this->redirect ( [ 
+											'//protocolo/terminados' 
+									] );
+							}else{
+								return $this->redirect ( [ 
+											'//protocolo/entregados' 
+									] );
+							}
+						}	
 					}else{
 						\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 						return ['rta'=>'error', 'message'=>'Error, el paciente no tiene mail.'];die();

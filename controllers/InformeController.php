@@ -604,71 +604,74 @@ class InformeController extends Controller {
 		return $pdf;
 	}
 	
-	public function actionMailing($model=null,$estudio=null){
+	public function actionMailing($model=null,$estudio=null,$modelp){
 		$laboratorio = Laboratorio::find()->where(['id' => 1])->one();
 		
 		if ($model) {
 			$modelp = $model->protocolo;
-		}
-	
-		$estudio = $model->Estudio_id; 
-		switch ($estudio){
-			case \app\models\Estudio::getEstudioPap(): //pap
-			    $vista = '_print_pap';
-				break;
-			case \app\models\Estudio::getEstudioBiopsia(): //biopsia
-			    $vista = '_print_biopsia';
-				break;
-			case \app\models\Estudio::getEstudioMolecular(): //molecular
-			    $vista = '_print_mole';
-				break;
-			case \app\models\Estudio::getEstudioCitologia(): //citologia
-				$vista = '_print_inf_cito';
-				break;
-			case \app\models\Estudio::getEstudioInmuno(): //IMQ
-				$vista = '_print_inf_inmuno';
-				break;
-		}
-
+			if ( $modelp) {
 			
-		$mpdf=new Pdf();
-		$pdf1 = new Pdf ( [
-				// 'mode' => Pdf::MODE_CORE,
-				'mode' => Pdf::MODE_BLANK,
-				// A4 paper format
-				'format' => Pdf::FORMAT_A4,
-				// portrait orientation
-				'orientation' => Pdf::ORIENT_PORTRAIT,
-				// stream to browser inline
-				'destination' => Pdf::DEST_BROWSER,                
-				'cssFile' => '@app/web/css/print/informe.css',
-				'cssInline' => '* {font-size:14px;}',
-				// set mPDF properties on the fly
-				
-				'content' => $this->renderPartial ( $vista, [ 
-						'model' => $model,
-						'modelp' => $modelp,
-                        'laboratorio' => $laboratorio,
-				] ),
-		] );            
-		
-		$titulo = $model->titulo."-".date("d-m-Y");;
-		$mpdf = $pdf1->api;
-		$mpdf->WriteHTML($pdf1->content); //pdf is a name of view file responsible for this pdf document
-		$path = $mpdf->Output(Yii::getAlias('@webroot').'/uploads/pdf/'.$titulo.'.pdf', 'F'); // THIS WILL SAVE THE FILE IN PATH
-		
-		$ee =   Yii::$app->mailer->compose()
-			->setFrom('alejandra@qwavee.com')
-			->setTo($modelp->pacienteMail)
-			->setTextBody($laboratorio->nombre)
-			->setSubject('Envío de Resultados de Laboratorio CIPAT')
-			->setHtmlBody($laboratorio->nombre.'<b> le envía los resultados del análisis</b>')
-			->attach(Yii::getAlias('@webroot').'/uploads/pdf/'.$titulo.'.pdf');
-		if ($ee->send()) 
-			return 1;
-		else
-			return 0;
-	   }
+					$estudio = $model->Estudio_id; 
+					switch ($estudio){
+						case \app\models\Estudio::getEstudioPap(): //pap
+							$vista = '_print_pap';
+							break;
+						case \app\models\Estudio::getEstudioBiopsia(): //biopsia
+							$vista = '_print_biopsia';
+							break;
+						case \app\models\Estudio::getEstudioMolecular(): //molecular
+							$vista = '_print_mole';
+							break;
+						case \app\models\Estudio::getEstudioCitologia(): //citologia
+							$vista = '_print_inf_cito';
+							break;
+						case \app\models\Estudio::getEstudioInmuno(): //IMQ
+							$vista = '_print_inf_inmuno';
+							break;
+					}
+
+						
+					$mpdf=new Pdf();
+					$pdf1 = new Pdf ( [
+							// 'mode' => Pdf::MODE_CORE,
+							'mode' => Pdf::MODE_BLANK,
+							// A4 paper format
+							'format' => Pdf::FORMAT_A4,
+							// portrait orientation
+							'orientation' => Pdf::ORIENT_PORTRAIT,
+							// stream to browser inline
+							'destination' => Pdf::DEST_BROWSER,                
+							'cssFile' => '@app/web/css/print/informe.css',
+							'cssInline' => '* {font-size:14px;}',
+							// set mPDF properties on the fly
+							
+							'content' => $this->renderPartial ( $vista, [ 
+									'model' => $model,
+									'modelp' => $modelp,
+									'laboratorio' => $laboratorio,
+							] ),
+					] );            
+					
+					$titulo = $model->titulo."-".date("d-m-Y");;
+					$mpdf = $pdf1->api;
+					$mpdf->WriteHTML($pdf1->content); //pdf is a name of view file responsible for this pdf document
+					$path = $mpdf->Output(Yii::getAlias('@webroot').'/uploads/pdf/'.$titulo.'.pdf', 'F'); // THIS WILL SAVE THE FILE IN PATH
+					
+					$ee =   Yii::$app->mailer->compose()
+						->setFrom('alejandra@qwavee.com')
+						->setTo($modelp->pacienteMail)
+						->setTextBody($laboratorio->nombre)
+						->setSubject('Envío de Resultados de Laboratorio CIPAT')
+						->setHtmlBody($laboratorio->nombre.'<b> le envía los resultados del análisis</b>')
+						->attach(Yii::getAlias('@webroot').'/uploads/pdf/'.$titulo.'.pdf');
+					if ($ee->send()) 
+						return 1;
+					else
+						return 0;
+			}		
+		}
+		return false;
+  }
         
         
 		public function actionPrintreducido($id,$estudio){

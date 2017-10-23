@@ -657,9 +657,42 @@ class InformeController extends Controller {
 							$vista = '_print_inf';
 							break;
 					}
+				
+					$css="					
+							body{
+								font-family: Arial;
+								font-size: 12px; 
+							}
 
-						
-					$mpdf=new Pdf();
+							.pap_labels{
+								font-weight: bold; 
+								padding-bottom: 10px;
+									
+							}
+							.pap_desc{
+								font-size: 12px;
+								font-style: italic;
+								padding-bottom: 15px; 
+								padding-left: 50px; 
+							}
+
+							.pap_desc_cito {
+								padding-left:50px;
+							}
+							.pap_labels_cito{
+								font-style: normal;
+							}
+
+							table.pap_desc {
+								padding-left: 0px;
+							}
+
+
+							.header_pap{
+								font-size: 13px;
+							}
+							";
+	$mpdf=new Pdf();
 					$pdf1 = new Pdf ( [
 							// 'mode' => Pdf::MODE_CORE,
 							'mode' => Pdf::MODE_BLANK,
@@ -670,7 +703,7 @@ class InformeController extends Controller {
 							// stream to browser inline
 							'destination' => Pdf::DEST_BROWSER,                
 							'cssFile' => '@app/web/css/print/informe.css',
-							'cssInline' => '* {font-size:14px;}',
+							'cssInline' => "* {font-size:14px;} {$css}",
 							// set mPDF properties on the fly
 							
 							'content' => $this->renderPartial ( $vista, [ 

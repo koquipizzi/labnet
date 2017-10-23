@@ -2,6 +2,44 @@
 use app\models\Leyenda;
 use yii\helpers\Html;
 ?>
+<html>
+<body> 
+
+<style>
+
+body{
+    font-family: Arial;
+    font-size: 12px; 
+}
+
+.pap_labels{
+     font-weight: bold; 
+     padding-bottom: 10px;
+         
+}
+.pap_desc{
+    font-size: 12px;
+    font-style: italic;
+    padding-bottom: 15px; 
+    padding-left: 50px; 
+}
+
+.pap_desc_cito {
+    padding-left:50px;
+}
+.pap_labels_cito{
+    font-style: normal;
+}
+
+table.pap_desc {
+    padding-left: 0px;
+}
+
+
+.header_pap{
+    font-size: 13px;
+}
+</style>
 <div class="pagina">
     <div class="header_pap">
         <table>
@@ -92,4 +130,5 @@ use yii\helpers\Html;
 <div class="footer" style="position: fixed; bottom: -5px; text-align: center; font-size: 11px; width:100%">
     INFORMACIÓN CONFIDENCIAL - SECRETO MÉDICO - ALCANCES DEL ARTÍCULO 156 DEL CÓDIGO PENAL
 </div>
-    
+</body> 
+</html>      

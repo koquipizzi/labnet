@@ -642,57 +642,26 @@ class InformeController extends Controller {
 					$estudio = $model->Estudio_id; 
 					switch ($estudio){
 						case \app\models\Estudio::getEstudioPap(): //pap
-							$vista = '_print_pap';
+							$vista = '_print_pap_mail';
 							break;
 						case \app\models\Estudio::getEstudioBiopsia(): //biopsia
-							$vista = '_print_biopsia';
+							$vista = '_print_biopsia_mail';
 							break;
 						case \app\models\Estudio::getEstudioMolecular(): //molecular
-							$vista = '_print_mole';
+							$vista = '_print_mole_mail';
 							break;
 						case \app\models\Estudio::getEstudioCitologia(): //citologia
-							$vista = '_print_inf_cito';
+							$vista = '_print_inf_cito_mail';
 							break;
 						case \app\models\Estudio::getEstudioInmuno(): //IMQ
-							$vista = '_print_inf';
+							$vista = '_print_inf_mail';
 							break;
 					}
-				
-					$css="					
-							body{
-								font-family: Arial;
-								font-size: 12px; 
-							}
-
-							.pap_labels{
-								font-weight: bold; 
-								padding-bottom: 10px;
-									
-							}
-							.pap_desc{
-								font-size: 12px;
-								font-style: italic;
-								padding-bottom: 15px; 
-								padding-left: 50px; 
-							}
-
-							.pap_desc_cito {
-								padding-left:50px;
-							}
-							.pap_labels_cito{
-								font-style: normal;
-							}
-
-							table.pap_desc {
-								padding-left: 0px;
-							}
 
 
-							.header_pap{
-								font-size: 13px;
-							}
-							";
-	$mpdf=new Pdf();
+
+							
+					$mpdf=new Pdf();
 					$pdf1 = new Pdf ( [
 							// 'mode' => Pdf::MODE_CORE,
 							'mode' => Pdf::MODE_BLANK,
@@ -701,30 +670,27 @@ class InformeController extends Controller {
 							// portrait orientation
 							'orientation' => Pdf::ORIENT_PORTRAIT,
 							// stream to browser inline
-							'destination' => Pdf::DEST_BROWSER,                
+							'destination' => Pdf::DEST_FILE,                
 							'cssFile' => '@app/web/css/print/informe.css',
-							'cssInline' => "* {font-size:14px;} {$css}",
-							// set mPDF properties on the fly
-							
+							// set mPDF properties on the fly							
 							'content' => $this->renderPartial ( $vista, [ 
 									'model' => $model,
 									'modelp' => $modelp,
 									'laboratorio' => $laboratorio,
 							] ),
 					] );            
-					
-					$titulo = $model->titulo."-".date("d-m-Y");;
+					$titulo = $model->id.'-'.$model->titulo."-".date('Y-m-d-H-i-s');
 					$mpdf = $pdf1->api;
 					$mpdf->WriteHTML($pdf1->content); //pdf is a name of view file responsible for this pdf document
-					$path = $mpdf->Output(Yii::getAlias('@webroot').'/uploads/pdf/'.$titulo.'.pdf', 'F'); // THIS WILL SAVE THE FILE IN PATH
-					
+					$path = $mpdf->Output(Yii::getAlias('@app/runtime/mpdf/').$titulo.'.pdf', 'F');
+
 					$ee =   Yii::$app->mailer->compose()
 						->setFrom('alejandra@qwavee.com')
 						->setTo($modelp->pacienteMail)
 						->setTextBody($laboratorio->nombre)
 						->setSubject('Envío de Resultados de Laboratorio CIPAT')
 						->setHtmlBody($laboratorio->nombre.'<b> le envía los resultados del análisis</b>')
-						->attach(Yii::getAlias('@webroot').'/uploads/pdf/'.$titulo.'.pdf');
+						->attach(Yii::getAlias('@app/runtime/mpdf/').$titulo.'.pdf');
 					if ($ee->send()) 
 						return 1;
 					else

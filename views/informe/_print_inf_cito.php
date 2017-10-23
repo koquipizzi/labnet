@@ -2,6 +2,7 @@
 use app\models\Leyenda;
 use yii\helpers\Html;
 ?>
+
 <div class="pagina">
     <div class="header_pap">
         <table>

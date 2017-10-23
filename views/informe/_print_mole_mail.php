@@ -85,7 +85,7 @@ table.pap_desc {
     </div>
     <hr>
     <h5 style="font-size: 13px; text-align: center; margin-left: 20px; font-weight: bold; text-decoration: underline">
-        BIOLOGÍA MOLECULAR - HPV DNA TEST
+        BIOLOGÍA MOLECULAR 
     </h5>
     <div class="informe">        
         <div class="pap_labels">

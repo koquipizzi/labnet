@@ -35,14 +35,6 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_localidad.js');
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
 
-//                [
-//                    'label' => 'Nombre',
-//                    'format' => 'raw',
-//                    'value' => function ($data, $url) { //var_dump($data); die();
-//                                  return Html::a($data->nombre, FALSE, ['class' => 'editar', 'value'=>'index.php?r=localidad/update&id='.$data->id]);
-//                              },
-//                ],
-          //      'id',
                 'nombre',
                 'cp',
                 'caracteristica_telefonica',

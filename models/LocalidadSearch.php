@@ -15,7 +15,7 @@ class LocalidadSearch extends Localidad
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id','caracteristica_telefonica'], 'integer'],
             [['nombre', 'cp'], 'safe'],
         ];
     }
@@ -45,8 +45,6 @@ class LocalidadSearch extends Localidad
         ]);
         $this->load($params);
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
         // grid filtering conditions
@@ -54,7 +52,8 @@ class LocalidadSearch extends Localidad
             'id' => $this->id,
         ]);
         $query->andFilterWhere(['like', 'nombre', $this->nombre])
-            ->andFilterWhere(['like', 'cp', $this->cp]);
+              ->andFilterWhere(['like', 'caracteristica_telefonica', $this->caracteristica_telefonica])
+              ->andFilterWhere(['like', 'cp', $this->cp]);
         return $dataProvider;
     }
 }

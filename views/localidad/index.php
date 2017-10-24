@@ -37,7 +37,8 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_localidad.js');
 
                 'nombre',
                 'cp',
-                'caracteristica_telefonica',
+                'atributte'=>'caracteristica_telefonica',
+               
 
                 ['class' => 'yii\grid\ActionColumn',
                 'template' => '{view} {edit} {delete}',

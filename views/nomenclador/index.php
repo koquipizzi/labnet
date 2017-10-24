@@ -34,6 +34,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_nomenclador.js');
         'columns' => [
             [
                 'label' => 'Código',
+                'attribute'=>'servicio',
                 'format' => 'raw',
                 'contentOptions' =>['class' => 'table_class','style'=>'width:12%;'],
                 'value' => function ($data, $url) { //var_dump($data); die();

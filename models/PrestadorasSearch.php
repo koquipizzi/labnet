@@ -21,7 +21,7 @@ class PrestadorasSearch extends Prestadoras
     {
         return [
             [['id', 'Localidad_id', 'Tipo_prestadora_id'], 'integer'],
-            [['descripcion', 'telefono', 'domicilio', 'email', 'facturable'], 'safe'],
+            [['descripcion', 'telefono', 'domicilio', 'email', 'facturable','Localidad_id'], 'safe'],
         ];
     }
 
@@ -45,16 +45,11 @@ class PrestadorasSearch extends Prestadoras
     {
 
         if($tipoDeEntidad==="C"){
-          // $query =  Prestadoras::find()->where(['cobertura'=>1])->all();
           $query = (new Query())->from('Prestadoras')->where(['cobertura' => 1]);
-//         $query = (new \yii\db\Query())->select('*')->from('Prestadoras')->where(['cobertura'=>1]);
         }elseif ($tipoDeEntidad==="F"){
-     //       $query =  Prestadoras::find()->where(['cobertura'=>0])->all();
             $query = (new Query())->from('Prestadoras')->where(['cobertura' => 0]);
-//          $query = (new \yii\db\Query())->select('*')->from('Prestadoras')->where(['cobertura'=>0]);
-        }
-      //  $query->join('LEFT JOIN', 'Localidad', 'Localidad.id = Prestadoras.Localidad_id');
 
+        }
 
         // add conditions that should always apply here
         $sort = new Sort([
@@ -62,8 +57,8 @@ class PrestadorasSearch extends Prestadoras
             'attributes' => [
                 'id',
                 'domicilio',
-                'descripcion',
-                'Localidad_id'
+                'descripcion'
+                //'Localidad_id'
             ]
         ]);
 
@@ -74,23 +69,20 @@ class PrestadorasSearch extends Prestadoras
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
 //         grid filtering conditions
         $query->andFilterWhere([
-//          'id' => $this->id,
+          'id' => $this->id,
             'Localidad_id' => $this->Localidad_id,
-//            'Tipo_prestadora_id' => $this->Tipo_prestadora_id,
         ]);
-//
-//        $query->andFilterWhere(['like', 'descripcion', $this->descripcion])
-//            ->andFilterWhere(['like', 'telefono', $this->telefono])
-//            ->andFilterWhere(['like', 'domicilio', $this->domicilio])
-//            ->andFilterWhere(['like', 'email', $this->email])
-//            ->andFilterWhere(['like', 'facturable', $this->facturable]);
+
+        $query->andFilterWhere(['like', 'descripcion', $this->descripcion])
+            ->andFilterWhere(['like', 'telefono', $this->telefono])
+            ->andFilterWhere(['like', 'domicilio', $this->domicilio])
+            ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'facturable', $this->facturable]);
 
         return $dataProvider;
     }

@@ -47,6 +47,16 @@ class ProcedenciaSearch extends Procedencia
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' =>[
+                'attributes' => [
+                    'Localidad_id',
+                    'descripcion',
+                    'mail',
+                    'domicilio',
+                    'telefono',
+
+                ]
+            ]
         ]);
 
         $this->load($params);

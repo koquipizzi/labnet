@@ -18,8 +18,8 @@ class NomencladorSearch extends Nomenclador
     public function rules()
     {
         return [
-            [['id', 'Prestadoras_id'], 'integer'],
-            [['descripcion', 'servicio'], 'safe'],
+            [['id', 'Prestadoras_id', 'servicio'], 'integer'],
+            [['descripcion', 'servicio','Prestadoras_id'], 'safe'],
             [['valor', 'coseguro'], 'number'],
         ];
     }
@@ -48,6 +48,18 @@ class NomencladorSearch extends Nomenclador
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+             'sort' => [
+              'attributes' => [
+                    'servicio',
+                    'coseguro',
+                    'Prestadoras_id' => [
+                        'asc' => ['Nomenclador.Prestadoras_id' => SORT_ASC],
+                        'desc' => ['Nomenclador.Prestadoras_id' => SORT_DESC],
+                    ],
+                    'valor',
+                    'descripcion',
+                ],
+    ],
         ]);
 
         $this->load($params);
@@ -64,10 +76,13 @@ class NomencladorSearch extends Nomenclador
             'valor' => $this->valor,
             'Prestadoras_id' => $this->Prestadoras_id,
             'coseguro' => $this->coseguro,
+            'servicio'=> $this->servicio,
         ]);
 
         $query->andFilterWhere(['like', 'descripcion', $this->descripcion])
             ->andFilterWhere(['like', 'servicio', $this->servicio]);
+
+        
 
         return $dataProvider;
     }

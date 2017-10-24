@@ -43,7 +43,8 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_procedencia.js', ['depen
                 'mail',
                 [
                     'label' => 'Localidad',
-                    'attribute' => 'localidadTexto',
+                    'attribute' => 'Localidad_id',
+                    'value' => 'localidadTexto',
                     'filter' => Html::activeDropDownList($searchModel, 'Localidad_id', ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre'),['class'=>'form-control','prompt' => 'Localidad...']),
                    
                 ],

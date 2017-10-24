@@ -30,7 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute'=>'Localidad',
                             'value'=> $model->getLocalidadTexto(),
                         ],
-                    		'telefono'
+                    	'telefono',
+                        'informacion_adicional',
                     ],
                 ]) ?>
                 

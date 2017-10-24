@@ -12,6 +12,8 @@ use yii\db\Expression;
  */
 class PacienteSearch extends Paciente
 {
+public $nombre_prest_nro;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class PacienteSearch extends Paciente
     {
         return [
             [['id', 'Tipo_documento_id', 'Localidad_id'], 'integer'],
-            [['nombre', 'nro_documento', 'sexo', 'fecha_nacimiento', 'telefono', 'email', 'domicilio'], 'safe'],
+            [['nombre', 'nro_documento', 'sexo', 'fecha_nacimiento', 'telefono', 'email', 'domicilio','nombre_prest_nro'], 'safe'],
         ];
     }
 
@@ -128,12 +130,24 @@ class PacienteSearch extends Paciente
     /**
     * Filtro de numero de documento
     */
+    private function coberturaNroAfiliadoFilter($params, &$where, &$queryParams) {
+        if($this->paramExists($params, 'nombre_prest_nro')) {
+            $queryParams[':nombre_prest_nro'] = "%".$params['nombre_prest_nro']."%";
+            $where = $this->addWhereSentence($where, "pp.nombre_prest_nro like :nombre_prest_nro");
+        }
+    }
+
+
+    /**
+    * Filtro de numero de documento
+    */
     private function nroDocumentoFilter($params, &$where, &$queryParams) {
         if($this->paramExists($params, 'nro_documento')) {
             $queryParams[':nro_documento'] = "%".$params['nro_documento']."%";
             $where = $this->addWhereSentence($where, "Paciente.nro_documento like :nro_documento");
         }
     }
+    
     
     public function searchPacPrest($params)
     {
@@ -146,21 +160,35 @@ class PacienteSearch extends Paciente
         }
 
         $fieldList = "
-                    Paciente.*,
+					Paciente.id,
+                    Paciente.nro_documento,
+                    Paciente.telefono,
+                    Paciente.nombre,
                     Paciente.id as PacienteId,
-                    Paciente_prestadora.id as pacprest,
-                    Prestadoras.descripcion as nombre_prest,
-                    concat(Prestadoras.descripcion,' - ', Paciente_prestadora.nro_afiliado) as nombre_prest_nro			
+                    pp.pacprest,
+                    pp.nombre_prest,
+                    pp.nombre_prest_nro
                      ";
-        $fromTables = '
-                    Paciente
-                    left JOIN Paciente_prestadora ON (Paciente.id = Paciente_prestadora.Paciente_id)         
-                    left JOIN Prestadoras ON (Prestadoras.id = Paciente_prestadora.Prestadoras_id) 
-                    ';
+        $fromTables = "
+                    Paciente 
+                    left join
+                    (   select
+							 concat(Prestadoras.descripcion,' - ', Paciente_prestadora.nro_afiliado) as nombre_prest_nro	,
+                              Paciente_prestadora.Paciente_id,
+                              Paciente_prestadora.id as pacprest,
+                              Prestadoras.descripcion as nombre_prest,
+                              Paciente_prestadora.nro_afiliado,
+                              Prestadoras.descripcion
+                        from  Paciente_prestadora       
+                        left JOIN Prestadoras ON (Prestadoras.id = Paciente_prestadora.Prestadoras_id) 
+                     ) as pp  on (Paciente.id=pp.pacprest)
+
+                    ";
 
         $this->nombreFilter($formParams, $where, $queryParams);
         $this->nroDocumentoFilter($formParams, $where, $queryParams);
         $this->telefonoFilter($formParams, $where, $queryParams);
+        $this->coberturaNroAfiliadoFilter($formParams, $where, $queryParams);
     
        if(!empty($where)) {
             $where = " WHERE {$where} ";

@@ -19,7 +19,8 @@ class ProcedenciaSearch extends Procedencia
     {
         return [
             [['id', 'Localidad_id'], 'integer'],
-            [['descripcion', 'domicilio'], 'safe'],];
+            [['telefono','domicilio','mail','descripcion','Localidad_id'], 'string'],
+            [['telefono','domicilio','mail','descripcion','Localidad_id'], 'safe'],];
     }
 
     /**
@@ -63,7 +64,10 @@ class ProcedenciaSearch extends Procedencia
         ]);
 
         $query->andFilterWhere(['like', 'descripcion', $this->descripcion])
-            ->andFilterWhere(['like', 'domicilio', $this->domicilio]);
+            ->andFilterWhere(['like', 'domicilio', $this->domicilio])
+            ->andFilterWhere(['like', 'mail', $this->mail])
+              ->andFilterWhere(['like', 'Localidad_id', $this->Localidad_id])
+             ->andFilterWhere(['like', 'telefono', $this->telefono]);
 
         return $dataProvider;
     }

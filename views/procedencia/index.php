@@ -5,6 +5,9 @@ use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use xj\bootbox\BootboxAsset;
+use yii\helpers\ArrayHelper;
+use app\models\Localidad;
+
 BootboxAsset::register($this);
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ProcedenciaSearch */
@@ -32,19 +35,25 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_procedencia.js', ['depen
             'filterModel' => $searchModel,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-                [
+               /* [
                     'label' => 'Procedencia',
                     'format' => 'raw',
                     'value' => function ($data, $url) { //var_dump($data); die();
                                   return Html::a($data->descripcion, FALSE, ['class' => 'editar', 'value'=>'index.php?r=procedencia/update&id='.$data->id]);
                               },
+                ],*/
+                [
+                    'label' => 'Procedencia',
+                    'attribute' => 'descripcion',
                 ],
                 'telefono',
                 'domicilio',
                 'mail',
                 [
                     'label' => 'Localidad',
-                    'value' => 'localidadTexto',
+                    'attribute' => 'localidadTexto',
+                    'filter' => Html::activeDropDownList($searchModel, 'Localidad_id', ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre'),['class'=>'form-control','prompt' => 'Localidad...']),
+                   
                 ],
     //            [
     //                'label' => 'Observaciones',

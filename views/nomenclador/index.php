@@ -46,7 +46,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_nomenclador.js');
             'coseguro',
             [   
                 'label' =>'Prestadora',
-                'attribute' => 'Prestadora_id',
+                'attribute' => 'Prestadoras_id',
                 'value' => function ($model) {
                     return $model->getPrestadoraTexto();
                 },

@@ -37,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute'=>'Tipo Prestadora',
                             'value'=> $model->getTipoPrestadoraTexto(),
                         ],
+                        'notas',
                     ],
                 ]) ?>
 

@@ -97,6 +97,19 @@ class Prestadoras extends \yii\db\ActiveRecord
         return $this->hasOne(Localidad::className(), ['id' => 'Localidad_id']);
     }
 
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLocalidadnombre()
+    {
+        $localidad= $this->hasOne(Localidad::className(), ['id' => 'Localidad_id'])->one();
+        //var_dump($localidad);die();
+        return  $localidad;
+    }
+
+
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -124,13 +137,7 @@ class Prestadoras extends \yii\db\ActiveRecord
         return $this->hasMany(Tarifas::className(), ['Prestadoras_id' => 'id']);
     }
     
-    public function getLocalidadTexto()
-    {       
-        $localidad = $this->hasOne(Localidad::className(), ['id' => 'Localidad_id'])->one();
-        if ($localidad)
-            return $localidad->nombre;
-        return '';
-    }
+  
     
     public function getFacturableTexto()
     {       
@@ -144,6 +151,15 @@ class Prestadoras extends \yii\db\ActiveRecord
         if ($tipo)
             {return $tipo->descripcion;}
         return '';
+    }
+
+ public function getLocalidadTexto()
+    {
+        $localidad = $this->hasOne(Localidad::className(), ['id' => 'Localidad_id'])->one();
+        if($localidad)
+        return $localidad->nombre;
+        return "";
+
     }
     
 }

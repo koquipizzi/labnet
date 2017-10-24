@@ -10,6 +10,7 @@ use yii\helpers\ArrayHelper;
 //agregar modelos para los combos
 use app\models\TipoPrestadora;
 use app\models\Localidad;
+use app\models\Informe;
 use xj\bootbox\BootboxAsset;
 BootboxAsset::register($this);
 
@@ -31,13 +32,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 
-    <?php Pjax::begin(['id' => 'prestadoras']); ?>
+    <?php Pjax::begin(['id' => 'prestadoras']);  ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'options'=>array('class'=>'table table-striped table-lilac'),
         'filterModel' => $searchModel,
         'columns' => [
-           // ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'yii\grid\SerialColumn'],
             'descripcion',
             [
                 'attribute'=>'telefono',
@@ -46,13 +48,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'email:email',
             'domicilio',
             [
-                        'label' => 'Localidad',
-                        'attribute'=>'Localidad_id',
-                        'value' => function ($data) {
-                          //  return  $data['nombre'];
-                        },
-                        'filter' => Html::activeDropDownList($searchModel, 'Localidad_id', ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre'),['class'=>'form-control','prompt' => 'Localidad...']),
-                    ],
+                'label' => 'Localidad',
+                'attribute' =>'Localidad_id',
+                'value'=>function($data){
+                             $localidad = Localidad::find('nombre')->andWhere(['id' => $data['Localidad_id']])->one();
+                        //   var_dump($localidad);die();
+                            return $localidad->nombre;
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'Localidad_id', ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre'),['class'=>'form-control','prompt' => 'Localidad...']),
+                
+            ],
 
             ['class' => 'yii\grid\ActionColumn',
             'template' => '{view}{edit}{delete}',
@@ -60,6 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //view button
             'view' => function ($url, $model) {
+           
                 return Html::a('<span class="fa fa-eye activity-view-link"></span>', $url, [
                             'title' => Yii::t('app', 'Ver'),
                             'class'=>'btn btn-success btn-xs',

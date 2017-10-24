@@ -46,15 +46,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'domicilio',
                     [
                         'label' => 'Localidad',
-                        'attribute' =>'Localidad_id',
-                        'value'=>function($data){
-                                    $localidad = Localidad::find('nombre')->andWhere(['id' => $data['Localidad_id']])->one();
-                                //   var_dump($localidad);die();
-                                    return $localidad->nombre;
-                        },
+                        'attribute'=>'Localidad_id',
+                        'value'=>'nombreLoc',
                         'filter' => Html::activeDropDownList($searchModel, 'Localidad_id', ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre'),['class'=>'form-control','prompt' => 'Localidad...']),
                         
                     ],
+
 
                     ['class' => 'yii\grid\ActionColumn',
                         'template' => '{view}{edit}{delete}',

@@ -45,11 +45,16 @@ class PrestadorasSearch extends Prestadoras
     {
 
         if($tipoDeEntidad==="C"){
-          $query = (new Query())->from('Prestadoras')->where(['cobertura' => 1]);
+          $query = (new Query())
+          ->select('Localidad.nombre as nombreLoc, Prestadoras.*')
+          ->from('Prestadoras')->where(['cobertura' => 1]);
         }elseif ($tipoDeEntidad==="F"){
-            $query = (new Query())->from('Prestadoras')->where(['cobertura' => 0]);
+            $query = (new Query())
+            ->select('Localidad.nombre as nombreLoc, Prestadoras.*')
+            ->from('Prestadoras')->where(['cobertura' => 0]);
 
         }
+        $query->join('LEFT JOIN', 'Localidad', 'Localidad.id = Prestadoras.Localidad_id');
 
         // add conditions that should always apply here
         $sort = new Sort([

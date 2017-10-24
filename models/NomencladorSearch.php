@@ -52,10 +52,7 @@ class NomencladorSearch extends Nomenclador
               'attributes' => [
                     'servicio',
                     'coseguro',
-                    'Prestadoras_id' => [
-                        'asc' => ['Nomenclador.Prestadoras_id' => SORT_ASC],
-                        'desc' => ['Nomenclador.Prestadoras_id' => SORT_DESC],
-                    ],
+                    'Prestadoras_id',
                     'valor',
                     'descripcion',
                 ],

@@ -15,6 +15,7 @@ class MedicoSearch extends Medico
     /**
      * @inheritdoc
      */
+     public $especialidadTexto;
     public function rules()
     {
         return [
@@ -48,7 +49,16 @@ class MedicoSearch extends Medico
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => ['pageSize' => 50],
-            'sort'=> ['defaultOrder' => ['nombre'=>SORT_ASC]]
+            'sort'=>[
+                'attributes'=>[
+                    'especialidad_id',
+                    'Localidad_id',
+                    'nombre',
+                    'domicilio',
+                    'telefono',
+                    'Email'
+                    ],
+            ]
         ]);
 
         $this->load($params);

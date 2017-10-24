@@ -41,6 +41,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->nombre, 'url' => ['view', '
                             'label'=>'Localidad',
                             'value'=>$model->getLocalidadTexto(),
                         ],
+                        'notas',
 
                     ],
                 ]) ?>

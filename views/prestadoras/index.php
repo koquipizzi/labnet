@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(['id' => 'prestadoras']);  ?>
 
     <?= GridView::widget([
+    
         'dataProvider' => $dataProvider,
         'options'=>array('class'=>'table table-striped table-lilac'),
         'filterModel' => $searchModel,
@@ -47,14 +48,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'email:email',
             'domicilio',
-            [
+             [
                 'label' => 'Localidad',
-                'attribute' =>'Localidad_id',
-                'value'=>function($data){
-                             $localidad = Localidad::find('nombre')->andWhere(['id' => $data['Localidad_id']])->one();
-                        //   var_dump($localidad);die();
-                            return $localidad->nombre;
-                },
+                'attribute'=>'Localidad_id',
+                'value'=>'nombreLoc',
                 'filter' => Html::activeDropDownList($searchModel, 'Localidad_id', ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre'),['class'=>'form-control','prompt' => 'Localidad...']),
                 
             ],

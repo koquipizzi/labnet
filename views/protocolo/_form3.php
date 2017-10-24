@@ -98,7 +98,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                                 {hint}
                                                 {error}",
                                             'labelOptions' => [ 'class' => 'col-md-1 ' ]
-                        ])->textInput(['maxlength' => false]) ?>
+                        ])->textInput(['maxlength' => false,'readonly' =>true]) ?>
                 </div>
                 <div class="col-md-1">
                         <?= $form->field($model, 'letra', ['template' => "

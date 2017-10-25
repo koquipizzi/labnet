@@ -29,7 +29,9 @@ Yii::$app->name = "LabNET";
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <!--img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="user-image" alt="User Image"/-->
                         <img src="<?= Yii::$app->getHomeUrl().'images/photo.jpg' ?>" class="user-image"  alt="admin" >
-                        <span class="hidden-xs">Laboratorio CIPAT</span>
+                        <span class="hidden-xs">
+                        <?php echo Yii::$app->user->identity->username; ?>
+                        </span>
                     </a>
                     
                     <!--ul class="dropdown-menu">

@@ -82,18 +82,21 @@ class LocalidadController extends Controller
         }
     }
 
-    public function actionCreate_pop()
+    public function actionCreatepop()
     {
         $model = new Localidad();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                     $dataProvider = new ActiveDataProvider([
-                        'query' => Localidad::find()
-                    ]);
-                    $searchModel = new LocalidadSearch();
-                    return;
+                //     $dataProvider = new ActiveDataProvider([
+               //         'query' => Localidad::find()
+               //     ]);
+              //      $searchModel = new LocalidadSearch();
+                    \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return ['rta'=>'ok', 'message'=>''];
+                   
+                //   die();
         } else {
-            return $this->renderAjax('_form', [
+            return $this->renderAjax('create_pop', [
                         'model' => $model
             ]);
         }

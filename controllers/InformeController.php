@@ -121,6 +121,7 @@ class InformeController extends Controller {
 	}
 	
         public function cargarModelo(&$model, $texto) {
+			
             switch ($model->estudio->id){
                 case 1: //pap
                     $model->material = $texto->material;
@@ -141,8 +142,8 @@ class InformeController extends Controller {
                 case 3: //molecular
                     $model->material = $texto->material;
                     $model->tecnica = $texto->tecnica;
-                    $model->metodo = $texto->macro;
-                    $model->resultado = $texto->micro;
+                    $model->macroscopia = $texto->macro;
+                    $model->microscopia = $texto->micro;
                     $model->diagnostico = $texto->diagnos;
                     $model->observaciones = $texto->observ;
                     break;
@@ -323,6 +324,7 @@ class InformeController extends Controller {
                     if (isset($_GET['idtexto'])) {
                         $textoModel = new \app\models\Textos();
                         $texto = $textoModel->find()->where(['=', 'id', $_GET['idtexto']])->one(); //findModel($_GET['idtexto']);
+						
                         $this->cargarModelo($model, $texto);      
                         $codigo = $texto->codigo;
                         $model->save();
@@ -640,23 +642,25 @@ class InformeController extends Controller {
 					$estudio = $model->Estudio_id; 
 					switch ($estudio){
 						case \app\models\Estudio::getEstudioPap(): //pap
-							$vista = '_print_pap';
+							$vista = '_print_pap_mail';
 							break;
 						case \app\models\Estudio::getEstudioBiopsia(): //biopsia
-							$vista = '_print_biopsia';
+							$vista = '_print_biopsia_mail';
 							break;
 						case \app\models\Estudio::getEstudioMolecular(): //molecular
-							$vista = '_print_mole';
+							$vista = '_print_mole_mail';
 							break;
 						case \app\models\Estudio::getEstudioCitologia(): //citologia
-							$vista = '_print_inf_cito';
+							$vista = '_print_inf_cito_mail';
 							break;
 						case \app\models\Estudio::getEstudioInmuno(): //IMQ
-							$vista = '_print_inf_inmuno';
+							$vista = '_print_inf_mail';
 							break;
 					}
 
-						
+
+
+							
 					$mpdf=new Pdf();
 					$pdf1 = new Pdf ( [
 							// 'mode' => Pdf::MODE_CORE,
@@ -667,29 +671,27 @@ class InformeController extends Controller {
 							'orientation' => Pdf::ORIENT_PORTRAIT,
 							// stream to browser inline
 							'destination' => Pdf::DEST_DOWNLOAD,                
-							'cssFile' => '@app/web/css/print/print.css',
+							'cssFile' => '@app/web/css/print/informe.css',
 							'cssInline' => '* {font-size:14px;}',
 							// set mPDF properties on the fly
-							
 							'content' => $this->renderPartial ( $vista, [ 
 									'model' => $model,
 									'modelp' => $modelp,
 									'laboratorio' => $laboratorio,
 							] ),
 					] );            
-					
-					$titulo = $model->titulo."-".date("d-m-Y");;
+					$titulo = $model->id.'-'.$model->titulo."-".date('Y-m-d-H-i-s');
 					$mpdf = $pdf1->api;
 					$mpdf->WriteHTML($pdf1->content); //pdf is a name of view file responsible for this pdf document
-					$path = $mpdf->Output(Yii::getAlias('@webroot').'/uploads/pdf/'.$titulo.'.pdf', 'F'); // THIS WILL SAVE THE FILE IN PATH
-					
+					$path = $mpdf->Output(Yii::getAlias('@app/runtime/mpdf/').$titulo.'.pdf', 'F');
+
 					$ee =   Yii::$app->mailer->compose()
 						->setFrom('alejandra@qwavee.com')
 						->setTo($modelp->pacienteMail)
 						->setTextBody($laboratorio->nombre)
 						->setSubject('Envío de Resultados de Laboratorio CIPAT')
 						->setHtmlBody($laboratorio->nombre.'<b> le envía los resultados del análisis</b>')
-						->attach(Yii::getAlias('@webroot').'/uploads/pdf/'.$titulo.'.pdf');
+						->attach(Yii::getAlias('@app/runtime/mpdf/').$titulo.'.pdf');
 					if ($ee->send()) 
 						return 1;
 					else

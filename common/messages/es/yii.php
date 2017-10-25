@@ -76,7 +76,7 @@ return [
     '{attribute} must be a string.' => '{attribute} debe ser texto.',
     '{attribute} must be a valid IP address.' => '',
     '{attribute} must be an IP address with specified subnet.' => '',
-    '{attribute} must be an integer.' => '{attribute} debe ser un integer.',
+    '{attribute} must be an integer.' => '{attribute} debe ser un número.',
     '{attribute} must be either "{true}" or "{false}".' => '',
     '{attribute} must be equal to "{compareValueOrAttribute}".' => '',
     '{attribute} must be greater than "{compareValueOrAttribute}".' => '',

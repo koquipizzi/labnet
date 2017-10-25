@@ -34,6 +34,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_nomenclador.js');
         'columns' => [
             [
                 'label' => 'Código',
+                'attribute'=>'servicio',
                 'format' => 'raw',
                 'contentOptions' =>['class' => 'table_class','style'=>'width:12%;'],
                 'value' => function ($data, $url) { //var_dump($data); die();
@@ -43,12 +44,13 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_nomenclador.js');
             'descripcion',
             'valor',
             'coseguro',
-            [
-                'attribute' => 'Prestadora',
+            [   
+                'label' =>'Prestadora',
+                'attribute' => 'Prestadoras_id',
                 'value' => function ($model) {
                     return $model->getPrestadoraTexto();
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'Prestadoras_id', ArrayHelper::map(Prestadoras::find()->asArray()->all(), 'id', 'descripcion'),['class'=>'form-control','prompt' => 'Select Category']),
+                'filter' => Html::activeDropDownList($searchModel, 'Prestadoras_id', ArrayHelper::map(Prestadoras::find()->asArray()->all(), 'id', 'descripcion'),['class'=>'form-control','prompt' => 'Selecionar Prestadora']),
             ],
             ['class' => 'yii\grid\ActionColumn',
             'template' => '{view} {edit} {delete}',

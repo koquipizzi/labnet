@@ -5,6 +5,9 @@ use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use xj\bootbox\BootboxAsset;
+use yii\helpers\ArrayHelper;
+use app\models\Localidad; 
+use app\models\Especialidad; 
 BootboxAsset::register($this);
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\MedicoSearch */
@@ -34,14 +37,20 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_medico.js', ['depends' =
         //    ['class' => 'yii\grid\SerialColumn'],
             'nombre',
             'email:email',
-            [
-                'label' => 'Especialidad',                
-                'value' => 'especialidadTexto',
+             [
+                'label' => 'Especialidad',
+                'attribute' => 'especialidad_id',
+                'value'=>'especialidadTexto',
+                'filter' => Html::activeDropDownList($searchModel, 'especialidad_id', ArrayHelper::map(Especialidad::find()->asArray()->all(), 'id', 'nombre'),['class'=>'form-control','prompt' => 'Especialidad...']),
+                
             ],
             'domicilio',
             [
-                'label' => 'Localidad',                
-                'value' => 'localidadTexto',
+                'label' => 'Localidad',
+                'attribute' => 'Localidad_id',
+                'value'=>'localidadTexto',
+                'filter' => Html::activeDropDownList($searchModel, 'Localidad_id', ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre'),['class'=>'form-control','prompt' => 'Localidad...']),
+                
             ],
             ['class' => 'yii\grid\ActionColumn',
             'template' => '{view} {edit} {delete}',

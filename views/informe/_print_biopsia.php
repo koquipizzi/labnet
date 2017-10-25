@@ -2,6 +2,12 @@
 use app\models\Leyenda;
 use yii\helpers\Html;
 ?>
+
+<html>
+<body> 
+
+
+
 <div class="pagina">
     <div class="header_pap">
         <table>
@@ -93,4 +99,7 @@ use yii\helpers\Html;
 <div class="footer" style="position: fixed; bottom: -5px; text-align: center; font-size: 11px; width:100%">
     INFORMACIÓN CONFIDENCIAL - SECRETO MÉDICO - ALCANCES DEL ARTÍCULO 156 DEL CÓDIGO PENAL
 </div>
-    
+
+</body>    
+</html>
+ 

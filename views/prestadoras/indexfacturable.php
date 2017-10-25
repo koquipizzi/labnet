@@ -47,11 +47,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'label' => 'Localidad',
                         'attribute'=>'Localidad_id',
-                        'value' => function ($data) {
-                            //return  $data['nombre'];
-                        },
+                        'value'=>'nombreLoc',
                         'filter' => Html::activeDropDownList($searchModel, 'Localidad_id', ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre'),['class'=>'form-control','prompt' => 'Localidad...']),
+                        
                     ],
+
 
                     ['class' => 'yii\grid\ActionColumn',
                         'template' => '{view}{edit}{delete}',

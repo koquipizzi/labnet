@@ -327,6 +327,7 @@ class ProtocoloController extends Controller
         $paciente = Paciente::findOne($pacprest_modelo->Paciente_id);
         $prestadora = \app\models\Prestadoras::findOne($pacprest_modelo->Prestadoras_id);       
         $mdlProtocolo = new Protocolo();
+        $mdlProtocolo->anio= date("Y");
         $modelSecuencia= new NroSecuenciaProtocolo();
         $modelSecuencia->fecha= date("Y-m-d");
         $modelSecuencia->save();

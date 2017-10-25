@@ -6,7 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Paciente;
-
+use yii\db\Expression;
 /**
  * PacienteSearch represents the model behind the search form about `app\models\Paciente`.
  */
@@ -31,6 +31,25 @@ class PacienteSearch extends Paciente
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
+
+
+
+    private function paramExists($params, $key) {
+        return
+            is_array($params)
+            && array_key_exists($key, $params)
+            && (!empty($params[$key]));
+    }
+
+    private function addWhereSentence($where, $sentence, $connector = 'AND') {
+        if(empty($where))
+            return $sentence;
+        return " {$where} {$connector} {$sentence} ";
+    }
+
+  
+
+
 
     /**
      * Creates data provider instance with search query applied
@@ -74,54 +93,127 @@ class PacienteSearch extends Paciente
        //     ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'domicilio', $this->domicilio]);
         return $dataProvider;
-    }
+    } 
 
+
+
+
+
+
+
+  /**
+    * Filtro de Nombre
+    */
+    private function nombreFilter($params, &$where, &$queryParams) {
+        if($this->paramExists($params, 'telefono')) {
+            $queryParams[':telefono'] = "%".$params['telefono']."%";
+            $where = $this->addWhereSentence($where, "Paciente.telefono like :telefono");
+        }
+    }
+    
+
+
+
+    /**
+    * Filtro de Nombre
+    */
+    private function telefonoFilter($params, &$where, &$queryParams) {
+        if($this->paramExists($params, 'nombre')) {
+            $queryParams[':nombre'] = "%".$params['nombre']."%";
+            $where = $this->addWhereSentence($where, "Paciente.nombre like :nombre");
+        }
+    }
+    
+
+    /**
+    * Filtro de numero de documento
+    */
+    private function nroDocumentoFilter($params, &$where, &$queryParams) {
+        if($this->paramExists($params, 'nro_documento')) {
+            $queryParams[':nro_documento'] = "%".$params['nro_documento']."%";
+            $where = $this->addWhereSentence($where, "Paciente.nro_documento like :nro_documento");
+        }
+    }
+    
     public function searchPacPrest($params)
     {
-        $query = "
-        			Select Paciente.*,
-                            Paciente.id as PacienteId,
-                           Paciente_prestadora.id as pacprest,
-                           Prestadoras.descripcion as nombre_prest,
-                           concat(Prestadoras.descripcion,' - ', Paciente_prestadora.nro_afiliado) as nombre_prest_nro
-                    From Paciente
-                            left JOIN Paciente_prestadora ON (Paciente.id = Paciente_prestadora.Paciente_id)         
-                            left JOIN Prestadoras ON (Prestadoras.id = Paciente_prestadora.Prestadoras_id)                 
-                   
-                    ";
-        if (isset($params['PacienteSearch']['nombre']) && ($params['PacienteSearch']['nombre'] <> "") )
-            $query = $query." where Paciente.nombre like '%".$params['PacienteSearch']['nombre']."%'";
-        
-     //   $consultaCant = "Select Count(Paciente.id) as total From Paciente";
-        $consultaCant = 'SELECT count(tt.PacienteId) as total FROM ('.$query.') as tt';
-     // return total items count for this sql query
-       // $itemsCount = \Yii::$app->db->createCommand($consulta)->queryScalar();
-        
-        $command =  \Yii::$app->db->createCommand($consultaCant);
-        $results = $command->queryAll();
-        $itemsCount = (int)$results[0]["total"];  
 
-        // build a SqlDataProvider with a pagination with 10 items for page
-     //   $query = $query." group by Paciente.nombre ";
+        $queryParams = [];
+        $where = '';
+        $formParams = [];
+        if(array_key_exists('PacienteSearch',$params)) {
+            $formParams = $params['PacienteSearch'];
+        }
+
+        $fieldList = "
+                    Paciente.*,
+                    Paciente.id as PacienteId,
+                    Paciente_prestadora.id as pacprest,
+                    Prestadoras.descripcion as nombre_prest,
+                    concat(Prestadoras.descripcion,' - ', Paciente_prestadora.nro_afiliado) as nombre_prest_nro			
+                     ";
+        $fromTables = '
+                    Paciente
+                    left JOIN Paciente_prestadora ON (Paciente.id = Paciente_prestadora.Paciente_id)         
+                    left JOIN Prestadoras ON (Prestadoras.id = Paciente_prestadora.Prestadoras_id) 
+                    ';
+
+        $this->nombreFilter($formParams, $where, $queryParams);
+        $this->nroDocumentoFilter($formParams, $where, $queryParams);
+        $this->telefonoFilter($formParams, $where, $queryParams);
+    
+       if(!empty($where)) {
+            $where = " WHERE {$where} ";
+        }
+
+        $query = "
+            SELECT {$fieldList}
+            FROM {$fromTables}
+            {$where}
+        ";
+        $consultaCant = "
+            SELECT count(*) as total
+            FROM {$fromTables}
+            {$where}
+        ";
+        
+        $itemsCount = Yii::$app->db->createCommand(
+            $consultaCant, 
+            $queryParams
+        )->queryScalar();
         $dataProvider = new \yii\data\SqlDataProvider([
             'sql' => $query,
-            'sort' => [
-                 'defaultOrder' => ['nombre' => SORT_ASC],
+            'params' => $queryParams,
+             'sort' => [
+                'defaultOrder' => ['nombre' => SORT_ASC],
                 'attributes' => [
-                    'nombre' => [
-                            'asc' => ['Paciente.nombre' => SORT_ASC],
-                            'desc' => ['Paciente.nombre' => SORT_DESC],
-                        ],        
+                     'nombre',
+                     'telefono',
+                     'nombre_prest_nro',
+                    'nro_documento' => [
+                        'asc' => ['Paciente.nro_documento' => SORT_ASC],
+                        'desc' => ['Paciente.nro_documento' => SORT_DESC],
+                    ],                 
+                    
                 ],
             ],
             'totalCount' => $itemsCount,
+            'key'        => 'id' ,
             'pagination' => [
                     'pageSize' => 50,
             ],
         ]);
-        return $dataProvider;
+
+        
+              return $dataProvider;
+        
 
     }
+
+
+
+
+
 
 
 }

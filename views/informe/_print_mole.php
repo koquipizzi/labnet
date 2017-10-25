@@ -2,6 +2,10 @@
 use app\models\Leyenda;
 use yii\helpers\Html;
 ?>
+<html>
+<body> 
+
+
 <div class="pagina">
     <div class="header_pap">
         <table>
@@ -47,7 +51,7 @@ use yii\helpers\Html;
     </div>
     <hr>
     <h5 style="font-size: 13px; text-align: center; margin-left: 20px; font-weight: bold; text-decoration: underline">
-        BIOLOGÍA MOLECULAR - HPV DNA TEST
+        BIOLOGÍA MOLECULAR
     </h5>
     <div class="informe">        
         <div class="pap_labels">
@@ -62,13 +66,13 @@ use yii\helpers\Html;
             METODO
         </div>    
         <div class="pap_desc">
-            <?php echo nl2br($model->metodo); ?>
+            <?php echo nl2br($model->macroscopia); ?>
         </div>        
         <div class="pap_labels">            
             RESULTADO
         </div> 
         <div class="pap_desc">
-            <?php echo nl2br($model->resultado);  ?>
+            <?php echo nl2br($model->microscopia);  ?>
         </div>
         <div class="pap_labels">
             DIAGNÓSTICO
@@ -92,4 +96,5 @@ use yii\helpers\Html;
 <div class="footer" style="position: fixed; bottom: -5px; text-align: center; font-size: 11px; width:100%">
     INFORMACIÓN CONFIDENCIAL - SECRETO MÉDICO - ALCANCES DEL ARTÍCULO 156 DEL CÓDIGO PENAL
 </div>
-    
+</body> 
+</html>      

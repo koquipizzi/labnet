@@ -5,6 +5,9 @@ use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use xj\bootbox\BootboxAsset;
+use yii\helpers\ArrayHelper;
+use app\models\Localidad; 
+
 BootboxAsset::register($this);
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ProcedenciaSearch */
@@ -30,71 +33,67 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_procedencia.js', ['depen
             'dataProvider' => $dataProvider,
             'options'=>array('class'=>'table table-striped table-lilac'),
             'filterModel' => $searchModel,
-            'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
+            'columns' => [ 
                 [
                     'label' => 'Procedencia',
-                    'format' => 'raw',
-                    'value' => function ($data, $url) { //var_dump($data); die();
-                                  return Html::a($data->descripcion, FALSE, ['class' => 'editar', 'value'=>'index.php?r=procedencia/update&id='.$data->id]);
-                              },
+                    'attribute' => 'descripcion',
                 ],
                 'telefono',
                 'domicilio',
                 'mail',
                 [
                     'label' => 'Localidad',
-                    'value' => 'localidadTexto',
+                    'attribute' => 'localidadTexto',
+                    'filter' => Html::activeDropDownList($searchModel, 'Localidad_id', ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre'),['class'=>'form-control','prompt' => 'Localidad...']),
+                   
                 ],
-    //            [
-    //                'label' => 'Observaciones',
-    //                'attribute'=>'informacion_adicional',
-    //                'contentOptions' => ['style' => 'width:30%;'],
-    //            ],
-                ['class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {edit} {delete}',
-                'buttons' => [
+            ['class' => 'yii\grid\ActionColumn',
+            'template' => '{view}{edit}{delete}',
+            'buttons' => [
 
-                //view button
-                'view' => function ($url, $model) {
-                    return Html::a('<span class="fa fa-eye "></span>', $url, [
-                                'title' => Yii::t('app', 'View'),
-                                'class'=>'btn btn-success ver btn-xs',
-                                'value'=> "$url",
-                    ]);
-                },
-                'edit' => function ($url, $model) {
-                    return Html::a('<span class="fa fa-pencil"></span>', $url, [
-                                'title' => Yii::t('app', 'Editar'),
-                                'class'=>'btn btn-info editar btn-xs',
-                                'value'=> "$url",
-                    ]);
-                },
-                 'delete' => function ($url, $model) {
-                    return Html::a('<span class="fa fa-trash"></span>', $url, [
-                                'title' => Yii::t('app', 'Borrar'),
-                                'class'=>'btn btn-danger borrar btn-xs',
-                                'value'=> "$url",
-                    ]);
-                },
-            ],
-
-            'urlCreator' => function ($action, $model, $key, $index) {
-                if ($action === 'view') {
-                    $url ='index.php?r=procedencia/view&id='.$model->id;
-                    return $url;
-                    }
-                if ($action === 'edit') {
-                    $url ='index.php?r=procedencia/update&id='.$model->id;
-                    return $url;
-                    }
-                if ($action === 'delete') {
-                    $url ='index.php?r=procedencia/delete&id='.$model->id;
-                    return $url;
-                    }
-                }
-            ],
+            //view button
+            'view' => function ($url, $model) {
+           
+                return Html::a('<span class="fa fa-eye activity-view-link"></span>', $url, [
+                            'title' => Yii::t('app', 'Ver'),
+                            'class'=>'btn btn-success btn-xs',
+                           // 'value'=> "$url",
+                ])." ";
+            },
+            'edit' => function ($url, $model) {
+                return Html::a('<span class="fa fa-pencil"></span>', $url, [
+                            'title' => Yii::t('app', 'Editar'),
+                            'class'=>'btn btn-info btn-xs',
+                          //  'value'=> "$url",
+                ])." ";
+            },
+            'delete' => function ($url, $model) {
+                           return Html::a('<span class="fa fa-trash"></span>', FALSE, [
+                                       'title' => Yii::t('app', 'Borrar'),
+                                       'class'=>'btn btn-danger borrar btn-xs',
+                                       'value'=> "$url",
+                           ]);
+                       },
+                   ],
+       'urlCreator' => function ($action, $model, $key, $index) {
+            if ($action === 'view') {
+                $url ='index.php?r=procedencia/view&id='.$model['id'];
+                return $url;
+                     }
+           if ($action === 'edit') {
+               $url ='index.php?r=procedencia/update&id='.$model['id'];
+               return $url;
+              }
+            if ($action === 'delete') {
+               $url ='index.php?r=procedencia/delete&id='.$model['id'];
+                return $url;
+              }
+        }
+        ],
              ],
         ]); ?>
 
-    <?php Pjax::end(); ?>
+    <?php
+    
+$this->registerJsFile('@web/assets/admin/js/cipat_modal_procedencia.js', ['depends' => [yii\web\AssetBundle::className()]]);
+     Pjax::end(); ?>

@@ -1,6 +1,8 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\bootstrap\Modal;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use app\models\Localidad;
@@ -43,6 +45,15 @@ $this->registerJs($js);
 
 ?>
 
+<?php
+    Modal::begin([
+            'id' => 'modalPaciente',
+           // 'size'=>'modal-lg',
+            'options' => ['tabindex' => false ],
+        ]);
+        echo "<div id='modalContent'></div>";
+ Modal::end();
+?>
 <?= Html::csrfMetaTags() ?>
   <?php /* \insolita\wgadminlte\LteBox::begin([
              'type'=>\insolita\wgadminlte\LteConst::TYPE_INFO,
@@ -95,7 +106,7 @@ $this->registerJs($js);
                                         'multiple' => false,
                                         'placeholder' => 'Choose item'
                                     ],
-                                        'items' => $dataTipo,
+                                    'items' => $dataTipo,
                                     'settings' => [
                                         'width' => '100%','text-align' => 'left'
                                     ],
@@ -157,23 +168,44 @@ $this->registerJs($js);
                             'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
             ])->textInput(['maxlength' => true])->error([ 'style' => ' margin-left: 35%;']); ?>
 
-            <?php
+            
+            <?php yii\widgets\Pjax::begin(['id' => 'new_localidad']);
                 $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
                 echo $form->field($model, 'Localidad_id', ['template' => "{label}
-                <div class='col-md-8'>{input}</div>
+                <div class='col-md-7'>{input}</div>
                 {hint}
-                {error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
-                ])->widget(Widget::className(), [
+                {error}
+                <button type='button' id='addLocalidad' class=' btn btn-success btn-xs' 
+                value='index.php?r=localidad/createpop'>Agregar </button>"
+                ,  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
+                ])->widget(Widget::className(),[
+                    
                                     'options' => [
                                         'multiple' => false,
-                                        'placeholder' => 'Choose item'
+                                        'placeholder' => 'Choose item',
                                     ],
-                                        'items' => $dataLocalidad,
+                                    'items' => $dataLocalidad,
                                     'settings' => [
                                         'width' => '100%',
                                     ],
                             ])->error([ 'style' => ' margin-left: 35%;']);;
             ?>
+            <?php yii\widgets\Pjax::end() ?>
+            
+            <div id="div_new_model" style="display:none">
+                <?= Html::button('Cancel', [
+                    'class' => 'btn btn-success',
+                    'onclick'=>'(function ( $event ) { $("#div_new_model").hide(); })();'
+                ])?>
+                <?php $modelloc = new Localidad(); ?>
+                
+                <!-- Render create form -->
+                <?= $this->render('/localidad/_form', [
+                    'model' => $modelloc,
+                ]) ?>
+                
+            </div>
+
                <?= $form->field($model, 'telefono', ['template' => "{label}
                 <div class='col-md-8'>{input}</div>
                 {hint}
@@ -291,4 +323,28 @@ $this->registerJs($js);
         <?php ActiveForm::end(); ?>
 <?php
     $this->registerJsFile('@web/assets/admin/js/cipat_modal_paciente.js', ['depends' => [yii\web\AssetBundle::className()]]);    $this->registerJsFile('@web/assets/admin/js/cipat_modal_paciente.js', ['depends' => [yii\web\AssetBundle::className(),  'yii\web\JqueryAsset']]);
+?>
+
+<?php
+/*$js = <<<JS
+$('form#{$model->formName()}').on('beforeSubmit', function(e) {
+    var \$form = $(this);
+    $.post(
+        \$form.attr("action"),
+        \$form.serialize()
+        )
+    .done (function(result){
+        if (result.message == 'Success')
+        {
+            $(document).find('#modalPaciente').modal('hide');
+            $.pjax.reload();
+        }
+    }).fail(function(){
+        console.log("lalala");
+    });
+    return false;
+ });
+ JS;
+ 
+$this->registerJs($js);*/
 ?>

@@ -15,8 +15,8 @@ use kartik\rating\StarRating;
             'options' => [
                 'class' => 'form-horizontal mt-10',
                 'id' => 'create-localidad-form',
-                'enableAjaxValidation' => true,
-                'data-pjax' => '',
+            //    'enableAjaxValidation' => true,
+                'data-pjax' => 'true',
              ]
         ]); ?>
 

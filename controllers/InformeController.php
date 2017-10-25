@@ -670,9 +670,10 @@ class InformeController extends Controller {
 							// portrait orientation
 							'orientation' => Pdf::ORIENT_PORTRAIT,
 							// stream to browser inline
-							'destination' => Pdf::DEST_FILE,                
-							'cssFile' => '@app/web/css/print/informe.css',
-							// set mPDF properties on the fly							
+							'destination' => Pdf::DEST_DOWNLOAD,                
+							'cssFile' => '@app/web/css/print/print.css',
+							'cssInline' => '* {font-size:14px;}',
+							// set mPDF properties on the fly
 							'content' => $this->renderPartial ( $vista, [ 
 									'model' => $model,
 									'modelp' => $modelp,
@@ -944,8 +945,8 @@ class InformeController extends Controller {
  
         
 	public function actionPrintpap($id,$web=null) {
-                //Datos generales del Laboratorio
-                $laboratorio = Laboratorio::find()->where(['id' => 1])->one();
+        //Datos generales del Laboratorio
+        $laboratorio = Laboratorio::find()->where(['id' => 1])->one();
                 
 		$model = $this->findModel ( $id );
 		if ($model) {

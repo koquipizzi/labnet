@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= Html::a('<i class="fa fa-pencil"></i> Editar ', ['medico/update', 'id'=>$model->id], ['class'=>'btn btn-primary']) ?>
                 </div>
             </div>
-            <?= DetailView::widget(['model' => $model,'attributes' => [
+            <?=  DetailView::widget(['model' => $model,'attributes' => [
                             'nombre',
                             'email:email',
                             [
@@ -31,7 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'label'=>'Localidad',
                             'value'=>$model->getLocalidadTexto(),
                             ],
-                             ],
+                            'notas'
+                             ]
                      ])
         ?>
 </div>

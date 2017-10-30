@@ -179,6 +179,7 @@ return [
     'Servicio' => 'Servicio',
     'Submit' => 'Enviar',
     'Anio' => 'Año',
+    'Cancel' => 'Cancelar',
     'Create' => 'Crear',
     'Create Estudio' => 'Nuevo Estudio',
     'Create Informe' => 'Nuevo Informe',

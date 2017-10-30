@@ -177,65 +177,77 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                 ?>
         </div>
        
+        
         <div class="col-md-6" style="text-align: right;">
-            <?php $dataMedico=ArrayHelper::map(Medico::find()->asArray()->all(), 'id', 'nombre');
-                    
-            yii\widgets\Pjax::begin(['id' => 'new_medico']);
-            
-            echo $form->field($model, 'Medico_id',
+           
+              <div class="row">
+                    <div class="col-md-10">
+                      <?php yii\widgets\Pjax::begin(['id' => 'new_medico']);                         
+                           $dataMedico=ArrayHelper::map(Medico::find()->asArray()->all(), 'id', 'nombre'); 
+                        
+                            echo $form->field($model, 'Medico_id',
                                     ['template' => "{label}
-                                    <div class='col-md-5' >
-                                    {input}  </div>
-                                    <div class='col-md-1' ><button type='button' id='addMedico' class=' btn btn-success btn-xs' 
-                                        value='index.php?r=medico/createpop'>Agregar </button>
-                                        </div>
-                                    {hint}{error}
-                                    
-                                    ",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
+                                    <div class='col-md-6' >
+                                        {input}  </div>
+                                        
+                                        {hint}{error}
+                                        "
+                                    ,'labelOptions' => [ 'class' => 'col-md-5  control-label' ],
                                     ]
-                        )->widget(Widget::className(), [
-                'options' => [
-                    'multiple' => false,
-                    'placeholder' => 'Choose item'
-                ],
-                    'items' => $dataMedico ,
-                    'settings' => [
-                        'class'=> 'form-group',
-                    'width' => '100%',
-                    ]
-            ]);
-            ?>
-            <?php yii\widgets\Pjax::end() ?>
-        </div>  
-                
+                                    )->widget(Widget::className(), [
+                            'options' => [
+                                'multiple' => false,
+                                'placeholder' => 'Choose item'
+                            ],
+                                'items' => $dataMedico,
+                            'settings' => [
+                                'width' => '100%',
+                            ]
+                        ]);
+                        
+                        ?>
+                        <?php yii\widgets\Pjax::end() ?>
+                    </div>
+                        <button type='button'  id='addMedico'class=' col-md-1   btn btn-success btn-xs' 
+                                        value='index.php?r=medico/createpop'>Agregar
+                        </button>
+            </div>
+        </div>                
         <div class="col-md-6" style="text-align: right;">
-            <?php
-             
-                $dataProcedencia=ArrayHelper::map(Procedencia::find()->asArray()->all(), 'id', 'descripcion');  
-                yii\widgets\Pjax::begin(['id' => 'new_procedencia']);
-                echo $form->field($model, 'Procedencia_id',
-                        ['template' => "{label}
-                        <div class='col-md-5' >
-                            {input}  </div>
-                            <div class='col-md-1' ><button type='button' id='addProcedencia' class=' btn btn-success btn-xs' 
-                                value='index.php?r=procedencia/createpop'>Agregar </button>
-                                </div>
-                            {hint}{error}
-                            "
-                        ,'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
-                        ]
-                        )->widget(Widget::className(), [
-                'options' => [
-                    'multiple' => false,
-                    'placeholder' => 'Choose item'
-                ],
-                    'items' => $dataProcedencia,
-                'settings' => [
-                    'width' => '100%',
-                ]
-            ]);
-            ?>
-            <?php yii\widgets\Pjax::end() ?>
+           
+              <div class="row">
+                    <div class="col-md-10">
+                      <?php yii\widgets\Pjax::begin(['id' => 'new_procedencia']);                         
+                            $dataProcedencia=ArrayHelper::map(Procedencia::find()->asArray()->all(), 'id', 'descripcion');  
+                        
+                            echo $form->field($model, 'Procedencia_id',
+                                    ['template' => "{label}
+                                    <div class='col-md-6' >
+                                        {input}  </div>
+                                        
+                                        {hint}{error}
+                                        "
+                                    ,'labelOptions' => [ 'class' => 'col-md-5  control-label' ],
+                                    ]
+                                    )->widget(Widget::className(), [
+                            'options' => [
+                                'multiple' => false,
+                                'placeholder' => 'Choose item'
+                            ],
+                                'items' => $dataProcedencia,
+                            'settings' => [
+                                'width' => '100%',
+                            ]
+                        ]);
+                        
+                        ?>
+                        <?php yii\widgets\Pjax::end() ?>
+                    </div>
+                        <button type='button' id='addProcedencia'  
+                             class=' col-md-1  addProcedencia btn btn-success btn-xs' 
+                             value='index.php?r=procedencia/createpop'>Agregar
+                        </button>
+            </div>
         </div>
      
 

@@ -294,7 +294,7 @@ $this->registerJs($js);
                                                 <div class='col-md-8'>{input}</div>
                                                 {hint}
                                                 {error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
-                                                ])->dropDownList( $dataPrestadoras, ['prompt' => ''])->error([ 'style' => 'float: left;']) 
+                                                ])->dropDownList( $dataPrestadoras, ['prompt' => ''])->error([ 'style' => ' margin-left: 35%;']);
                                         ?>
                                 </div>
                             </div>

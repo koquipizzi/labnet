@@ -168,30 +168,36 @@ $this->registerJs($js);
                             'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
             ])->textInput(['maxlength' => true])->error([ 'style' => ' margin-left: 35%;']); ?>
 
-            
-            <?php yii\widgets\Pjax::begin(['id' => 'new_localidad']);
-                $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
-                echo $form->field($model, 'Localidad_id', ['template' => "{label}
-                <div class='col-md-7'>{input}</div>
-                {hint}
-                {error}
-                <button type='button' id='addLocalidad' class=' btn btn-success btn-xs' 
-                value='index.php?r=localidad/createpop'>Agregar </button>"
-                ,  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
-                ])->widget(Widget::className(),[
-                    
-                                    'options' => [
-                                        'multiple' => false,
-                                        'placeholder' => 'Choose item',
-                                    ],
-                                    'items' => $dataLocalidad,
-                                    'settings' => [
-                                        'width' => '100%',
-                                    ],
-                            ])->error([ 'style' => ' margin-left: 35%;']);;
-            ?>
-            <?php yii\widgets\Pjax::end() ?>
-            
+           <div class='row'>
+                <div class="col-md-10">
+                    <?php yii\widgets\Pjax::begin(['id' => 'new_localidad']);
+                        $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
+                        echo $form->field($model, 'Localidad_id', ['template' => "{label}
+                        <div class='col-md-7'>{input}</div>
+                        {hint}
+                        {error}
+                    "
+                        ,  'labelOptions' => [ 'class' => 'col-md-5  control-label' ]
+                        ])->widget(Widget::className(),[
+                            
+                                            'options' => [
+                                                'multiple' => false,
+                                                'placeholder' => 'Choose item',
+                                            ],
+                                            'items' => $dataLocalidad,
+                                            'settings' => [
+                                                'width' => '100%',
+                                            ],
+                                    ])->error([ 'style' => ' margin-left: 35%;']);;
+                    ?>
+                    <?php yii\widgets\Pjax::end() ?>
+                </div>
+                <div  class='col-md-2' style="text-align: left;">
+                        <button type='button' id='addLocalidad' class=' btn btn-success btn-xs' 
+                                value='index.php?r=localidad/createpop'><?php   echo Yii::t('app', 'Add');  ?> </button>            
+                </div>
+            </div>
+           
             <div id="div_new_model" style="display:none">
                 <?= Html::button('Cancel', [
                     'class' => 'btn btn-success',

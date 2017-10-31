@@ -197,12 +197,7 @@ $this->registerJs($js);
                     'class' => 'btn btn-success',
                     'onclick'=>'(function ( $event ) { $("#div_new_model").hide(); })();'
                 ])?>
-                <?php $modelloc = new Localidad(); ?>
                 
-                <!-- Render create form -->
-                <?= $this->render('/localidad/_form', [
-                    'model' => $modelloc,
-                ]) ?>
                 
             </div>
 

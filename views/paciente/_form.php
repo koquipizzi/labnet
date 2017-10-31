@@ -298,7 +298,7 @@ $this->registerJs($js);
                                             ])->textInput(['maxlength' => true, 'class'=> $model->isNewRecord ? 'form-control crear':'form-control editar' ])
                                         ?>
                                         <?php
-                                                yii\widgets\Pjax::begin(['formSelector' => 'new_prestadora']);
+                                                yii\widgets\Pjax::begin(['options' => ['class' => 'new_prestadora']]);
                                                 $dataPrestadoras=ArrayHelper::map(app\models\Prestadoras::find()->where(['cobertura'=>1])->all(), 'id', 'descripcion');
                                                 echo $form->field($modelPrestadora, "[{$index}]Prestadoras_id", ['template' => "{label}
                                                 <div class='col-md-8'>{input}</div>

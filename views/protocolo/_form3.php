@@ -244,7 +244,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                              value='index.php?r=procedencia/createpop'><?php    echo Yii::t('app', 'Add');  ?>
                         </button>
             </div>
->>>>>>> d20f6de72e6acdcbb38d67fc738a68a75746d75a
         </div>
      
 

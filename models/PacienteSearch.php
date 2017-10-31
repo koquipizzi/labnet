@@ -49,7 +49,7 @@ public $nombre_prest_nro;
         return " {$where} {$connector} {$sentence} ";
     }
 
-  
+
 
 
 
@@ -95,7 +95,7 @@ public $nombre_prest_nro;
        //     ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'domicilio', $this->domicilio]);
         return $dataProvider;
-    } 
+    }
 
 
 
@@ -112,7 +112,7 @@ public $nombre_prest_nro;
             $where = $this->addWhereSentence($where, "Paciente.telefono like :telefono");
         }
     }
-    
+
 
 
 
@@ -125,7 +125,7 @@ public $nombre_prest_nro;
             $where = $this->addWhereSentence($where, "Paciente.nombre like :nombre");
         }
     }
-    
+
 
     /**
     * Filtro de numero de documento
@@ -147,8 +147,8 @@ public $nombre_prest_nro;
             $where = $this->addWhereSentence($where, "Paciente.nro_documento like :nro_documento");
         }
     }
-    
-    
+
+
     public function searchPacPrest($params)
     {
 
@@ -170,7 +170,7 @@ public $nombre_prest_nro;
                     pp.nombre_prest_nro
                      ";
         $fromTables = "
-                    Paciente 
+                    Paciente
                     left join
                     (   select
 							 concat(Prestadoras.descripcion,' - ', Paciente_prestadora.nro_afiliado) as nombre_prest_nro	,
@@ -179,9 +179,9 @@ public $nombre_prest_nro;
                               Prestadoras.descripcion as nombre_prest,
                               Paciente_prestadora.nro_afiliado,
                               Prestadoras.descripcion
-                        from  Paciente_prestadora       
-                        left JOIN Prestadoras ON (Prestadoras.id = Paciente_prestadora.Prestadoras_id) 
-                     ) as pp  on (Paciente.id=pp.pacprest)
+                        from  Paciente_prestadora
+                        left JOIN Prestadoras ON (Prestadoras.id = Paciente_prestadora.Prestadoras_id)
+                     ) as pp  on (Paciente.id=pp.Paciente_id)
 
                     ";
 
@@ -189,7 +189,7 @@ public $nombre_prest_nro;
         $this->nroDocumentoFilter($formParams, $where, $queryParams);
         $this->telefonoFilter($formParams, $where, $queryParams);
         $this->coberturaNroAfiliadoFilter($formParams, $where, $queryParams);
-    
+
        if(!empty($where)) {
             $where = " WHERE {$where} ";
         }
@@ -204,9 +204,9 @@ public $nombre_prest_nro;
             FROM {$fromTables}
             {$where}
         ";
-        
+
         $itemsCount = Yii::$app->db->createCommand(
-            $consultaCant, 
+            $consultaCant,
             $queryParams
         )->queryScalar();
         $dataProvider = new \yii\data\SqlDataProvider([
@@ -221,8 +221,8 @@ public $nombre_prest_nro;
                     'nro_documento' => [
                         'asc' => ['Paciente.nro_documento' => SORT_ASC],
                         'desc' => ['Paciente.nro_documento' => SORT_DESC],
-                    ],                 
-                    
+                    ],
+
                 ],
             ],
             'totalCount' => $itemsCount,
@@ -232,9 +232,9 @@ public $nombre_prest_nro;
             ],
         ]);
 
-        
+
               return $dataProvider;
-        
+
 
     }
 

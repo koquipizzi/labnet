@@ -26,7 +26,7 @@ use app\models\Prestadoras;
                 {hint}
                 {error}",
                 'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
-             ])->textInput()->error([ 'style' => ' margin-right: 30%;'])?>
+             ])->textInput()->error([ 'style' => 'float:left;  margin-left:26%;']);?>
 
         <?= $form->field($model, 'descripcion', ['template' => "{label}
             <div class='col-md-7'>{input}</div>
@@ -41,7 +41,7 @@ use app\models\Prestadoras;
                     {hint}
                     {error}",
                     'labelOptions' => [ 'class' => 'col-md-6  control-label' ]
-                ])->textInput(['maxlength' => true])->error([ 'style' => ' margin-right: 10%;'])?>
+                ])->textInput(['maxlength' => true])->error([ 'style' => 'float:left; margin-left:53%;']);?>
             </div>
             <div class="col-md-6">
                 <?= $form->field($model, 'coseguro',['template' => "{label}
@@ -49,7 +49,7 @@ use app\models\Prestadoras;
                         {hint}
                         {error}",
                        'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
-                ])->textInput()->error([ 'style' => ' margin-right: 10%;'])?>
+                ])->textInput()->error([ 'style' => 'float:left; margin-left: 35%;']);?>
             </div>
          </div>
 

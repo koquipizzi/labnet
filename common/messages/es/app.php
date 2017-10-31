@@ -35,6 +35,7 @@ return [
     'Columnas' => '',
     'Copiar' => '',
     'Coseguro' => '',
+    'Add' => 'Agregar' ,
     'Create Informe Nomenclador' => '',
     'Create Laboratorio' => '',
     'Create Paciente Prestadora' => '',

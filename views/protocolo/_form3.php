@@ -175,11 +175,8 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                     ]
                 ])->error([ 'style' => ' float: left;']);
                 ?>
-        </div>
-       
-        
+        </div>      
         <div class="col-md-6" style="text-align: right;">
-           
               <div class="row">
                     <div class="col-md-10">
                       <?php yii\widgets\Pjax::begin(['id' => 'new_medico']);                         
@@ -187,30 +184,29 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         
                             echo $form->field($model, 'Medico_id',
                                     ['template' => "{label}
-                                    <div class='col-md-6' >
-                                        {input}  </div>
-                                        
-                                        {hint}{error}
-                                        "
-                                    ,'labelOptions' => [ 'class' => 'col-md-5  control-label' ],
-                                    ]
-                                    )->widget(Widget::className(), [
-                            'options' => [
-                                'multiple' => false,
-                                'placeholder' => 'Choose item'
-                            ],
-                                'items' => $dataMedico,
-                            'settings' => [
-                                'width' => '100%',
-                            ]
-                        ]);
+                                        <div class='col-md-6' >
+                                            {input}  </div>
+                                            
+                                            {hint}{error}
+                                            "
+                                        ,'labelOptions' => [ 'class' => 'col-md-5  control-label' ],
+                                    ])->widget(Widget::className(), [
+                                        'options' => [
+                                            'multiple' => false,
+                                            'placeholder' => 'Choose item'
+                                        ],
+                                            'items' => $dataMedico,
+                                        'settings' => [
+                                            'width' => '100%',
+                                        ]
+                                    ]);
                         
                         ?>
                         <?php yii\widgets\Pjax::end() ?>
                     </div>
-                        <button type='button'  id='addMedico'class=' col-md-1   btn btn-success btn-xs' 
-                                        value='index.php?r=medico/createpop'>Agregar
-                        </button>
+                    <button type='button'  id='addMedico'class=' col-md-1   btn btn-success btn-xs' 
+                            value='index.php?r=medico/createpop'><?php   echo Yii::t('app', 'Add');  ?>
+                    </button>
             </div>
         </div>                
         <div class="col-md-6" style="text-align: right;">
@@ -245,7 +241,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                     </div>
                         <button type='button' id='addProcedencia'  
                              class=' col-md-1  addProcedencia btn btn-success btn-xs' 
-                             value='index.php?r=procedencia/createpop'>Agregar
+                             value='index.php?r=procedencia/createpop'><?php    echo Yii::t('app', 'Add');  ?>
                         </button>
             </div>
         </div>

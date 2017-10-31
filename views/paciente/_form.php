@@ -53,6 +53,13 @@ $this->registerJs($js);
         ]);
         echo "<div id='modalContent'></div>";
  Modal::end();
+ Modal::begin([
+            'id' => 'modalPrestadoras',
+           // 'size'=>'modal-lg',
+            'options' => ['tabindex' => false ],
+        ]);
+        echo "<div id='divPrestadoras'></div>";
+ Modal::end();
 ?>
 <?= Html::csrfMetaTags() ?>
   <?php /* \insolita\wgadminlte\LteBox::begin([
@@ -262,7 +269,9 @@ $this->registerJs($js);
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         Prestadoras
+                        <button type="button" id="addPrestadoras"  value='index.php?r=prestadoras/createpop' style="float:right; margin-left:5%;" class="btn btn-success btn-xs"><i class="fa fa-plus"></i><?php  echo Yii::t('app', 'Add New'); ?></button>
                         <button type="button" class="pull-right add-item btn btn-success btn-xs"><i class="fa fa-plus"></i> Agregar Prestadora</button>
+                        <div class="clearfix"></div>
                         <div class="clearfix"></div>
                     </div>
                     <div class="panel-body container-items"><!-- widgetContainer -->
@@ -289,12 +298,14 @@ $this->registerJs($js);
                                             ])->textInput(['maxlength' => true, 'class'=> $model->isNewRecord ? 'form-control crear':'form-control editar' ])
                                         ?>
                                         <?php
+                                                yii\widgets\Pjax::begin(['formSelector' => 'new_prestadora']);
                                                 $dataPrestadoras=ArrayHelper::map(app\models\Prestadoras::find()->where(['cobertura'=>1])->all(), 'id', 'descripcion');
                                                 echo $form->field($modelPrestadora, "[{$index}]Prestadoras_id", ['template' => "{label}
                                                 <div class='col-md-8'>{input}</div>
                                                 {hint}
                                                 {error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
                                                 ])->dropDownList( $dataPrestadoras, ['prompt' => ''])->error([ 'style' => ' margin-left: 35%;']);
+                                                yii\widgets\Pjax::end();
                                         ?>
                                 </div>
                             </div>

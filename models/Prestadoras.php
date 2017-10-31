@@ -46,7 +46,7 @@ class Prestadoras extends \yii\db\ActiveRecord
             [['descripcion', 'domicilio'], 'string', 'max' => 45],
             [['descripcion', 'domicilio','telefono'], 'required'],
             [['notas'], 'string', 'max' => 512],
-            [['email'], 'email'],
+            [['email'],'email'],
             [['telefono'], 'string'],
             [['facturable'], 'string', 'max' => 1],
             [['Localidad_id'], 'exist', 'skipOnError' => true, 'targetClass' => Localidad::className(), 'targetAttribute' => ['Localidad_id' => 'id']],
@@ -72,6 +72,8 @@ class Prestadoras extends \yii\db\ActiveRecord
             'notas' => Yii::t('app', 'Notas'),
         ];
     }
+
+
 
     /**
      * @return \yii\db\ActiveQuery

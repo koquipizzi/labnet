@@ -671,7 +671,7 @@ class InformeController extends Controller {
 							'orientation' => Pdf::ORIENT_PORTRAIT,
 							// stream to browser inline
 							'destination' => Pdf::DEST_DOWNLOAD,                
-							'cssFile' => '@app/web/css/print/print.css',
+							'cssFile' => '@app/web/css/print/informe.css',
 							'cssInline' => '* {font-size:14px;}',
 							// set mPDF properties on the fly
 							'content' => $this->renderPartial ( $vista, [ 

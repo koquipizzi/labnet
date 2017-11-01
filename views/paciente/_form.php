@@ -275,6 +275,7 @@ $this->registerJs($js);
                         <div class="clearfix"></div>
                     </div>
                     <div class="panel-body container-items"><!-- widgetContainer -->
+                    
                         <?php foreach ($PacientePrestadorasmultiple as $index => $modelPrestadora): ?>
                             <div class="item panel panel-default"><!-- widgetBody -->
                                 <div class="panel-heading">
@@ -298,18 +299,22 @@ $this->registerJs($js);
                                             ])->textInput(['maxlength' => true, 'class'=> $model->isNewRecord ? 'form-control crear':'form-control editar' ])
                                         ?>
                                         <?php
-                                                yii\widgets\Pjax::begin(['options' => ['class' => 'new_prestadora']]);
+                                           
                                                 $dataPrestadoras=ArrayHelper::map(app\models\Prestadoras::find()->where(['cobertura'=>1])->all(), 'id', 'descripcion');
                                                 echo $form->field($modelPrestadora, "[{$index}]Prestadoras_id", ['template' => "{label}
                                                 <div class='col-md-8'>{input}</div>
                                                 {hint}
                                                 {error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
-                                                ])->dropDownList( $dataPrestadoras, ['prompt' => ''])->error([ 'style' => ' margin-left: 35%;']);
-                                                yii\widgets\Pjax::end();
+                                                ])->dropDownList( $dataPrestadoras,
+                                                                                   ['class'=>'selectoProcedencia form-control','prompt' => ''])->error([ 'style' => ' margin-left: 35%;']);
+                                            
                                         ?>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
+                        <?php endforeach; 
+                       
+                         ?>
+                        
                     </div>
                 </div>
                 <?php DynamicFormWidget::end(); ?>

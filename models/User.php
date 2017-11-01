@@ -32,9 +32,10 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             [['username', 'email','status',  'password'], 'required'],
             [['created_at', 'updated_at','status'], 'integer'],
             [['email'], 'email'],
-            [['username', 'auth_key'], 'string', 'max' => 32],
+            [['auth_key'], 'string', 'max' => 32],
             [['password_reset_token'], 'string', 'max' => 255],
             [['password'], 'string', 'max' => 30],
+            [['username'], 'string', 'max' => 200],
         ];
     }
  public static function findByUsername($username){
@@ -103,4 +104,9 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     return  date('m/d/Y', $this->created_at); 
 
  }
+
+
+
+
+
 }

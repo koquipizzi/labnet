@@ -269,7 +269,7 @@ $this->registerJs($js);
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         Prestadoras
-                        <button type="button" id="addPrestadoras"  value='index.php?r=prestadoras/createpop' style="float:right; margin-left:5%;" class="btn btn-success btn-xs"><i class="fa fa-plus"></i><?php  echo Yii::t('app', 'Add New'); ?></button>
+                        <button type="button" id="addPrestadoras"  value='index.php?r=prestadoras/createpop' style="float:right; margin-left:5%;" class="btn btn-success btn-xs"><i class="fa fa-plus"></i><?php  echo ' '.Yii::t('app', 'Add New'); ?></button>
                         <button type="button" class="pull-right add-item btn btn-success btn-xs"><i class="fa fa-plus"></i> Agregar Prestadora</button>
                         <div class="clearfix"></div>
                         <div class="clearfix"></div>
@@ -306,7 +306,16 @@ $this->registerJs($js);
                                                 {hint}
                                                 {error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
                                                 ])->dropDownList( $dataPrestadoras,
-                                                                                   ['class'=>'selectoProcedencia form-control','prompt' => ''])->error([ 'style' => ' margin-left: 35%;']);
+                                                                                   ['onchange' => 'var $this=$(this);$.post("'.Yii::$app->urlManager->createUrl(["prestadoras/recargardropdown"]).'", function( data ) {
+                                                                                     console.log($this);    
+                                                                                     
+                                                                                       /*$this.siblings().find().remove(); */
+                                                                                       $this.empty();     
+                                                                                              
+                                                                                     $.each(data.data, function(id,descripcion){
+                                                                                            $this.append("<option value="+id+">"+descripcion+"</option>");
+                                                                                        });                                                                                                                                                                           
+                                                                                    })','class'=>'selectoProcedencia form-control','prompt' => ''])->error([ 'style' => ' margin-left: 35%;']);
                                             
                                         ?>
                                 </div>

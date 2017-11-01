@@ -44,7 +44,7 @@ class Prestadoras extends \yii\db\ActiveRecord
             [['Localidad_id'], 'required'],
             [['Localidad_id', 'Tipo_prestadora_id'], 'integer'],
             [['descripcion', 'domicilio'], 'string', 'max' => 45],
-            [['descripcion', 'domicilio','telefono'], 'required'],
+            [['descripcion'], 'required'],
             [['notas'], 'string', 'max' => 512],
             [['email'],'email'],
             [['telefono'], 'string'],

@@ -45,7 +45,7 @@ class Paciente extends \yii\db\ActiveRecord
             [['fecha_nacimiento'], 'safe'],
             [['Tipo_documento_id', 'Localidad_id', 'fecha_nacimiento'], 'required'],
             [['Tipo_documento_id', 'Localidad_id'], 'integer'],
-            [['nombre'], 'string', 'max' => 150],
+            [['nombre'], 'string', 'max' => 200],
             [['nombre'], 'required'],
             ['email', 'email' ],
             [['nro_documento'], 'integer'],

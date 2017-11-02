@@ -169,7 +169,9 @@ $this->registerJs($js);
             ])->textInput(['maxlength' => true])->error([ 'style' => ' margin-left: 35%;']); ?>
 
             
-            <?php yii\widgets\Pjax::begin(['id' => 'new_localidad']);
+            <?php 
+                yii\widgets\Pjax::begin(['id' => 'new_localidad']);
+
                 $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
                 echo $form->field($model, 'Localidad_id', ['template' => "{label}
                 <div class='col-md-7'>{input}</div>

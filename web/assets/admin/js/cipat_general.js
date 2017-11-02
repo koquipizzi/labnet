@@ -190,6 +190,69 @@ $(document).on('ready', function () {
 
 /********************************************************************************************************* */
 
+/********************************************************************************************************* */
+
+    $("body").on("beforeSubmit", "form#create-prestadora-form-pop", function () {
+        //alert("ddddd");
+        var form = $(this);
+        // return false if form still have some validation errors
+        if (form.find(".has-error").length) 
+        {
+            return false;
+        }
+        // submit form
+        $.ajax({
+            url    : form.attr("action"),
+            type   : "post",
+            data   : form.serialize(),
+            success: function (response) 
+            {
+                if (response.rta == "ok"){
+                    //$.pjax.reload({container:"#new_prestadora"}); //for pjax update       
+                    $(".selectoProcedencia").append("<option value="+response.data_id+">"+response.data_nombre+"</option>");
+                    var n = noty({
+                        text: ' agregada con éxito!',
+                        type: 'success',
+                        class: 'animated pulse',
+                        layout: 'topRight',
+                        theme: 'relax',
+                        timeout: 3000, // delay for closing event. Set false for sticky notifications
+                        force: false, // adds notification to the beginning of queue when set to true
+                        modal: false, // si pongo true me hace el efecto de pantalla gris
+                    });
+                }
+                else {
+                    var n = noty({
+                        text: response.message +' agregada con éxito!',
+                        type: 'error',
+                        class: 'animated pulse',
+                        layout: 'topRight',
+                        theme: 'relax',
+                        timeout: 3000, // delay for closing event. Set false for sticky notifications
+                        force: false, // adds notification to the beginning of queue when set to true
+                        modal: false, // si pongo true me hace el efecto de pantalla gris
+                    });
+                }
+                $('#modalPrestadoras').modal('hide');
+            },
+            error  : function () 
+            {
+                console.log("internal server error");
+            }
+        });
+        return false;
+});
+
+    $('#addPrestadoras').click(
+        function(){
+            $('#modalPrestadoras').modal('show').find('#divPrestadoras').load($(this).attr('value'));
+    });
+    
+
+/********************************************************************************************************* */
+
+
+
 
 
 

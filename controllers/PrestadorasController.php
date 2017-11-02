@@ -9,6 +9,8 @@ use app\models\PrestadorasSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\data\ArrayDataProvider;
+
+use yii\helpers\ArrayHelper;
 //use yii\filters\VerbFilter;
 
 /**
@@ -25,7 +27,7 @@ class PrestadorasController extends Controller
 //            'verbs' => [
 //                'class' => VerbFilter::className(),
 //                'actions' => [
-//                    'delete' => ['POST'],
+//                     'delete' => ['POST'],
 //                ],
 //            ],
         ];
@@ -267,5 +269,29 @@ class PrestadorasController extends Controller
         }
     }
     
-    
+    public function actionCreatepop()
+    {
+        $model = new Prestadoras();
+
+        if ($model->load(Yii::$app->request->post())){
+            $model->cobertura=1;
+                if($model->facturable==="1"){
+                    $model->facturable='S';
+                 }else{
+                      $model->facturable='N';
+                 }
+            $model->save();   
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return ['rta'=>'ok', 'message'=>'','data_id'=>$model->id, 'data_nombre'=>$model->descripcion];
+        }
+       else {
+            return $this->renderAjax('create_form_pop', [
+                        'model' => $model
+            ]);
+        }
+    }
+
+  
+
+
 }

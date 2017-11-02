@@ -53,6 +53,13 @@ $this->registerJs($js);
         ]);
         echo "<div id='modalContent'></div>";
  Modal::end();
+ Modal::begin([
+            'id' => 'modalPrestadoras',
+           // 'size'=>'modal-lg',
+            'options' => ['tabindex' => false ],
+        ]);
+        echo "<div id='divPrestadoras'></div>";
+ Modal::end();
 ?>
 <?= Html::csrfMetaTags() ?>
   <?php /* \insolita\wgadminlte\LteBox::begin([
@@ -262,10 +269,13 @@ $this->registerJs($js);
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         Prestadoras
+                        <button type="button" id="addPrestadoras"  value='index.php?r=prestadoras/createpop' style="float:right; margin-left:5%;" class="btn btn-success btn-xs"><i class="fa fa-plus"></i><?php  echo ' '.Yii::t('app', 'Add New'); ?></button>
                         <button type="button" class="pull-right add-item btn btn-success btn-xs"><i class="fa fa-plus"></i> Agregar Prestadora</button>
+                        <div class="clearfix"></div>
                         <div class="clearfix"></div>
                     </div>
                     <div class="panel-body container-items"><!-- widgetContainer -->
+                    
                         <?php foreach ($PacientePrestadorasmultiple as $index => $modelPrestadora): ?>
                             <div class="item panel panel-default"><!-- widgetBody -->
                                 <div class="panel-heading">
@@ -289,16 +299,31 @@ $this->registerJs($js);
                                             ])->textInput(['maxlength' => true, 'class'=> $model->isNewRecord ? 'form-control crear':'form-control editar' ])
                                         ?>
                                         <?php
+                                           
                                                 $dataPrestadoras=ArrayHelper::map(app\models\Prestadoras::find()->where(['cobertura'=>1])->all(), 'id', 'descripcion');
                                                 echo $form->field($modelPrestadora, "[{$index}]Prestadoras_id", ['template' => "{label}
                                                 <div class='col-md-8'>{input}</div>
                                                 {hint}
                                                 {error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
-                                                ])->dropDownList( $dataPrestadoras, ['prompt' => ''])->error([ 'style' => ' margin-left: 35%;']);
+                                                ])->dropDownList( $dataPrestadoras,
+                                                                                   ['onchange' => 'var $this=$(this);$.post("'.Yii::$app->urlManager->createUrl(["prestadoras/recargardropdown"]).'", function( data ) {
+                                                                                     console.log($this);    
+                                                                                     
+                                                                                       /*$this.siblings().find().remove(); */
+                                                                                       $this.empty();     
+                                                                                              
+                                                                                     $.each(data.data, function(id,descripcion){
+                                                                                            $this.append("<option value="+id+">"+descripcion+"</option>");
+                                                                                        });                                                                                                                                                                           
+                                                                                    })','class'=>'selectoProcedencia form-control','prompt' => ''])->error([ 'style' => ' margin-left: 35%;']);
+                                            
                                         ?>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
+                        <?php endforeach; 
+                       
+                         ?>
+                        
                     </div>
                 </div>
                 <?php DynamicFormWidget::end(); ?>

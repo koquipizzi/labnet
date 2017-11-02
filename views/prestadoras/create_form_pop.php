@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-header with-border">
               <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
               <div class="pull-right">
-                            <?= Html::a('<i class="fa fa-arrow-left"></i> Volver', ['prestadoras/index'], ['class'=>'btn btn-primary']) ?>
+                           
               </div>
             </div>
             <?php $form = ActiveForm::begin([  
@@ -40,28 +40,21 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 
 
-    <?= $form->field($model, 'domicilio', ['template' => "{label}
-<div class='col-md-7'>{input}</div>
-{hint}
-{error}",
-        'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
-    ])->textInput(['maxlength' => true]) ?>
-
     <?php
     $data=ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
 
     echo $form->field($model, 'Localidad_id', ['template' => "{label}
-<div class='col-md-7'>{input}</div>
-{hint}
-{error}",  'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
-    ])->widget(select2::classname(), [
-        'data' => $data,
-        'language'=>'es',
-        'options' => ['placeholder' => 'Seleccione una Localidad ...'],
-        'pluginOptions' => [
-            'allowClear' => false
-        ],
-    ]);
+        <div class='col-md-7'>{input}</div>
+        {hint}
+        {error}",  'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
+        ])->widget(select2::classname(), [
+            'data' => $data,
+            'language'=>'es',
+            'options' => ['placeholder' => 'Seleccione una Localidad ...'],
+            'pluginOptions' => [
+                'allowClear' => false
+            ],
+        ]);
     ?>
 
 
@@ -74,34 +67,20 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 
-    <?= $form->field($model, 'telefono', ['template' => "{label}
-                                <div class='col-md-7'>{input}</div>
-                                {hint}
-                                {error}",
-        'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
-    ])->textInput(['maxlength' => true]) ?>
 
-
-    <?= $form->field($model, 'email', ['template' => "{label}
-                            <div class='col-md-7'>{input}</div>
-                            {hint}
-                            {error}",
-
-        'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
-    ])->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'notas', ['template' => "{label}
                             <div class='col-md-7'>{input}</div>
                             {hint}
                             {error}",
         'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
-    ])->textArea(['maxlength' => true]) ?>
+         ])->textArea(['maxlength' => true]) ?>
 
 
     <div class="box-footer" >
         <div class="pull-right box-tools">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
             <!-- <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button> -->
-            <?= Html::a('Cancelar', ['prestadoras/index'], ['class'=>'btn btn-danger']) ?>
+             <button type="reset" class="btn btn-danger" ><?php echo Yii::t('app', 'Reset') ?></button>
         </div>
     </div>
 

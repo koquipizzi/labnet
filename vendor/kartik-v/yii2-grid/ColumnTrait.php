@@ -4,43 +4,44 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2017
- * @version   3.1.5
+ * @version   3.1.6
  */
 
 namespace kartik\grid;
 
 use Closure;
+use NumberFormatter;
+use kartik\base\Config;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
-use kartik\base\Config;
 
 /**
  * ColumnTrait maintains generic methods used by all column widgets in [[GridView]].
  *
- * @property boolean $mergeHeader
- * @property boolean $hidden
- * @property boolean $noWrap
- * @property array $options
- * @property array $headerOptions
- * @property array $filterOptions
- * @property array $footerOptions
- * @property array $contentOptions
- * @property array $pageSummaryOptions
- * @property boolean $hidePageSummary
- * @property boolean $hiddenFromExport
+ * @property boolean         $mergeHeader
+ * @property boolean         $hidden
+ * @property boolean         $noWrap
+ * @property array           $options
+ * @property array           $headerOptions
+ * @property array           $filterOptions
+ * @property array           $footerOptions
+ * @property array           $contentOptions
  * @property boolean|Closure $pageSummary
- * @property string|Closure $pageSummaryFunc
- * @property string $footer
- * @property string $hAlign
- * @property string $vAlign
- * @property string $width
- * @property array $_rows
- * @property string $_columnKey
- * @property string $_clientScript
- * @property GridView $grid
- * @property string $format
+ * @property string|Closure  $pageSummaryFunc
+ * @property array           $pageSummaryOptions
+ * @property boolean         $hidePageSummary
+ * @property boolean         $hiddenFromExport
+ * @property string          $footer
+ * @property string          $hAlign
+ * @property string          $vAlign
+ * @property string          $width
+ * @property array           $_rows
+ * @property string          $_columnKey
+ * @property string          $_clientScript
+ * @property GridView        $grid
+ * @property string          $format
  * @method getDataCellValue() getDataCellValue($model, $key, $index)
  * @method renderCell()
  *
@@ -95,93 +96,12 @@ trait ColumnTrait
     }
 
     /**
-     * Renders the page summary cell content.
-     *
-     * @return string the rendered result
-     */
-    protected function renderPageSummaryCellContent()
-    {
-        if ($this->hidePageSummary) {
-            return $this->grid->emptyCell;
-        }
-        $content = $this->getPageSummaryCellContent();
-        if ($this->pageSummary === true) {
-            return $this->grid->formatter->format($content, $this->format);
-        }
-        return ($content === null) ? $this->grid->emptyCell : $content;
-    }
-
-    /**
-     * Gets the raw page summary cell content.
-     *
-     * @return string the rendered result
-     */
-    protected function getPageSummaryCellContent()
-    {
-        if ($this->pageSummary === true || $this->pageSummary instanceof \Closure) {
-            $summary = $this->calculateSummary();
-            return ($this->pageSummary === true) ? $summary : call_user_func(
-                $this->pageSummary,
-                $summary,
-                $this->_rows,
-                $this
-            );
-        }
-        if ($this->pageSummary !== false) {
-            return $this->pageSummary;
-        }
-        return null;
-    }
-
-    /**
-     * Calculates the summary of an input data based on page summary aggregration function.
-     *
-     * @return float
-     */
-    protected function calculateSummary()
-    {
-        $data = $this->_rows;
-        $type = $this->pageSummaryFunc;
-        if ($type instanceof Closure) {
-            return call_user_func($type, $data);
-        }
-        if (empty($this->_rows)) {
-            return '';
-        }
-        switch ($type) {
-            case null:
-                return array_sum($data);
-            case GridView::F_SUM:
-                return array_sum($data);
-            case GridView::F_COUNT:
-                return count($data);
-            case GridView::F_AVG:
-                return count($data) > 0 ? array_sum($data) / count($data) : null;
-            case GridView::F_MAX:
-                return max($data);
-            case GridView::F_MIN:
-                return min($data);
-        }
-        return '';
-    }
-
-    /**
-     * Checks if the filter input types are valid
-     */
-    protected function checkValidFilters()
-    {
-        if (isset($this->filterType)) {
-            Config::validateInputWidget($this->filterType, 'for filtering the grid as per your setup');
-        }
-    }
-
-    /**
      * Parses Excel Cell Formats for export
      *
-     * @param array $options the HTML attributes for the cell
-     * @param Model $model the current model being rendered
-     * @param mixed $key the primary key value for the model
-     * @param int   $index the zero-based index of the model being rendered
+     * @param array   $options the HTML attributes for the cell
+     * @param Model   $model the current model being rendered
+     * @param mixed   $key the primary key value for the model
+     * @param integer $index the zero-based index of the model being rendered
      */
     public function parseExcelFormats(&$options, $model, $key, $index)
     {
@@ -256,6 +176,86 @@ trait ColumnTrait
             $options['data-raw-value'] = $this->getDataCellValue($model, $key, $index);
         }
         Html::addCssStyle($options, ['mso-number-format' => '"' . $fmt . '"']);
+    }
+
+    /**
+     * Renders the page summary cell content.
+     *
+     * @return string the rendered result
+     */
+    protected function renderPageSummaryCellContent()
+    {
+        if ($this->hidePageSummary) {
+            return $this->grid->emptyCell;
+        }
+        $content = $this->getPageSummaryCellContent();
+        if ($this->pageSummary === true) {
+            return $this->grid->formatter->format($content, $this->format);
+        }
+        return ($content === null) ? $this->grid->emptyCell : $content;
+    }
+
+    /**
+     * Gets the raw page summary cell content.
+     *
+     * @return string the rendered result
+     */
+    protected function getPageSummaryCellContent()
+    {
+        if ($this->pageSummary === true || $this->pageSummary instanceof \Closure) {
+            $summary = $this->calculateSummary();
+            return ($this->pageSummary === true) ? $summary : call_user_func(
+                $this->pageSummary,
+                $summary,
+                $this->_rows,
+                $this
+            );
+        }
+        if ($this->pageSummary !== false) {
+            return $this->pageSummary;
+        }
+        return null;
+    }
+
+    /**
+     * Calculates the summary of an input data based on page summary aggregration function.
+     *
+     * @return float
+     */
+    protected function calculateSummary()
+    {
+        $type = $this->pageSummaryFunc;
+        if ($type instanceof Closure) {
+            return call_user_func($type, $this->_rows);
+        }
+        if (empty($this->_rows)) {
+            return '';
+        }
+        $data = $this->_rows;
+        switch ($type) {
+            case null:
+            case GridView::F_SUM:
+                return array_sum($data);
+            case GridView::F_COUNT:
+                return count($data);
+            case GridView::F_AVG:
+                return count($data) > 0 ? array_sum($data) / count($data) : null;
+            case GridView::F_MAX:
+                return max($data);
+            case GridView::F_MIN:
+                return min($data);
+        }
+        return '';
+    }
+
+    /**
+     * Checks if the filter input types are valid
+     */
+    protected function checkValidFilters()
+    {
+        if (isset($this->filterType)) {
+            Config::validateInputWidget($this->filterType, 'for filtering the grid as per your setup');
+        }
     }
 
     /**
@@ -359,10 +359,10 @@ trait ColumnTrait
             $options = $this->contentOptions;
         }
         if ($this->hidden === true) {
-            Html::addCssClass($options, "kv-grid-hide");
+            Html::addCssClass($options, 'kv-grid-hide');
         }
         if ($this->hiddenFromExport === true) {
-            Html::addCssClass($options, "skip-export");
+            Html::addCssClass($options, 'skip-export');
         }
         if (is_array($this->hiddenFromExport) && !empty($this->hiddenFromExport)) {
             $tag = 'skip-export-';
@@ -433,9 +433,9 @@ trait ColumnTrait
      * Parses a value if Closure and returns the right value
      *
      * @param string|int|Closure $var the variable to parse
-     * @param Model $model the model instance
-     * @param string|object $key the current model key value
-     * @param int   $index the index of the current record in the data provider
+     * @param Model              $model the model instance
+     * @param string|object      $key the current model key value
+     * @param integer            $index the index of the current record in the data provider
      *
      * @return mixed
      */
@@ -446,8 +446,6 @@ trait ColumnTrait
 
     /**
      * Initializes grid grouping
-     *
-     * @return void
      */
     protected function initGrouping()
     {
@@ -468,10 +466,10 @@ trait ColumnTrait
     /**
      * Parses grid grouping and sets data attributes
      *
-     * @param array $options
-     * @param Model $model
-     * @param mixed $key
-     * @param int   $index
+     * @param array   $options
+     * @param Model   $model
+     * @param mixed   $key
+     * @param integer $index
      */
     protected function parseGrouping(&$options, $model, $key, $index)
     {

@@ -168,16 +168,6 @@ SELECT COUNT(*) FROM `users` WHERE `name` = 'Davert' AND `email` LIKE 'davert%'
 
 ## Actions
 
-### assertArraySubset
- 
-Checks that array contains subset.
-
- * `param array`  $subset
- * `param array`  $array
- * `param bool`   $strict
- * `param string` $message
-
-
 ### dontSeeInDatabase
  
 Effect is opposite to ->seeInDatabase
@@ -289,6 +279,17 @@ $I->seeNumRecords(1, 'users', ['name' => 'davert'])
 
 
 ### updateInDatabase
-__not documented__
+ 
+Update an SQL record into a database.
+
+```php
+<?php
+$I->updateInDatabase('users', array('isAdmin' => true), array('email' => 'miles@davis.com'));
+?>
+```
+
+ * `param string` $table
+ * `param array` $data
+ * `param array` $criteria
 
 <p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.3/src/Codeception/Module/Db.php">Help us to improve documentation. Edit module reference</a></div>

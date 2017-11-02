@@ -2,7 +2,7 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2017
- * @version   3.1.5
+ * @version   3.1.6
  *
  * Grid grouping jquery library created for yii2-grid.
  *
@@ -109,7 +109,7 @@ var kvGridGroup;
                 rowspan = $td.attr('rowspan') || 1;
             if (isGrouped) {
                 j = false;
-                $row = $row.next(':not(.kv-grid-group-row');
+                $row = $row.next(':not(.kv-grid-group-row)');
                 while (!j && $row.length) {
                     $row.find('td[data-col-seq="' + i + '"]').each(function () {
                         data.push(getColValue($(this), decPoint, thousandSep));

@@ -38,16 +38,6 @@ To use this module with Composer you need <em>"php-amqplib/php-amqplib": "~2.4"<
 
 ## Actions
 
-### assertArraySubset
- 
-Checks that array contains subset.
-
- * `param array`  $subset
- * `param array`  $array
- * `param bool`   $strict
- * `param string` $message
-
-
 ### bindQueueToExchange
  
 Binds a queue to an exchange
@@ -133,7 +123,7 @@ $message = $I->grabMessageFromQueue('queue.emails');
 ```
 
  * `param string` $queue
- * `return` AMQPMessage
+ * `return` \PhpAmqpLib\Message\AMQPMessage
 
 
 ### purgeAllQueues
@@ -174,7 +164,7 @@ $I->pushToExchange('exchange.emails', new AMQPMessage('Thanks!'), 'severity');
 ```
 
  * `param string` $exchange
- * `param string|AMQPMessage` $message
+ * `param string|\PhpAmqpLib\Message\AMQPMessage` $message
  * `param string` $routing_key
 
 
@@ -190,7 +180,7 @@ $I->pushToQueue('queue.jobs', new AMQPMessage('create'));
 ```
 
  * `param string` $queue
- * `param string|AMQPMessage` $message
+ * `param string|\PhpAmqpLib\Message\AMQPMessage` $message
 
 
 ### seeMessageInQueueContainsText

@@ -4,13 +4,12 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2017
- * @version   3.1.5
+ * @version   3.1.6
  */
 
 namespace kartik\grid;
 
 use Closure;
-use Yii;
 use yii\grid\SerialColumn as YiiSerialColumn;
 use yii\helpers\Html;
 
@@ -52,13 +51,13 @@ class SerialColumn extends YiiSerialColumn
     public $hiddenFromExport = false;
 
     /**
-     * @var string the horizontal alignment of each column. Should be one of [[GridView::ALIGN_LEFT]], 
+     * @var string the horizontal alignment of each column. Should be one of [[GridView::ALIGN_LEFT]],
      * [[GridView::ALIGN_RIGHT]], or [[GridView::ALIGN_CENTER]].
      */
     public $hAlign = GridView::ALIGN_CENTER;
 
     /**
-     * @var string the vertical alignment of each column. Should be one of [[GridView::ALIGN_TOP]], 
+     * @var string the vertical alignment of each column. Should be one of [[GridView::ALIGN_TOP]],
      * [[GridView::ALIGN_BOTTOM]], or [[GridView::ALIGN_MIDDLE]].
      */
     public $vAlign = GridView::ALIGN_MIDDLE;
@@ -99,7 +98,14 @@ class SerialColumn extends YiiSerialColumn
     public $pageSummary = false;
 
     /**
-     * @var string the summary function that will be used to calculate the page summary for the column.
+     * @var string|Closure the summary function that will be used to calculate the page summary for the column. If
+     * setting as `Closure`, you can set it to an anonymous function with the following signature:
+     *
+     * ```php
+     * function ($data)
+     * ```
+     *
+     *   - the `$data` variable will contain array of the selected page rows for the column.
      */
     public $pageSummaryFunc = GridView::F_SUM;
 

@@ -69,14 +69,24 @@ Adds HTTP authentication via username/password.
  * `[Part]` xml
 
 
-### assertArraySubset
+### amNTLMAuthenticated
  
-Checks that array contains subset.
+Adds NTLM authentication via username/password.
+Requires client to be Guzzle >=6.3.0
+Out of scope for functional modules.
 
- * `param array`  $subset
- * `param array`  $array
- * `param bool`   $strict
- * `param string` $message
+Example:
+```php
+<?php
+$I->amNTLMAuthenticated('jon_snow', 'targaryen');
+?>
+```
+
+ * `param` $username
+ * `param` $password
+@throws ModuleException
+ * `[Part]` json
+ * `[Part]` xml
 
 
 ### deleteHeader

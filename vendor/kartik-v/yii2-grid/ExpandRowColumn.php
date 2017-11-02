@@ -4,7 +4,7 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2017
- * @version   3.1.5
+ * @version   3.1.6
  */
 
 namespace kartik\grid;
@@ -233,7 +233,7 @@ class ExpandRowColumn extends DataColumn
      * [[GridView::dataProvider]].
      * @param ExpandRowColumn $column the column object instance.
      *
-     * @return string
+     * @return mixed
      */
     protected static function parseData($data, $model, $key, $index, $column)
     {

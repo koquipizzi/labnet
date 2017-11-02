@@ -4,7 +4,7 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2017
- * @version   3.1.5
+ * @version   3.1.6
  */
 
 namespace kartik\grid\controllers;
@@ -38,8 +38,9 @@ class ExportController extends Controller
         /**
          * @var Module $module
          */
-        $module = Config::initModule(Module::className());
         $request = Yii::$app->request;
+        $moduleId = $request->post('module_id', Module::MODULE);
+        $module = Config::getModule($moduleId, Module::className());
         $type = $request->post('export_filetype', 'html');
         $name = $request->post('export_filename', Yii::t('kvgrid', 'export'));
         $content = $request->post('export_content', Yii::t('kvgrid', 'No data found'));
@@ -48,7 +49,7 @@ class ExportController extends Controller
         $bom = $request->post('export_bom', 1);
         $config = $request->post('export_config', '{}');
         $oldHash = $request->post('export_hash');
-        $newData = $name . $mime . $encoding . $bom . $config;
+        $newData = $moduleId . $name . $mime . $encoding . $bom . $config;
         $security = Yii::$app->security;
         $salt = $module->exportEncryptSalt;
         $newHash = $security->hashData($newData, $salt);
@@ -61,7 +62,7 @@ class ExportController extends Controller
             $this->generatePDF($content, "{$name}.pdf", $config);
             /** @noinspection PhpInconsistentReturnPointsInspection */
             return;
-        }  elseif ($type == GridView::HTML) {
+        } elseif ($type == GridView::HTML) {
             $content = HtmlPurifier::process($content);
         } elseif ($type == GridView::CSV || $type == GridView::TEXT) {
             if ($encoding != 'utf-8') {
@@ -107,17 +108,17 @@ class ExportController extends Controller
     protected function setHttpHeaders($type, $name, $mime, $encoding = 'utf-8')
     {
         Yii::$app->response->format = Response::FORMAT_RAW;
-        if (strstr($_SERVER["HTTP_USER_AGENT"], "MSIE") == false) {
-            header("Cache-Control: no-cache");
-            header("Pragma: no-cache");
+        if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE') == false) {
+            header('Cache-Control: no-cache');
+            header('Pragma: no-cache');
         } else {
-            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-            header("Pragma: public");
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Pragma: public');
         }
-        header("Expires: Sat, 26 Jul 1979 05:00:00 GMT");
+        header('Expires: Sat, 26 Jul 1979 05:00:00 GMT');
         header("Content-Encoding: {$encoding}");
         header("Content-Type: {$mime}; charset={$encoding}");
         header("Content-Disposition: attachment; filename={$name}.{$type}");
-        header("Cache-Control: max-age=0");
+        header('Cache-Control: max-age=0');
     }
 }

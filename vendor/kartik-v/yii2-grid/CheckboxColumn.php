@@ -4,7 +4,7 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2017
- * @version   3.1.5
+ * @version   3.1.6
  */
 
 namespace kartik\grid;
@@ -52,13 +52,13 @@ class CheckboxColumn extends YiiCheckboxColumn
     public $hiddenFromExport = true;
 
     /**
-     * @var string the horizontal alignment of each column. Should be one of [[GridView::ALIGN_LEFT]], 
+     * @var string the horizontal alignment of each column. Should be one of [[GridView::ALIGN_LEFT]],
      * [[GridView::ALIGN_RIGHT]], or [[GridView::ALIGN_CENTER]].
      */
     public $hAlign = GridView::ALIGN_CENTER;
 
     /**
-     * @var string the vertical alignment of each column. Should be one of [[GridView::ALIGN_TOP]], 
+     * @var string the vertical alignment of each column. Should be one of [[GridView::ALIGN_TOP]],
      * [[GridView::ALIGN_BOTTOM]], or [[GridView::ALIGN_MIDDLE]].
      */
     public $vAlign = GridView::ALIGN_MIDDLE;
@@ -159,10 +159,10 @@ class CheckboxColumn extends YiiCheckboxColumn
     public function init()
     {
         $id = $this->grid->options['id'];
+        $view = $this->grid->getView();
+        CheckboxColumnAsset::register($view);
         if ($this->rowHighlight) {
             Html::addCssClass($this->headerOptions, 'kv-all-select');
-            $view = $this->grid->getView();
-            CheckboxColumnAsset::register($view);
             $this->_clientScript = "kvSelectRow('{$id}', '{$this->rowSelectedClass}');";
             $view->registerJs($this->_clientScript);
         }

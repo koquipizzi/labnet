@@ -544,8 +544,9 @@
  $(document).on('ready pjax:success', function () {   
     $('.finalizado').on('click', function (e) {
         e.preventDefault();
+        
         var $url =$(this).attr('href'); 
-        $.ajax({
+       $.ajax({
                 type: "GET",
                 url: $url,               
                 dataType: "JSON",
@@ -566,11 +567,12 @@
                             }); 
                              
                     }
+                     $.pjax.reload({container:"#finalizados"}); //for pjax update
                 }
             });
             
         });
-        
+         
        
  });
 

@@ -3,8 +3,25 @@ Change Log: `yii2-grid`
 
 ## Version 3.1.6
 
-**Date:** 10-Jul-2017
+**Date:** 22-Oct-2017
 
+- (enh #701): Enhance and simplify `ActionColumn` delete action.
+- (enh #700): Update Russian Translations.
+- (enh #699): Enhance ActionColumn to consider new `pjaxDelete` flag.
+- (enh #698): Update Spanish Translations.
+- Simplify `kv-merged-header` CSS in `kv-grid.css`.
+- (enh #696): New properties `itemLabelSingle` and `itemLabelPlural` to be allowed for use in grid summary and action column.
+- (bug #695): Correct perfect scrollbar JS script.
+- (enh #693): Add Brazilian Portugese Translations.
+- (enh #690): Add ability to configure one's own module identifier.
+- (enh #689, #688, #609): Correct expand row column behavior when used with grid grouping (_to be tested for all grouping use cases_).
+- (enh #687): Update to the latest `floatThead` plugin version.
+- (enh #684): Enhancements to `ActionColumn` button rendering.
+- (enh #672): Simplify module code.
+    - Eliminate dependency on Yii Session to generate `exportEncryptSalt`
+    - Create new `Demo` class to manage grid demo message translations
+- (bug #671): Initialize checkbox column asset more correctly.
+- (enh #666, #658): Enhance export to render header with `perfectScrollbar` and `floatOverflowContainer`.
 - (enh #664): Allow to specify Editable class in `editableOptions`.
 
 ## Version 3.1.5
@@ -12,6 +29,10 @@ Change Log: `yii2-grid`
 **Date:** 09-Jun-2017
 
 - (bug #659): Fix session issue that is not applicable for console apps.
+- (enh #654): Update Polish Translations.
+- (enh #649): Update Hebrew Translations.
+- (enh #644): Do not show the button if there are no actions.
+- (enh #635): Update Chinese Traditional Translations.
 
 ## Version 3.1.4
 

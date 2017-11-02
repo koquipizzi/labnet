@@ -26,7 +26,7 @@ use vova07\select2\Widget;
                                             {hint}
                                             {error}",
                     'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
-    ])->textInput(['maxlength' => true])->error([ 'style' => ' margin-right: 30%;'])?>
+    ])->textInput(['maxlength' => true])->error([ 'style' => 'float:left; margin-left: 26%;'])?>
 
     <?= $form->field($model, 'domicilio', ['template' => "{label}
                                             <div class='col-md-7'>{input}</div>
@@ -40,7 +40,7 @@ use vova07\select2\Widget;
                                             {hint}
                                             {error}",
                     'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
-    ])->textInput()->error([ 'style' => ' margin-right: 30%;'])?>
+    ])->textInput()->error([ 'style' => 'float:left; margin-left: 26%;'])?>
 
         <?php
             $data=ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');

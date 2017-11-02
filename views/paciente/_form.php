@@ -167,7 +167,6 @@ $this->registerJs($js);
                 {error}",
                             'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
             ])->textInput(['maxlength' => true])->error([ 'style' => ' margin-left: 35%;']); ?>
-
             
             <?php 
                 yii\widgets\Pjax::begin(['id' => 'new_localidad']);
@@ -193,18 +192,13 @@ $this->registerJs($js);
                             ])->error([ 'style' => ' margin-left: 35%;']);;
             ?>
             <?php yii\widgets\Pjax::end() ?>
-            
+
             <div id="div_new_model" style="display:none">
                 <?= Html::button('Cancel', [
                     'class' => 'btn btn-success',
                     'onclick'=>'(function ( $event ) { $("#div_new_model").hide(); })();'
                 ])?>
-                <?php $modelloc = new Localidad(); ?>
                 
-                <!-- Render create form -->
-                <?= $this->render('/localidad/_form', [
-                    'model' => $modelloc,
-                ]) ?>
                 
             </div>
 
@@ -295,7 +289,7 @@ $this->registerJs($js);
                                                 <div class='col-md-8'>{input}</div>
                                                 {hint}
                                                 {error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
-                                                ])->dropDownList( $dataPrestadoras, ['prompt' => ''])->error([ 'style' => 'float: left;']) 
+                                                ])->dropDownList( $dataPrestadoras, ['prompt' => ''])->error([ 'style' => ' margin-left: 35%;']);
                                         ?>
                                 </div>
                             </div>

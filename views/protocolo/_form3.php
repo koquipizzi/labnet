@@ -65,7 +65,30 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
   <h4><i class="icon fa fa-check"></i>Saved!</h4>
   <?= Yii::$app->session->getFlash('success') ?>
   </div>
+  
 <?php endif; ?>
+
+
+<?php
+    Modal::begin([
+            'id' => 'modalNuevoMedico',
+           // 'size'=>'modal-lg',
+            'options' => ['tabindex' => false ],
+        ]);
+        echo "<div id='modalContent'></div>";
+ Modal::end();
+?>
+
+<?php
+    Modal::begin([
+            'id' => 'modalNuevaProcedencia',
+           // 'size'=>'modal-lg',
+            'options' => ['tabindex' => false ],
+        ]);
+        echo "<div id='modalContentProcedencia'></div>";
+ Modal::end();
+?>
+
 
 <?= Html::csrfMetaTags() ?>
 
@@ -135,7 +158,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                         'autoclose' => true
                                     ]
                                 ]
-                ])->error([ 'style' => 'float: left;']); ?>
+                ])->error([ 'style' => ' float: left; margin-left: 35%;']);?>
         </div>
         <div class="col-md-6" style="text-align: left;">
                 <?php
@@ -150,55 +173,83 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                             'autoclose' => true
                         ]
                     ]
-                ])->error([ 'style' => ' float: left;']);
+                ])->error([ 'style' => ' float: left; margin-left: 35%;']);
                 ?>
-        </div>
+        </div>      
         <div class="col-md-6" style="text-align: right;">
-            <?php   $dataMedico=ArrayHelper::map(Medico::find()->asArray()->all(), 'id', 'nombre');
-
-            echo $form->field($model, 'Medico_id',
+              <div class="row">
+                    <div class="col-md-10">
+                      <?php yii\widgets\Pjax::begin(['id' => 'new_medico']);                         
+                           $dataMedico=ArrayHelper::map(Medico::find()->asArray()->all(), 'id', 'nombre'); 
+                        
+                            echo $form->field($model, 'Medico_id',
                                     ['template' => "{label}
-                                    <div class='col-md-7' >
-                                    {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
-                                    ]
-                        )->widget(Widget::className(), [
-                'options' => [
-                    'multiple' => false,
-                    'placeholder' => 'Choose item'
-                ],
-                    'items' => $dataMedico ,
-                    'settings' => [
-                        'class'=> 'form-group',
-                    'width' => '100%',
-                    ]
-            ]);
-            ?>
+                                        <div class='col-md-6' >
+                                            {input}  </div>
+                                            
+                                            {hint}{error}
+                                            "
+                                        ,'labelOptions' => [ 'class' => 'col-md-5  control-label' ],
+                                    ])->widget(Widget::className(), [
+                                        'options' => [
+                                            'multiple' => false,
+                                            'placeholder' => 'Choose item'
+                                        ],
+                                            'items' => $dataMedico,
+                                        'settings' => [
+                                            'width' => '100%',
+                                        ]
+                                    ]);
+                        
+                        ?>
+                        <?php yii\widgets\Pjax::end() ?>
+                    </div>
+                    <button type='button'  id='addMedico'  class=' col-md-1   btn btn-success btn-xs' 
+                            value='index.php?r=medico/createpop'><?php   echo Yii::t('app', 'Add');  ?>
+                    </button>
             </div>
+        </div>                
         <div class="col-md-6" style="text-align: right;">
-            <?php
-                $dataProcedencia=ArrayHelper::map(Procedencia::find()->asArray()->all(), 'id', 'descripcion');
-
-                echo $form->field($model, 'Procedencia_id',
-                        ['template' => "{label}
-                        <div class='col-md-7'>
-                        {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
-                        ]
-                        )->widget(Widget::className(), [
-                'options' => [
-                    'multiple' => false,
-                    'placeholder' => 'Choose item'
-                ],
-                    'items' => $dataProcedencia,
-                'settings' => [
-                    'width' => '100%',
-                ]
-            ]);
-
-                $dataFacturar=ArrayHelper::map(Prestadoras::find()->where(['facturable' => 'S'])->asArray()->all(), 'id', 'descripcion');
-            ?>
+           
+              <div class="row">
+                    <div class="col-md-10">
+                      <?php yii\widgets\Pjax::begin(['id' => 'new_procedencia']);                         
+                            $dataProcedencia=ArrayHelper::map(Procedencia::find()->asArray()->all(), 'id', 'descripcion');  
+                        
+                            echo $form->field($model, 'Procedencia_id',
+                                    ['template' => "{label}
+                                    <div class='col-md-6' >
+                                        {input}  </div>
+                                        
+                                        {hint}{error}
+                                        "
+                                    ,'labelOptions' => [ 'class' => 'col-md-5  control-label' ],
+                                    ]
+                                    )->widget(Widget::className(), [
+                            'options' => [
+                                'multiple' => false,
+                                'placeholder' => 'Choose item'
+                            ],
+                                'items' => $dataProcedencia,
+                            'settings' => [
+                                'width' => '100%',
+                            ]
+                        ]);
+                        
+                        ?>
+                        <?php yii\widgets\Pjax::end() ?>
+                    </div>
+                        <button type='button'  id='addProcedencia'  
+                             class=' col-md-1  addProcedencia btn btn-success btn-xs' 
+                             value='index.php?r=procedencia/createpop'><?php    echo Yii::t('app', 'Add');  ?>
+                        </button>
+            </div>
         </div>
+     
+
         <div class="col-md-6" style="text-align: right;">
             <?php
+             $dataFacturar=ArrayHelper::map(Prestadoras::find()->where(['facturable' => 'S'])->asArray()->all(), 'id', 'descripcion');
                 echo $form->field($model, 'FacturarA_id',
                         ['template' => "{label}
                         <div class='col-md-7'>
@@ -307,7 +358,8 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         <?= $form->field($modelInforme, "[{$index}]Estudio_id",['template' => "{label}
                                              <div class='col-md-8'>{input}</div>
                                              {hint}{error}",
-                                            'labelOptions' => [ 'class' => 'col-md-3 control-label' ]])->dropDownList( $dataEstudio, ['prompt' => ''])->error([ 'style' => 'float: left;']) ?>
+                                            'labelOptions' => [ 'class' => 'col-md-3 control-label' ]])->dropDownList( $dataEstudio, ['prompt' => ''])
+                                            ->error([ 'style' => ' float: left; margin-left: 28%;']); ?>
 
                                 <?= $form->field($modelInforme, "[{$index}]descripcion", ['template' => "{label}
                                              <div class='col-md-8'>{input}</div>
@@ -348,3 +400,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     <?php ActiveForm::end(); ?>
 
 </div>
+ <?php
+      $this->registerJsFile('@web/assets/admin/js/cipat_general.js', ['depends' => [yii\web\AssetBundle::className()]]);    $this->registerJsFile('@web/assets/admin/js/cipat_modal_paciente.js', ['depends' => [yii\web\AssetBundle::className(),  'yii\web\JqueryAsset']]);
+  ?>

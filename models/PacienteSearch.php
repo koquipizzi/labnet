@@ -12,6 +12,8 @@ use yii\db\Expression;
  */
 class PacienteSearch extends Paciente
 {
+public $nombre_prest_nro;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class PacienteSearch extends Paciente
     {
         return [
             [['id', 'Tipo_documento_id', 'Localidad_id'], 'integer'],
-            [['nombre', 'nro_documento', 'sexo', 'fecha_nacimiento', 'telefono', 'email', 'domicilio'], 'safe'],
+            [['nombre', 'nro_documento', 'sexo', 'fecha_nacimiento', 'telefono', 'email', 'domicilio','nombre_prest_nro'], 'safe'],
         ];
     }
 
@@ -47,7 +49,7 @@ class PacienteSearch extends Paciente
         return " {$where} {$connector} {$sentence} ";
     }
 
-  
+
 
 
 
@@ -93,7 +95,7 @@ class PacienteSearch extends Paciente
        //     ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'domicilio', $this->domicilio]);
         return $dataProvider;
-    } 
+    }
 
 
 
@@ -110,7 +112,7 @@ class PacienteSearch extends Paciente
             $where = $this->addWhereSentence($where, "Paciente.telefono like :telefono");
         }
     }
-    
+
 
 
 
@@ -123,7 +125,18 @@ class PacienteSearch extends Paciente
             $where = $this->addWhereSentence($where, "Paciente.nombre like :nombre");
         }
     }
-    
+
+
+    /**
+    * Filtro de numero de documento
+    */
+    private function coberturaNroAfiliadoFilter($params, &$where, &$queryParams) {
+        if($this->paramExists($params, 'nombre_prest_nro')) {
+            $queryParams[':nombre_prest_nro'] = "%".$params['nombre_prest_nro']."%";
+            $where = $this->addWhereSentence($where, "pp.nombre_prest_nro like :nombre_prest_nro");
+        }
+    }
+
 
     /**
     * Filtro de numero de documento
@@ -134,7 +147,8 @@ class PacienteSearch extends Paciente
             $where = $this->addWhereSentence($where, "Paciente.nro_documento like :nro_documento");
         }
     }
-    
+
+
     public function searchPacPrest($params)
     {
 
@@ -146,22 +160,36 @@ class PacienteSearch extends Paciente
         }
 
         $fieldList = "
-                    Paciente.*,
+					Paciente.id,
+                    Paciente.nro_documento,
+                    Paciente.telefono,
+                    Paciente.nombre,
                     Paciente.id as PacienteId,
-                    Paciente_prestadora.id as pacprest,
-                    Prestadoras.descripcion as nombre_prest,
-                    concat(Prestadoras.descripcion,' - ', Paciente_prestadora.nro_afiliado) as nombre_prest_nro			
+                    pp.pacprest,
+                    pp.nombre_prest,
+                    pp.nombre_prest_nro
                      ";
-        $fromTables = '
+        $fromTables = "
                     Paciente
-                    left JOIN Paciente_prestadora ON (Paciente.id = Paciente_prestadora.Paciente_id)         
-                    left JOIN Prestadoras ON (Prestadoras.id = Paciente_prestadora.Prestadoras_id) 
-                    ';
+                    left join
+                    (   select
+							 concat(Prestadoras.descripcion,' - ', Paciente_prestadora.nro_afiliado) as nombre_prest_nro	,
+                              Paciente_prestadora.Paciente_id,
+                              Paciente_prestadora.id as pacprest,
+                              Prestadoras.descripcion as nombre_prest,
+                              Paciente_prestadora.nro_afiliado,
+                              Prestadoras.descripcion
+                        from  Paciente_prestadora
+                        left JOIN Prestadoras ON (Prestadoras.id = Paciente_prestadora.Prestadoras_id)
+                     ) as pp  on (Paciente.id=pp.Paciente_id)
+
+                    ";
 
         $this->nombreFilter($formParams, $where, $queryParams);
         $this->nroDocumentoFilter($formParams, $where, $queryParams);
         $this->telefonoFilter($formParams, $where, $queryParams);
-    
+        $this->coberturaNroAfiliadoFilter($formParams, $where, $queryParams);
+
        if(!empty($where)) {
             $where = " WHERE {$where} ";
         }
@@ -176,9 +204,9 @@ class PacienteSearch extends Paciente
             FROM {$fromTables}
             {$where}
         ";
-        
+
         $itemsCount = Yii::$app->db->createCommand(
-            $consultaCant, 
+            $consultaCant,
             $queryParams
         )->queryScalar();
         $dataProvider = new \yii\data\SqlDataProvider([
@@ -193,8 +221,8 @@ class PacienteSearch extends Paciente
                     'nro_documento' => [
                         'asc' => ['Paciente.nro_documento' => SORT_ASC],
                         'desc' => ['Paciente.nro_documento' => SORT_DESC],
-                    ],                 
-                    
+                    ],
+
                 ],
             ],
             'totalCount' => $itemsCount,
@@ -204,9 +232,9 @@ class PacienteSearch extends Paciente
             ],
         ]);
 
-        
+
               return $dataProvider;
-        
+
 
     }
 

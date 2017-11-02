@@ -36,9 +36,9 @@ class Medico extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['Localidad_id','nombre','domicilio'], 'required'],
+            [['Localidad_id','nombre'], 'required'],
             [['Localidad_id', 'especialidad_id'], 'integer'],
-            [['nombre'], 'string', 'max' => 33],
+            [['nombre'], 'string', 'max' => 150],
             [['email'], 'email'],
             [['telefono'], 'string'], 
             [['domicilio'], 'string', 'max' => 45],     

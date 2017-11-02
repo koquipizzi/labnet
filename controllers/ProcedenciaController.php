@@ -127,4 +127,24 @@ class ProcedenciaController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    /*
+        Autor: Aller Franco
+        Fecha:30/10/17
+        Description: this method is used for add a procedencia in a new protocolo  
+    */
+    public function actionCreatepop()
+    {
+        $model = new Procedencia();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                    \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return ['rta'=>'ok', 'message'=>''];
+        } else {
+            return $this->renderAjax('create_form_pop', [
+                        'model' => $model
+            ]);
+        }
+    }
+
 }

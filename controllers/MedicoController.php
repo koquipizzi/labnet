@@ -133,4 +133,25 @@ class MedicoController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+
+    public function actionCreatepop()
+        {
+            $model = new Medico();
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                        return ['rta'=>'ok', 'message'=>''];
+                    
+                    //   die();
+            } else {
+                return $this->renderAjax('create_form_pop', [
+                            'model' => $model
+                ]);
+            }
+        }
+
+
+
+
 }

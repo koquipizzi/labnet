@@ -556,18 +556,18 @@ class InformeController extends Controller {
 						$this->actionPrintinf($id);
 						break;
 				}
-			}else if($accion==="publicar"){
+			} else if($accion==="publicar"){
 				if($estado_actual==5){
 					return $this->redirect ( [ 
 								'//protocolo/terminados' 
 						] );
-				}else{
+				} else{
 					return $this->redirect ( [ 
 								'//protocolo/entregados' 
 						] );
 				}
 					
-			}else{//mail
+			} else{//mail
 					if(!empty($modelp->pacienteMail)){	
 						if ($this->actionMailing($model)){
 					
@@ -724,8 +724,8 @@ class InformeController extends Controller {
         
         
         public function actionPrintpapreducido($id) {
-                //Datos generales del Laboratorio
-                $laboratorio = Laboratorio::find()->where(['id' => 1])->one();
+        //Datos generales del Laboratorio
+        $laboratorio = Laboratorio::find()->where(['id' => 1])->one();
                 
 		$model = $this->findModel ( $id );
 		if ($model) {
@@ -744,14 +744,14 @@ class InformeController extends Controller {
 				'orientation' => Pdf::ORIENT_PORTRAIT,
 				// stream to browser inline
 				'destination' => Pdf::DEST_BROWSER,
-                                'cssFile' => '@app/web/css/print/print.css',
+				'cssFile' => '@app/web/css/print/print.css',
 				'cssInline' => '* {font-size:14px;}',
 				// set mPDF properties on the fly
 				
 				'content' => $this->renderPartial ( $vista, [ 
 						'model' => $model,
 						'modelp' => $modelp,
-                                                'laboratorio' => $laboratorio,
+                        'laboratorio' => $laboratorio,
 				] ),
 				'options' => [ 
 						'title' => 'Informe PAP' 
@@ -761,7 +761,10 @@ class InformeController extends Controller {
 								$header 
 						],
 				] 
-		] );                
+		] );   
+		Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+		Yii::$app->response->headers->add('Content-Type', 'application/pdf');
+		           
 		return $pdf->render ();
 	}
         
@@ -806,7 +809,9 @@ class InformeController extends Controller {
 								$header 
 						],
 				] 
-		] );                
+		] );    
+		Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+		Yii::$app->response->headers->add('Content-Type', 'application/pdf');            
 		return $pdf->render ();
 	}
         
@@ -851,6 +856,8 @@ class InformeController extends Controller {
 						],
 				] 
 		] );                
+		Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+		Yii::$app->response->headers->add('Content-Type', 'application/pdf');            
 		return $pdf->render ();
 	}
         
@@ -894,6 +901,8 @@ class InformeController extends Controller {
 						],
 				] 
 		] );                            
+		Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+		Yii::$app->response->headers->add('Content-Type', 'application/pdf');            
 		return $pdf->render ();
 	}
         
@@ -938,6 +947,8 @@ class InformeController extends Controller {
 						],
 				] 
 		] );                
+		Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+		Yii::$app->response->headers->add('Content-Type', 'application/pdf');            
 		return $pdf->render ();
 	}
         
@@ -990,8 +1001,12 @@ class InformeController extends Controller {
 						] 
 				] 
 		] );                
+		Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+		Yii::$app->response->headers->add('Content-Type', 'application/pdf');            
 		return $pdf->render ();
 	}
+
+
 	public function actionPrintinf($id) {
         //Datos generales del Laboratorio
         $laboratorio = Laboratorio::find()->where(['id' => 1])->one();
@@ -1032,6 +1047,8 @@ class InformeController extends Controller {
 				] 
 		] );
 		
+		Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+		Yii::$app->response->headers->add('Content-Type', 'application/pdf');            
 		return $pdf->render ();
 	}
 	public function actionPrintanatomo($id) {
@@ -1074,6 +1091,8 @@ class InformeController extends Controller {
                     ] 
 		] );
 		
+		Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+		Yii::$app->response->headers->add('Content-Type', 'application/pdf');            
 		return $pdf->render ();
 	}
         
@@ -1117,7 +1136,9 @@ class InformeController extends Controller {
                     ] 
 			] );
 		
-		return $pdf->render ();
+			Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+			Yii::$app->response->headers->add('Content-Type', 'application/pdf');            
+			return $pdf->render ();
 	}
         
       
@@ -1161,6 +1182,8 @@ class InformeController extends Controller {
 				] 
 		] );
 		
+		Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+		Yii::$app->response->headers->add('Content-Type', 'application/pdf');            
 		return $pdf->render ();
 	}
 	

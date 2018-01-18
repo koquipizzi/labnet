@@ -38,8 +38,8 @@ function (undefined, item) {
         });
     }
 
-    var otherTreeWidgetEl = $('.treeview.small').not($(this)),
-        otherTreeWidget = otherTreeWidgetEl.data('treeview'),
+    var otherTreeWidgetEl = $('.treeview2.small').not($(this)),
+        otherTreeWidget = otherTreeWidgetEl.data('treeview2'),
         selectedEl = otherTreeWidgetEl.find('.node-selected');
     if (selectedEl.length) {
         otherTreeWidget.unselectNode(Number(selectedEl.attr('data-nodeid')));
@@ -85,11 +85,12 @@ $items = [
     ],
 ];
 
-$this->registerCss(".treeview {
+$this->registerCss(".treeview2 {
                                     float:left;
                                     width:100%;
                                     overflow-y: auto;
-                                    height: 200px;}");
+                                    height: 200px;
+                                }");
 
 echo execut\widget\TreeView::widget([
     'data' => $items2,

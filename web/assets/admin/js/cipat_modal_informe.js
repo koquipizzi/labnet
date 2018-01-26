@@ -11,9 +11,7 @@
                 success: function(response) {                   
                      $.pjax.reload({container:"#galeriar"});   
                     if (response.rta == 'ok'){
-                     //   $.pjax.reload({container:"#galeriar"}); 
                         $('.content-galeria').html(response.gal);
-                       // $('#popNomenclador').popoverX('hide');
                     }
                     else if(response.rta == 'error'){                        
                    //     $('.field-informenomenclador-cantidad').removeClass('has-success');
@@ -37,7 +35,9 @@
         e.preventDefault();        
         var $url = 'index.php?r=informe-nomenclador/create'; 
         $p = $('#popNomenclador');       
-        $p.popoverX('toggle');
+        $p.on('show.bs.modal', function (e) {
+            $('#informenomenclador-cantidad').val("");
+        });
 
         $.ajax({
                 type: "POST",
@@ -57,13 +57,13 @@
                                 force: false, // adds notification to the beginning of queue when set to true
                                 modal: false, // si pongo true me hace el efecto de pantalla gris
                             });
-                        $('#popNomenclador').popoverX('hide');
+                        $p.popoverX('hide');
                     }else if(response.rta == 'error'){                        
                         $('.field-informenomenclador-cantidad').removeClass('has-success');
                         $('.field-informenomenclador-cantidad').addClass('has-error');
                         $('.field-informenomenclador-cantidad .help-block').html(response.message.cantidad[0]);
                     }                    
-                    else {
+                    else { // el nomenclador ya se encuentra agregado
                         var n = noty({
                                 text:  response.message,
                                 type: 'error',
@@ -74,7 +74,7 @@
                                 force: false, // adds notification to the beginning of queue when set to true
                                 modal: false, // si pongo true me hace el efecto de pantalla gris
                             });
-                        $('#popNomenclador').popoverX('hide');
+                            $p.popoverX('hide');
                     }
                 }
            });

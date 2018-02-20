@@ -48,6 +48,45 @@ jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
         jQuery(this).html("Estudio: " + (index + 1))
     });
 });
+
+//obtiene dinamicamente el nro de secuencia segun la letra ingresada
+$( document ).ready(function() {
+
+    //cambia la letra a mayusculas en protocolo-letra
+    $("#protocolo-letra").keyup(function(){
+        this.value = this.value.toUpperCase();
+    });
+
+    //obtiene el numero de secuencia segun la letra ingresada
+    //si la letra no tiene nro de secuencia entonces retorna cero y un mensaje indicando esto
+    $("#protocolo-letra").change(function() {
+        var letra   = $("#protocolo-letra").val();
+        var anio    = $("#protocolo-anio").val();
+        $.ajax({
+            url    : "index.php?r=protocolo/nro-secuencia-letra",
+            type   : "post",
+            data   : {
+                        letra:  letra,
+                        anio:   anio
+                    },
+            success: function (response) 
+            {                         
+                if(response.rta===true){
+                    $("#dynamic-form").yiiActiveForm("updateAttribute", "protocolo-nro_secuencia","");
+                    $("#protocolo-nro_secuencia").val(response.nro_secuencia);
+                }   
+                if(response.rta===false){
+                    $("#protocolo-nro_secuencia").val(response.nro_secuencia);
+                    $("#dynamic-form").yiiActiveForm("updateMessages", {
+                        "protocolo-nro_secuencia": [response.mensaje]
+                    }, true);  
+                }             
+            }               
+        });
+    }); 
+});
+
+
 ';
 
 $this->registerJs($js);

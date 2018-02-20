@@ -5,7 +5,8 @@ use Empathy\Validators\DateTimeCompareValidator;
 use Yii;
 use app\models\Informe;
 use app\models\PacientePrestadora;
- use \Datetime;
+use \Datetime;
+use yii\db\Query;
 /**
  * This is the model class for table "Protocolo".
  *
@@ -50,9 +51,9 @@ class Protocolo extends \yii\db\ActiveRecord
         return [
                     [['nro_secuencia', 'Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id','numero_hospitalario'], 'integer'],
                     [['Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id','fecha_entrega'],'required'],
+                    [['letra','nro_secuencia'],'required'],
                     [['anio'], 'string', 'max' => 4],
                     [['letra'], 'string', 'max' => 1],
-        //            [['nombre'], 'string'],
                     [['registro'], 'string', 'max' => 45],
                     [['observaciones'], 'string', 'max' => 255],
                     [['Medico_id'], 'exist', 'skipOnError' => true, 'targetClass' => Medico::className(), 'targetAttribute' => ['Medico_id' => 'id']],
@@ -228,7 +229,36 @@ class Protocolo extends \yii\db\ActiveRecord
         return $cobertura;
     }
 
+      public function getNextNroSecuenciaByLetra($letra,$anio){
+        $query = new Query;
+        $query	->select(['max(nro_secuencia) as nro_secuencia,anio'])  
+                ->from('Protocolo')                
+                ->where(["Protocolo.letra"=>$letra,"Protocolo.anio"=>$anio])                          
+                ->groupBy(['Protocolo.letra']);
+        $command = $query->createCommand();
+        $data = $command->queryAll();
 
+        if(empty($data) || !is_array($data) || ( !array_key_exists("anio",$data[0]) && !array_key_exists("nro_secuencia",$data[0]) ) ){
+             throw new \yii\base\Exception("Elija el valor inicial para Nro.Secuencia de la letra {$letra}.");         
+        }
+        $nro_secuencia=$data[0]["nro_secuencia"];
+        if($data[0]["anio"]<$anio){
+            $nro_secuencia=sprintf("%07d",0);
+            
+        }else{
+           $nro_secuencia=sprintf("%07d",($nro_secuencia+1) );
+        }  
+        return $nro_secuencia;
+    } 
+
+    public function existeNumeroSecuencia(){
+        $modelProtocolo= Protocolo::find()->where(["anio"=>$this->anio,"nro_secuencia"=>$this->nro_secuencia])->one();
+        $existe=false;
+        if(!empty( $modelProtocolo) ){
+            $existe=true;
+        }
+        return $existe;
+    }
 
 
 }

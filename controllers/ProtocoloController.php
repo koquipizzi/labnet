@@ -461,7 +461,6 @@ class ProtocoloController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         } 
         else {
-
             $modelsInformes=$model->informes;
             return $this->render('update', [
                 'model' => $model,

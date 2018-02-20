@@ -36,123 +36,144 @@ $this->params['breadcrumbs'][] = $this->title;
             'dataProvider' => $dataProviderTodosLosProtocolos,
             'options'=>array('class'=>'table table-striped'),
             'filterModel' => $searchModel,
-            'columns' => [
-                        [
-                        'label' => 'Fecha de Entrada',
-                        'attribute' => 'fecha_entrada',
-                        'contentOptions' => ['style' => 'width:20%;'],
-                        'format' => ['date', 'php:d/m/Y'],
-
-                        'filter' => DateRangePicker::widget([
-                            'template' => '
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
-                                        {input}
-                                    </div>
-                                ',
-                            'model' => $searchModel,
-                            'locale'    => 'es-ES',
-                            'attribute' => 'fecha_entrada',
-                            'pluginOptions' => [ 'format' => 'dd-mm-yyyy',
-                            'locale'=>[
-                                'format'=>'DD/MM/YYYY',
-                                'separator'=>' - ',
-                                'applyLabel' => 'Seleccionar',
-                                'cancelLabel' => 'Cancelar',
-                            ],
-                            'autoUpdateInput' => false,
-                            ]
-                        ])
-                    ],      [
-                        'label' => 'Fecha de Entrega',
-                        'attribute' => 'fecha_entrega',
-                        'contentOptions' => ['style' => 'width:20%;'],
-                        'format' => ['date', 'php:d/m/Y'],
-
-                        'filter' => DateRangePicker::widget([
-                            'template' => '
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
-                                        {input}
-                                    </div>
-                                ',
-                            'model' => $searchModel,
-                            'locale'    => 'es-ES',
-                            'attribute' => 'fecha_entrega',
-                            'pluginOptions' => [ 'format' => 'dd-mm-yyyy',
-                            'locale'=>[
-                                'format'=>'DD/MM/YYYY',
-                                'separator'=>' - ',
-                                'applyLabel' => 'Seleccionar',
-                                'cancelLabel' => 'Cancelar',
-                            ],
-                            'autoUpdateInput' => false,
-                            ]
-                        ])
-                    ],
-
+            'columns' => 
                 [
-                            'label' => 'Protocolo',
-                            'attribute' => 'codigo',
-                            'contentOptions' => ['style' => 'width:10%;'],
-                ],
-                [
-                    'label' => 'Paciente',
-                    'attribute'=>'nombre',
-                    'contentOptions' => ['style' => 'width:30%;'],
-                ],
-                [
-                    'label' => 'Documento',
-                    'attribute'=>'nro_documento',
-                    'contentOptions' => ['style' => 'width:10%;'],
-                ],
-                [
-                    'label' => 'Informes',
-                    'format' => 'raw',
+                    [
+                    'label' => 'Fecha de Entrada',
+                    'attribute' => 'fecha_entrada',
                     'contentOptions' => ['style' => 'width:20%;'],
-                      'value'=>function ($model, $key, $index, $widget) {
-                                $estados = array(
-                                                    "1" => "danger",
-                                                    "2" => "default",
-                                                    "3" => "success",
-                                                    "4" => "warning",
-                                                    "5" => "primary",
-                                                    "6" => "info",
-                                                    );
-                                $estadosLeyenda = array(
-                                    "1" => "INFORME PENDIENTE",
-                                    "2" => "INFORME DESCARTADO",
-                                    "3" => "EN PROCESO",
-                                    "4" => "INFORME PAUSADO",
-                                    "5" => "FINALIZADO",
-                                    "6" => "ENTREGADO",
-                                );
-                                $val = " ";
-                                $idProtocolo = $model['id'];
-                                $informes = app\models\Informe::find()->where(['=','Informe.Protocolo_id',$idProtocolo])->all();
-                                //var_dump($model['id']); die();
-                                foreach ($informes as $inf){
-                                 //   var_dump($inf);
-                                    $estado = $inf->workflowLastState;
-                                    $clase = " label-".$estados[$estado];
-                                    $url ='index.php?r=informe/update&id='.$inf->id;
-                                    $val = $val. Html::a(Html::encode($inf->estudio->nombre),$url,[
-                                            'title' => "$estadosLeyenda[$estado]",
-                                            'class'=>'label '. $clase.' rounded protoClass2',
-                                            'value'=> "$url",
-                                            'data-id'=> "$inf->id",
-                                            'data-protocolo'=> "$inf->Protocolo_id",
-                                    ]);
-                                    $val = $val."<br /><span></span>";
-                                }
-                                return $val;
-                            },
+                    'format' => ['date', 'php:d/m/Y'],
+
+                    'filter' => DateRangePicker::widget([
+                        'template' => '
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                    {input}
+                                </div>
+                            ',
+                        'model' => $searchModel,
+                        'locale'    => 'es-ES',
+                        'attribute' => 'fecha_entrada',
+                        'pluginOptions' => [ 'format' => 'dd-mm-yyyy',
+                        'locale'=>[
+                            'format'=>'DD/MM/YYYY',
+                            'separator'=>' - ',
+                            'applyLabel' => 'Seleccionar',
+                            'cancelLabel' => 'Cancelar',
+                        ],
+                        'autoUpdateInput' => false,
+                        ]
+                    ])
+                ],      [
+                    'label' => 'Fecha de Entrega',
+                    'attribute' => 'fecha_entrega',
+                    'contentOptions' => ['style' => 'width:20%;'],
+                    'format' => ['date', 'php:d/m/Y'],
+
+                    'filter' => DateRangePicker::widget([
+                        'template' => '
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                    {input}
+                                </div>
+                            ',
+                        'model' => $searchModel,
+                        'locale'    => 'es-ES',
+                        'attribute' => 'fecha_entrega',
+                        'pluginOptions' => [ 'format' => 'dd-mm-yyyy',
+                        'locale'=>[
+                            'format'=>'DD/MM/YYYY',
+                            'separator'=>' - ',
+                            'applyLabel' => 'Seleccionar',
+                            'cancelLabel' => 'Cancelar',
+                        ],
+                        'autoUpdateInput' => false,
+                        ]
+                    ])
                 ],
-                ],
+
+            [
+                        'label' => 'Protocolo',
+                        'attribute' => 'codigo',
+                        'contentOptions' => ['style' => 'width:10%;'],
+            ],
+            [
+                'label' => 'Paciente',
+                'attribute'=>'nombre',
+                'contentOptions' => ['style' => 'width:30%;'],
+            ],
+            [
+                'label' => 'Documento',
+                'attribute'=>'nro_documento',
+                'contentOptions' => ['style' => 'width:10%;'],
+            ],
+            [
+                'label' => 'Informes',
+                'format' => 'raw',
+                'contentOptions' => ['style' => 'width:20%;'],
+                'value'=>function ($model, $key, $index, $widget) {
+                            $estados = array(
+                                                "1" => "danger",
+                                                "2" => "default",
+                                                "3" => "success",
+                                                "4" => "warning",
+                                                "5" => "primary",
+                                                "6" => "info",
+                                                );
+                            $estadosLeyenda = array(
+                                "1" => "INFORME PENDIENTE",
+                                "2" => "INFORME DESCARTADO",
+                                "3" => "EN PROCESO",
+                                "4" => "INFORME PAUSADO",
+                                "5" => "FINALIZADO",
+                                "6" => "ENTREGADO",
+                            );
+                            $val = " ";
+                            $idProtocolo = $model['id'];
+                            $informes = app\models\Informe::find()->where(['=','Informe.Protocolo_id',$idProtocolo])->all();
+                            //var_dump($model['id']); die();
+                            foreach ($informes as $inf){
+                            //   var_dump($inf);
+                                $estado = $inf->workflowLastState;
+                                $clase = " label-".$estados[$estado];
+                                $url ='index.php?r=informe/update&id='.$inf->id;
+                                $val = $val. Html::a(Html::encode($inf->estudio->nombre),$url,[
+                                        'title' => "$estadosLeyenda[$estado]",
+                                        'class'=>'label '. $clase.' rounded protoClass2',
+                                        'value'=> "$url",
+                                        'data-id'=> "$inf->id",
+                                        'data-protocolo'=> "$inf->Protocolo_id",
+                                ]);
+                                $val = $val."<br /><span></span>";
+                            }
+                            return $val;
+                        },
+            ],            
+             ['class' => 'yii\grid\ActionColumn',
+                'template' => '{edit}',
+                'contentOptions' => ['style' => 'width:10%;'],
+                'buttons' => [
+                    //view button
+                    'edit' => function ($url, $model) {
+                        return Html::a('<span class="fa fa-pencil"></span>', $url, [
+                                    'title' => Yii::t('app', 'edit'),  
+                                    'class'=> 'btn-info btn-xs',
+
+                        ]);
+                    },
+                ],                
+                'urlCreator' => function ($action, $model, $key, $index) {
+                    if ($action === 'edit') {
+                        $url ='index.php?r=protocolo/update&id='.$model['id'];
+                        return $url;
+                    }
+                }
+             ],
+        ],
 
         ]);
         ?>

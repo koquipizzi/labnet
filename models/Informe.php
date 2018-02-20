@@ -150,7 +150,19 @@ class Informe extends \yii\db\ActiveRecord
 
         return $models;
     }
-
+/**
+     * Obtiene los nomecladores relacionados
+     *
+     * @return string descripcion nomencladores
+     */
+    public function getInformeNomenclador()
+    {
+       
+        $informeNomencladores = InformeNomenclador::find()
+                ->andWhere("id_informe = $this->id");
+        
+        return  $informeNomencladores;
+    }
     /**
      * @author franco.a
      * Setea el campo tutulo con un valor por defecto,si el campo es null en algun momento tambien sera seteado a default

@@ -252,7 +252,7 @@ class Protocolo extends \yii\db\ActiveRecord
     } 
 
     public function existeNumeroSecuencia(){
-        $modelProtocolo= Protocolo::find()->where(["anio"=>$this->anio,"nro_secuencia"=>$this->nro_secuencia])->one();
+        $modelProtocolo= Protocolo::find()->where(["anio"=>$this->anio,"nro_secuencia"=>$this->nro_secuencia, "letra"=>$this->letra])->one();
         $existe=false;
         if(!empty( $modelProtocolo) ){
             $existe=true;

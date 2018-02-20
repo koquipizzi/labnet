@@ -234,7 +234,8 @@ class ProtocoloController extends Controller
 
         $fecha = date_create ();
         $fecha = date_format ( $fecha, 'd-m-Y H:i:s' );
-        if ($mdlProtocolo->load(Yii::$app->request->post())) {                 
+        if ($mdlProtocolo->load(Yii::$app->request->post())) {
+                        
             if($mdlProtocolo->existeNumeroSecuencia()){
                 if(!empty($mdlProtocolo->letra)){
                     try{
@@ -248,7 +249,7 @@ class ProtocoloController extends Controller
        
                 } 
                
-            }        
+            }       
             if ($mdlProtocolo->fecha_entrada == NULL)
                 $mdlProtocolo->fecha_entrada = date("Y-m-d");
             $modelsInformes = Informe::createMultiple(Informe::classname());
@@ -454,20 +455,21 @@ class ProtocoloController extends Controller
     {
         $model = $this->findModel($id);
         $nomenclador= new Nomenclador();
-        $Estudio= new Estudio();
         $searchModel = new InformeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $informe= new Informe();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } 
         else {
-            return $this->renderAjax('update', [
+
+            $modelsInformes=$model->informes;
+            return $this->render('update', [
                 'model' => $model,
                 'searchModel' =>$searchModel ,
+                'modelsInformes' => (empty($modelsInformes)) ? [new Informe] : $modelsInformes,
                 'dataProvider' => $dataProvider,
-                'informe'=>$informe,
                 'nomenclador'=>$nomenclador,
+     
             ]);
         }
     }

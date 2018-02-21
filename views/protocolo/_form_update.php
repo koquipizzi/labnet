@@ -25,8 +25,8 @@ use app\models\Medico;
 use app\models\ViewPacientePrestadora;
 use app\models\ViewPacientePrestadoraQuery;
 use app\models\Prestadoras;
-use app\models\InformeTemp;
 use app\models\InformeNomenclador;
+use app\models\PacientePrestadora;
 /* @var $this yii\web\View */
 /* @var $model app\models\Protocolo */
 /* @var $form yii\widgets\ActiveForm */
@@ -283,12 +283,10 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                              value='index.php?r=procedencia/createpop'><?php    echo Yii::t('app', 'Add');  ?>
                         </button>
             </div>
-        </div>
-     
-
+        </div>    
         <div class="col-md-6" style="text-align: right;">
             <?php
-             $dataFacturar=ArrayHelper::map(Prestadoras::find()->where(['facturable' => 'S'])->asArray()->all(), 'id', 'descripcion');
+                $dataFacturar=ArrayHelper::map(Prestadoras::find()->where(['facturable' => 'S'])->asArray()->all(), 'id', 'descripcion');
                 echo $form->field($model, 'FacturarA_id',
                         ['template' => "{label}
                         <div class='col-md-7'>
@@ -304,11 +302,29 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                             'width' => '100%',
                         ]
                 ]);
-                ?>
-                </div>
-                <div class="col-md-6" style="text-align: right;">
-
-                <?php
+            ?>
+        </div>
+        <div class="col-md-6" style="text-align: left;">
+            <?php                
+                echo $form->field($model, 'Paciente_prestadora_id',
+                        ['template' => "{label}
+                        <div class='col-md-7'>
+                        {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
+                        ]
+                        )->widget(Widget::className(), [
+                        'options' => [
+                            'multiple' => false,
+                            'placeholder' => 'Choose item'
+                        ],
+                        'items' => $PacientePrestadora,
+                        'settings' => [
+                            'width' => '100%',
+                        ]
+                ]);
+            ?>
+        </div>        
+        <div class="col-md-6" style="text-align: right;">
+            <?php
                 echo $form->field($model, 'observaciones', ['template' => "{label}
                                 <div class='col-md-7'>{input}</div>
                                 {hint}
@@ -342,98 +358,90 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
                 ');
 
-                    ?>
+            ?>
         </div> <!-- bloque izquierdo -->
         <div class="col-md-12">
-        <?php DynamicFormWidget::begin([
-        'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
-        'widgetBody' => '.container-items', // required: css class selector
-        'widgetItem' => '.item', // required: css class
-        'limit' => 100, // the maximum times, an element can be cloned (default 999)
-        'min' => 1, // 0 or 1 (default 1)
-        'insertButton' => '.add-item', // css class
-        'deleteButton' => '.remove-item', // css class
-        'model' => $modelsInformes[0],
-        'formId' => 'dynamic-form',
-        'formFields' => [
-            'Estudio_id',
-            'descripcion',
-            'observaciones',
-       //     'city',
-       //     'state',
-        //    'postal_code',
-        ],
-    ]); ?>
-    <div class="box box-primary">
-        <div class="box-header with-border">
-            <i class="fa fa-file"></i> Estudios
-            <button type="button" class="pull-right add-item addItem btn btn-success btn-xs"><i class="fa fa-plus"></i> Agregar Estudio</button>
-            <div class="clearfix"></div>
-        </div>
-        <div class="panel-body container-items"><!-- widgetContainer -->
-       <?php //var_dump($modelsInformes); die(); ?>
-            <?php foreach ($modelsInformes as $index => $modelInforme): ?>
-            <?php //var_dump($modelInforme); die(); ?>
-                <div class="item box box-info "><!-- widgetBody -->
-                    <div class="box-header with-border bg-gray disabled">
-                        <span class="panel-title-address">Estudio: <?= ($index + 1) ?></span>
-                        <button type="button" class="pull-right remove-item btn btn-default btn-xs"><i class="fa fa-minus"></i></button>
+            <?php DynamicFormWidget::begin([
+                'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                'widgetBody' => '.container-items', // required: css class selector
+                'widgetItem' => '.item', // required: css class
+                'limit' => 100, // the maximum times, an element can be cloned (default 999)
+                'min' => 1, // 0 or 1 (default 1)
+                'insertButton' => '.add-item', // css class
+                'deleteButton' => '.remove-item', // css class
+                'model' => $modelsInformes[0],
+                'formId' => 'dynamic-form',
+                'formFields' => [
+                    'Estudio_id',
+                    'descripcion',
+                    'observaciones',
+            //     'city',
+            //     'state',
+                //    'postal_code',
+                ],
+            ]); ?>
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <i class="fa fa-file"></i> Estudios
+                        <button type="button" class="pull-right add-item addItem btn btn-success btn-xs"><i class="fa fa-plus"></i> Agregar Estudio</button>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="box-body no-padding" style="margin-top:5px;">
+                    <div class="panel-body container-items"><!-- widgetContainer -->
+                <?php //var_dump($modelsInformes); die(); ?>
+                        <?php foreach ($modelsInformes as $index => $modelInforme): ?>
+                        <?php //var_dump($modelInforme); die(); ?>
+                            <div class="item box box-info "><!-- widgetBody -->
+                                <div class="box-header with-border bg-gray disabled">
+                                    <span class="panel-title-address">Estudio: <?= ($index + 1) ?></span>
+                                    <button type="button" class="pull-right remove-item btn btn-default btn-xs"><i class="fa fa-minus"></i></button>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="box-body no-padding" style="margin-top:5px;">
+                                    <?php  
+                                        $dataEstudio=ArrayHelper::map(Estudio::find()->asArray()->all(), 'id', 'descripcion');
+                                        // necessary for update action.
+                                        if (!$modelInforme->isNewRecord) {
+                                            echo Html::activeHiddenInput($modelInforme, "[{$index}]id");
+                                        }
+                                    ?>
+                                    <div class="col-md-6" style="text-align: right;">
 
-                          <?php  
-
-                             $dataEstudio=ArrayHelper::map(Estudio::find()->asArray()->all(), 'id', 'descripcion');
-                            // necessary for update action.
-                            if (!$modelInforme->isNewRecord) {
-                                echo Html::activeHiddenInput($modelInforme, "[{$index}]id");
-                            }
-
-
-                        ?>
-                         <div class="col-md-6" style="text-align: right;">
-
-                        <?= $form->field($modelInforme, "[{$index}]Estudio_id",['template' => "{label}
-                                             <div class='col-md-8'>{input}</div>
-                                             {hint}{error}",
-                                            'labelOptions' => [ 'class' => 'col-md-3 control-label' ]])->dropDownList( $dataEstudio, ['prompt' => ''])
-                                            ->error([ 'style' => ' float: left; margin-left: 28%;']); ?>
-
-                                <?= $form->field($modelInforme, "[{$index}]descripcion", ['template' => "{label}
-                                             <div class='col-md-8'>{input}</div>
-                                             {hint}{error}",
-                                            'labelOptions' => [ 'class' => 'col-md-3 control-label' ]]) ?>
-
-                                <?= $form->field($modelInforme, "[{$index}]observaciones",['template' => "{label}
-                                             <div class='col-md-8'>{input}</div>
-                                             {hint}{error}",
-                                            'labelOptions' => [ 'class' => 'col-md-3 control-label' ]]) ?>
-                        </div>
-                         <div class="col-md-6" style="text-align: right;">
-                         <?php
-                            $modelsInformeNomencladorArray[$index]=$modelInforme->informeNomenclador;
-                            echo $this->render('_form-nomencladores', [
-                                        'form' => $form,
-                                        'indexEstudio' => $index,
-                                        'modelsNomenclador' =>  (empty($modelsInformeNomencladorArray[$index])) ? [new InformeNomenclador] : $modelsInformeNomencladorArray
-                                    ])
-                        ?>
-
-
-                         </div>
+                                        <?= $form->field($modelInforme, "[{$index}]Estudio_id",['template' => "{label}
+                                                    <div class='col-md-8'>{input}</div>
+                                                    {hint}{error}",
+                                                    'labelOptions' => [ 'class' => 'col-md-3 control-label' ]])->dropDownList( $dataEstudio, ['prompt' => ''])
+                                                    ->error([ 'style' => ' float: left; margin-left: 28%;']); 
+                                        ?>
+                                        <?= $form->field($modelInforme, "[{$index}]descripcion", ['template' => "{label}
+                                                    <div class='col-md-8'>{input}</div>
+                                                    {hint}{error}",
+                                                    'labelOptions' => [ 'class' => 'col-md-3 control-label' ]])
+                                        ?>
+                                        <?= $form->field($modelInforme, "[{$index}]observaciones",['template' => "{label}
+                                                    <div class='col-md-8'>{input}</div>
+                                                    {hint}{error}",
+                                                    'labelOptions' => [ 'class' => 'col-md-3 control-label' ]]) 
+                                        ?>
+                                    </div>
+                                    <div class="col-md-6" style="text-align: right;">
+                                        <?php
+                                            $modelsInformeNomencladorArray[$index]=$modelInforme->informeNomenclador;
+                                            echo $this->render('_form-nomencladores', [
+                                                        'form' => $form,
+                                                        'indexEstudio' => $index,
+                                                        'modelsNomenclador' =>  (empty($modelsInformeNomencladorArray[$index])) ? [new InformeNomenclador] : $modelsInformeNomencladorArray
+                                                    ])
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
-    <?php DynamicFormWidget::end();  ?>
-
-
+                <?php DynamicFormWidget::end();  ?>
         <div class="box-footer" >
             <div class="pull-right box-tools">
-                <?= Html::submitButton($modelInforme->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? ' btn btn-info' : ' btn btn-primary']) ?>
-                <?= Html::resetButton(Yii::t('app', 'Cancel'), ['class' => ' btn btn-default']) ?>
+                <?= Html::submitButton($modelInforme->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? ' btn btn-info' : ' btn btn-primary']) ?>               
             </div>
         </div>
     </div>

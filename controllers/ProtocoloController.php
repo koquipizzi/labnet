@@ -460,7 +460,9 @@ class ProtocoloController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } 
-        else {
+        else
+        { 
+            $PacientePrestadora=$model->pacientePrestadoraArray;
             $modelsInformes=$model->informes;
             return $this->render('update', [
                 'model' => $model,
@@ -468,7 +470,7 @@ class ProtocoloController extends Controller
                 'modelsInformes' => (empty($modelsInformes)) ? [new Informe] : $modelsInformes,
                 'dataProvider' => $dataProvider,
                 'nomenclador'=>$nomenclador,
-     
+                'PacientePrestadora'=>$PacientePrestadora
             ]);
         }
     }

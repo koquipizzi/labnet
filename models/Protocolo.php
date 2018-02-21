@@ -187,7 +187,7 @@ class Protocolo extends \yii\db\ActiveRecord
 
     public function getCodigo()
     {
-    	$secuncia = sprintf("%06d", $this->nro_secuencia);
+    	$secuncia = sprintf("%07d", $this->nro_secuencia);
         $codigo= substr($this->anio,-2).$this->letra."-".$secuncia;
         return $codigo;
     }
@@ -259,6 +259,54 @@ class Protocolo extends \yii\db\ActiveRecord
         }
         return $existe;
     }
+
+    public function  getPacientePrestadoraArray(){
+        //el paciente prestadora configurado
+        $query = new Query;
+        $query->select(['Paciente_prestadora.id, CONCAT(Paciente.nro_documento," (",Paciente.nombre,") ", Prestadoras.descripcion ) descripcion'])  
+            ->from( 'Prestadoras')
+            ->join(	'join', 
+                    'Paciente_prestadora',
+                    'Prestadoras.id=Paciente_prestadora.prestadoras_id'
+            )       
+            ->join(	'join', 
+                    'Paciente',
+                    'Paciente.id=Paciente_prestadora.paciente_id'
+            )                   
+            ->where(["Paciente_prestadora.id"=>$this->Paciente_prestadora_id]);
+                
+        $command = $query->createCommand();
+        $data = $command->queryAll();	
+        $arrayData=array();
+        if( !empty($data) and is_array($data) ){ //and array_key_exists('detallepedidopieza',$data) and array_key_exists('detalle_pedido_id',$data)){
+            foreach ($data as $key => $arrayPacientePrestadora) {
+                 $arrayData[$arrayPacientePrestadora['id']]=$arrayPacientePrestadora['descripcion'];   
+            }
+        }
+        //todas los pacientes prestadoras
+        $query = new Query;
+        $query->select(['Paciente_prestadora.id, CONCAT(Paciente.nro_documento," (",Paciente.nombre,") ", Prestadoras.descripcion ) descripcion'])  
+            ->from( 'Prestadoras')
+            ->join(	'join', 
+                    'Paciente_prestadora',
+                    'Prestadoras.id=Paciente_prestadora.prestadoras_id'
+            )       
+            ->join(	'join', 
+                    'Paciente',
+                    'Paciente.id=Paciente_prestadora.paciente_id'
+            );
+                
+        $command = $query->createCommand();
+        $data = $command->queryAll();	
+        if( !empty($data) and is_array($data) ){ //and array_key_exists('detallepedidopieza',$data) and array_key_exists('detalle_pedido_id',$data)){
+            foreach ($data as $key => $arrayPacientePrestadora) {
+                 $arrayData[$arrayPacientePrestadora['id']]=$arrayPacientePrestadora['descripcion'];   
+            }
+        }        
+
+        return $arrayData;
+    }
+
 
 
 }

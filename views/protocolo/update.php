@@ -3,10 +3,10 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Protocolo */
-
+$codigo= $model->codigo;
 $this->title = Yii::t('app', 'Update {modelClass}: ', [
     'modelClass' => 'Protocolo',
-]) . $model->id;
+]) . $codigo;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Protocolos'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
@@ -14,8 +14,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
 <section id="page-content">
 
-    <div class="header-content">
-        <h2><i class="fa fa-home"></i>Cipat <span><?= Html::encode($this->title) ?></span></h2>        
+    <div class="header-content">     
     </div><!-- /.header-content -->
     
     <!-- Start body content -->
@@ -39,7 +38,8 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                             'searchModel' =>$searchModel ,
                             'dataProvider' => $dataProvider,
                             'modelsInformes'=>$modelsInformes,
-                            'nomenclador'=>$nomenclador,                            
+                            'nomenclador'=>$nomenclador,
+                            'PacientePrestadora'=>$PacientePrestadora                            
                 ]) ?>
 
             </div>

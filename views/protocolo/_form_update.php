@@ -52,6 +52,45 @@ jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
 //obtiene dinamicamente el nro de secuencia segun la letra ingresada
 $( document ).ready(function() {
 
+// $("body").on("beforeSubmit", "form#dynamic-form", function () {
+//     var form = $(this);
+//     var permitido=false;
+//     console.log($("body").hasClass(".has-error"));
+//     if ($("#dynamic-form").hasClass(".has-error")===false) {
+//         permitido= true;
+//     } 
+
+//     var letra   = $("#protocolo-letra").val();
+//     var anio    = $("#protocolo-anio").val();
+//     var nro_sec = $("#protocolo-nro_secuencia").val();
+//     $.ajax({
+//         url    : "index.php?r=protocolo/existe-nro-secuencia-letra",
+//         type   : "post",
+//         data   : {
+//                     letra:          letra,
+//                     anio:           anio,
+//                     nro_secuencia:  nro_sec
+//                 },
+//         success: function (response) 
+//         {                         
+//             if(response.rta===false){
+//                 $("#dynamic-form").yiiActiveForm("updateAttribute", "protocolo-nro_secuencia","");
+//                 //$("#dynamic-form").find("button").click();                   
+//             }   
+//             if(response.rta===true){                    
+//                 $("#dynamic-form").yiiActiveForm("updateMessages", {
+//                     "protocolo-nro_secuencia": [response.mensaje]
+//                 }, true);  
+//             }             
+//         }               
+//     }); 
+//     // if(permitido===true){
+//     //    return true;
+//     // }    
+
+//     return false;
+// });
+
     //cambia la letra a mayusculas en protocolo-letra
     $("#protocolo-letra").keyup(function(){
         this.value = this.value.toUpperCase();
@@ -85,6 +124,52 @@ $( document ).ready(function() {
         });
     }); 
 });
+    $("#protocolo-nro_secuencia").change(function() {
+        var letra           = $("#protocolo-letra").val();
+        var anio            = $("#protocolo-anio").val();
+        var nro_sec         = $("#protocolo-nro_secuencia").val();
+        var protocolo_id    = $("#protocolo-id").val();
+        
+        $.ajax({
+            url    : "index.php?r=protocolo/existe-nro-secuencia-letra-update",
+            type   : "post",
+            data   : {
+                        letra:          letra,
+                        anio:           anio,
+                        nro_secuencia:  nro_sec,
+                        protocolo_id:   protocolo_id
+                    },
+            success: function (response) 
+            {                         
+                if(response.rta===false){
+                    $("#dynamic-form").yiiActiveForm("updateAttribute", "protocolo-nro_secuencia","");                   
+                }   
+                if(response.rta===true){                    
+                    $("#dynamic-form").yiiActiveForm("updateMessages", {
+                        "protocolo-nro_secuencia": [response.mensaje]
+                    }, true);  
+                }             
+            }               
+        });
+    }); 
+$("#protocolo-nro_secuencia").keydown(function(e) {
+    var numeroSinCeros= parseInt(this.value,10);
+    var digitos = numeroSinCeros.toString().length;
+    if( (digitos>=7) && (e.keyCode != 8) ){
+        return false;
+    }
+    
+});
+
+$("#protocolo-nro_secuencia").keyup(function() {
+    function pad(input, length, padding) { 
+        var str = input + "";
+        return (length <= str.length) ? str : pad( padding + str, length, padding);
+    }
+    var numeroSinCeros=  parseInt(this.value,10);
+    var digitos = numeroSinCeros.toString().length;
+    $("#protocolo-nro_secuencia").val(pad(numeroSinCeros,7,0) );
+ });
 
 
 ';
@@ -146,7 +231,9 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         'enableAjaxValidation' => true,
                         'data-pjax' => '',
                     ]
-            ]); ?>
+            ]);
+            echo   $form->field($model, 'id')->hiddenInput()->label(false);
+             ?>
                 <input type="hidden" name="tanda" value="<?php // $tanda ?>" id="tanda">
 
 
@@ -219,8 +306,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
               <div class="row">
                     <div class="col-md-10">
                       <?php yii\widgets\Pjax::begin(['id' => 'new_medico']);                         
-                           $dataMedico=ArrayHelper::map(Medico::find()->asArray()->all(), 'id', 'nombre'); 
-                        
+                           $dataMedico=ArrayHelper::map(Medico::find()->asArray()->all(), 'id', 'nombre');                         
                             echo $form->field($model, 'Medico_id',
                                     ['template' => "{label}
                                         <div class='col-md-6' >
@@ -425,11 +511,11 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                     </div>
                                     <div class="col-md-6" style="text-align: right;">
                                         <?php
-                                            $modelsInformeNomencladorArray[$index]=$modelInforme->informeNomenclador;
+                                            $modelsInformeNomencladorArray[$index]=$modelInforme->informeNomenclador;                                                                                                                                       
                                             echo $this->render('_form-nomencladores', [
                                                         'form' => $form,
                                                         'indexEstudio' => $index,
-                                                        'modelsNomenclador' =>  (empty($modelsInformeNomencladorArray[$index])) ? [new InformeNomenclador] : $modelsInformeNomencladorArray
+                                                        'modelsNomenclador' =>  (empty($modelsInformeNomencladorArray[$index])) ? [new InformeNomenclador] :$modelsInformeNomencladorArray[$index]
                                                     ])
                                         ?>
                                     </div>

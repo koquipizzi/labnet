@@ -159,10 +159,16 @@ class Informe extends \yii\db\ActiveRecord
     {
        
         $informeNomencladores = InformeNomenclador::find()
-                ->andWhere("id_informe = $this->id");
+                ->where(["id_informe" => $this->id])->all();
         
         return  $informeNomencladores;
     }
+
+       public function getInformeNomenclador2()
+    {  
+        return $this->hasMany(InformeNomenclador::className(), ['id_informe' => 'id']);   
+    }  
+
     /**
      * @author franco.a
      * Setea el campo tutulo con un valor por defecto,si el campo es null en algun momento tambien sera seteado a default
@@ -432,4 +438,34 @@ class Informe extends \yii\db\ActiveRecord
         return $this->hasMany(Tag::className(), ['id' => 'tag_id'])->viaTable('informe_tag_assn', ['informe_id' => 'id']);
     }
     
+    public static function eliminarInforme($informe_id){
+        
+        $modelInforme   = Informe::find()->where(["id"=>$informe_id])->one();
+        //   $modelInforme->delete();
+        //ELIMINA WORKFLOW
+        $modelsWorkflow    = $modelInforme->workflows;
+        if(!empty($modelsWorkflow)){
+            foreach ($modelsWorkflow as $key => $workflows) {
+                // var_dump( $modelsWorkflow );die("modelsWorkflow");
+                if(!$workflows->delete()){
+                        throw new \yii\base\Exception("Error to delete Workflow with id {$workflows->id}.");
+                }
+            }
+        }
+        //ELIIMINA INFORMENOMENCLADORES  
+        $modelsInformeNomenclador    = $modelInforme->informeNomenclador;
+        if(!empty($modelsInformeNomenclador)){
+            foreach ($modelsInformeNomenclador as $key => $infNom) {
+                        // var_dump( $modelsInformeNomenclador );die("modelsInformeNomenclador");
+                if(!$infNom->delete()){
+                    throw new \yii\base\Exception("Error to delete InformeNomenclador with id {$infNom->id}.");
+                }
+            }
+        }
+         Informe::deleteAll(["id"=>$modelInforme->id]);
+        // $modelInforme->delete();
+    }
+
+
+
 }

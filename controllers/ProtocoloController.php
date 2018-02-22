@@ -26,6 +26,7 @@ use yii\base\Model;
 use Da\QrCode\QrCode;
 use yii\web\Response;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 
 
 /**
@@ -187,10 +188,8 @@ class ProtocoloController extends Controller
         $searchModel = new ProtocoloSearch();
         $dataProvider = $searchModel->searchTodos(Yii::$app->request->queryParams);
         $loggedUserId = Yii::$app->user->id;
-        $dataProviderTodosLosProtocolos= $searchModel->searchTodos(Yii::$app->request->queryParams);
-        //pendientes 
+        $dataProviderTodosLosProtocolos= $searchModel->searchTodos(Yii::$app->request->queryParams); 
         $query = Protocolo::find()->where(['status' => 1]);
-//var_dump( $query);die();
         return $this->render('_all', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -445,35 +444,225 @@ class ProtocoloController extends Controller
     }
         
 
+
     /**
-     * Updates an existing Protocolo model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
+     * Validates multiple models.
+     * This method will validate every model. The models being validated may
+     * be of the same or different types.
+     * @param array $models the models to be validated
+     * @param array $attributeNames list of attribute names that should be validated.
+     * If this parameter is empty, it means any attribute listed in the applicable
+     * validation rules should be validated.
+     * @return bool whether all models are valid. False will be returned if one
+     * or multiple models have validation error.
      */
-    public function actionUpdate($id)
+    public  function validateMultiple($models, $attributeNames = null)
     {
+        $valid = true;
+        /* @var $model Model */
+        foreach ($models as $model) {
+            $valid = $model->validate($attributeNames) && $valid;
+          
+            if(!$model->validate($attributeNames) ){
+               var_dump($model);  var_dump($model->getErrors());die(22112);
+            }
+        }
+
+        return $valid;
+    }
+
+   /**
+
+     */
+    public  function addAtributo($models, $attributeNames, $val)
+    {
+        foreach ($models as $model) {
+            $valid = $model->$attributeNames=$val;
+            }        
+    }
+
+
+
+  public function actionUpdate($id)
+    {
+        $error='';
+        $mostrarMensajeViewnNroSecuencia='';
         $model = $this->findModel($id);
+        $model->nro_secuencia= str_pad((int) $model->nro_secuencia,7,"0",STR_PAD_LEFT);
+        $modelsInforme=  $model->informes;
+        $fecha = date_create ();
+        $fecha = date_format ( $fecha, 'd-m-Y H:i:s' );
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->existeNumeroSecuencia()){
+                if(!empty($model->letra)){
+                    try{
+                        $mostrarMensajeViewnNroSecuencia="El Nro.Secuencia <strong> {$model->nro_secuencia}</strong> ya existe. ";
+                        $model->nro_secuencia=$model->getNextNroSecuenciaByLetra($model->letra,$anio);
+                        $mostrarMensajeViewnNroSecuencia.="El nuevo numero de secuencia es <strong>{$model->nro_secuencia}</strong>.";                    
+                    } catch (\Exception $e) {
+                            $model->nro_secuencia=sprintf("%07d",0);
+                            $mostrarMensajeViewnNroSecuencia="";   
+                    }
+        
+                } 
+                
+            }  
+            //  MODELS INFORME
+            $oldIDs = ArrayHelper::map($modelsInforme, 'id', 'id');
+            $modelsInforme = Informe::createMultiple(Informe::classname(), $modelsInforme);
+            Model::loadMultiple($modelsInforme, Yii::$app->request->post());
+            $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelsInforme, 'id', 'id')));
+            // FIN MODELS INFORME
+
+            // validate all models
+            $valid = $model->validate();
+            $this->addAtributo($modelsInforme,'Protocolo_id',$model->id);
+            $valid = $this->validateMultiple($modelsInforme) && $valid;
+            // try {
+                if (!$valid) {
+                    throw new \yii\base\Exception("Error,al validar el modelo protocolo.");
+                }
+                $transaction = \Yii::$app->db->beginTransaction();
+                if (!$model->save()) {
+                    throw new \yii\base\Exception("Error,save model protocolo.");
+                }
+                //DELETE INFOMES 
+                if (!empty($deletedIDs)) {     
+                    foreach ($deletedIDs as $key => $inf_id) {                                                                        
+                        if(!Workflow::getTieneEstadoEntregado($inf_id)){
+                            Informe::eliminarInforme($inf_id);
+                        }                                                                     
+                    }                                                                               
+                }               
+                foreach ($modelsInforme as $key=>$modelInforme) {       
+                    //INFOMRE SAVE            
+                    if (!$modelInforme->save()) {
+                        throw new \yii\base\Exception("Error,save model informe");
+                    }  
+                    //WORKFLOW SAVE OF INFOMRE
+                    $workflow= new Workflow();
+                    $workflow->Informe_id= $modelInforme->id;
+                    $workflow->Estado_id=1;//estado 1 es pendiente 
+                    $workflow->fecha_inicio = $fecha;           
+                    $workflow->save();
+                    //INFOMRENOMENCLADOR OLD
+                    $modelsInformeNomenclador= $modelInforme->informeNomenclador;                      
+                    if(empty( $modelsInformeNomenclador)){
+                        $oldIDs=array();
+                    }else{
+                            $oldIDs = ArrayHelper::map($modelsInformeNomenclador, 'id', 'id');
+                    }                                                   
+                    $modelsInformeNomenclador = informeNomenclador::createMultiple(informeNomenclador::classname(), $modelsInformeNomenclador);
+                    // INFOMRENOMENCLADOR NEW  
+                    if (!empty( Yii::$app->request->post()["InformeNomenclador"])       &&
+                        is_array( Yii::$app->request->post()["InformeNomenclador"])     &&
+                        !empty( Yii::$app->request->post()["InformeNomenclador"][$key]) &&
+                        is_array(Yii::$app->request->post()["InformeNomenclador"][$key])
+                        ) {
+                        $arrayinformeNomencladorNew=array();   
+                        foreach (Yii::$app->request->post()["InformeNomenclador"][$key] as $index => $modelNom) {
+                            $informeNomenclador= new InformeNomenclador();
+                            $data['InformeNomenclador'] = $modelNom;
+                            $informeNomenclador->load($data);
+                            $informeNomenclador->id_informe=$modelInforme->id;                                                    
+                            if (!$informeNomenclador->save()) {
+                                throw new \yii\base\Exception("Error,save model informeNomenclador.");
+                            }
+                            
+                            $arrayinformeNomencladorNew[]=$informeNomenclador;
+                        }
+                        $arrayInformeNom=
+                        ArrayHelper::toArray($arrayinformeNomencladorNew, [
+                            'app\models\informeNomenclador' => [
+                                'id',        
+                                ]
+                        ]);
+                    } 
+                    // END INFOMRENOMENCLADOR NEW  
+
+                    //DELETE INFOMRENOMENCLADOR OLD
+                    $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelsInformeNomenclador, 'id', 'id')));                    
+                    $this->addAtributo($modelsInformeNomenclador,'id_informe',$modelInforme->id);
+                    if (!empty($deletedIDs)) {     
+                        foreach ($deletedIDs as $key => $nomencladorId) {                                                                                                                           
+                                informeNomenclador::deleteAll(["id"=>$nomencladorId]);                                            
+                        }
+                    }  
+                                    
+                } 
+                    $transaction->commit();                                                                                                                     
+                    // } catch (Exception $e) {
+                    //     $transaction->rollBack();
+                    //     $error=  "Error, update protocolo numero {$model->codigo}. {$e} ";
+                    //     throw new \yii\web\HttpException(406, $error);
+                    // } 
+            if(empty($error)){
+                $searchModel = new InformeSearch();
+                $dataProvider = $searchModel->search((Yii::$app->request->queryParams),$model->id);
+                $informe= new Informe();
+                return $this->render('view', [
+                    'model' => $this->findModel($model->id),
+                    'dataProvider'=>$dataProvider,
+                    'informe' => $informe,
+                    'mostrarMensajeView'=>$mostrarMensajeViewnNroSecuencia
+                ]);                
+            }                   
+        }
         $nomenclador= new Nomenclador();
         $searchModel = new InformeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } 
-        else
-        { 
-            $PacientePrestadora=$model->pacientePrestadoraArray;
-            $modelsInformes=$model->informes;
-            return $this->render('update', [
-                'model' => $model,
-                'searchModel' =>$searchModel ,
-                'modelsInformes' => (empty($modelsInformes)) ? [new Informe] : $modelsInformes,
-                'dataProvider' => $dataProvider,
-                'nomenclador'=>$nomenclador,
-                'PacientePrestadora'=>$PacientePrestadora
-            ]);
-        }
+        $PacientePrestadora=$model->pacientePrestadoraArray;
+        $modelsInformes=$model->informes;
+        return $this->render('update', [
+            'model' => $model,
+            'searchModel' =>$searchModel ,
+            'modelsInformes' => (empty($modelsInformes)) ? [new Informe] : $modelsInformes,
+            'dataProvider' => $dataProvider,
+            'nomenclador'=>$nomenclador,
+            'PacientePrestadora'=>$PacientePrestadora
+        ]);
+
     }
+
+
+
+
+
+
+
+
+
+
+
+    // /**
+    //  * Updates an existing Protocolo model.
+    //  * If update is successful, the browser will be redirected to the 'view' page.
+    //  * @param integer $id
+    //  * @return mixed
+    //  */
+    // public function actionUpdate($id)
+    // {
+    //     $model = $this->findModel($id);
+    //     $nomenclador= new Nomenclador();
+    //     $searchModel = new InformeSearch();
+    //     $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    //     if ($model->load(Yii::$app->request->post()) && $model->save()) {
+    //         return $this->redirect(['view', 'id' => $model->id]);
+    //     } 
+    //     else
+    //     { 
+    //         $PacientePrestadora=$model->pacientePrestadoraArray;
+    //         $modelsInformes=$model->informes;
+    //         return $this->render('update', [
+    //             'model' => $model,
+    //             'searchModel' =>$searchModel ,
+    //             'modelsInformes' => (empty($modelsInformes)) ? [new Informe] : $modelsInformes,
+    //             'dataProvider' => $dataProvider,
+    //             'nomenclador'=>$nomenclador,
+    //             'PacientePrestadora'=>$PacientePrestadora
+    //         ]);
+    //     }
+    // }
 
     /**
      * Deletes an existing Protocolo model.
@@ -482,11 +671,24 @@ class ProtocoloController extends Controller
      * @return mixed
      */
     public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
+    {   
+           
+        $respuesta='ok';
+        $msj='';
+        $protocolo=$this->findModel($id);
+        try{
+            $protocolo->eliminarInformes();            
+            $pdeleted=$protocolo->delete(); 
+        }catch (Exception $e) {
+            $respuesta='error';
+            $msj=$e;
+        }       
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return ['rta'=>$respuesta,"msj"=>$msj];
+        
 
-        return $this->redirect(['index']);
     }
+    
 
     /**
      * Finds the Protocolo model based on its primary key value.
@@ -523,6 +725,56 @@ class ProtocoloController extends Controller
        
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return ['rta'=>$rta,"nro_secuencia"=>$nro_secuencia,"mensaje"=>$mensaje];
+    }
+
+    public function actionExisteNroSecuenciaLetra()
+    {
+
+        $rta=false;    
+        $mensaje="";   
+        $mensajeError=""; 
+        try{
+            if( empty(Yii::$app->request->post()["letra"]) || empty(Yii::$app->request->post()["anio"]) || empty(Yii::$app->request->post()["nro_secuencia"])  ){
+                throw new \yii\base\Exception("the request especification is wrong ");         
+            }            
+            $letra          = Yii::$app->request->post()["letra"];
+            $anio           = Yii::$app->request->post()["anio"];
+            $nro_secuencia  = Yii::$app->request->post()["nro_secuencia"];
+            $rta            = Protocolo::existeNumeroSecuenciaParamsUpdate($anio,$letra,$nro_secuencia);
+        } catch (\Exception $e) {
+            $mensajeError=$e->getMessage();
+        }
+        if($rta){
+            $mensaje="El nro de secuencia {$nro_secuencia} para la letra {$letra} ya existe.";
+        }
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return ['rta'=>$rta,"mensaje"=>$mensaje,"mensajeError"=> $mensajeError];
+    }
+    public function actionExisteNroSecuenciaLetraUpdate()
+    {
+
+        $rta=false;    
+        $mensaje="";   
+        $mensajeError=""; 
+        try{
+            if( empty(Yii::$app->request->post()["letra"]) || empty(Yii::$app->request->post()["anio"]) || empty(Yii::$app->request->post()["nro_secuencia"]) || empty(Yii::$app->request->post()["protocolo_id"])   ){
+                throw new \yii\base\Exception("the request especification is wrong ");         
+            }            
+            $letra          = Yii::$app->request->post()["letra"];
+            $anio           = Yii::$app->request->post()["anio"];
+            $nro_secuencia  = Yii::$app->request->post()["nro_secuencia"];
+            $protocolo_id  = Yii::$app->request->post()["protocolo_id"];
+            $rta            = Protocolo::existeNumeroSecuenciaParamsUpdate($anio,$letra,$nro_secuencia,$protocolo_id);
+        } catch (\Exception $e) {
+            $mensajeError=$e->getMessage();
+        }
+        if($rta){
+            $mensaje="El nro de secuencia {$nro_secuencia} para la letra {$letra} ya existe.";
+        }
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return ['rta'=>$rta,"mensaje"=>$mensaje,"mensajeError"=> $mensajeError];
     }
 
 

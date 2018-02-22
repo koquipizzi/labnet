@@ -251,7 +251,24 @@ class Protocolo extends \yii\db\ActiveRecord
         return $nro_secuencia;
     } 
 
-    public function existeNumeroSecuencia(){
+    public function existeNumeroSecuenciaUpdate(){
+        $modelProtocolo= Protocolo::find()->where(["anio"=>$this->anio,"nro_secuencia"=>$this->nro_secuencia, "letra"=>$this->letra])->one();
+        $existe=false;
+        if(!empty( $modelProtocolo) ){
+            $existe=true;
+        }
+
+        $modelProtocolo= Protocolo::find()->where(["anio"=>$this->anio,"nro_secuencia"=>$this->nro_secuencia, "letra"=>$this->letra, "id"=>$this->id])->one();
+        if(!empty( $modelProtocolo) ){
+            $existe=false;
+        }
+
+        return $existe;
+    }
+
+
+    public function existeNumeroSecuencia($anio =null,$letra = null,$nro_secuencia = null){
+
         $modelProtocolo= Protocolo::find()->where(["anio"=>$this->anio,"nro_secuencia"=>$this->nro_secuencia, "letra"=>$this->letra])->one();
         $existe=false;
         if(!empty( $modelProtocolo) ){
@@ -259,6 +276,32 @@ class Protocolo extends \yii\db\ActiveRecord
         }
         return $existe;
     }
+    public static function existeNumeroSecuenciaParams($anio,$letra,$nro_secuencia){
+        if( empty($anio) || empty($letra) || empty($nro_secuencia)){
+              throw new \yii\base\Exception("Error, parametros falntantes"); 
+        }
+        $modelProtocolo= Protocolo::find()->where(["anio"=>$anio,"nro_secuencia"=>$nro_secuencia, "letra"=>$letra])->one();
+        $existe=false;
+        if(!empty( $modelProtocolo) ){
+            $existe=true;
+        }
+        return $existe;
+    }   
+   public static function existeNumeroSecuenciaParamsUpdate($anio,$letra,$nro_secuencia,$protocolo_id){
+        if( empty($anio) || empty($letra) || empty($nro_secuencia)){
+              throw new \yii\base\Exception("Error, parametros falntantes"); 
+        }
+        $modelProtocolo= Protocolo::find()->where(["anio"=>$anio,"nro_secuencia"=>$nro_secuencia, "letra"=>$letra])->one();
+        $existe=false;
+        if(!empty( $modelProtocolo) ){
+            $existe=true;
+        }
+              $modelProtocolo= Protocolo::find()->where(["anio"=>$anio,"nro_secuencia"=>$nro_secuencia, "letra"=>$letra,"id"=>$protocolo_id])->one();
+        if(!empty( $modelProtocolo) ){
+            $existe=false;
+        }
+        return $existe;
+    }         
 
     public function  getPacientePrestadoraArray(){
         //el paciente prestadora configurado
@@ -308,5 +351,17 @@ class Protocolo extends \yii\db\ActiveRecord
     }
 
 
+    public function eliminarInformes(){        
+        $modelInformes= Informe::find()->where(["Protocolo_id"=>$this->id])->all();
+        try{   
+            if(!empty($modelInformes) ) {          
+                foreach ($modelInformes as $modelInformesArray => $inf) {
+                    Informe::eliminarInforme($inf->id);                    
+                }
+            }
+        }catch (Exception $e) {
+            throw new Exception("Error, delete protocolo's informes . Protocolo id {$this->id} ");
+        }
+    }
 
 }

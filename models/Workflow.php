@@ -1,7 +1,7 @@
 <?php
 
 namespace app\models;
-
+use yii\db\Query;
 use Yii;
 
 /**
@@ -135,5 +135,28 @@ class Workflow extends \yii\db\ActiveRecord
     public static function estadoPausado(){
     	return 4;
     }
+
+    public static function getTieneEstadoEntregado($informe_id)
+    {        
+        $rta=false;
+        $query = new Query;
+        $query->select(['Workflow.id'])  
+            ->from('Workflow')
+            ->join(	'join', 
+                    'Estado', 
+                    'Workflow.Estado_id=Estado.id'
+            )
+            ->where(["Workflow.Informe_id"=>$informe_id,"Estado.estado_final"=>1]);
+                
+        $command = $query->createCommand();
+        $data = $command->queryAll();	
+        if(!empty($data) ){
+            $rta=true;
+        }
+
+        return $rta;
+    }
+
+    
     
 }

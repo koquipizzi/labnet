@@ -441,12 +441,10 @@ class Informe extends \yii\db\ActiveRecord
     public static function eliminarInforme($informe_id){
         
         $modelInforme   = Informe::find()->where(["id"=>$informe_id])->one();
-        //   $modelInforme->delete();
         //ELIMINA WORKFLOW
         $modelsWorkflow    = $modelInforme->workflows;
         if(!empty($modelsWorkflow)){
             foreach ($modelsWorkflow as $key => $workflows) {
-                // var_dump( $modelsWorkflow );die("modelsWorkflow");
                 if(!$workflows->delete()){
                         throw new \yii\base\Exception("Error to delete Workflow with id {$workflows->id}.");
                 }
@@ -456,14 +454,12 @@ class Informe extends \yii\db\ActiveRecord
         $modelsInformeNomenclador    = $modelInforme->informeNomenclador;
         if(!empty($modelsInformeNomenclador)){
             foreach ($modelsInformeNomenclador as $key => $infNom) {
-                        // var_dump( $modelsInformeNomenclador );die("modelsInformeNomenclador");
                 if(!$infNom->delete()){
                     throw new \yii\base\Exception("Error to delete InformeNomenclador with id {$infNom->id}.");
                 }
             }
         }
          Informe::deleteAll(["id"=>$modelInforme->id]);
-        // $modelInforme->delete();
     }
 
 

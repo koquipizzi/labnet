@@ -27,6 +27,7 @@ use Da\QrCode\QrCode;
 use yii\web\Response;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
+use \Exception;
 
 
 /**
@@ -678,9 +679,13 @@ class ProtocoloController extends Controller
         $msj='';
         $protocolo=$this->findModel($id);
         try{
+        //    if($protocolo->tieneInformesEntregados()[0] == true){
+        //         throw new Exception("No se peude eliminar, el protocolo tiene informes  ");
+        //    }
+            $protocolo->tieneInformesEntregados();
             $protocolo->eliminarInformes();            
-            $pdeleted=$protocolo->delete(); 
-        }catch (Exception $e) {
+            $pdeleted=$protocolo->delete();            
+        }catch (\Exception $e) {
             $respuesta='error';
             $msj=$e;
         }       

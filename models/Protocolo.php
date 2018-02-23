@@ -6,6 +6,7 @@ use Yii;
 use app\models\Informe;
 use app\models\PacientePrestadora;
 use \Datetime;
+use \Exception;
 use yii\db\Query;
 /**
  * This is the model class for table "Protocolo".
@@ -239,7 +240,7 @@ class Protocolo extends \yii\db\ActiveRecord
         $data = $command->queryAll();
 
         if(empty($data) || !is_array($data) || ( !array_key_exists("anio",$data[0]) && !array_key_exists("nro_secuencia",$data[0]) ) ){
-             throw new \yii\base\Exception("Elija el valor inicial para Nro.Secuencia de la letra {$letra}.");         
+             throw new \yii\base\Exception("Elija el valor inicial para Nro.Secuencia de la letra {$letra} en el año {$anio}, sino comenzara en cero.");         
         }
         $nro_secuencia=$data[0]["nro_secuencia"];
         if($data[0]["anio"]<$anio){
@@ -363,5 +364,40 @@ class Protocolo extends \yii\db\ActiveRecord
             throw new Exception("Error, delete protocolo's informes . Protocolo id {$this->id} ");
         }
     }
+
+    public function tieneInformesEntregados(){
+        $modelInformes= Informe::find()->where(["Protocolo_id"=>$this->id])->all();
+        $rta=true;
+        try{   
+            if(!empty($modelInformes) ) {          
+                foreach ($modelInformes as $modelInformesArray => $inf) {
+                  if(Workflow::getTieneEstadoEntregado($inf->id)){
+                       throw new Exception("No se puede eliminar el protocolo. Tiene informes entregados");
+                  }              
+                }
+            }
+        }catch (Exception $e) {
+            throw new Exception($e);
+        }
+        return $rta;          
+    }    
+
+    // public function tieneInformesEntregados(){
+    //     $modelInformes= Informe::find()->where(["Protocolo_id"=>$this->id])->all();
+    //     $rta=false;
+    //     $msj="";  
+    //     if(!empty($modelInformes) ) {          
+    //         foreach ($modelInformes as $modelInformesArray => $inf) {
+    //             if(Workflow::getTieneEstadoEntregado($inf->id)){
+    //                 $msj="No se puede eliminar el protocolo. Tiene informes entregados";
+    //                 $rta=true;
+    //             }              
+    //         }
+    //     }
+    //     return [$rta,$msj];
+          
+    // }
+
+
 
 }

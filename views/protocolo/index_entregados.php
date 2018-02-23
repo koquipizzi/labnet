@@ -193,6 +193,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                     'data-id'=> "$data",
                                                                     'data-protocolo'=> "$data",
                                                                     'target'=>'_blank',
+                                                                    'data-pjax' => 0                                                                    
                                                                 ])." ".Html::a("<i class='fa fa-envelope'></i>",$url,[
                                                                     'title' => Yii::t('app', 'Enviar por Mail'),
                                                                     'class'=>'btn btn-primary btn-xs finalizado ',

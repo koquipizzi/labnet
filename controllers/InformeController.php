@@ -586,6 +586,7 @@ class InformeController extends Controller {
 						return ['rta'=>'error', 'message'=>'Error, el paciente no tiene mail.'];die();
 					}  	
 				}
+							
 		}   
 	
       

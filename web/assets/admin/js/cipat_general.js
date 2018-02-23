@@ -32,7 +32,7 @@ $(document).on('ready', function () {
                 //   $("#modal").modal("toggle");
                     $.pjax.reload({container:"#new_localidad"}); //for pjax update
                     var n = noty({
-                        text: ' agregada con éxito!',
+                        text: ' Localidad agregada con éxito!',
                         type: 'success',
                         class: 'animated pulse',
                         layout: 'topRight',
@@ -44,7 +44,7 @@ $(document).on('ready', function () {
                 }
                 else {
                     var n = noty({
-                        text: response.message +' agregada con éxito!',
+                        text: response.message +' Localidad agregada con éxito!',
                         type: 'error',
                         class: 'animated pulse',
                         layout: 'topRight',
@@ -90,7 +90,7 @@ $(document).on('ready', function () {
                 //   $("#modal").modal("toggle");
                     $.pjax.reload({container:"#new_medico"}); //for pjax update
                     var n = noty({
-                        text: ' agregada con éxito!',
+                        text: ' Medico agregado con éxito!',
                         type: 'success',
                         class: 'animated pulse',
                         layout: 'topRight',
@@ -102,7 +102,7 @@ $(document).on('ready', function () {
                 }
                 else {
                     var n = noty({
-                        text: response.message +' agregada con éxito!',
+                        text: response.message +' Medico agregado con éxito!',
                         type: 'error',
                         class: 'animated pulse',
                         layout: 'topRight',
@@ -150,7 +150,7 @@ $(document).on('ready', function () {
                 if (response.rta == "ok"){
                     $.pjax.reload({container:"#new_procedencia"}); //for pjax update
                     var n = noty({
-                        text: ' agregada con éxito!',
+                        text: ' Procedencia agregada con éxito!',
                         type: 'success',
                         class: 'animated pulse',
                         layout: 'topRight',
@@ -162,7 +162,7 @@ $(document).on('ready', function () {
                 }
                 else {
                     var n = noty({
-                        text: response.message +' agregada con éxito!',
+                        text: response.message +' Procedencia agregada con éxito!',
                         type: 'error',
                         class: 'animated pulse',
                         layout: 'topRight',
@@ -211,7 +211,7 @@ $(document).on('ready', function () {
                     //$.pjax.reload({container:"#new_prestadora"}); //for pjax update       
                     $(".selectoProcedencia").append("<option value="+response.data_id+">"+response.data_nombre+"</option>");
                     var n = noty({
-                        text: ' agregada con éxito!',
+                        text: ' Prestadora agregada con éxito!',
                         type: 'success',
                         class: 'animated pulse',
                         layout: 'topRight',
@@ -223,7 +223,7 @@ $(document).on('ready', function () {
                 }
                 else {
                     var n = noty({
-                        text: response.message +' agregada con éxito!',
+                        text: response.message +'Prestadora agregada con éxito!',
                         type: 'error',
                         class: 'animated pulse',
                         layout: 'topRight',
@@ -251,6 +251,56 @@ $(document).on('ready', function () {
 
 /********************************************************************************************************* */
 
+
+ $('.add-item').click(function() {
+       $.ajax({
+            url    : "prestadoras/updatedataselect",
+            type   : "post",
+            data   : form.serialize(),
+            success: function (response) 
+            {
+
+                if (response.rta == "ok"){     
+                    $.each(response.data, function(key, value) {   
+                    $('.selectoProcedencia  :not(:selected)').append($("<option></option>")
+                                    .attr("value",key)
+                                    .text(value)); 
+                     });              
+               
+                    var n = noty({
+                        text: ' agregada con éxito!',
+                        type: 'success',
+                        class: 'animated pulse',
+                        layout: 'topRight',
+                        theme: 'relax',
+                        timeout: 3000, // delay for closing event. Set false for sticky notifications
+                        force: false, // adds notification to the beginning of queue when set to true
+                        modal: false, // si pongo true me hace el efecto de pantalla gris
+                    });
+                }
+                else {
+                    var n = noty({
+                        text: response.message +' agregada con éxito!',
+                        type: 'error',
+                        class: 'animated pulse',
+                        layout: 'topRight',
+                        theme: 'relax',
+                        timeout: 3000, // delay for closing event. Set false for sticky notifications
+                        force: false, // adds notification to the beginning of queue when set to true
+                        modal: false, // si pongo true me hace el efecto de pantalla gris
+                    });
+                }
+               
+            },
+            error  : function () 
+            {
+                console.log("internal server error");
+            }
+        });
+        return false;
+      
+ });
+    
 
 
 

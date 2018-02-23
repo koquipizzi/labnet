@@ -492,8 +492,9 @@ class ProtocoloController extends Controller
         $modelsInforme=  $model->informes;
         $fecha = date_create ();
         $fecha = date_format ( $fecha, 'd-m-Y H:i:s' );
+        $anio=date("Y");
         if ($model->load(Yii::$app->request->post())) {
-            if($model->existeNumeroSecuencia()){
+            if($model->existeNumeroSecuenciaUpdate()){               
                 if(!empty($model->letra)){
                     try{
                         $mostrarMensajeViewnNroSecuencia="El Nro.Secuencia <strong> {$model->nro_secuencia}</strong> ya existe. ";
@@ -740,7 +741,7 @@ class ProtocoloController extends Controller
             $letra          = Yii::$app->request->post()["letra"];
             $anio           = Yii::$app->request->post()["anio"];
             $nro_secuencia  = Yii::$app->request->post()["nro_secuencia"];
-            $rta            = Protocolo::existeNumeroSecuenciaParamsUpdate($anio,$letra,$nro_secuencia);
+            $rta            = Protocolo::existeNumeroSecuenciaParams($anio,$letra,$nro_secuencia);
         } catch (\Exception $e) {
             $mensajeError=$e->getMessage();
         }

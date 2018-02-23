@@ -288,7 +288,7 @@ class Protocolo extends \yii\db\ActiveRecord
         return $existe;
     }   
    public static function existeNumeroSecuenciaParamsUpdate($anio,$letra,$nro_secuencia,$protocolo_id){
-        if( empty($anio) || empty($letra) || empty($nro_secuencia)){
+        if( empty($anio) || empty($letra) || empty($nro_secuencia) || empty($protocolo_id)){
               throw new \yii\base\Exception("Error, parametros falntantes"); 
         }
         $modelProtocolo= Protocolo::find()->where(["anio"=>$anio,"nro_secuencia"=>$nro_secuencia, "letra"=>$letra])->one();

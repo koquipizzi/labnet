@@ -720,7 +720,7 @@ class ProtocoloSearch extends Protocolo
                         Paciente.nombre as nombre,
                         Estudio.nombre as nombre_estudio,
                         Workflow.Estado_id,
-                        u.username as ultimo_propietario			
+                        CONCAT(UCASE(LEFT(u.username, 1)),SUBSTRING(u.username, 2)) as ultimo_propietario				
         ';
         $fromTables = '
                 Protocolo
@@ -942,7 +942,7 @@ class ProtocoloSearch extends Protocolo
                 Paciente.nombre as nombre,
                 Estudio.nombre as nombre_estudio,
                 Workflow.Estado_id,
-                u.username as ultimo_propietario		
+                CONCAT(UCASE(LEFT(u.username, 1)),SUBSTRING(u.username, 2)) as ultimo_propietario		
         ';
         $fromTables = '
                 Protocolo

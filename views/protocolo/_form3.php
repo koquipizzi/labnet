@@ -85,6 +85,24 @@ $( document ).ready(function() {
         });
     }); 
 });
+$("#protocolo-nro_secuencia").keydown(function(e) {
+    var numeroSinCeros= parseInt(this.value,10);
+    var digitos = numeroSinCeros.toString().length;
+    if( (digitos>=7) && (e.keyCode != 8) ){
+        return false;
+    }
+    
+});
+
+$("#protocolo-nro_secuencia").keyup(function() {
+    function pad(input, length, padding) { 
+        var str = input + "";
+        return (length <= str.length) ? str : pad( padding + str, length, padding);
+    }
+    var numeroSinCeros=  parseInt(this.value,10);
+    var digitos = numeroSinCeros.toString().length;
+    $("#protocolo-nro_secuencia").val(pad(numeroSinCeros,7,0) );
+ });
 
 
 ';

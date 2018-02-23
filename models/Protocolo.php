@@ -88,6 +88,8 @@ class Protocolo extends \yii\db\ActiveRecord
             'Pacienteprestadora' => Yii::t('app', 'Datos Paciente'),
             'numero_hospitalario' => Yii::t('app', 'Número Hospitalario'),
             'Codigo' => Yii::t('app', 'Código'),
+            'ultimo_propietario'=>Yii::t('app', 'Propietario Actual'),
+            'nro_documento'=>Yii::t('app', 'Dni'),
 
         ];
     }
@@ -185,7 +187,28 @@ class Protocolo extends \yii\db\ActiveRecord
         return $d;
     }
 
-
+      /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLastUser()
+    {
+       $user="No tiene";
+       $informeEstado= $this->findBySql("
+    			select u.username
+                from view_informe_ult_workflow vi
+                     join 
+                     Workflow w
+                     ON(vi.id=w.id)
+                     join 
+                     user u
+                     ON(w.Responsable_id=u.id)
+                where vi.informe_id=$this->id")->asArray()->one();
+        if(!empty($informeEstado)){
+            $user=$informeEstado['username'];
+        }      
+        return $user; 
+    }
+    
     public function getCodigo()
     {
     	$secuncia = sprintf("%07d", $this->nro_secuencia);

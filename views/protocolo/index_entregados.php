@@ -112,7 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                  [
                                                     'label' => 'Nro Protocolo',
                                                     'attribute' => 'codigo',
-                                                    'contentOptions' => ['style' => 'width:10%;'],
+                                                    'contentOptions' => ['style' => 'width:7%;'],
                                                 ],
 
                                                 [
@@ -128,10 +128,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     }
                                                 ],
                                                 [
-                                                    'label' => 'Documento',
                                                     'attribute'=>'nro_documento',
-                                                    'contentOptions' => ['style' => 'width:10%;'],
+                                                    'contentOptions' => ['style' => 'width:6%;'],
                                                 ],
+                                                [
+                                                    'attribute'=>'ultimo_propietario',
+                                                    'contentOptions' => ['style' => 'width:10%;'],
+                                                ],                                                 
                                                 [
                                                       'label' => 'Informes',
                                                       'format' => 'raw',

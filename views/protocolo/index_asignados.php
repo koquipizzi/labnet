@@ -99,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'label' => 'Nro Protocolo',
                             'attribute' => 'codigo',
-                            'contentOptions' => ['style' => 'width:10%;'],
+                            'contentOptions' => ['style' => 'width:7%;'],
                         ],
                         [
                             'label' => 'Paciente',
@@ -114,9 +114,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             }
                         ],
                         [
-                            'label' => 'Documento',
                             'attribute' => 'nro_documento',
-                            'contentOptions' => ['style' => 'width:10%;'],
+                            'contentOptions' => ['style' => 'width:6%;'],
                         ],
                         [
                             'label' => 'Informes',

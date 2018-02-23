@@ -439,7 +439,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     'contentOptions' => ['style' => 'width:20%;'],
                                                 ],
                                                 [
-                                                    'label' => 'Documento',
                                                     'attribute'=>'nro_documento', 
                                                     'contentOptions' => ['style' => 'width:20%;'],
                                                 ],

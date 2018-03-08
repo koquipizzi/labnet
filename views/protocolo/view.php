@@ -19,17 +19,14 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_protocolo.js', ['depends
 
 <div class="box box-info">
     <div class="box-header with-border">
-        <h3 class="box-title"><?= Html::encode($this->title) ?></h3>        
+        <h3 class="box-title"><?= Html::encode($this->title) ?></h3>           
         <div class="pull-right">
-            <?php                            
-                $url = 'index.php?r=paciente/index';
-                echo Html::a('<i class="fa fa-arrow-circle-left"></i> Volver', Yii::$app->request->referrer, [
-                            'title' => Yii::t('app', 'Volver'),
-                            'class'=>'btn btn-primary btn-sm', 
-                        
-                ]);
-            ?>    
-        </div>                                                          
+            <?php 
+               $url = Url::to(['post/view', 'id' => 100]);
+            ?>
+            <?= Html::a('<i class="fa fa-arrow-left"></i> Volver', Yii::$app->request->referrer, ['class'=>'btn btn-primary']) ?>
+            <?= Html::a('<i class="fa fa-pencil"></i> Editar ', ['protocolo/update', 'id'=>$model->id], ['class'=>'btn btn-primary']) ?>
+        </div>                                                              
     </div>
     <div class="panel-body">
         <div class="row">                   
@@ -45,11 +42,14 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_protocolo.js', ['depends
                 'model' => $model,
                 'attributes' =>
                     [
-
+                        [
+                            'label'=>'Fecha de Entrada',
+                            'value'=>$model->getFechaEntradaformateada(),
+                        ],      
                         [
                             'label'=>'Fecha de Entrega',
-                            'value'=>$model->getFechaEntrega(),
-                        ],
+                            'value'=>$model->getFechaEntregaformateada(),
+                        ],                  
                         [
                             'label'=>'Médico',
                             'value'=>$model->medico->nombre
@@ -59,6 +59,17 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_protocolo.js', ['depends
                             'label'=>'Procedencia',
                             'value'=>$model->procedencia->descripcion
                         ],
+
+                        [
+                            'attribute'=>'Cobertura',
+                            'value'=>$model->getCobertura()
+                        ],    
+                        [
+                            'attribute'=>'Facturar A',
+                            'value'=>$model->getNombreFacturarA()
+                        ],                                                
+                        
+                        'numero_hospitalario',
                         'observaciones',
                     ],
             ]) ?>

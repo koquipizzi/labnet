@@ -95,8 +95,9 @@ $this->registerJs($js2);
                     <div class="pull-right">
                                          
                             <?php 
-                                    echo  "<button data-toggle='tooltip' title='' id='btn_delete' class='btn btn-primary' value='{$model->id}' >".Yii::t('app', 'Delete')."</button>";         
+                                echo  "<button data-toggle='tooltip' title='' id='btn_delete' class='btn btn-primary' value='{$model->id}' >".Yii::t('app', 'Delete')."</button>";         
                             ?>      
+                            <?= Html::a('<i class="fa fa-arrow-left"></i> Volver', Yii::$app->request->referrer, ['class'=>'btn btn-primary']) ?>
                             <?php //  echo "<input id='inputHiddenDelete' hidden type='text' value='{$visualizarDelete}'>" ?> 
                           
                         <button class="btn btn-sm" data-action="collapse" data-container="body" data-toggle="tooltip" data-placement="top" data-title="Collapse"><i class="fa fa-angle-up"></i></button>

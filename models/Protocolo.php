@@ -129,6 +129,22 @@ class Protocolo extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Prestadoras::className(), ['id' => 'FacturarA_id']);
     }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNombreFacturarA()
+    {
+        $prestadora = Prestadoras::find()->where(['id' => $this->FacturarA_id])->one();
+        $nombre="No Tiene";
+        if(empty($prestadora)){
+            throw new \yii\base\Exception( "Error, model prestadora." );
+        }
+        if(empty($prestadora->descripcion)){
+            throw new \yii\base\Exception( "Error, model prestadora attribute descripcion." );
+        }        
+        $nombre=$prestadora->descripcion;
+    }
+
 
     /**
      * @return \yii\db\ActiveQuery
@@ -228,6 +244,15 @@ class Protocolo extends \yii\db\ActiveRecord
         $arr = explode('-',$fecha);
         return $arr[2].'-'.$arr[1].'-'.$arr[0];
     }
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFechaEntregaformateada()
+    {
+        $date = new DateTime($this->fecha_entrega);
+        $fecha= $date->format('d/m/Y');
+        return $fecha;
+    }
 
 
     public function getFechaEntrada()
@@ -239,9 +264,19 @@ class Protocolo extends \yii\db\ActiveRecord
 
     public function getFechaEntregaOrdenada()
     {
-        $fecha= $this->fecha_entrega;
+        $fecha= $this->fecha_entrada;
         $arr = explode('-',$fecha);
         return $arr[2].'-'.$arr[1].'-'.$arr[0];
+    }
+
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFechaEntradaformateada()
+    {
+        $date = new DateTime($this->fecha_entrada);
+        $fecha= $date->format('d/m/Y');
+        return $fecha;
     }
 
 

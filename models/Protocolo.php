@@ -141,8 +141,10 @@ class Protocolo extends \yii\db\ActiveRecord
         }
         if(empty($prestadora->descripcion)){
             throw new \yii\base\Exception( "Error, model prestadora attribute descripcion." );
-        }        
-        $nombre=$prestadora->descripcion;
+        } else{
+           $nombre=$prestadora->descripcion; 
+        }       
+        return $nombre;
     }
 
 

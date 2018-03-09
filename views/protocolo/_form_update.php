@@ -37,6 +37,62 @@ if (!$session->isActive)
     $session->open();
 
 $js = '
+
+
+
+
+ $(".dynamicform_wrapper").on("beforeDelete", function(e, item) {        
+        var informeId= $(item).find(".id_informe_hidden").val();
+        var btn=$(item).find(".remove-item");
+         console.log(btn);
+        var permitido;
+        permitido=$( ".remove-item" ).hasClass( "permitidoBorrar" );
+        if(permitido!=true){
+            $.ajax({
+                url    : "index.php?r=informe/fue-modificado",
+                type   : "post",
+                data   : {
+                            "informeId":informeId,
+                        },
+                success: function (response)
+                {
+                    console.log(response);
+                    console.log(response.rta);
+                    if(response.rta=="ok"){
+                       var n = noty
+                            ({
+                                text:   "El inofme no puede eliminarse debido a que el mismo ya ha sido modificado.",
+                                type:   "error",
+                                class:  "animated pulse",
+                                layout: "topCenter",
+                                theme:  "relax",
+                                timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                force:  false, // adds notification to the beginning of queue when set to true
+                                modal:  false, // si pongo true me hace el efecto de pantalla gris
+                                // maxVisible : 10
+                            });  
+                    } 
+                    if(response.rta=="error"){                     
+                        $(btn).addClass( "permitidoBorrar" );
+                        $(btn).click();
+
+                    } 
+
+                },
+            });
+        }
+        if(permitido==true){
+               return true;
+        }
+         return false;
+    });
+
+
+
+
+
+
+
 jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
     jQuery(".dynamicform_wrapper .panel-title-address").each(function(index) {
         jQuery(this).html("Estudio: " + (index + 1))
@@ -480,7 +536,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                         $dataEstudio=ArrayHelper::map(Estudio::find()->asArray()->all(), 'id', 'descripcion');
                                         // necessary for update action.
                                         if (!$modelInforme->isNewRecord) {
-                                            echo Html::activeHiddenInput($modelInforme, "[{$index}]id");
+                                            echo Html::activeHiddenInput($modelInforme, "[{$index}]id",['class'=> 'id_informe_hidden']);
                                         }
                                     ?>
                                     <div class="col-md-6" style="text-align: right;">

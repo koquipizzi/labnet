@@ -687,7 +687,7 @@ class ProtocoloController extends Controller
             $pdeleted=$protocolo->delete();            
         }catch (\Exception $e) {
             $respuesta='error';
-            $msj=$e;
+            $msj="El protocolo no pudo eliminarse. Esto puede ser causa de que los informes del mismo ya fueron modificados.";
         }       
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return ['rta'=>$respuesta,"msj"=>$msj];

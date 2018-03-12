@@ -70,62 +70,20 @@ use yii\helpers\Html;
         <div class="pap_labels">
             CITOLOGÍA HORMONAL
         </div>   
-        <div class="contenedorInformePap">   
-                 <div class="labeInformePap">   
-                   CALIDAD DE MUESTRA
-                  </div>    
-                 <div class="camposInformePap">
-                      <?php echo $model->calidad ? Leyenda::findOne(['id' => $model->calidad ])->texto : ""  ?>
-                 </div>     
-       </div> 
-        <div class="contenedorInformePap">   
-                 <div class="labeInformePap">   
-                   ASPECTO
-                  </div>    
-                 <div class="camposInformePap">
-                     <?php echo $model->aspecto ? Leyenda::findOne(['id' => $model->aspecto ])->texto : ""  ?>
-                 </div>     
-       </div>     
-        <div class="contenedorInformePap">   
-                 <div class="labeInformePap">   
-                   FLORA
-                  </div>    
-                 <div class="camposInformePap">
-                   <?php echo $model->flora ? Leyenda::findOne(['id' => $model->flora ])->texto : ""  ?>
-                 </div>     
-       </div>        
-        <div class="contenedorInformePap">   
-                <div class="labeInformePap">   
-                   LEUCOCITOS
-                </div>    
-                <div class="camposInformePap">
-                   <?php echo Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->leucositos])->texto  ?>
-                </div>     
-       </div>
-        <div class="contenedorInformePap">   
-                 <div class="labeInformePap">   
-                   HEMATIES
-                  </div>    
-                 <div class="camposInformePap">
-                   <?php echo Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->hematies])->texto ?>
-                 </div>     
-        </div>           
-        <div class="contenedorInformePap">   
-                 <div class="labeInformePap">   
-                   OTROS ELEMENTOS
-                  </div>    
-                 <div class="camposInformePap">
-                   <?php echo $model->otros ? Leyenda::findOne(['id' => $model->otros ])->texto : ""  ?>
-                 </div>     
-       </div>         
-        <div class="contenedorInformePap">   
-                 <div class="labeInformePap">   
-                   MICROORGANISMOS
-                  </div>    
-                 <div class="camposInformePap">
-                   <?php echo $model->microorganismos ? Leyenda::findOne(['id' => $model->microorganismos ])->texto : ""  ?>
-                 </div>     
-       </div>         
+       
+        <div class="pap_desc">
+            <table class="pap_desc">
+                <tr><td class="pap_labels_cito">CALIDAD DE MUESTRA</td> <td  class="pap_desc_cito"><?php echo $model->calidad ? Leyenda::findOne(['id' => $model->calidad ])->texto : ""  ?></td></tr>
+                <tr><td class="pap_labels_cito">ASPECTO</td>            <td  class="pap_desc_cito"><?php echo $model->aspecto ? Leyenda::findOne(['id' => $model->aspecto ])->texto : ""  ?></td></tr>
+                <tr><td class="pap_labels_cito">FLORA</td>              <td  class="pap_desc_cito"><?php echo $model->flora ? Leyenda::findOne(['id' => $model->flora ])->texto : ""  ?></td></tr>
+                <tr><td class="pap_labels_cito">LEUCOCITOS</td>         <td  class="pap_desc_cito"><?php echo $model->leucositos ? Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->leucositos])->texto : "No se presentan"?></td></tr>
+                <tr><td class="pap_labels_cito">HEMATIES</td>           <td  class="pap_desc_cito"><?php echo $model->hematies ? Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->hematies])->texto : "No se presentan" ?></td></tr>
+                <tr><td class="pap_labels_cito">OTROS ELEMENTOS</td>    <td  class="pap_desc_cito"><?php echo $model->otros ? Leyenda::findOne(['id' => $model->otros ])->texto : ""  ?></td></tr>
+                <tr><td class="pap_labels_cito">MICROORGANISMOS</td>    <td  class="pap_desc_cito"><?php echo $model->microorganismos ? Leyenda::findOne(['id' => $model->microorganismos ])->texto : ""  ?></td></tr>
+            </table>
+            
+        </div>      
+           
 
         <div class="contenedorInformePap">   
                  <div class="labeInformePap">   

@@ -35,7 +35,7 @@ use yii\helpers\ArrayHelper;
                                 'placement' => PopoverX::ALIGN_TOP,
                                 'id'=> 'popNomenclador',
                                 'toggleButton' => ['label'=>'', 'class'=>' fa fa-plus'],
-                                'header' => '<!--i class="glyphicon glyphicon-lock"></i-->Agregar nomenclador',
+                                'header' => 'Agregar nomenclador',
                                 'footer'=> Html::a('<span class="btn btn-info click"> Agregar</span>', $url)//Html::Button('Agregar', ['class'=>'btn btn-sm btn-primary click'])// .
                                         // Html::resetButton('Cancelar', ['class'=>'btn btn-sm btn-default'])
                             ]);

@@ -35,7 +35,8 @@ use mdm\admin\components\Helper;
 
         <?php echo dmstr\widgets\Menu::widget(
             [
-                'options' => ['class' => 'sidebar-menu', 'data-widget' => 'tree'],
+                'options' => ['class' => 'sidebar-menu', 
+                'data-widget' => 'tree'],
                 'items' => [
                     
                     ['label' => 'LabNET', 'options' => ['class' => 'header']],
@@ -54,6 +55,7 @@ use mdm\admin\components\Helper;
                         'icon' => 'fa fa-group',
                         'url' => '#',
                         'class'=>'treeview',
+                        'data-toggle'=>"push-menu",
                         'items' => [
                             ['label' => 'Pacientes','icon' => 'user-circle', 'url' => ['/paciente'],],
                             ['label' => 'Médicos', 'icon' => 'user-md', 'url' => ['/medico'],],
@@ -104,6 +106,8 @@ use mdm\admin\components\Helper;
                         'label' => 'Configuración',
                         'icon' => 'cogs',
                         'url' => '#',
+                        'class'=>'treeview',
+                        'data-toggle'=>"push-menu",
                         'items' => [
                             ['label' => 'Nomenclador', 'icon' => 'book', 'url' => ['/nomenclador'],],
                             ['label' => 'Coberturas/OS', 'icon' => 'user-md', 'url' => ['/prestadoras/index'],],

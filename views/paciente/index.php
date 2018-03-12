@@ -28,8 +28,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'options'=>array('class'=>'table table-striped table-lilac'),
         'filterModel' => $searchModel,
         'columns' => [
-        //    ['class' => 'yii\grid\SerialColumn'],
-            'nombre',
+            [
+                'label'=>'Nombre',
+                'attribute' => 'nombre',
+                'format' => 'raw',
+                'value'=>function ($data) {
+                    return Html::a($data->nombre, Url::to(['paciente/view', 'id'=>$data->id]), [
+                        'title' => Yii::t('app', 'Ver información'),
+                        'class'=>'',    
+                    ]);
+                },
+            ],
             'nro_documento',
             [
                 'label' => 'Teléfono',

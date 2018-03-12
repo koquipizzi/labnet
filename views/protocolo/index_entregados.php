@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php
                 $this->registerCss(".hasDatepicker {
                                     width:90px;}");
-                Pjax::begin(['id' => 'entregados']);
+               // Pjax::begin(['id' => 'entregados']);
                 echo GridView::widget([
 //                                    'id'=>'asignados',
                     'dataProvider' => $dataProvider_entregados,
@@ -269,7 +269,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 ]
                                         ]);
                                     ?>
-                <?php Pjax::end() ?>
+                <?php //Pjax::end() ?>
 
             </div>
             </p>

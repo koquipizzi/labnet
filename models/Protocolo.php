@@ -5,7 +5,9 @@ use Empathy\Validators\DateTimeCompareValidator;
 use Yii;
 use app\models\Informe;
 use app\models\PacientePrestadora;
- use \Datetime;
+use \Datetime;
+use \Exception;
+use yii\db\Query;
 /**
  * This is the model class for table "Protocolo".
  *
@@ -50,17 +52,17 @@ class Protocolo extends \yii\db\ActiveRecord
         return [
                     [['nro_secuencia', 'Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id','numero_hospitalario'], 'integer'],
                     [['Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id','fecha_entrega'],'required'],
+                    [['letra','nro_secuencia'],'required'],
                     [['anio'], 'string', 'max' => 4],
                     [['letra'], 'string', 'max' => 1],
-        //            [['nombre'], 'string'],
                     [['registro'], 'string', 'max' => 45],
                     [['observaciones'], 'string', 'max' => 255],
                     [['Medico_id'], 'exist', 'skipOnError' => true, 'targetClass' => Medico::className(), 'targetAttribute' => ['Medico_id' => 'id']],
                     [['Paciente_prestadora_id'], 'exist', 'skipOnError' => true, 'targetClass' => PacientePrestadora::className(), 'targetAttribute' => ['Paciente_prestadora_id' => 'id']],
                     [['FacturarA_id'], 'exist', 'skipOnError' => true, 'targetClass' => Prestadoras::className(), 'targetAttribute' => ['FacturarA_id' => 'id']],
                     [['Procedencia_id'], 'exist', 'skipOnError' => true, 'targetClass' => Procedencia::className(), 'targetAttribute' => ['Procedencia_id' => 'id']],
-                    ['fecha_entrada', DateTimeCompareValidator::className(), 'compareValue' => date('Y-m-d'), 'operator' => '<='],
-                    ['fecha_entrega', DateTimeCompareValidator::className(), 'compareValue' => date('Y-m-d'), 'operator' => '>='],
+                    // ['fecha_entrada', DateTimeCompareValidator::className(), 'compareValue' => date('Y-m-d'), 'operator' => '<='],
+                    // ['fecha_entrega', DateTimeCompareValidator::className(), 'compareValue' => date('Y-m-d'), 'operator' => '>='],
 
             ];
     }
@@ -86,6 +88,8 @@ class Protocolo extends \yii\db\ActiveRecord
             'Pacienteprestadora' => Yii::t('app', 'Datos Paciente'),
             'numero_hospitalario' => Yii::t('app', 'Número Hospitalario'),
             'Codigo' => Yii::t('app', 'Código'),
+            'ultimo_propietario'=>Yii::t('app', 'Propietario Actual'),
+            'nro_documento'=>Yii::t('app', 'Dni'),
 
         ];
     }
@@ -125,6 +129,24 @@ class Protocolo extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Prestadoras::className(), ['id' => 'FacturarA_id']);
     }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNombreFacturarA()
+    {
+        $prestadora = Prestadoras::find()->where(['id' => $this->FacturarA_id])->one();
+        $nombre="No Tiene";
+        if(empty($prestadora)){
+            throw new \yii\base\Exception( "Error, model prestadora." );
+        }
+        if(empty($prestadora->descripcion)){
+            throw new \yii\base\Exception( "Error, model prestadora attribute descripcion." );
+        } else{
+           $nombre=$prestadora->descripcion; 
+        }       
+        return $nombre;
+    }
+
 
     /**
      * @return \yii\db\ActiveQuery
@@ -183,10 +205,31 @@ class Protocolo extends \yii\db\ActiveRecord
         return $d;
     }
 
-
+      /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLastUser()
+    {
+       $user="No tiene";
+       $informeEstado= $this->findBySql("
+    			select u.username
+                from view_informe_ult_workflow vi
+                     join 
+                     Workflow w
+                     ON(vi.id=w.id)
+                     join 
+                     user u
+                     ON(w.Responsable_id=u.id)
+                where vi.informe_id=$this->id")->asArray()->one();
+        if(!empty($informeEstado)){
+            $user=$informeEstado['username'];
+        }      
+        return $user; 
+    }
+    
     public function getCodigo()
     {
-    	$secuncia = sprintf("%06d", $this->nro_secuencia);
+    	$secuncia = sprintf("%07d", $this->nro_secuencia);
         $codigo= substr($this->anio,-2).$this->letra."-".$secuncia;
         return $codigo;
     }
@@ -203,6 +246,15 @@ class Protocolo extends \yii\db\ActiveRecord
         $arr = explode('-',$fecha);
         return $arr[2].'-'.$arr[1].'-'.$arr[0];
     }
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFechaEntregaformateada()
+    {
+        $date = new DateTime($this->fecha_entrega);
+        $fecha= $date->format('d/m/Y');
+        return $fecha;
+    }
 
 
     public function getFechaEntrada()
@@ -214,9 +266,19 @@ class Protocolo extends \yii\db\ActiveRecord
 
     public function getFechaEntregaOrdenada()
     {
-        $fecha= $this->fecha_entrega;
+        $fecha= $this->fecha_entrada;
         $arr = explode('-',$fecha);
         return $arr[2].'-'.$arr[1].'-'.$arr[0];
+    }
+
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFechaEntradaformateada()
+    {
+        $date = new DateTime($this->fecha_entrada);
+        $fecha= $date->format('d/m/Y');
+        return $fecha;
     }
 
 
@@ -228,6 +290,173 @@ class Protocolo extends \yii\db\ActiveRecord
         return $cobertura;
     }
 
+      public function getNextNroSecuenciaByLetra($letra,$anio){
+        $query = new Query;
+        $query	->select(['max(nro_secuencia) as nro_secuencia,anio'])  
+                ->from('Protocolo')                
+                ->where(["Protocolo.letra"=>$letra,"Protocolo.anio"=>$anio])                          
+                ->groupBy(['Protocolo.letra']);
+        $command = $query->createCommand();
+        $data = $command->queryAll();
+
+        if(empty($data) || !is_array($data) || ( !array_key_exists("anio",$data[0]) && !array_key_exists("nro_secuencia",$data[0]) ) ){
+             throw new \yii\base\Exception("Elija el valor inicial para Nro.Secuencia de la letra {$letra} en el año {$anio}, sino comenzara en cero.");         
+        }
+        $nro_secuencia=$data[0]["nro_secuencia"];
+        if($data[0]["anio"]<$anio){
+            $nro_secuencia=sprintf("%07d",0);
+            
+        }else{
+           $nro_secuencia=sprintf("%07d",($nro_secuencia+1) );
+        }  
+        return $nro_secuencia;
+    } 
+
+    public function existeNumeroSecuenciaUpdate(){
+        $modelProtocolo= Protocolo::find()->where(["anio"=>$this->anio,"nro_secuencia"=>$this->nro_secuencia, "letra"=>$this->letra])->one();
+        $existe=false;
+        if(!empty( $modelProtocolo) ){
+            $existe=true;
+        }
+
+        $modelProtocolo= Protocolo::find()->where(["anio"=>$this->anio,"nro_secuencia"=>$this->nro_secuencia, "letra"=>$this->letra, "id"=>$this->id])->one();
+        if(!empty( $modelProtocolo) ){
+            $existe=false;
+        }
+
+        return $existe;
+    }
+
+
+    public function existeNumeroSecuencia($anio =null,$letra = null,$nro_secuencia = null){
+
+        $modelProtocolo= Protocolo::find()->where(["anio"=>$this->anio,"nro_secuencia"=>$this->nro_secuencia, "letra"=>$this->letra])->one();
+        $existe=false;
+        if(!empty( $modelProtocolo) ){
+            $existe=true;
+        }
+        return $existe;
+    }
+    public static function existeNumeroSecuenciaParams($anio,$letra,$nro_secuencia){
+        if( empty($anio) || empty($letra) || empty($nro_secuencia)){
+              throw new \yii\base\Exception("Error, parametros falntantes"); 
+        }
+        $modelProtocolo= Protocolo::find()->where(["anio"=>$anio,"nro_secuencia"=>$nro_secuencia, "letra"=>$letra])->one();
+        $existe=false;
+        if(!empty( $modelProtocolo) ){
+            $existe=true;
+        }
+        return $existe;
+    }   
+   public static function existeNumeroSecuenciaParamsUpdate($anio,$letra,$nro_secuencia,$protocolo_id){
+        if( empty($anio) || empty($letra) || empty($nro_secuencia) || empty($protocolo_id)){
+              throw new \yii\base\Exception("Error, parametros falntantes"); 
+        }
+        $modelProtocolo= Protocolo::find()->where(["anio"=>$anio,"nro_secuencia"=>$nro_secuencia, "letra"=>$letra])->one();
+        $existe=false;
+        if(!empty( $modelProtocolo) ){
+            $existe=true;
+        }
+              $modelProtocolo= Protocolo::find()->where(["anio"=>$anio,"nro_secuencia"=>$nro_secuencia, "letra"=>$letra,"id"=>$protocolo_id])->one();
+        if(!empty( $modelProtocolo) ){
+            $existe=false;
+        }
+        return $existe;
+    }         
+
+    public function  getPacientePrestadoraArray(){
+        //el paciente prestadora configurado
+        $query = new Query;
+        $query->select(['Paciente_prestadora.id, CONCAT(Paciente.nro_documento," (",Paciente.nombre,") ", Prestadoras.descripcion ) descripcion'])  
+            ->from( 'Prestadoras')
+            ->join(	'join', 
+                    'Paciente_prestadora',
+                    'Prestadoras.id=Paciente_prestadora.prestadoras_id'
+            )       
+            ->join(	'join', 
+                    'Paciente',
+                    'Paciente.id=Paciente_prestadora.paciente_id'
+            )                   
+            ->where(["Paciente_prestadora.id"=>$this->Paciente_prestadora_id]);
+                
+        $command = $query->createCommand();
+        $data = $command->queryAll();	
+        $arrayData=array();
+        if( !empty($data) and is_array($data) ){ //and array_key_exists('detallepedidopieza',$data) and array_key_exists('detalle_pedido_id',$data)){
+            foreach ($data as $key => $arrayPacientePrestadora) {
+                 $arrayData[$arrayPacientePrestadora['id']]=$arrayPacientePrestadora['descripcion'];   
+            }
+        }
+        //todas los pacientes prestadoras
+        $query = new Query;
+        $query->select(['Paciente_prestadora.id, CONCAT(Paciente.nro_documento," (",Paciente.nombre,") ", Prestadoras.descripcion ) descripcion'])  
+            ->from( 'Prestadoras')
+            ->join(	'join', 
+                    'Paciente_prestadora',
+                    'Prestadoras.id=Paciente_prestadora.prestadoras_id'
+            )       
+            ->join(	'join', 
+                    'Paciente',
+                    'Paciente.id=Paciente_prestadora.paciente_id'
+            );
+                
+        $command = $query->createCommand();
+        $data = $command->queryAll();	
+        if( !empty($data) and is_array($data) ){ //and array_key_exists('detallepedidopieza',$data) and array_key_exists('detalle_pedido_id',$data)){
+            foreach ($data as $key => $arrayPacientePrestadora) {
+                 $arrayData[$arrayPacientePrestadora['id']]=$arrayPacientePrestadora['descripcion'];   
+            }
+        }        
+
+        return $arrayData;
+    }
+
+
+    public function eliminarInformes(){        
+        $modelInformes= Informe::find()->where(["Protocolo_id"=>$this->id])->all();
+        try{   
+            if(!empty($modelInformes) ) {          
+                foreach ($modelInformes as $modelInformesArray => $inf) {
+                    Informe::eliminarInforme($inf->id);                    
+                }
+            }
+        }catch (Exception $e) {
+            throw new Exception("Error, delete protocolo's informes . Protocolo id {$this->id} ");
+        }
+    }
+
+    public function tieneInformesEntregados(){
+        $modelInformes= Informe::find()->where(["Protocolo_id"=>$this->id])->all();
+        $rta=true;
+        try{   
+            if(!empty($modelInformes) ) {          
+                foreach ($modelInformes as $modelInformesArray => $inf) {
+                  if(Workflow::getTieneEstadoEntregado($inf->id)){
+                       throw new Exception("No se puede eliminar el protocolo. Tiene informes entregados");
+                  }              
+                }
+            }
+        }catch (Exception $e) {
+            throw new Exception($e);
+        }
+        return $rta;          
+    }    
+
+    // public function tieneInformesEntregados(){
+    //     $modelInformes= Informe::find()->where(["Protocolo_id"=>$this->id])->all();
+    //     $rta=false;
+    //     $msj="";  
+    //     if(!empty($modelInformes) ) {          
+    //         foreach ($modelInformes as $modelInformesArray => $inf) {
+    //             if(Workflow::getTieneEstadoEntregado($inf->id)){
+    //                 $msj="No se puede eliminar el protocolo. Tiene informes entregados";
+    //                 $rta=true;
+    //             }              
+    //         }
+    //     }
+    //     return [$rta,$msj];
+          
+    // }
 
 
 

@@ -586,6 +586,7 @@ class InformeController extends Controller {
 						return ['rta'=>'error', 'message'=>'Error, el paciente no tiene mail.'];die();
 					}  	
 				}
+							
 		}   
 	
       
@@ -1256,5 +1257,19 @@ class InformeController extends Controller {
 	
 
 	
+  public function actionFueModificado(){
+        $respuesta='error';
+		$msj="";
+         if( is_array(Yii::$app->request->post()) && array_key_exists('informeId',Yii::$app->request->post())){
+            $informeId= Yii::$app->request->post()['informeId'];
+			if(Workflow::getTieneEstadoEntregado($informeId)){
+				$respuesta="ok";
+				$msj="El Estudio no puede eliminarse porque el mismo ha tenido modificaciones.";			
+			} 
+
+         }
+          \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return ['rta'=>$respuesta, 'message'=>$msj];
+    }
 	
 }

@@ -11,6 +11,21 @@ use xj\bootbox\BootboxAsset;
 BootboxAsset::register($this);
 $this->title = Yii::t('app', 'Estudios');
 $this->params['breadcrumbs'][] = $this->title;
+
+$js = '
+$( document ).ready(function() {
+    $(".printClass").click(function() {       
+         setTimeout(reload, 2000);
+    });
+    function reload(){
+    $.pjax.reload({container:"#terminados"});
+    } 
+ });
+';
+$this->registerJs($js);    
+ 
+
+
 ?>
 <?php
     Modal::begin([
@@ -81,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             ],
                                             'autoUpdateInput' => false,
                                             ]
-                                        ])
+                                        ]),
                                     ],
                                     [
                                         'label' => 'Fecha de Entrega',
@@ -114,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     [
                                         'label' => 'Nro Protocolo',
                                         'attribute' => 'codigo',
-                                        'contentOptions' => ['style' => 'width:10%;'],
+                                        'contentOptions' => ['style' => 'width:7%;'],
                                     ],
                                     [
                                         'label' => 'Paciente',
@@ -129,10 +144,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     ],
                                     [
-                                        'label' => 'Documento',
                                         'attribute'=>'nro_documento',
-                                        'contentOptions' => ['style' => 'width:10%;'],
+                                        'contentOptions' => ['style' => 'width:6%;'],
                                     ],
+                                    [
+                                        'attribute'=>'ultimo_propietario',
+                                        'contentOptions' => ['style' => 'width:10%;'],
+                                    ],                                    
                                     [
                                         'label' => 'Informes',
                                         'format' => 'raw',
@@ -188,11 +206,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                                     return Html::a(" <span class='fa fa-print'></span>",$urlPrint,[
                                                         'title' => Yii::t('app', 'Descargar/imprimir'),
-                                                        'class'=>'btn btn-primary btn-xs ',
+                                                        'class'=>'btn btn-primary btn-xs printClass ',
                                                         'value'=> "$urlPrint",
                                                         'data-id'=> "$data",
                                                         'data-protocolo'=> "$data",
                                                         'target'=>'_blank',
+                                                        'data-pjax' => 0,
                                                     ])."  " .Html::a(" <span class='fa fa-envelope'></span>",$url,[
                                                         'title' => Yii::t('app', 'Enviar por Mail'),
                                                         'class'=>'btn bg-olive btn-xs finalizado',

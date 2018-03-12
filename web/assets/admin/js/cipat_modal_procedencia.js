@@ -42,17 +42,9 @@
                         });
                         return false;
             });
+$( document ).ready(function() {
 
-
-            $(document).on('ready pjax:success', function () { 
-                $('#modal').addClass('modal-primary');
-                  $('.loadMainContentProcedencia').click(function(){  
-                    $('#modal').find('.modal-header').html('Nueva Procedencia');
-                    $('#modal').find('#modalContent').load($(this).attr('value'));
-                    $('#modal').modal('show');
-                });
-                
-                $('.editar').click(function(e){  
+               $('.editar').click(function(e){  
                     e.preventDefault();
                     $('#modal').find('.modal-header').html('Editar Procedencia');
                     $('#modal').find('#modalContent').load($(this).attr('value'));
@@ -66,6 +58,30 @@
                     $('#modal').modal('show');
                 });
                 
+
+});
+
+            $(document).on('ready pjax:success', function () { 
+                $('#modal').addClass('modal-primary');
+                  $('.loadMainContentProcedencia').click(function(){  
+                    $('#modal').find('.modal-header').html('Nueva Procedencia');
+                    $('#modal').find('#modalContent').load($(this).attr('value'));
+                    $('#modal').modal('show');
+                });
+                 $('.editar').click(function(e){  
+                    e.preventDefault();
+                    $('#modal').find('.modal-header').html('Editar Procedencia');
+                    $('#modal').find('#modalContent').load($(this).attr('value'));
+                    $('#modal').modal('show');
+                });
+                
+                $('.ver').click(function(e){  
+                    e.preventDefault();
+                    $('#modal').find('.modal-header').html('Ver Procedencia');
+                    $('#modal').find('#modalContent').load($(this).attr('value'));
+                    $('#modal').modal('show');
+                });
+ 
                 $('.borrar').click(function(e){
                     e.preventDefault();
                     var $urlw = $(this).attr("value");

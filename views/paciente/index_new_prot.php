@@ -78,6 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Cobertura/OS - Nro Afiliado',
                 'attribute' => 'nombre_prest_nro',
+                
             ], 
             [
             'class' => 'yii\grid\DataColumn', 

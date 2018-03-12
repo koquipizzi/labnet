@@ -19,7 +19,7 @@ class ProtocoloSearch extends Protocolo
     public $nombre;
     public $Prestadoras_id;
     public $nro_documento;
-    
+    public $ultimo_propietario;
     public $fecha_desde;
     public $fecha_hasta;
     /**
@@ -29,7 +29,7 @@ class ProtocoloSearch extends Protocolo
     {
         return [
             [['id', 'nro_secuencia', 'Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id'], 'integer'],
-            [['fecha_entrada','fecha_entrega', 'anio', 'letra', 'registro', 'observaciones', 'nombre','nro_documento', 'codigo'], 'safe'],
+            [['fecha_entrada','fecha_entrega', 'anio', 'letra', 'registro', 'observaciones', 'nombre','nro_documento', 'codigo','ultimo_propietario'], 'safe'],
         ];
     }
 
@@ -142,7 +142,16 @@ class ProtocoloSearch extends Protocolo
         }
     }
     
-
+   /**
+    * Filtro de Código
+    */
+    private function propietarioFilter($params, &$where, &$queryParams) {
+        if($this->paramExists($params, 'ultimo_propietario')) {
+            $queryParams[':ultimo_propietario'] = "%".$params['ultimo_propietario']."%";
+            $where = $this->addWhereSentence($where, "u.username like :ultimo_propietario");
+        }
+    }
+    
 
 
 
@@ -283,22 +292,24 @@ class ProtocoloSearch extends Protocolo
                 Protocolo.fecha_entrada,
                 Protocolo.fecha_entrega,
                 Paciente.nombre,
-                Paciente.nro_documento			
+                Paciente.nro_documento	
         ';
         $fromTables = '
                 Protocolo
                 LEFT JOIN
-                Informe ON Protocolo.id = Informe.Protocolo_id
+                Informe                     ON Protocolo.id = Informe.Protocolo_id
                 LEFT JOIN
-                Paciente_prestadora ON Protocolo.Paciente_prestadora_id = Paciente_prestadora.id
+                Paciente_prestadora         ON Protocolo.Paciente_prestadora_id = Paciente_prestadora.id
                 LEFT JOIN
-                Paciente ON Paciente_prestadora.Paciente_id = Paciente.id
+                Paciente                    ON Paciente_prestadora.Paciente_id = Paciente.id
                 JOIN
-                view_informe_ult_workflow ON Informe.id = view_informe_ult_workflow.Informe_id
+                view_informe_ult_workflow   ON Informe.id = view_informe_ult_workflow.Informe_id
                 JOIN
-                Workflow ON view_informe_ult_workflow.id = Workflow.id
+                Workflow                    ON view_informe_ult_workflow.id = Workflow.id                 
         ';
-
+	
+                                                 
+        $this->propietarioFilter($formParams, $where, $queryParams);	
 
         $this->nombreFilter($formParams, $where, $queryParams);
         
@@ -708,18 +719,19 @@ class ProtocoloSearch extends Protocolo
                         Informe.Estudio_id,
                         Paciente.nombre as nombre,
                         Estudio.nombre as nombre_estudio,
-                        Workflow.Estado_id			
+                        Workflow.Estado_id,
+                        CONCAT(UCASE(LEFT(u.username, 1)),SUBSTRING(u.username, 2)) as ultimo_propietario				
         ';
         $fromTables = '
                 Protocolo
-                JOIN Informe ON (Protocolo.id = Informe.Protocolo_id)
-                LEFT JOIN     Paciente_prestadora ON Protocolo.Paciente_prestadora_id = Paciente_prestadora.id
-                LEFT JOIN     Paciente ON Paciente_prestadora.Paciente_id = Paciente.id
+                JOIN          Informe                   ON (Protocolo.id = Informe.Protocolo_id)
+                LEFT JOIN     Paciente_prestadora       ON Protocolo.Paciente_prestadora_id = Paciente_prestadora.id
+                LEFT JOIN     Paciente                  ON Paciente_prestadora.Paciente_id = Paciente.id
                 JOIN          view_informe_ult_workflow ON Informe.id = view_informe_ult_workflow.Informe_id
-                LEFT JOIN     Workflow ON view_informe_ult_workflow.id = Workflow.id
-				JOIN          Estudio ON (Informe.Estudio_id = Estudio.id)
+                LEFT JOIN     Workflow                  ON view_informe_ult_workflow.id = Workflow.id
+				JOIN          Estudio                   ON (Informe.Estudio_id = Estudio.id)
+                JOIN          user u                    ON(Workflow.Responsable_id=u.id)
         ';
-
 
         $this->nombreFilter($formParams, $where, $queryParams);
         
@@ -731,7 +743,7 @@ class ProtocoloSearch extends Protocolo
 
         $this->fechaEntregaFilter($formParams, $where, $queryParams);
 
-        
+        $this->propietarioFilter($formParams, $where, $queryParams);
 
         if(!empty($where)) {
             
@@ -764,7 +776,7 @@ class ProtocoloSearch extends Protocolo
                      'fecha_entrada',
                      'fecha_entrega',
                      'codigo',
-                     
+                     'ultimo_propietario',                     
                     'nro_documento' => [
                         'asc' => ['Paciente.nro_documento' => SORT_ASC],
                         'desc' => ['Paciente.nro_documento' => SORT_DESC],
@@ -916,31 +928,35 @@ class ProtocoloSearch extends Protocolo
         }
 
         $fieldList = '
-                        Protocolo.id,    
-                        Protocolo.codigo,
-                        Protocolo.fecha_entrada,
-                        Protocolo.fecha_entrega,
-                        Protocolo.letra,
-                        Protocolo.nro_secuencia,
-                        Paciente.nro_documento,                        
-                        Workflow.fecha_inicio,
-                        Workflow.id AS workflow_id,
-                        Informe.id as informe_id,
-                        Informe.Estudio_id,
-                        Paciente.nombre as nombre,
-                        Estudio.nombre as nombre_estudio,
-                        Workflow.Estado_id			
+                Protocolo.id,    
+                Protocolo.codigo,
+                Protocolo.fecha_entrada,
+                Protocolo.fecha_entrega,
+                Protocolo.letra,
+                Protocolo.nro_secuencia,
+                Paciente.nro_documento,                        
+                Workflow.fecha_inicio,
+                Workflow.id AS workflow_id,
+                Informe.id as informe_id,
+                Informe.Estudio_id,
+                Paciente.nombre as nombre,
+                Estudio.nombre as nombre_estudio,
+                Workflow.Estado_id,
+                CONCAT(UCASE(LEFT(u.username, 1)),SUBSTRING(u.username, 2)) as ultimo_propietario		
         ';
         $fromTables = '
                 Protocolo
-                JOIN Informe ON (Protocolo.id = Informe.Protocolo_id)
-                LEFT JOIN     Paciente_prestadora ON Protocolo.Paciente_prestadora_id = Paciente_prestadora.id
-                LEFT JOIN     Paciente ON Paciente_prestadora.Paciente_id = Paciente.id
-                JOIN          view_informe_ult_workflow ON Informe.id = view_informe_ult_workflow.Informe_id
-                LEFT JOIN     Workflow ON view_informe_ult_workflow.id = Workflow.id
-				JOIN          Estudio ON (Informe.Estudio_id = Estudio.id)
+                JOIN        Informe                     ON (Protocolo.id = Informe.Protocolo_id)
+                LEFT JOIN   Paciente_prestadora         ON Protocolo.Paciente_prestadora_id = Paciente_prestadora.id
+                LEFT JOIN   Paciente                    ON Paciente_prestadora.Paciente_id = Paciente.id
+                JOIN        view_informe_ult_workflow   ON Informe.id = view_informe_ult_workflow.Informe_id
+                LEFT JOIN   Workflow                    ON view_informe_ult_workflow.id = Workflow.id
+				JOIN        Estudio                     ON (Informe.Estudio_id = Estudio.id)
+                JOIN        user u                      ON(Workflow.Responsable_id=u.id)
         ';
-
+     		
+                                        
+       $this->propietarioFilter($formParams, $where, $queryParams);	
 
         $this->nombreFilter($formParams, $where, $queryParams);
         
@@ -990,6 +1006,7 @@ class ProtocoloSearch extends Protocolo
                         'asc' => ['Paciente.nro_documento' => SORT_ASC],
                         'desc' => ['Paciente.nro_documento' => SORT_DESC],
                     ],
+                    'ultimo_propietario',
                     'id' => [
                         'asc' => [new Expression('id')],
                         'desc' => [new Expression('id DESC ')],

@@ -150,6 +150,24 @@ class Informe extends \yii\db\ActiveRecord
 
         return $models;
     }
+/**
+     * Obtiene los nomecladores relacionados
+     *
+     * @return string descripcion nomencladores
+     */
+    public function getInformeNomenclador()
+    {
+       
+        $informeNomencladores = InformeNomenclador::find()
+                ->where(["id_informe" => $this->id])->all();
+        
+        return  $informeNomencladores;
+    }
+
+       public function getInformeNomenclador2()
+    {  
+        return $this->hasMany(InformeNomenclador::className(), ['id_informe' => 'id']);   
+    }  
 
     /**
      * @author franco.a
@@ -420,4 +438,30 @@ class Informe extends \yii\db\ActiveRecord
         return $this->hasMany(Tag::className(), ['id' => 'tag_id'])->viaTable('informe_tag_assn', ['informe_id' => 'id']);
     }
     
+    public static function eliminarInforme($informe_id){
+        
+        $modelInforme   = Informe::find()->where(["id"=>$informe_id])->one();
+        //ELIMINA WORKFLOW
+        $modelsWorkflow    = $modelInforme->workflows;
+        if(!empty($modelsWorkflow)){
+            foreach ($modelsWorkflow as $key => $workflows) {
+                if(!$workflows->delete()){
+                        throw new \yii\base\Exception("Error to delete Workflow with id {$workflows->id}.");
+                }
+            }
+        }
+        //ELIIMINA INFORMENOMENCLADORES  
+        $modelsInformeNomenclador    = $modelInforme->informeNomenclador;
+        if(!empty($modelsInformeNomenclador)){
+            foreach ($modelsInformeNomenclador as $key => $infNom) {
+                if(!$infNom->delete()){
+                    throw new \yii\base\Exception("Error to delete InformeNomenclador with id {$infNom->id}.");
+                }
+            }
+        }
+         Informe::deleteAll(["id"=>$modelInforme->id]);
+    }
+
+
+
 }

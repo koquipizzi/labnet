@@ -112,7 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                  [
                                                     'label' => 'Nro Protocolo',
                                                     'attribute' => 'codigo',
-                                                    'contentOptions' => ['style' => 'width:10%;'],
+                                                    'contentOptions' => ['style' => 'width:7%;'],
                                                 ],
 
                                                 [
@@ -128,10 +128,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     }
                                                 ],
                                                 [
-                                                    'label' => 'Documento',
                                                     'attribute'=>'nro_documento',
-                                                    'contentOptions' => ['style' => 'width:10%;'],
+                                                    'contentOptions' => ['style' => 'width:6%;'],
                                                 ],
+                                                [
+                                                    'attribute'=>'ultimo_propietario',
+                                                    'contentOptions' => ['style' => 'width:10%;'],
+                                                ],                                                 
                                                 [
                                                       'label' => 'Informes',
                                                       'format' => 'raw',
@@ -193,6 +196,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                     'data-id'=> "$data",
                                                                     'data-protocolo'=> "$data",
                                                                     'target'=>'_blank',
+                                                                    'data-pjax' => 0                                                                    
                                                                 ])." ".Html::a("<i class='fa fa-envelope'></i>",$url,[
                                                                     'title' => Yii::t('app', 'Enviar por Mail'),
                                                                     'class'=>'btn btn-primary btn-xs finalizado ',

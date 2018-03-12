@@ -8,6 +8,7 @@ use yii\widgets\ActiveForm;
 /* @var $model app\models\Localidad */
 /* @var $form yii\widgets\ActiveForm */
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\bootstrap\Modal;
 use kartik\rating\StarRating;
 ?>

@@ -48,6 +48,63 @@ jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
         jQuery(this).html("Estudio: " + (index + 1))
     });
 });
+
+//obtiene dinamicamente el nro de secuencia segun la letra ingresada
+$( document ).ready(function() {
+
+    //cambia la letra a mayusculas en protocolo-letra
+    $("#protocolo-letra").keyup(function(){
+        this.value = this.value.toUpperCase();
+    });
+
+    //obtiene el numero de secuencia segun la letra ingresada
+    //si la letra no tiene nro de secuencia entonces retorna cero y un mensaje indicando esto
+    $("#protocolo-letra").change(function() {
+        var letra   = $("#protocolo-letra").val();
+        var anio    = $("#protocolo-anio").val();
+        $.ajax({
+            url    : "index.php?r=protocolo/nro-secuencia-letra",
+            type   : "post",
+            data   : {
+                        letra:  letra,
+                        anio:   anio
+                    },
+            success: function (response) 
+            {                         
+                if(response.rta===true){
+                    $("#dynamic-form").yiiActiveForm("updateAttribute", "protocolo-nro_secuencia","");
+                    $("#protocolo-nro_secuencia").val(response.nro_secuencia);
+                }   
+                if(response.rta===false){
+                    $("#protocolo-nro_secuencia").val(response.nro_secuencia);
+                    $("#dynamic-form").yiiActiveForm("updateMessages", {
+                        "protocolo-nro_secuencia": [response.mensaje]
+                    }, true);  
+                }             
+            }               
+        });
+    }); 
+});
+$("#protocolo-nro_secuencia").keydown(function(e) {
+    var numeroSinCeros= parseInt(this.value,10);
+    var digitos = numeroSinCeros.toString().length;
+    if( (digitos>=7) && (e.keyCode != 8) ){
+        return false;
+    }
+    
+});
+
+$("#protocolo-nro_secuencia").keyup(function() {
+    function pad(input, length, padding) { 
+        var str = input + "";
+        return (length <= str.length) ? str : pad( padding + str, length, padding);
+    }
+    var numeroSinCeros=  parseInt(this.value,10);
+    var digitos = numeroSinCeros.toString().length;
+    $("#protocolo-nro_secuencia").val(pad(numeroSinCeros,7,0) );
+ });
+
+
 ';
 
 $this->registerJs($js);

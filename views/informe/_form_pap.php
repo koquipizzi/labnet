@@ -60,30 +60,7 @@ foreach ($result as $row){
     $tree->merge($row['codigo'], $url);
 }
 
-$items2 = $tree->getTree();
-
-$items = [
-    [
-        'text' => 'Parent 1',
-        'href' => Url::to(['', 'page' => 'parent1']),
-        'nodes' => [
-            [
-                'text' => 'Child 1',
-                'href' => Url::to(['informe/update', 'id' => '1', 'idtexto'=> '12']),
-                'nodes' => [
-                    [
-                        'text' => 'Grandchild 1',
-                        Url::to(['informe/update', 'id' => '1', 'idtexto'=> '1'])
-                    ],
-                    [
-                        'text' => 'Grandchild 2',
-                        'href' => Url::to(['',  'id' => '1', 'idtexto'=> '15'])
-                    ]
-                ]
-            ],
-        ],
-    ],
-];
+$items = $tree->getTree();
 
 $this->registerCss(".treeview2 {
                                     float:left;
@@ -93,7 +70,7 @@ $this->registerCss(".treeview2 {
                                 }");
 
 echo execut\widget\TreeView::widget([
-    'data' => $items2,
+    'data' => $items,
     'size' => TreeView::SIZE_SMALL,
     'header'=> 'Seleccione Tipo de Estudio',
     'searchOptions' => [

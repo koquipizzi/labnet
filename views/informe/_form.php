@@ -32,7 +32,7 @@ function (undefined, item) {
     }
 
     var otherTreeWidgetEl = $('.treeview.small').not($(this)),
-        otherTreeWidget = otherTreeWidgetEl.data('treeview'),
+        otherTreeWidget = otherTreeWidgetEl.data('treeview2'),
         selectedEl = otherTreeWidgetEl.find('.node-selected');
     if (selectedEl.length) {
         otherTreeWidget.unselectNode(Number(selectedEl.attr('data-nodeid')));
@@ -53,9 +53,9 @@ foreach ($result as $row){
     $tree->merge($row['codigo'], $url);
 }
 
-$items2 = $tree->getTree();
+$items = $tree->getTree();
 
-$this->registerCss(".treeview {
+$this->registerCss(".treeview2 {
                                 float:left;
                                 width:100%;
                                 overflow-y: auto;
@@ -64,7 +64,7 @@ $this->registerCss(".treeview {
 ");
 
 echo execut\widget\TreeView::widget([
-    'data' => $items2,
+    'data' => $items,
     'size' => TreeView::SIZE_SMALL,
     'header'=> 'Seleccione Tipo de Estudio',
     'searchOptions' => [

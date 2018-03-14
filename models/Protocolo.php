@@ -12,7 +12,7 @@ use yii\db\Query;
  * This is the model class for table "Protocolo".
  *
  * @property integer $id
- * @property string $fecha_entrada
+ * @property string $fecha_entrada 
  * @property string $fecha_entrega
  * @property string $anio
  * @property string $nombre
@@ -43,7 +43,8 @@ class Protocolo extends \yii\db\ActiveRecord
     {
         return 'Protocolo';
     }
-
+    const SCENARIO_CREATE = 'create';
+    const SCENARIO_UPDATE = 'update';
     /**
      * @inheritdoc
      */
@@ -53,6 +54,7 @@ class Protocolo extends \yii\db\ActiveRecord
                     [['nro_secuencia', 'Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id','numero_hospitalario'], 'integer'],
                     [['Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id','fecha_entrega'],'required'],
                     [['letra','nro_secuencia'],'required'],
+                    [['fecha_entrada'], 'safe'],
                     [['anio'], 'string', 'max' => 4],
                     [['letra'], 'string', 'max' => 1],
                     [['registro'], 'string', 'max' => 45],
@@ -61,9 +63,10 @@ class Protocolo extends \yii\db\ActiveRecord
                     [['Paciente_prestadora_id'], 'exist', 'skipOnError' => true, 'targetClass' => PacientePrestadora::className(), 'targetAttribute' => ['Paciente_prestadora_id' => 'id']],
                     [['FacturarA_id'], 'exist', 'skipOnError' => true, 'targetClass' => Prestadoras::className(), 'targetAttribute' => ['FacturarA_id' => 'id']],
                     [['Procedencia_id'], 'exist', 'skipOnError' => true, 'targetClass' => Procedencia::className(), 'targetAttribute' => ['Procedencia_id' => 'id']],
-                    // ['fecha_entrada', DateTimeCompareValidator::className(), 'compareValue' => date('Y-m-d'), 'operator' => '<='],
-                    // ['fecha_entrega', DateTimeCompareValidator::className(), 'compareValue' => date('Y-m-d'), 'operator' => '>='],
-
+                    ['fecha_entrada', DateTimeCompareValidator::className(), 'compareValue' => date('Y-m-d'), 'operator' => '<=','on' => self::SCENARIO_CREATE],
+                    ['fecha_entrega', DateTimeCompareValidator::className(), 'compareValue' => date('Y-m-d'), 'operator' => '>=','on' => self::SCENARIO_CREATE],
+                    ['fecha_entrada','compare','compareAttribute'=>'fecha_entrega','operator'=>'<=','on' => self::SCENARIO_UPDATE],
+                    ['fecha_entrega','compare','compareAttribute'=>'fecha_entrada','operator'=>'>=','on' => self::SCENARIO_UPDATE],
             ];
     }
 
@@ -94,6 +97,33 @@ class Protocolo extends \yii\db\ActiveRecord
         ];
     }
 
+
+
+    // public function behaviors()
+    //      {
+    //          return [
+    //              'ControlFecha' => [
+    //                 'class' => ControlFecha::className(),
+    //                  'attributes' => [
+    //                      ActiveRecord::EVENT_BEFORE_INSERT => ['fecha_entrada', 'fecha_entrega'],
+    //                  ],
+    //              ],
+    //          ];
+    //      }
+
+// public function behaviors()
+// {
+//     return [
+//         'blameable' => [
+//             'class' => BlameableBehavior::className(),
+//             'createdByAttribute' => 'created_by',
+//             'updatedByAttribute' => 'updated_by',
+//             'attributes' => [
+//                 ActiveRecord::EVENT_BEFORE_VALIDATE => ['updated_by', 'created_by']
+//             ]
+//         ],
+//     ];
+// }
 
 
 
@@ -457,6 +487,8 @@ class Protocolo extends \yii\db\ActiveRecord
     //     return [$rta,$msj];
           
     // }
+
+
 
 
 

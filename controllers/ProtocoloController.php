@@ -324,8 +324,8 @@ class ProtocoloController extends Controller
             }
         }
 
-       $mdlProtocolo->scenario = Protocolo::SCENARIO_CREATE; 
-          
+        $mdlProtocolo->scenario = Protocolo::SCENARIO_CREATE; 
+        $mdlProtocolo->fecha_entrada = date('Y-m-d');
         return $this->render('_form3', [
                             'model' => $mdlProtocolo,
                             'modelsInformes'=>(empty($modelsInformes)) ? [new Informe] : $modelsInformes,

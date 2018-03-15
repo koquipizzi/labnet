@@ -22,6 +22,7 @@ use app\models\Paciente;
 use yii\data\SqlDataProvider;
 use yii\data\ArrayDataProvider;
 use app\models\User;
+use app\models\Medico;
 use yii\base\Model;
 use Da\QrCode\QrCode;
 use yii\web\Response;
@@ -324,15 +325,17 @@ class ProtocoloController extends Controller
             }
         }
 
-       
-          
+        $dataMedico=ArrayHelper::map(Medico::find()->asArray()->all(), 'id', 'nombre'); 
+    
+        
         return $this->render('_form3', [
                             'model' => $mdlProtocolo,
                             'modelsInformes'=>(empty($modelsInformes)) ? [new Informe] : $modelsInformes,
                             'modelsNomenclador'=>(empty($modelsNomenclador)) ? [new InformeNomenclador] : $modelsNomenclador,
                             'pacprest' => $pacprest,
                             'paciente'=>$paciente,
-                            'prestadora'=> $prestadora
+                            'prestadora'=> $prestadora,
+                            'dataMedico' => $dataMedico
                              ]);
     }
 

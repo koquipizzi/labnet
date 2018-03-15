@@ -1,6 +1,5 @@
 
-$(document).on('ready', function () {   
-    
+
 
     $(function check_order(){
         $( "a" ).each(function( index ) {
@@ -28,8 +27,6 @@ $(document).on('ready', function () {
             success: function (response) 
             {
                 if (response.rta == "ok"){
-                    //alert(response);
-                //   $("#modal").modal("toggle");
                     $.pjax.reload({container:"#new_localidad"}); //for pjax update
                     var n = noty({
                         text: ' Localidad agregada con éxito!',
@@ -122,10 +119,15 @@ $(document).on('ready', function () {
         return false;
 });
 
-    $('#addMedico').click(
+$(document).on('ready pjax:success', function () {
+
+    $('.fa-info-circle').click(
         function(){
-            $('#modalNuevoMedico').modal('show').find('#modalContent').load($(this).attr('value'));
+            $value = 'index.php?r=medico/createpop';
+            $('#modalNuevoMedico').modal('show').find('#modalContent').load($value);
     });
+
+});
     
 /********************************************************************************************************* */
 
@@ -307,6 +309,6 @@ $(document).on('ready', function () {
 
 
     
-});
+
 
     

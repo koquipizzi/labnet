@@ -37,8 +37,9 @@ class Procedencia extends \yii\db\ActiveRecord
         return [
             [['Localidad_id','descripcion'], 'required'],
             [['Localidad_id'], 'integer'],
-            [['descripcion', 'domicilio', 'mail'], 'string', 'max' => 200],
-            [['telefono'], 'string'],
+            [[ 'domicilio'], 'string', 'max' => 45],
+            [['descripcion','mail'], 'string', 'max' => 200],
+            [['descripcion','mail'], 'string', 'max' => 200],
             [['mail'], 'email'],
             [['informacion_adicional'], 'string', 'max' => 254],
             [['Localidad_id'], 'exist', 'skipOnError' => true, 'targetClass' => Localidad::className(), 'targetAttribute' => ['Localidad_id' => 'id']],

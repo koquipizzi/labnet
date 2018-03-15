@@ -236,7 +236,7 @@ class ProtocoloController extends Controller
         $fecha = date_create ();
         $fecha = date_format ( $fecha, 'd-m-Y H:i:s' );
         if ($mdlProtocolo->load(Yii::$app->request->post())) {
-                        
+                       
             if($mdlProtocolo->existeNumeroSecuencia()){
                 if(!empty($mdlProtocolo->letra)){
                     try{
@@ -325,9 +325,9 @@ class ProtocoloController extends Controller
             }
         }
 
-        $dataMedico=ArrayHelper::map(Medico::find()->asArray()->all(), 'id', 'nombre'); 
-    
-        
+        $dataMedico=ArrayHelper::map(Medico::find()->asArray()->all(), 'id', 'nombre');
+        $mdlProtocolo->scenario = Protocolo::SCENARIO_CREATE; 
+        $mdlProtocolo->fecha_entrada = date('Y-m-d');
         return $this->render('_form3', [
                             'model' => $mdlProtocolo,
                             'modelsInformes'=>(empty($modelsInformes)) ? [new Informe] : $modelsInformes,
@@ -497,7 +497,9 @@ class ProtocoloController extends Controller
         $fecha = date_create ();
         $fecha = date_format ( $fecha, 'd-m-Y H:i:s' );
         $anio=date("Y");
+        //   var_dump(Yii::$app->request->post());die();
         if ($model->load(Yii::$app->request->post())) {
+           
             if($model->existeNumeroSecuenciaUpdate()){               
                 if(!empty($model->letra)){
                     try{
@@ -530,7 +532,7 @@ class ProtocoloController extends Controller
                 $transaction = \Yii::$app->db->beginTransaction();
                 if (!$model->save()) {
                     throw new \yii\base\Exception("Error,save model protocolo.");
-                }
+                }                 
                 //DELETE INFOMES 
                 if (!empty($deletedIDs)) {     
                     foreach ($deletedIDs as $key => $inf_id) {                                                                        
@@ -618,6 +620,7 @@ class ProtocoloController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $PacientePrestadora=$model->pacientePrestadoraArray;
         $modelsInformes=$model->informes;
+        $model->scenario = Protocolo::SCENARIO_UPDATE; 
         return $this->render('update', [
             'model' => $model,
             'searchModel' =>$searchModel ,

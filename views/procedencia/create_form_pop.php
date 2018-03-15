@@ -66,8 +66,8 @@ use vova07\select2\Widget;
 
             <div class="box-footer">
                 <div style="text-align: right;">
-                    <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-                <button type="reset" class="btn btn-danger">Restablecer</button>
+                    <button type="reset" class="btn btn-danger">Restablecer</button>
+                    <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>               
                 </div>
             </div>
 

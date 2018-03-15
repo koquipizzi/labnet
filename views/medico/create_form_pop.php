@@ -40,7 +40,7 @@ use app\models\Localidad;
             {hint}
             {error}",
             'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
-        ])->textArea(['maxlength' => true]);?>               
+        ])->textInput(['maxlength' => true]);?>               
     <?php
             $data=ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
             echo $form->field($model, 'Localidad_id', ['template' => "{label}
@@ -68,10 +68,9 @@ use app\models\Localidad;
 
  
      <div class="form-footer">
-         <div style="text-align: right;">
-           
+         <div style="text-align: right;">           
+             <button type="reset" class="btn btn-danger">Restablecer</button>         
              <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        
          </div>
      </div>
  

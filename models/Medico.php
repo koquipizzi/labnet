@@ -40,7 +40,7 @@ class Medico extends \yii\db\ActiveRecord
             [['Localidad_id', 'especialidad_id'], 'integer'],
             [['nombre'], 'string', 'max' => 150],
             [['email'], 'email'],
-            [['telefono'], 'string'], 
+            [['telefono'], 'string','max' => 45], 
             [['domicilio'], 'string', 'max' => 45],     
             [['notas'], 'string', 'max' => 512],
             [['Localidad_id'], 'exist', 'skipOnError' => true, 'targetClass' => Localidad::className(), 'targetAttribute' => ['Localidad_id' => 'id']],

@@ -172,13 +172,16 @@ public $nombre_prest_nro;
         $fromTables = "
                     Paciente
                     left join
-                    (   select
-							 concat(Prestadoras.descripcion,' - ', Paciente_prestadora.nro_afiliado) as nombre_prest_nro	,
-                              Paciente_prestadora.Paciente_id,
-                              Paciente_prestadora.id as pacprest,
-                              Prestadoras.descripcion as nombre_prest,
-                              Paciente_prestadora.nro_afiliado,
-                              Prestadoras.descripcion
+                    (   select              
+                            CASE Paciente_prestadora.nro_afiliado  
+                                when  Paciente_prestadora.nro_afiliado is not null then  concat(Prestadoras.descripcion,' - ', Paciente_prestadora.nro_afiliado) 
+                                else  concat(Prestadoras.descripcion,' - sin nro.afiliado')
+                            END as nombre_prest_nro,
+                            Paciente_prestadora.Paciente_id,
+                            Paciente_prestadora.id as pacprest,
+                            Prestadoras.descripcion as nombre_prest,
+                            Paciente_prestadora.nro_afiliado,
+                          Prestadoras.descripcion
                         from  Paciente_prestadora
                         left JOIN Prestadoras ON (Prestadoras.id = Paciente_prestadora.Prestadoras_id)
                      ) as pp  on (Paciente.id=pp.Paciente_id)

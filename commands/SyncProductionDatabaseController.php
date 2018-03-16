@@ -88,6 +88,7 @@ private function migrarPaciente($conn) {
             $modelPaciente->Localidad_id = $modelLocalidad->id;
             if (!$modelPaciente->save()) {
                 $error=$modelPaciente->getErrors();
+                var_dump($error);
                 throw new \yii\base\Exception("fallo al salvar el model paciente".$error);
             }
             $modelPacientePrestadora                 = new PacientePrestadora();
@@ -106,7 +107,7 @@ private function migrarPaciente($conn) {
         echo "fallo al migrar pacientes".$e;
         return 0;
     }
-    echo "finalizo Paciente";
+    echo "finalizo Paciente\n";
     return 1;
 }
 
@@ -152,7 +153,7 @@ private function migrarPaciente($conn) {
                 return 0;
             }
         }
-        echo "finalizo Medico";
+        echo "finalizo Medico\n";
         return 1;
     }
 
@@ -173,7 +174,7 @@ private function migrarPaciente($conn) {
 
 
         }
-        echo "finalizo Especialidad";
+        echo "finalizo Especialidad\n";
 
         return 1;
     }
@@ -201,11 +202,11 @@ private function migrarPaciente($conn) {
 
                 if(!$modelProcedencia->save()){
                     var_dump(($modelProcedencia->getErrors()));
-                    echo "fallo al salvar el model Procedencia";
+                    echo "fallo al salvar el model Procedencia\n";
                     return 0;
                 }
         }
-        echo "finalizo procedencia";
+        echo "finalizo procedencia\n";
         return 1;
     }
 
@@ -244,11 +245,11 @@ private function migrarPaciente($conn) {
             $modelPrestadora->Tipo_prestadora_id    =  $modelTipoPrestadora->id;
             if(!$modelPrestadora->save()){
                 var_dump(($modelPrestadora->getErrors()));
-                echo "fallo al salvar el model Procedencia";
+                echo "fallo al salvar el model Procedencia\n";
                 return 0;
             }
         }
-        echo "finalizo Prestadora";
+        echo "finalizo Prestadora\n";
         return 1;
     }
 
@@ -264,11 +265,11 @@ private function migrarPaciente($conn) {
 
             if(!$modelNomenclador->save()){
                 var_dump(($modelNomenclador->getErrors()));
-                echo "fallo al salvar el model Nomenclador";
+                echo "fallo al salvar el model Nomenclador\n";
                 return 0;
             }
         }
-        echo "finalizo Nomenclador";
+        echo "finalizo Nomenclador\n";
         return 1;
     }
 
@@ -296,11 +297,11 @@ private function migrarPaciente($conn) {
 
             if(!$modelTarifas->save()){
                 var_dump(($modelTarifas->getErrors()));
-                echo "fallo al salvar el model Tarifa";
+                echo "fallo al salvar el model Tarifa\n";
                 return 0;
             }
         }
-        echo "finalizo Tarifas";
+        echo "finalizo Tarifas\n";
         return 1;
     }
 
@@ -345,7 +346,7 @@ private function migrarPaciente($conn) {
     {
         $connection = \Yii::$app->dbSqlServer;
         $conecctionNewEsquema = \Yii::$app->db;
-
+        $this->removeColumsOldId($conecctionNewEsquema);
         //prepara la base
         $this->addColumsOldId($conecctionNewEsquema);
         $this->clearAllDatabase();

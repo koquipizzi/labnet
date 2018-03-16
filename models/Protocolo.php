@@ -52,7 +52,7 @@ class Protocolo extends \yii\db\ActiveRecord
     {
         return [
                     [['nro_secuencia', 'Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id','numero_hospitalario'], 'integer'],
-                    [['Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id','fecha_entrega'],'required'],
+                    [['Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id'],'required'],
                     [['letra','nro_secuencia'],'required'],
                     [['fecha_entrada'], 'safe'],
                     [['anio'], 'string', 'max' => 4],
@@ -97,33 +97,6 @@ class Protocolo extends \yii\db\ActiveRecord
         ];
     }
 
-
-
-    // public function behaviors()
-    //      {
-    //          return [
-    //              'ControlFecha' => [
-    //                 'class' => ControlFecha::className(),
-    //                  'attributes' => [
-    //                      ActiveRecord::EVENT_BEFORE_INSERT => ['fecha_entrada', 'fecha_entrega'],
-    //                  ],
-    //              ],
-    //          ];
-    //      }
-
-// public function behaviors()
-// {
-//     return [
-//         'blameable' => [
-//             'class' => BlameableBehavior::className(),
-//             'createdByAttribute' => 'created_by',
-//             'updatedByAttribute' => 'updated_by',
-//             'attributes' => [
-//                 ActiveRecord::EVENT_BEFORE_VALIDATE => ['updated_by', 'created_by']
-//             ]
-//         ],
-//     ];
-// }
 
 
 

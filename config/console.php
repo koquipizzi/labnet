@@ -21,6 +21,14 @@ $config = [
             ],
         ],
         'db' => $db,
+        'dbSqlServer' => [
+            'class' => 'yii\db\Connection',
+            'dsn' =>'dblib:host=192.168.3.109;port=1433;dbname=hellmund',
+            'username' => 'sa',
+            'password' => 'hellmund',
+            'charset' => 'utf-8',
+        ],
+            
        /*  'authManager' => [
              'class' => 'yii\rbac\DbManager', // or use 'yii\rbac\PhpManager'
         ],*/

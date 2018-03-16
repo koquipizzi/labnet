@@ -26,7 +26,7 @@ use app\models\Paciente;
 use app\models\Especialidad;
 use app\models\Localidad;
 use app\models\Procedencia;
-
+use yii\validators\EmailValidator;
 
 use \date;
 
@@ -45,6 +45,7 @@ class SyncProductionDatabaseController extends Controller
 {
 
 private function migrarPaciente($conn) {
+    $validatorEmail = new EmailValidator();
     $transaction = Yii::$app->db->beginTransaction();
     try {
         $modelLocalidad = Localidad::find()->where(["nombre" => 'Indefinida'])->one();
@@ -68,7 +69,7 @@ private function migrarPaciente($conn) {
             $modelPaciente->nro_documento       = !empty($value["nroDocto"]) ? $value["nroDocto"] : 00000000;
             $modelPaciente->sexo                = $value["Sexo"];
             $modelPaciente->fecha_nacimiento    = !empty($value["fNacimiento"]) ? $value["fNacimiento"] : date('Y-m-d');
-            $modelPaciente->email               = $value["Domicilio"];//la tabla paciente del esquema Hellmund tine los emails en la columna domicilio
+            $modelPaciente->email               =  $validatorEmail->validate( $value["Domicilio"],$error) ? $value["Domicilio"]: "";//la tabla paciente del esquema Hellmund tine los emails en la columna domicilio
             //$modelPaciente->telefono=$value["Teléfono"];
             $modelTipoDocumento = TipoDocumento::find()->where(["descripcion" => $value["tipoDocto"]])->one();
             if (!empty($modelTipoDocumento)) {
@@ -112,7 +113,7 @@ private function migrarPaciente($conn) {
 
 
     private function migrarMedico($conn) {
-
+        $validatorEmail = new EmailValidator();
         $medicos = $conn->createCommand("
             SELECT 
                 Codigo
@@ -134,10 +135,10 @@ private function migrarPaciente($conn) {
 
         foreach ($medicos as $key => $value) {
             $modelMedico= new Medico();
-            $modelMedico->nombre=!empty($value["Nombre"])? $value["Nombre"] : "sin nombre";
-            $modelMedico->email=$value["eMail"];
-            $modelMedico->domicilio=$value["Domicilio"];
-            $modelMedico->Localidad_id=$modelLocalidad->id;
+            $modelMedico->nombre        = !empty($value["Nombre"])? $value["Nombre"] : "sin nombre";
+            $modelMedico->email         = $validatorEmail->validate( $value["eMail"],$error) ? $value["eMail"]: "";
+            $modelMedico->domicilio     = $value["Domicilio"];
+            $modelMedico->Localidad_id  = $modelLocalidad->id;
             //$modelPaciente->telefono=$value["Teléfono"];
             if(array_key_exists("Especialidad",$value) and !empty($value["Especialidad"])){
                 $modelEspecialidad= Especialidad::find()->where(["nombre"=>$value["Especialidad"]])->one();
@@ -178,6 +179,7 @@ private function migrarPaciente($conn) {
     }
 
     private function migrarProcedencia($conn) {
+        $validatorEmail = new EmailValidator();
         $modelLocalidad= Localidad::find()->where(["nombre"=>'Indefinida'])->one();
         if(empty($modelLocalidad)){
             $modelLocalidad= new Localidad();
@@ -192,7 +194,7 @@ private function migrarPaciente($conn) {
                 $modelProcedencia= new Procedencia();
                 $modelProcedencia->descripcion  = $value["Nombre"];
                 $modelProcedencia->domicilio    = $value["Domicilio"];
-                $modelProcedencia->mail         = $value["eMail"];
+                $modelProcedencia->mail         = $validatorEmail->validate( $value["eMail"],$error) ? $value["eMail"]: "";
                 $modelProcedencia->id_old       = $value["Codigo"];
                 //atributos que van por default
                 $modelProcedencia->Localidad_id=$modelLocalidad->id;
@@ -211,6 +213,7 @@ private function migrarPaciente($conn) {
 
 // en el squema nuevo prestadora hace referencia a coberturas
     private function migrarCobertura($conn) {
+        $validatorEmail = new EmailValidator();
         $modelLocalidad= Localidad::find()->where(["nombre"=>'Indefinida'])->one();
         if(empty($modelLocalidad)){
             $modelLocalidad= new Localidad();
@@ -233,7 +236,7 @@ private function migrarPaciente($conn) {
             $modelPrestadora= new Prestadoras();
             $modelPrestadora->descripcion           = $value["Nombre"];
             $modelPrestadora->domicilio             = $value["Domicilio"];
-            $modelPrestadora->email                 = $value["eMail"];
+            $modelPrestadora->email                 = $validatorEmail->validate( $value["eMail"],$error) ? $value["eMail"]: "";
             $modelPrestadora->cobertura             = 1;//por defecto son coberturas
             $modelPrestadora->id_old                = $value["Codigo"];
             //atributos que van por default
@@ -342,6 +345,7 @@ private function migrarPaciente($conn) {
     {
         $connection = \Yii::$app->dbSqlServer;
         $conecctionNewEsquema = \Yii::$app->db;
+
         //prepara la base
         $this->addColumsOldId($conecctionNewEsquema);
         $this->clearAllDatabase();

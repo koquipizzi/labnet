@@ -46,6 +46,7 @@ class SyncProductionDatabaseController extends Controller
 
 private function migrarPaciente($conn) {
     $validatorEmail = new EmailValidator();
+    $nombre="";
     $transaction = Yii::$app->db->beginTransaction();
     try {
         $modelLocalidad = Localidad::find()->where(["nombre" => 'Indefinida'])->one();
@@ -58,19 +59,24 @@ private function migrarPaciente($conn) {
                 throw new \yii\base\Exception("Error, al salvar el model Localidad".$error);
             }
         }
-        $pacientes = $conn->createCommand("SELECT  Nombre,nroDocto,Sexo,fNacimiento,Domicilio,tipoDocto,Cobertura,Afiliado FROM Pacientes ")->queryAll();
+        $pacientes = $conn->createCommand("SELECT * FROM mig_paciente ")->queryAll();
         foreach ($pacientes as $key => $value) {
             $modelPrestadoras = Prestadoras::find()->where(["id_old" => $value["Cobertura"]])->one();
             if (empty($modelPrestadoras)) {
                 throw new \yii\base\Exception("Error, prestadora no found where id_old = {$value["Cobertura"]}. ");
             }
+
+            echo "\n";
             $modelPaciente = new Paciente();
-            $modelPaciente->nombre              = !empty($value["Nombre"]) ? $value["Nombre"] : "sin nombre";
-            $modelPaciente->nro_documento       = !empty($value["nroDocto"]) ? $value["nroDocto"] : 00000000;
+            $modelPaciente->nombre              = !empty($value["Nombre"]) ? utf8_encode($value["Nombre"]):" ";
+            $modelPaciente->nro_documento       = !empty($value["nroDocto"]) ? utf8_encode($value["nroDocto"]) : 00000000;
             $modelPaciente->sexo                = $value["Sexo"];
             $modelPaciente->fecha_nacimiento    = !empty($value["fNacimiento"]) ? $value["fNacimiento"] : date('Y-m-d');
-            $modelPaciente->email               =  $validatorEmail->validate( $value["Domicilio"],$error) ? $value["Domicilio"]: "";//la tabla paciente del esquema Hellmund tine los emails en la columna domicilio
-            //$modelPaciente->telefono=$value["Teléfono"];
+            $modelPaciente->email               =  $validatorEmail->validate( $value["Domicilio"],$error) ? utf8_encode($value["Domicilio"]): "";//la tabla paciente del esquema Hellmund tine los emails en la columna domicilio
+            $modelPaciente->telefono            =  $value["telefono"];
+            if(empty($modelPaciente->nombre)){
+                $modelPaciente->nombre="Sin nombre";
+            }
             $modelTipoDocumento = TipoDocumento::find()->where(["descripcion" => $value["tipoDocto"]])->one();
             if (!empty($modelTipoDocumento)) {
                 $modelPaciente->Tipo_documento_id = $modelTipoDocumento->id;
@@ -89,7 +95,7 @@ private function migrarPaciente($conn) {
             if (!$modelPaciente->save()) {
                 $error=$modelPaciente->getErrors();
                 var_dump($error);
-                throw new \yii\base\Exception("fallo al salvar el model paciente".$error);
+                throw new    \yii\base\Exception("fallo al salvar el model paciente");
             }
             $modelPacientePrestadora                 = new PacientePrestadora();
             $modelPacientePrestadora->Paciente_id    = $modelPaciente->id;
@@ -100,6 +106,7 @@ private function migrarPaciente($conn) {
                 throw new \yii\base\Exception("fallo al salvar el model paciente".$error);
             }
             var_dump($modelPaciente->nombre);
+          echo   !empty($value["Nombre"]) ? $value["Nombre"]:" sin nombre ";
         }
         $transaction->commit();
     } catch (Exception $e) {
@@ -123,7 +130,9 @@ private function migrarPaciente($conn) {
                 ,Domicilio
                 ,Usuario
                 ,Especialidad 
-            FROM Medicos ")->queryAll();
+                ,telefono
+            FROM mig_medicos ")->queryAll();
+
         $modelLocalidad= Localidad::find()->where(["nombre"=>'Indefinida'])->one();
         if(empty($modelLocalidad)){
             $modelLocalidad= new Localidad();
@@ -135,12 +144,13 @@ private function migrarPaciente($conn) {
         }
 
         foreach ($medicos as $key => $value) {
+
             $modelMedico= new Medico();
-            $modelMedico->nombre        = !empty($value["Nombre"])? $value["Nombre"] : "sin nombre";
-            $modelMedico->email         = $validatorEmail->validate( $value["eMail"],$error) ? $value["eMail"]: "";
-            $modelMedico->domicilio     = $value["Domicilio"];
+            $modelMedico->nombre        = !empty($value["Nombre"])? utf8_encode($value["Nombre"]) : "sin nombre";
+            $modelMedico->email         = $validatorEmail->validate($value["eMail"],$error) ? utf8_encode($value["eMail"]): "";
+            $modelMedico->domicilio     = utf8_encode($value["Domicilio"]);
             $modelMedico->Localidad_id  = $modelLocalidad->id;
-            //$modelPaciente->telefono=$value["Teléfono"];
+            $modelMedico->telefono      = $value["telefono"];
             if(array_key_exists("Especialidad",$value) and !empty($value["Especialidad"])){
                 $modelEspecialidad= Especialidad::find()->where(["nombre"=>$value["Especialidad"]])->one();
                 if(!empty($modelEspecialidad)){
@@ -164,7 +174,7 @@ private function migrarPaciente($conn) {
             $modelEspecialidad= Especialidad::find()->where(["nombre"=>$value["Especialidad"]])->one();
             if(empty( $modelEspecialidad) && !empty($value["Especialidad"]) ){
                 $newModelEspecialidad= new Especialidad();
-                $newModelEspecialidad->nombre=$value["Especialidad"];
+                $newModelEspecialidad->nombre=utf8_encode($value["Especialidad"]);
                 if(!$newModelEspecialidad->save()){
                     var_dump(($newModelEspecialidad->getErrors()));
                     echo "fallo al salvar el model Especialidad";
@@ -190,13 +200,14 @@ private function migrarPaciente($conn) {
                 var_dump(($modelLocalidad->getErrors()));
             }
         }
-        $procedencias = $conn->createCommand("SELECT Codigo,Nombre,eMail,Domicilio,Usuario FROM Procedencia ")->queryAll();
+        $procedencias = $conn->createCommand("SELECT * from mig_procedencia ")->queryAll();
         foreach ($procedencias as $key => $value) {
                 $modelProcedencia= new Procedencia();
-                $modelProcedencia->descripcion  = $value["Nombre"];
-                $modelProcedencia->domicilio    = $value["Domicilio"];
-                $modelProcedencia->mail         = $validatorEmail->validate( $value["eMail"],$error) ? $value["eMail"]: "";
+                $modelProcedencia->descripcion  = utf8_encode($value["Nombre"]);
+                $modelProcedencia->domicilio    = utf8_encode($value["Domicilio"]);
+                $modelProcedencia->mail         = $validatorEmail->validate( $value["eMail"],$error) ? utf8_encode($value["eMail"]): "";
                 $modelProcedencia->id_old       = $value["Codigo"];
+                $modelProcedencia->telefono     = utf8_encode($value["telefono"]);
                 //atributos que van por default
                 $modelProcedencia->Localidad_id=$modelLocalidad->id;
 
@@ -209,7 +220,6 @@ private function migrarPaciente($conn) {
         echo "finalizo procedencia\n";
         return 1;
     }
-
 
 
 // en el squema nuevo prestadora hace referencia a coberturas
@@ -232,12 +242,13 @@ private function migrarPaciente($conn) {
                 var_dump(($modelTipoPrestadora->getErrors()));
             }
         }
-        $procedencias = $conn->createCommand("SELECT Codigo,Nombre,eMail,Domicilio FROM Cobertura ")->queryAll();
+        $procedencias = $conn->createCommand("SELECT Codigo,Nombre,eMail,Domicilio,Telefonos FROM Cobertura ")->queryAll();
         foreach ($procedencias as $key => $value) {
             $modelPrestadora= new Prestadoras();
-            $modelPrestadora->descripcion           = $value["Nombre"];
-            $modelPrestadora->domicilio             = $value["Domicilio"];
-            $modelPrestadora->email                 = $validatorEmail->validate( $value["eMail"],$error) ? $value["eMail"]: "";
+            $modelPrestadora->descripcion           = utf8_encode($value["Nombre"]);
+            $modelPrestadora->domicilio             = utf8_encode($value["Domicilio"]);
+            $modelPrestadora->telefono              = $value["Telefonos"];
+            $modelPrestadora->email                 = $validatorEmail->validate( $value["eMail"],$error) ? utf8_encode($value["eMail"]): "";
             $modelPrestadora->cobertura             = 1;//por defecto son coberturas
             $modelPrestadora->id_old                = $value["Codigo"];
             //atributos que van por default
@@ -259,7 +270,7 @@ private function migrarPaciente($conn) {
         foreach ($nomencladores as $key => $value) {
             $modelNomenclador= new Nomenclador();
             $modelNomenclador->servicio        = $value["Servicio"];
-            $modelNomenclador->descripcion     = $value["Nombre"];
+            $modelNomenclador->descripcion     = utf8_encode($value["Nombre"]);
             $modelNomenclador->valor           = $value["Valor"];
             $modelNomenclador->coseguro        = $value["Coseguro"];
 
@@ -346,7 +357,7 @@ private function migrarPaciente($conn) {
     {
         $connection = \Yii::$app->dbSqlServer;
         $conecctionNewEsquema = \Yii::$app->db;
-        $this->removeColumsOldId($conecctionNewEsquema);
+     //   $this->removeColumsOldId($conecctionNewEsquema);
         //prepara la base
         $this->addColumsOldId($conecctionNewEsquema);
         $this->clearAllDatabase();

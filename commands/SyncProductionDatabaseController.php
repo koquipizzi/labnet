@@ -7,10 +7,12 @@
 
 namespace app\commands;
 
+use app\models\Informe;
 use app\models\Medico;
 use app\models\Nomenclador;
 use app\models\PacientePrestadora;
 use app\models\Prestadoras;
+use app\models\Protocolo;
 use app\models\Tarifas;
 use app\models\TipoDocumento;
 use app\models\TipoPrestadora;
@@ -74,6 +76,7 @@ private function migrarPaciente($conn) {
             $modelPaciente->fecha_nacimiento    = !empty($value["fNacimiento"]) ? $value["fNacimiento"] : date('Y-m-d');
             $modelPaciente->email               =  $validatorEmail->validate( $value["Domicilio"],$error) ? utf8_encode($value["Domicilio"]): "";//la tabla paciente del esquema Hellmund tine los emails en la columna domicilio
             $modelPaciente->telefono            =  $value["telefono"];
+            $modelPaciente->id_old              =  $value["numero"];
             if(empty($modelPaciente->nombre)){
                 $modelPaciente->nombre="Sin nombre";
             }
@@ -119,50 +122,149 @@ private function migrarPaciente($conn) {
 }
 
 
+    private function migrarProtocolo($conn) {
+        $protocolo = $conn->createCommand("
+          SELECT *
+          FROM  Protocolos
+        ")->queryAll();
 
-    private function migrarMedico($conn) {
-        $validatorEmail = new EmailValidator();
-        $medicos = $conn->createCommand("
-            SELECT 
-                Codigo
-                ,Nombre
-                ,eMail
-                ,Domicilio
-                ,Usuario
-                ,Especialidad 
-                ,telefono
-            FROM mig_medicos ")->queryAll();
 
-        $modelLocalidad= Localidad::find()->where(["nombre"=>'Indefinida'])->one();
-        if(empty($modelLocalidad)){
-            $modelLocalidad= new Localidad();
-            $modelLocalidad->nombre='Indefinida';
-            $modelLocalidad->cp='0000';
-            if(!$modelLocalidad->save()){
-                var_dump(($modelLocalidad->getErrors()));
-            }
-        }
+        foreach ($protocolo as $key => $value) {
 
-        foreach ($medicos as $key => $value) {
+            $modelProtocolo= new Protocolo();
+            $modelProtocolo->anio          = $value["Año"];
+            $modelProtocolo->letra         = utf8_encode($value["Letra"]);
+            $modelProtocolo->nro_secuencia = $value["Protocolo"];
+            $modelProtocolo->fecha_entrada = $value["fEntrada"];
+            $modelProtocolo->fecha_entrega = $value["fEntrega"];
 
-            $modelMedico= new Medico();
-            $modelMedico->nombre        = !empty($value["Nombre"])? utf8_encode($value["Nombre"]) : "sin nombre";
-            $modelMedico->email         = $validatorEmail->validate($value["eMail"],$error) ? utf8_encode($value["eMail"]): "";
-            $modelMedico->domicilio     = utf8_encode($value["Domicilio"]);
-            $modelMedico->Localidad_id  = $modelLocalidad->id;
-            $modelMedico->telefono      = $value["telefono"];
-            if(array_key_exists("Especialidad",$value) and !empty($value["Especialidad"])){
-                $modelEspecialidad= Especialidad::find()->where(["nombre"=>$value["Especialidad"]])->one();
-                if(!empty($modelEspecialidad)){
-                    $modelMedico->especialidad_id=$modelEspecialidad->id;
-                }
-            }
-            if(!$modelMedico->save()){
-                var_dump(($modelMedico->getErrors()));
+            $modelPaciente = Paciente::find()->where(["old_id"=>$value["Paciente"]])->one();
+            $modelPrestadora= Prestadora::find()->where(["old_id"=>$value["Cobertura"]])->one();
+            $modelPacientePrestadora = PacientePrestadora::find()->where(["Paciente_id"=>$modelPaciente->id,"Prestadoras_id"=>$modelPaciente->id])->one();
+            $modelProtocolo->Paciente_prestadora_id = $modelPacientePrestadora->id;
+            $modelProtocolo->id_old        = $value["Numero"];
+
+            if(!$modelProtocolo->save()){
+                var_dump(($modelProtocolo->getErrors()));
                 echo "fallo al salvar el model Medico";
                 return 0;
             }
         }
+    }
+
+    private function migrarPap($conn) {
+        $validatorEmail = new EmailValidator();
+        $informes = $conn->createCommand("
+        SELECT *
+        FROM Estudios 
+        where TipoEstudio=1 ")->queryAll();
+
+        foreach ($informes as $key => $value) {
+            $modelProtocolo= Protocolo::find(["id_old"=>$value["Protocolo"]])->where()->one();
+            if(empty($modelProtocolo)){
+                throw new \yii\base\Exception("Error, al obtener el model protocolo");
+            }
+            $leucositos=$value["Leucositos"];
+            $hematies=$value["Hematies"];
+            $leuco=0;
+            $hemati=0;
+            switch ($leucositos) {
+                case "+":
+                    $leuco=1;
+                    break;
+                case "++":
+                    $leuco=2;
+                    break;
+                case "+++":
+                    $leuco=3;
+                    break;
+                case "++++":
+                    $leuco=4;
+                    break;
+            }
+            switch ($hematies) {
+                case "+":
+                    $hemati=1;
+                    break;
+                case "++":
+                    $hemati=2;
+                    break;
+                case "+++":
+                    $hemati=3;
+                    break;
+                case "++++":
+                    $hemati=4;
+                    break;
+            }
+
+            $modelInforme= new Informe();
+            $modelInforme->Protocolo_id     = $modelProtocolo->id;
+            $modelInforme->observaciones    = $value["Comentario"];
+            $modelInforme->material         = $value["Material"];
+            $modelInforme->tecnica          = $value["Tecnica"];
+            $modelInforme->micro            = $value["Micro"];
+            $modelInforme->diagnostico      = $value["Diagnostico"];
+            $modelInforme->obrservaciones   = $value["Diagnostico"];
+            $modelInforme->leucositos       = $leuco;
+            $modelInforme->hematies         = $hemati;
+            $modelInforme->flora            = $value["Flora"];
+            $modelInforme->otros            = $value["Otros"];
+            $modelInforme->aspecto          = $value["Aspecto"];
+            $modelInforme->calidad          = $value["Calidad"];
+            $modelInforme->Estudio_id=1;
+
+            if(!$modelInforme->save()){
+                var_dump(($modelInforme->getErrors()));
+                echo "fallo al salvar el model Medico";
+                return 0;
+            }
+        }
+    }
+
+
+    private function migrarMedico($conn) {
+    $validatorEmail = new EmailValidator();
+    $medicos = $conn->createCommand("
+        SELECT 
+            Codigo
+            ,Nombre
+            ,eMail
+            ,Domicilio
+            ,Usuario
+            ,Especialidad 
+            ,telefono
+        FROM mig_medicos ")->queryAll();
+
+    $modelLocalidad= Localidad::find()->where(["nombre"=>'Indefinida'])->one();
+    if(empty($modelLocalidad)){
+        $modelLocalidad= new Localidad();
+        $modelLocalidad->nombre='Indefinida';
+        $modelLocalidad->cp='0000';
+        if(!$modelLocalidad->save()){
+            var_dump(($modelLocalidad->getErrors()));
+        }
+    }
+
+    foreach ($medicos as $key => $value) {
+
+        $modelMedico= new Medico();
+        $modelMedico->nombre        = !empty($value["Nombre"])? utf8_encode($value["Nombre"]) : "sin nombre";
+        $modelMedico->email         = $validatorEmail->validate($value["eMail"],$error) ? utf8_encode($value["eMail"]): "";
+        $modelMedico->domicilio     = utf8_encode($value["Domicilio"]);
+        $modelMedico->Localidad_id  = $modelLocalidad->id;
+        $modelMedico->telefono      = $value["telefono"];
+        if(array_key_exists("Especialidad",$value) and !empty($value["Especialidad"])){
+            $modelEspecialidad= Especialidad::find()->where(["nombre"=>$value["Especialidad"]])->one();
+            if(!empty($modelEspecialidad)){
+                $modelMedico->especialidad_id=$modelEspecialidad->id;
+            }
+        }
+        if(!$modelMedico->save()){
+            var_dump(($modelMedico->getErrors()));
+            echo "fallo al salvar el model Medico";
+            return 0;
+        }
+    }
         echo "finalizo Medico\n";
         return 1;
     }
@@ -322,6 +424,8 @@ private function migrarPaciente($conn) {
         $conecctionNewEsquema->createCommand("       
             AlTER TABLE Procedencia add id_old INT(11);        
             AlTER TABLE Prestadoras add id_old INT(11);
+            AlTER TABLE Pacientes add id_old INT(11);
+            AlTER TABLE Protocolo add id_old INT(11);
         ")->execute();
         echo "Se agregaron las columnas id_old a las entidades\n";
     }
@@ -348,16 +452,21 @@ private function migrarPaciente($conn) {
         echo "Se han borrado todos los datos\n";
     }
 
-
+    public function getDb() {
+        return Yii::$app->dbMysqlServerDedicado;
+    }
     /**
      * This command echoes what you have entered as the message.
      * @param string $message the message to be echoed.
      */
     public function actionSync()
     {
-        $connection = \Yii::$app->dbSqlServer;
+        //$connection = \Yii::$app->dbSqlServer;
+        $connection = \Yii::$app->dbSqlServerEmpresa;
+        // $conecctionNewEsquema = \Yii::$app->dbMysqlServerDedicado;
         $conecctionNewEsquema = \Yii::$app->db;
-     //   $this->removeColumsOldId($conecctionNewEsquema);
+
+        //$this->removeColumsOldId($conecctionNewEsquema);
         //prepara la base
         $this->addColumsOldId($conecctionNewEsquema);
         $this->clearAllDatabase();

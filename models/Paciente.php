@@ -18,7 +18,6 @@ use Yii;
  * @property integer $Tipo_documento_id
  * @property integer $Localidad_id
  * @property string $domicilio
- * @property integer $id_old
  * @property string $hc
  *
  * @property Localidad $localidad

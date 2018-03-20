@@ -435,6 +435,8 @@ private function migrarPaciente($conn) {
         $conecctionNewEsquema->createCommand("       
             AlTER TABLE Procedencia drop id_old;        
             AlTER TABLE Prestadoras drop id_old;
+            AlTER TABLE Pacientes   drop id_old;
+            AlTER TABLE Protocolo   drop id_old;
         ")->execute();;
         echo "Se eliminaro las columnas id_old de las entidades\n";
     }
@@ -466,7 +468,7 @@ private function migrarPaciente($conn) {
         // $conecctionNewEsquema = \Yii::$app->dbMysqlServerDedicado;
         $conecctionNewEsquema = \Yii::$app->db;
 
-        //$this->removeColumsOldId($conecctionNewEsquema);
+        $this->removeColumsOldId($conecctionNewEsquema);
         //prepara la base
         $this->addColumsOldId($conecctionNewEsquema);
         $this->clearAllDatabase();

@@ -75,7 +75,7 @@ private function migrarPaciente($conn) {
             $modelPaciente->sexo                = $value["Sexo"];
             $modelPaciente->fecha_nacimiento    = !empty($value["fNacimiento"]) ? $value["fNacimiento"] : date('Y-m-d');
             $modelPaciente->email               =  $validatorEmail->validate( $value["Domicilio"],$error) ? utf8_encode($value["Domicilio"]): "";//la tabla paciente del esquema Hellmund tine los emails en la columna domicilio
-            $modelPaciente->telefono            =  $value["telefono"];
+            $modelPaciente->telefono            =  utf8_encode($value["telefono"]);
             $modelPaciente->id_old              =  $value["numero"];
             if(empty($modelPaciente->nombre)){
                 $modelPaciente->nombre="Sin nombre";

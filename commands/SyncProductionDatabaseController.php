@@ -424,7 +424,7 @@ private function migrarPaciente($conn) {
         $conecctionNewEsquema->createCommand("       
             AlTER TABLE Procedencia add id_old INT(11);        
             AlTER TABLE Prestadoras add id_old INT(11);
-            AlTER TABLE Pacientes add id_old INT(11);
+            AlTER TABLE Paciente add id_old INT(11);
             AlTER TABLE Protocolo add id_old INT(11);
         ")->execute();
         echo "Se agregaron las columnas id_old a las entidades\n";
@@ -435,7 +435,7 @@ private function migrarPaciente($conn) {
         $conecctionNewEsquema->createCommand("       
             AlTER TABLE Procedencia drop id_old;        
             AlTER TABLE Prestadoras drop id_old;
-            AlTER TABLE Pacientes   drop id_old;
+            AlTER TABLE Paciente   drop id_old;
             AlTER TABLE Protocolo   drop id_old;
         ")->execute();;
         echo "Se eliminaro las columnas id_old de las entidades\n";

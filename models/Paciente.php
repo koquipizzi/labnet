@@ -18,6 +18,7 @@ use Yii;
  * @property integer $Tipo_documento_id
  * @property integer $Localidad_id
  * @property string $domicilio
+ * @property integer $id_old
  * @property string $hc
  *
  * @property Localidad $localidad
@@ -44,9 +45,9 @@ class Paciente extends \yii\db\ActiveRecord
         return [
             [['fecha_nacimiento'], 'safe'],
             [['Tipo_documento_id', 'Localidad_id', 'fecha_nacimiento'], 'required'],
-            [['Tipo_documento_id', 'Localidad_id'], 'integer'],
+            [['Tipo_documento_id', 'Localidad_id','id_old'], 'integer'],
             [['nombre'], 'string', 'max' => 200],
-            [['nombre'], 'required'],
+            //[['nombre'], 'required'],
             ['email', 'email' ],
             [['nro_documento'], 'integer'],
             [['nro_documento'], 'required'],

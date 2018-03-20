@@ -26,6 +26,8 @@ use yii\db\Query;
  * @property integer $Paciente_prestadora_id
  * @property integer $FacturarA_id
  * @property integer $numero_hospitalario
+ * @property integer $id_old
+ *
  *
  * @property Informe[] $informes
  * @property Medico $medico
@@ -51,7 +53,7 @@ class Protocolo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-                    [['nro_secuencia', 'Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id','numero_hospitalario'], 'integer'],
+                    [['nro_secuencia', 'Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id','numero_hospitalario','id_old'], 'integer'],
                     [['Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id'],'required'],
                     [['letra','nro_secuencia'],'required'],
                     [['fecha_entrada'], 'safe'],

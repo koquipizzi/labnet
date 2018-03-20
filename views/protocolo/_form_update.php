@@ -536,7 +536,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                         $dataEstudio=ArrayHelper::map(Estudio::find()->asArray()->all(), 'id', 'descripcion');
                                         // necessary for update action.
                                         if (!$modelInforme->isNewRecord) {
-                                            echo Html::activeHiddenInput($modelInforme, "[{$index}]id",['class'=> 'id_informe_hidden']);
+                                            echo Html::activeHiddenInput($modelInforme, "[{$index}]id");
                                         }
                                     ?>
                                     <div class="col-md-6" style="text-align: right;">

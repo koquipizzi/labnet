@@ -248,22 +248,23 @@
 
 /********************************************************************************************************* */
 
-
+/*
  $('.add-item').click(function() {
+     var form = $(this);
        $.ajax({
             url    : "prestadoras/updatedataselect",
             type   : "post",
             data   : form.serialize(),
-            success: function (response) 
+            success: function (response)
             {
 
-                if (response.rta == "ok"){     
-                    $.each(response.data, function(key, value) {   
+                if (response.rta == "ok"){
+                    $.each(response.data, function(key, value) {
                     $('.selectoProcedencia  :not(:selected)').append($("<option></option>")
                                     .attr("value",key)
-                                    .text(value)); 
-                     });              
-               
+                                    .text(value));
+                     });
+
                     var n = noty({
                         text: ' agregada con éxito!',
                         type: 'success',
@@ -287,15 +288,15 @@
                         modal: false, // si pongo true me hace el efecto de pantalla gris
                     });
                 }
-               
+
             },
-            error  : function () 
+            error  : function ()
             {
                 console.log("internal server error");
             }
         });
         return false;
-      
- });
-    
+
+ });*/
+
 

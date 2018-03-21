@@ -900,7 +900,7 @@ private function migrarPaciente($conn) {
     public function actionSync()
     {
         //$connection = \Yii::$app->dbSqlServer;
-        $connection = \Yii::$app->dbMysqlServerDedicado;
+        $connection = \Yii::$app->dbSqlServerEmpresa;
         // $conecctionNewEsquema = \Yii::$app->dbMysqlServerDedicado;
         $conecctionNewEsquema = \Yii::$app->db;
 

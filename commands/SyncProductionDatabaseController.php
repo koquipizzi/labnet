@@ -875,7 +875,8 @@ private function migrarPaciente($conn) {
 
     private function  clearAllDatabase()
     {
-
+        Informe::deleteAll();
+        Protocolo::deleteAll();
         Tarifas::deleteAll();
         PacientePrestadora::deleteAll();
         Paciente::deleteAll();
@@ -885,8 +886,7 @@ private function migrarPaciente($conn) {
         Medico::deleteAll();
         Especialidad::deleteAll();
         Workflow::deleteAll();
-        Informe::deleteAll();
-        Protocolo::deleteAll();
+
         echo "Se han borrado todos los datos\n";
     }
 

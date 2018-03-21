@@ -442,12 +442,12 @@ private function migrarPaciente($conn) {
 
             $modelInforme = new Informe();
             $modelInforme->Protocolo_id = $modelProtocolo->id;
-            $modelInforme->observaciones = $value["Comentario"];
-            $modelInforme->material = $value["Material"];
-            $modelInforme->tecnica = $value["Tecnica"];
-            $modelInforme->microscopia = $value["Micro"];
-            $modelInforme->macroscopia = $value["Macro"];
-            $modelInforme->diagnostico = $value["Diagnostico"];
+            $modelInforme->observaciones = utf8_encode($value["Comentario"]);
+            $modelInforme->material = utf8_encode($value["Material"]);
+            $modelInforme->tecnica = utf8_encode($value["Tecnica"]);
+            $modelInforme->microscopia =utf8_encode($value["Micro"]);
+            $modelInforme->macroscopia = utf8_encode($value["Macro"]);
+            $modelInforme->diagnostico = utf8_encode($value["Diagnostico"]);
             $modelInforme->Estudio_id = 4;//citologia
             $modelInforme->estado_actual = $estadoFinal;
             if (!$modelInforme->save()) {
@@ -474,6 +474,7 @@ private function migrarPaciente($conn) {
 
 
     private function migrarHinmunoHistoQuimico($conn) {
+        echo "comienza HinmunoHistoQuimico";
         $validatorEmail = new EmailValidator();
         $informes = $conn->createCommand("
             SELECT *
@@ -513,12 +514,12 @@ private function migrarPaciente($conn) {
 
                 $modelInforme = new Informe();
                 $modelInforme->Protocolo_id = $modelProtocolo->id;
-                $modelInforme->observaciones = $value["Comentario"];
-                $modelInforme->material = $value["Material"];
-                $modelInforme->tecnica = $value["Tecnica"];
-                $modelInforme->descripcion = $value["Micro"];
-                $modelInforme->tipo = $value["Macro"];
-                $modelInforme->diagnostico = $value["Diagnostico"];
+                $modelInforme->observaciones = utf8_encode($value["Comentario"]);
+                $modelInforme->material = utf8_encode($value["Material"]);
+                $modelInforme->tecnica = utf8_encode($value["Tecnica"]);
+                $modelInforme->descripcion = utf8_encode($value["Micro"]);
+                $modelInforme->tipo = utf8_encode($value["Macro"]);
+                $modelInforme->diagnostico = utf8_encode($value["Diagnostico"]);
                 $modelInforme->Estudio_id = 5;//inmuno
                 $modelInforme->estado_actual = $estadoFinal;
                 if (!$modelInforme->save()) {
@@ -876,6 +877,7 @@ private function migrarPaciente($conn) {
     private function  clearAllDatabase()
     {
         Informe::deleteAll();
+        return 1;
         Protocolo::deleteAll();
         Tarifas::deleteAll();
         PacientePrestadora::deleteAll();
@@ -910,7 +912,7 @@ private function migrarPaciente($conn) {
         $this->clearAllDatabase();
 
         //comienza a migrar los datos de las entidades
-
+/*
         $this->migrarNomenclador($connection);
         $this->migrarEspecialidad($connection);
         $this->migrarMedico($connection);
@@ -920,6 +922,7 @@ private function migrarPaciente($conn) {
         $this->migrarProcedencia($connection);
         $this->migrarTarifa($connection);
         $this->migrarProtocolo($connection);
+*/
         $this->migrarMolecular($connection);
         $this->migrarHinmunoHistoQuimico($connection);
         $this->migrarCitologia($connection);

@@ -904,7 +904,7 @@ private function migrarPaciente($conn) {
         // $conecctionNewEsquema = \Yii::$app->dbMysqlServerDedicado;
         $conecctionNewEsquema = \Yii::$app->db;
 
-       // $this->removeColumsOldId($conecctionNewEsquema);
+        $this->removeColumsOldId($conecctionNewEsquema);
         //prepara la base
         $this->addColumsOldId($conecctionNewEsquema);
         $this->clearAllDatabase();

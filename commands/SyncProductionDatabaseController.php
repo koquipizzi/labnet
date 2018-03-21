@@ -904,13 +904,13 @@ private function migrarPaciente($conn) {
         // $conecctionNewEsquema = \Yii::$app->dbMysqlServerDedicado;
         $conecctionNewEsquema = \Yii::$app->db;
 
-        $this->removeColumsOldId($conecctionNewEsquema);
+        //$this->removeColumsOldId($conecctionNewEsquema);
         //prepara la base
-        $this->addColumsOldId($conecctionNewEsquema);
-        $this->clearAllDatabase();
+        //$this->addColumsOldId($conecctionNewEsquema);
+       // $this->clearAllDatabase();
 
         //comienza a migrar los datos de las entidades
-
+/*
         $this->migrarNomenclador($connection);
         $this->migrarEspecialidad($connection);
         $this->migrarMedico($connection);
@@ -919,7 +919,8 @@ private function migrarPaciente($conn) {
         $this->migrarPaciente($connection);
         $this->migrarProcedencia($connection);
         $this->migrarTarifa($connection);
-        $this->migrarProtocolo($connection);die();
+        $this->migrarProtocolo($connection);
+*/
         $this->migrarMolecular($connection);
         $this->migrarHinmunoHistoQuimico($connection);
         $this->migrarCitologia($connection);

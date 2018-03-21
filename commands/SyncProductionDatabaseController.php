@@ -16,6 +16,7 @@ use app\models\Protocolo;
 use app\models\Tarifas;
 use app\models\TipoDocumento;
 use app\models\TipoPrestadora;
+use app\models\Workflow;
 use yii\console\Controller;
 use app\models\Cliente;
 use app\models\Material;
@@ -63,9 +64,16 @@ private function migrarPaciente($conn) {
         }
         $pacientes = $conn->createCommand("SELECT * FROM mig_paciente ")->queryAll();
         foreach ($pacientes as $key => $value) {
-            $modelPrestadoras = Prestadoras::find()->where(["id_old" => $value["Cobertura"]])->one();
-            if (empty($modelPrestadoras)) {
-                throw new \yii\base\Exception("Error, prestadora no found where id_old = {$value["Cobertura"]}. ");
+            if($value["Cobertura"]==0){
+                $modelPrestadoras = Prestadoras::find()->where(["id_old" => 1])->one();
+                if (empty($modelPrestadoras)) {
+                    throw new \yii\base\Exception("Error, prestadora no found where id_old = {$value["Cobertura"]}. ");
+                }
+            }else{
+                $modelPrestadoras = Prestadoras::find()->where(["id_old" => $value["Cobertura"]])->one();
+                if (empty($modelPrestadoras)) {
+                    throw new \yii\base\Exception("Error, prestadora no found where id_old = {$value["Cobertura"]}. ");
+                }
             }
 
             echo "\n";
@@ -123,26 +131,86 @@ private function migrarPaciente($conn) {
 
 
     private function migrarProtocolo($conn) {
+
+      /*  $protocolo = $conn->createCommand("
+            SELECT 
+                 Numero
+                ,Anio
+                ,Letra
+                ,Protocolo                
+                ,fEntrada
+                ,fEntrega
+                ,Paciente 
+                ,Medico
+                ,Procedencia
+                ,Cobertura
+                ,FacturarA
+                ,Edad
+                ,Titulo
+                ,Registro
+                ,Observaciones
+                ,Afiliado
+                
+                          
+            FROM mig_protocolo 
+        ")->queryAll();*/
         $protocolo = $conn->createCommand("
-          SELECT *
-          FROM  Protocolos
+            SELECT *
+            FROM mig_protocolo  where Cobertura>0 AND Paciente is not null
         ")->queryAll();
-
-
         foreach ($protocolo as $key => $value) {
-
             $modelProtocolo= new Protocolo();
-            $modelProtocolo->anio          = $value["Año"];
+            $modelProtocolo->anio          = strval($value["Anio"]);
             $modelProtocolo->letra         = utf8_encode($value["Letra"]);
             $modelProtocolo->nro_secuencia = $value["Protocolo"];
             $modelProtocolo->fecha_entrada = $value["fEntrada"];
             $modelProtocolo->fecha_entrega = $value["fEntrega"];
-
-            $modelPaciente = Paciente::find()->where(["old_id"=>$value["Paciente"]])->one();
-            $modelPrestadora= Prestadora::find()->where(["old_id"=>$value["Cobertura"]])->one();
-            $modelPacientePrestadora = PacientePrestadora::find()->where(["Paciente_id"=>$modelPaciente->id,"Prestadoras_id"=>$modelPaciente->id])->one();
-            $modelProtocolo->Paciente_prestadora_id = $modelPacientePrestadora->id;
+            $modelProtocolo->observaciones = utf8_encode($value["Observaciones"]);
             $modelProtocolo->id_old        = $value["Numero"];
+            var_dump($modelProtocolo->id_old);
+            /*************************************************************************/
+            //obtener pacientePrestadora id a partir de la prestadora y el paciente
+            $modelPaciente              = Paciente::find()->where(["id_old"=>$value["Paciente"]])->one();
+            $modelPrestadora            = Prestadoras::find()->where(["id_old"=>$value["Cobertura"]])->one();
+            $modelPacientePrestadora    = PacientePrestadora::find()->where(["Paciente_id"=>$modelPaciente->id,"Prestadoras_id"=>$modelPrestadora->id])->one();
+
+            if(empty($modelPacientePrestadora) &&  !empty($modelPaciente)  && !empty($modelPrestadora)  ){
+                $modelPacientePrestadora= NEW PacientePrestadora();
+                $modelPacientePrestadora                 = new PacientePrestadora();
+                $modelPacientePrestadora->Paciente_id    = $modelPaciente->id;
+                $modelPacientePrestadora->Prestadoras_id = $modelPrestadora->id;
+                $modelPacientePrestadora->nro_afiliado   = $value["Afiliado"];
+                if (!$modelPacientePrestadora->save()) {
+                    $error=$modelPacientePrestadora->getErrors();
+                    throw new \yii\base\Exception("fallo al salvar el model paciente".$error);
+                }
+            }
+            //set protocolo Paciente_prestadora_id
+            $modelProtocolo->Paciente_prestadora_id = $modelPacientePrestadora->id;
+
+            /*************************************************************************/
+            //obtener el id del medico
+            $modelMedico = Medico::find()->where(["id_old"=>$value["Medico"]])->one();
+            $modelProtocolo->Medico_id=$modelMedico->id;
+            /*************************************************************************/
+
+            /*************************************************************************/
+            //obtener el id de la procedencia
+            $modelProcedencia = Procedencia::find()->where(["id_old"=>$value["Procedencia"]])->one();
+            $modelProtocolo->Procedencia_id=$modelProcedencia->id;
+            /*************************************************************************/
+
+            /*************************************************************************/
+            //obtener id de facturar_A
+            $modelPrestadora= Prestadoras::find()->where(["id_old"=>$value["FacturarA"]])->one();
+            if(empty($modelPrestadora)){
+                var_dump($modelProtocolo->id_old);
+                var_dump($value);
+                echo "fact a ".$value["FacturarA"];
+            }
+
+            $modelProtocolo->FacturarA_id=$modelPrestadora->id;
+            /*************************************************************************/
 
             if(!$modelProtocolo->save()){
                 var_dump(($modelProtocolo->getErrors()));
@@ -150,75 +218,398 @@ private function migrarPaciente($conn) {
                 return 0;
             }
         }
+        echo "finalizo Protocolo\n";
     }
 
     private function migrarPap($conn) {
+        //$validatorEmail = new EmailValidator();
+        $informes = $conn->createCommand("
+          select * from mig_informe_pap
+         ")->queryAll();
+        foreach ($informes as $key => $value) {
+            var_dump($value["Protocolo"]);
+            $modelProtocolo= Protocolo::find()->where(["id_old"=>$value["Protocolo"]])->one();
+     if(!empty($modelProtocolo)) {
+         if (empty($modelProtocolo)) {
+             throw new \yii\base\Exception("Error, al obtener el model protocolo");
+         }
+         $leucocitos = $value["Leucocitos"];
+         $hematies = $value["Hematies"];
+         $estado = $value["Estado"];
+         $leuco = "0";
+         $hemati = "0";
+         $estadoFinal = 0;
+         switch ($leucocitos) {
+             case "+":
+                 $leuco = "1";
+                 break;
+             case "++":
+                 $leuco = "2";
+                 break;
+             case "+++":
+                 $leuco = "3";
+                 break;
+             case "++++":
+                 $leuco = "4";
+                 break;
+         }
+         switch ($hematies) {
+             case "+":
+                 $hemati = "1";
+                 break;
+             case "++":
+                 $hemati = "2";
+                 break;
+             case "+++":
+                 $hemati = "3";
+                 break;
+             case "++++":
+                 $hemati = "4";
+                 break;
+         }
+
+         switch ($estado) {
+             case 0:
+                 $estadoFinal = 1;
+                 break;
+             case 1:
+                 $estadoFinal = 3;
+                 break;
+             case 2:
+                 $estadoFinal = 4;
+                 break;
+             case 4:
+                 $estadoFinal = 5;
+                 break;
+             case 5:
+                 $estadoFinal = 5;
+                 break;
+             case 6:
+                 $estadoFinal = 6;
+                 break;
+         }
+
+         $modelInforme = new Informe();
+         $modelInforme->Protocolo_id = $modelProtocolo->id;
+         $modelInforme->observaciones = utf8_encode($value["Comentario"]);
+         $modelInforme->material = utf8_encode($value["Material"]);
+         $modelInforme->tecnica = utf8_encode($value["Tecnica"]);
+         $modelInforme->citologia = utf8_encode($value["Micro"]);
+         $modelInforme->diagnostico = utf8_encode($value["Diagnostico"]);
+         $modelInforme->leucositos = $leuco;
+         $modelInforme->hematies = $hemati;
+         $modelInforme->flora = $value["Flora"];
+         $modelInforme->otros = $value["Otros"];
+         $modelInforme->aspecto = $value["Aspecto"];
+         $modelInforme->calidad = $value["Calidad"];
+         $modelInforme->Estudio_id = 1;//pap
+         $modelInforme->estado_actual = $estadoFinal;
+
+         var_dump($modelProtocolo->id);
+         if (!$modelInforme->save()) {
+             var_dump(($modelInforme->getErrors()));
+             echo "fallo al salvar el model Informe Pap ";
+             return 0;
+         }
+
+
+         $modelWorkflow = new Workflow();
+         $modelWorkflow->Informe_id = $modelInforme->id;
+         $modelWorkflow->Estado_id = $estadoFinal;
+         $modelWorkflow->Responsable_id= 5; //christian
+         if (!$modelWorkflow->save()) {
+             var_dump(($modelWorkflow->getErrors()));
+             echo "fallo al salvar el model  Workflow ";
+             return 0;
+         }
+     }
+        }
+        echo "Finalizo Informe Pap\n";
+        return 1;
+    }
+
+    private function migrarBiopcia($conn) {
         $validatorEmail = new EmailValidator();
         $informes = $conn->createCommand("
-        SELECT *
-        FROM Estudios 
-        where TipoEstudio=1 ")->queryAll();
+            SELECT *
+            FROM mig_informe_biopcia 
+         ")->queryAll();
 
         foreach ($informes as $key => $value) {
-            $modelProtocolo= Protocolo::find(["id_old"=>$value["Protocolo"]])->where()->one();
-            if(empty($modelProtocolo)){
+            var_dump($value["Protocolo"]);
+            $modelProtocolo = Protocolo::find()->where(["id_old" => $value["Protocolo"]])->one();
+        if(!empty($modelProtocolo)) {
+            if (empty($modelProtocolo)) {
                 throw new \yii\base\Exception("Error, al obtener el model protocolo");
             }
-            $leucositos=$value["Leucositos"];
-            $hematies=$value["Hematies"];
-            $leuco=0;
-            $hemati=0;
-            switch ($leucositos) {
-                case "+":
-                    $leuco=1;
+
+            $estado = $value["Estado"];
+            $estadoFinal = 0;
+            switch ($estado) {
+                case 0:
+                    $estadoFinal = 1;
                     break;
-                case "++":
-                    $leuco=2;
+                case 1:
+                    $estadoFinal = 3;
                     break;
-                case "+++":
-                    $leuco=3;
+                case 2:
+                    $estadoFinal = 4;
                     break;
-                case "++++":
-                    $leuco=4;
+                case 4:
+                    $estadoFinal = 5;
                     break;
-            }
-            switch ($hematies) {
-                case "+":
-                    $hemati=1;
+                case 5:
+                    $estadoFinal = 5;
                     break;
-                case "++":
-                    $hemati=2;
-                    break;
-                case "+++":
-                    $hemati=3;
-                    break;
-                case "++++":
-                    $hemati=4;
+                case 6:
+                    $estadoFinal = 6;
                     break;
             }
 
-            $modelInforme= new Informe();
-            $modelInforme->Protocolo_id     = $modelProtocolo->id;
-            $modelInforme->observaciones    = $value["Comentario"];
-            $modelInforme->material         = $value["Material"];
-            $modelInforme->tecnica          = $value["Tecnica"];
-            $modelInforme->micro            = $value["Micro"];
-            $modelInforme->diagnostico      = $value["Diagnostico"];
-            $modelInforme->obrservaciones   = $value["Diagnostico"];
-            $modelInforme->leucositos       = $leuco;
-            $modelInforme->hematies         = $hemati;
-            $modelInforme->flora            = $value["Flora"];
-            $modelInforme->otros            = $value["Otros"];
-            $modelInforme->aspecto          = $value["Aspecto"];
-            $modelInforme->calidad          = $value["Calidad"];
-            $modelInforme->Estudio_id=1;
 
-            if(!$modelInforme->save()){
+            $modelInforme = new Informe();
+            $modelInforme->Protocolo_id = $modelProtocolo->id;
+            $modelInforme->observaciones = utf8_encode($value["Comentario"]);
+            $modelInforme->material = utf8_encode($value["Material"]);
+            $modelInforme->tecnica = utf8_encode($value["Tecnica"]);
+            $modelInforme->microscopia = utf8_encode($value["Micro"]);
+            $modelInforme->macroscopia = utf8_encode($value["Macro"]);
+            $modelInforme->diagnostico = utf8_encode($value["Diagnostico"]);
+            $modelInforme->Estudio_id = 2;//biopcia
+            $modelInforme->estado_actual = $estadoFinal;
+            if (!$modelInforme->save()) {
                 var_dump(($modelInforme->getErrors()));
-                echo "fallo al salvar el model Medico";
+                echo "fallo al salvar el model Informe biop";
+                return 0;
+            }
+            $estado = $value["Estado"];
+
+            $modelWorkflow = new Workflow();
+            $modelWorkflow->Informe_id = $modelInforme->id;
+            $modelWorkflow->Estado_id = $estadoFinal;
+            $modelWorkflow->Responsable_id = 5; //christian
+            if (!$modelWorkflow->save()) {
+                var_dump(($modelWorkflow->getErrors()));
+                echo "fallo al salvar el model  Workflow ";
                 return 0;
             }
         }
+        }
+        echo "Finalizo Informe Biopcia\n";
+        return 1;
+    }
+
+
+
+    private function migrarCitologia($conn) {
+        $validatorEmail = new EmailValidator();
+        $informes = $conn->createCommand("
+            SELECT *
+            FROM mig_informe_citologia
+        ")->queryAll();
+
+        foreach ($informes as $key => $value) {
+            $modelProtocolo = Protocolo::find()->where(["id_old" => $value["Protocolo"]])->one();
+        if(!empty($modelProtocolo)) {
+            if (empty($modelProtocolo)) {
+                throw new \yii\base\Exception("Error, al obtener el model protocolo");
+            }
+            var_dump($value["Protocolo"]);
+
+            $estado = $value["Estado"];
+            $estadoFinal = 0;
+            switch ($estado) {
+                case 0:
+                    $estadoFinal = 1;
+                    break;
+                case 1:
+                    $estadoFinal = 3;
+                    break;
+                case 2:
+                    $estadoFinal = 4;
+                    break;
+                case 4:
+                    $estadoFinal = 5;
+                    break;
+                case 5:
+                    $estadoFinal = 5;
+                    break;
+                case 6:
+                    $estadoFinal = 6;
+                    break;
+            }
+
+
+            $modelInforme = new Informe();
+            $modelInforme->Protocolo_id = $modelProtocolo->id;
+            $modelInforme->observaciones = $value["Comentario"];
+            $modelInforme->material = $value["Material"];
+            $modelInforme->tecnica = $value["Tecnica"];
+            $modelInforme->microscopia = $value["Micro"];
+            $modelInforme->macroscopia = $value["Macro"];
+            $modelInforme->diagnostico = $value["Diagnostico"];
+            $modelInforme->Estudio_id = 4;//citologia
+            $modelInforme->estado_actual = $estadoFinal;
+            if (!$modelInforme->save()) {
+                var_dump(($modelInforme->getErrors()));
+                echo "fallo al salvar el model informe Citologia";
+                return 0;
+            }
+
+            $modelWorkflow = new Workflow();
+            $modelWorkflow->Informe_id = $modelInforme->id;
+            $modelWorkflow->Estado_id = $estadoFinal;
+            $modelWorkflow->Responsable_id = 5; //christian
+            if (!$modelWorkflow->save()) {
+                var_dump(($modelWorkflow->getErrors()));
+                echo "fallo al salvar el model  Workflow ";
+                return 0;
+            }
+        }
+        }
+        echo "Finalizo Informe Citologia\n";
+        return 1;
+    }
+
+
+
+    private function migrarHinmunoHistoQuimico($conn) {
+        $validatorEmail = new EmailValidator();
+        $informes = $conn->createCommand("
+            SELECT *
+            FROM mig_informe_ihq
+        ")->queryAll();
+
+        foreach ($informes as $key => $value) {
+            $modelProtocolo = Protocolo::find()->where(["id_old" => $value["Protocolo"]])->one();
+            if(!empty($modelProtocolo)) {
+                if (empty($modelProtocolo)) {
+                    throw new \yii\base\Exception("Error, al obtener el model protocolo");
+                }
+                var_dump($value["Protocolo"]);
+
+                $estado = $value["Estado"];
+                $estadoFinal = 0;
+                switch ($estado) {
+                    case 0:
+                        $estadoFinal = 1;
+                        break;
+                    case 1:
+                        $estadoFinal = 3;
+                        break;
+                    case 2:
+                        $estadoFinal = 4;
+                        break;
+                    case 4:
+                        $estadoFinal = 5;
+                        break;
+                    case 5:
+                        $estadoFinal = 5;
+                        break;
+                    case 6:
+                        $estadoFinal = 6;
+                        break;
+                }
+
+                $modelInforme = new Informe();
+                $modelInforme->Protocolo_id = $modelProtocolo->id;
+                $modelInforme->observaciones = $value["Comentario"];
+                $modelInforme->material = $value["Material"];
+                $modelInforme->tecnica = $value["Tecnica"];
+                $modelInforme->descripcion = $value["Micro"];
+                $modelInforme->tipo = $value["Macro"];
+                $modelInforme->diagnostico = $value["Diagnostico"];
+                $modelInforme->Estudio_id = 5;//inmuno
+                $modelInforme->estado_actual = $estadoFinal;
+                if (!$modelInforme->save()) {
+                    var_dump(($modelInforme->getErrors()));
+                    echo "fallo al salvar el model informe HinmunoHistoQuimico";
+                    return 0;
+                }
+
+                $modelWorkflow = new Workflow();
+                $modelWorkflow->Informe_id = $modelInforme->id;
+                $modelWorkflow->Estado_id = $estadoFinal;
+                $modelWorkflow->Responsable_id = 5; //christian
+                if (!$modelWorkflow->save()) {
+                    var_dump(($modelWorkflow->getErrors()));
+                    echo "fallo al salvar el model  Workflow ";
+                    return 0;
+                }
+            }
+        }
+        echo "Finalizo Informe HinmunoHistoQuimico\n";
+        return 1;
+    }
+
+
+    private function migrarMolecular($conn) {
+        $validatorEmail = new EmailValidator();
+        $informes = $conn->createCommand("
+            SELECT *
+            FROM mig_informe_molecular
+        ")->queryAll();
+
+        foreach ($informes as $key => $value) {
+            $modelProtocolo = Protocolo::find()->where(["id_old" => $value["Protocolo"]])->one();
+            if(!empty($modelProtocolo)) {
+                if (empty($modelProtocolo)) {
+                    throw new \yii\base\Exception("Error, al obtener el model protocolo");
+                }
+                var_dump($value["Protocolo"]);
+
+                $estado = $value["Estado"];
+                $estadoFinal = 0;
+                switch ($estado) {
+                    case 0:
+                        $estadoFinal = 1;
+                        break;
+                    case 1:
+                        $estadoFinal = 3;
+                        break;
+                    case 2:
+                        $estadoFinal = 4;
+                        break;
+                    case 4:
+                        $estadoFinal = 5;
+                        break;
+                    case 5:
+                        $estadoFinal = 5;
+                        break;
+                    case 6:
+                        $estadoFinal = 6;
+                        break;
+                }
+
+                $modelInforme = new Informe();
+                $modelInforme->Protocolo_id = $modelProtocolo->id;
+                $modelInforme->observaciones = $value["Comentario"];
+                $modelInforme->material = $value["Material"];
+                $modelInforme->tecnica = $value["Tecnica"];
+                $modelInforme->microscopia = $value["Micro"];
+                $modelInforme->macroscopia = $value["Macro"];
+                $modelInforme->diagnostico = $value["Diagnostico"];
+                $modelInforme->Estudio_id = 3;//mole
+                $modelInforme->estado_actual = $estadoFinal;
+                if (!$modelInforme->save()) {
+                    var_dump(($modelInforme->getErrors()));
+                    echo "fallo al salvar el model informe Molecular";
+                    return 0;
+                }
+
+                $modelWorkflow = new Workflow();
+                $modelWorkflow->Informe_id = $modelInforme->id;
+                $modelWorkflow->Estado_id = $estadoFinal;
+                $modelWorkflow->Responsable_id = 5; //christian
+                if (!$modelWorkflow->save()) {
+                    var_dump(($modelWorkflow->getErrors()));
+                    echo "fallo al salvar el model  Workflow ";
+                    return 0;
+                }
+            }
+        }
+        echo "Finalizo Informe Molecular\n";
+        return 1;
     }
 
 
@@ -253,6 +644,7 @@ private function migrarPaciente($conn) {
         $modelMedico->domicilio     = utf8_encode($value["Domicilio"]);
         $modelMedico->Localidad_id  = $modelLocalidad->id;
         $modelMedico->telefono      = $value["telefono"];
+        $modelMedico->id_old      = $value["Codigo"];
         if(array_key_exists("Especialidad",$value) and !empty($value["Especialidad"])){
             $modelEspecialidad= Especialidad::find()->where(["nombre"=>$value["Especialidad"]])->one();
             if(!empty($modelEspecialidad)){
@@ -344,8 +736,8 @@ private function migrarPaciente($conn) {
                 var_dump(($modelTipoPrestadora->getErrors()));
             }
         }
-        $procedencias = $conn->createCommand("SELECT Codigo,Nombre,eMail,Domicilio,Telefonos FROM Cobertura ")->queryAll();
-        foreach ($procedencias as $key => $value) {
+        $prestadoras = $conn->createCommand("SELECT Codigo,Nombre,eMail,Domicilio,Telefonos FROM Cobertura ")->queryAll();
+        foreach ($prestadoras as $key => $value) {
             $modelPrestadora= new Prestadoras();
             $modelPrestadora->descripcion           = utf8_encode($value["Nombre"]);
             $modelPrestadora->domicilio             = utf8_encode($value["Domicilio"]);
@@ -358,11 +750,48 @@ private function migrarPaciente($conn) {
             $modelPrestadora->Tipo_prestadora_id    =  $modelTipoPrestadora->id;
             if(!$modelPrestadora->save()){
                 var_dump(($modelPrestadora->getErrors()));
-                echo "fallo al salvar el model Procedencia\n";
+                echo "fallo al salvar el model Prestadora\n";
                 return 0;
             }
         }
         echo "finalizo Prestadora\n";
+        return 1;
+    }
+
+
+// en el squema nuevo prestadora hace referencia a coberturas
+// prestadoras facturables
+    private function migrarCoberturaFacturable($conn) {
+        $validatorEmail = new EmailValidator();
+        $modelLocalidad= Localidad::find()->where(["nombre"=>'Indefinida'])->one();
+        if(empty($modelLocalidad)){
+            $modelLocalidad= new Localidad();
+            $modelLocalidad->nombre='Indefinida';
+            $modelLocalidad->cp='0000';
+            if(!$modelLocalidad->save()){
+                var_dump(($modelLocalidad->getErrors()));
+            }
+        }
+
+        $prestadoras = $conn->createCommand("SELECT * from mig_procedencia ")->queryAll();//en el sistema viejo hacen referencia a facturar_a con la tabla procedencia. asi que se crearan entidades facturables a partir de la tabla procedencia
+        foreach ($prestadoras as $key => $value) {
+            $modelPrestadora= new Prestadoras();
+            $modelPrestadora->descripcion           = utf8_encode($value["Nombre"]);
+            $modelPrestadora->domicilio             = utf8_encode($value["Domicilio"]);
+            $modelPrestadora->telefono              = $value["telefono"];
+            $modelPrestadora->email                 = $validatorEmail->validate( $value["eMail"],$error) ? utf8_encode($value["eMail"]): "";
+            $modelPrestadora->cobertura             = 0;//por defecto son coberturas
+            $modelPrestadora->id_old                = $value["Codigo"];
+            $modelPrestadora->facturable            ="S";
+            //atributos que van por default
+            $modelPrestadora->Localidad_id=$modelLocalidad->id;
+            if(!$modelPrestadora->save()){
+                var_dump(($modelPrestadora->getErrors()));
+                echo "fallo al salvar el model Prestadora Facturable\n";
+                return 0;
+            }
+        }
+        echo "finalizo Prestadora Facturable\n";
         return 1;
     }
 
@@ -422,10 +851,12 @@ private function migrarPaciente($conn) {
     private function addColumsOldId($conecctionNewEsquema)
     {
         $conecctionNewEsquema->createCommand("       
-            AlTER TABLE Procedencia add id_old INT(11);        
-            AlTER TABLE Prestadoras add id_old INT(11);
-            AlTER TABLE Paciente add id_old INT(11);
-            AlTER TABLE Protocolo add id_old INT(11);
+            AlTER TABLE Procedencia   add id_old INT(11);        
+            AlTER TABLE Prestadoras   add id_old INT(11);
+            AlTER TABLE Paciente      add id_old INT(11);
+            AlTER TABLE Protocolo     add id_old INT(11);
+            AlTER TABLE Medico        add id_old INT(11);
+            
         ")->execute();
         echo "Se agregaron las columnas id_old a las entidades\n";
     }
@@ -433,16 +864,18 @@ private function migrarPaciente($conn) {
     private function removeColumsOldId($conecctionNewEsquema)
     {
         $conecctionNewEsquema->createCommand("       
-            AlTER TABLE Procedencia drop id_old;        
-            AlTER TABLE Prestadoras drop id_old;
-            AlTER TABLE Paciente   drop id_old;
-            AlTER TABLE Protocolo   drop id_old;
+            AlTER TABLE Procedencia   drop id_old;        
+            AlTER TABLE Prestadoras   drop id_old;
+            AlTER TABLE Paciente      drop id_old;
+            AlTER TABLE Protocolo     drop id_old;
+            AlTER TABLE Medico        drop id_old;
         ")->execute();;
-        echo "Se eliminaro las columnas id_old de las entidades\n";
+        echo "Se han eliminado las columnas id_old de las entidades\n";
     }
 
     private function  clearAllDatabase()
     {
+
         Tarifas::deleteAll();
         PacientePrestadora::deleteAll();
         Paciente::deleteAll();
@@ -451,6 +884,9 @@ private function migrarPaciente($conn) {
         Nomenclador::deleteAll();
         Medico::deleteAll();
         Especialidad::deleteAll();
+        Workflow::deleteAll();
+        Informe::deleteAll();
+        Protocolo::deleteAll();
         echo "Se han borrado todos los datos\n";
     }
 
@@ -464,26 +900,34 @@ private function migrarPaciente($conn) {
     public function actionSync()
     {
         //$connection = \Yii::$app->dbSqlServer;
-        $connection = \Yii::$app->dbSqlServerEmpresa;
+        $connection = \Yii::$app->dbSqlServer;
         // $conecctionNewEsquema = \Yii::$app->dbMysqlServerDedicado;
         $conecctionNewEsquema = \Yii::$app->db;
 
-        //$this->removeColumsOldId($conecctionNewEsquema);
+       // $this->removeColumsOldId($conecctionNewEsquema);
         //prepara la base
         $this->addColumsOldId($conecctionNewEsquema);
         $this->clearAllDatabase();
 
         //comienza a migrar los datos de las entidades
+
         $this->migrarNomenclador($connection);
         $this->migrarEspecialidad($connection);
         $this->migrarMedico($connection);
         $this->migrarCobertura($connection);
+        $this->migrarCoberturaFacturable($connection);
         $this->migrarPaciente($connection);
         $this->migrarProcedencia($connection);
         $this->migrarTarifa($connection);
-
+        $this->migrarProtocolo($connection);die();
+        $this->migrarMolecular($connection);
+        $this->migrarHinmunoHistoQuimico($connection);
+        $this->migrarCitologia($connection);
+        $this->migrarBiopcia($connection);
+        $this->migrarPap($connection);
+        //$this->migrarProtocolo($connection);
         //elimina de las entidades las fk id_old
-        $this->removeColumsOldId($conecctionNewEsquema);
+       // $this->removeColumsOldId($conecctionNewEsquema);
     }
     
 

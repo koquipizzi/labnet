@@ -907,13 +907,13 @@ private function migrarPaciente($conn) {
         // $conecctionNewEsquema = \Yii::$app->dbMysqlServerDedicado;
         $conecctionNewEsquema = \Yii::$app->db;
 
-        $this->removeColumsOldId($conecctionNewEsquema);
+        //$this->removeColumsOldId($conecctionNewEsquema);
         //prepara la base
         $this->addColumsOldId($conecctionNewEsquema);
-        $this->clearAllDatabase();
+        //$this->clearAllDatabase();
 
         //comienza a migrar los datos de las entidades
-/*
+
         $this->migrarNomenclador($connection);
         $this->migrarEspecialidad($connection);
         $this->migrarMedico($connection);
@@ -923,7 +923,7 @@ private function migrarPaciente($conn) {
         $this->migrarProcedencia($connection);
         $this->migrarTarifa($connection);
         $this->migrarProtocolo($connection);
-*/
+
         $this->migrarMolecular($connection);
         $this->migrarHinmunoHistoQuimico($connection);
         $this->migrarCitologia($connection);
@@ -932,6 +932,8 @@ private function migrarPaciente($conn) {
         //$this->migrarProtocolo($connection);
         //elimina de las entidades las fk id_old
        // $this->removeColumsOldId($conecctionNewEsquema);
+        $verificar=Informe::find()->all();
+        var_dump($verificar);
     }
     
 

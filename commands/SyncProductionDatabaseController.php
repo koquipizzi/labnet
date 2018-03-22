@@ -132,31 +132,9 @@ private function migrarPaciente($conn) {
 
     private function migrarProtocolo($conn) {
 
-      /*  $protocolo = $conn->createCommand("
-            SELECT 
-                 Numero
-                ,Anio
-                ,Letra
-                ,Protocolo                
-                ,fEntrada
-                ,fEntrega
-                ,Paciente 
-                ,Medico
-                ,Procedencia
-                ,Cobertura
-                ,FacturarA
-                ,Edad
-                ,Titulo
-                ,Registro
-                ,Observaciones
-                ,Afiliado
-                
-                          
-            FROM mig_protocolo 
-        ")->queryAll();*/
         $protocolo = $conn->createCommand("
             SELECT *
-            FROM mig_protocolo  where Cobertura>0 AND Paciente is not null
+            FROM mig_protocolo
         ")->queryAll();
         foreach ($protocolo as $key => $value) {
             $modelProtocolo= new Protocolo();
@@ -171,7 +149,12 @@ private function migrarPaciente($conn) {
             /*************************************************************************/
             //obtener pacientePrestadora id a partir de la prestadora y el paciente
             $modelPaciente              = Paciente::find()->where(["id_old"=>$value["Paciente"]])->one();
-            $modelPrestadora            = Prestadoras::find()->where(["id_old"=>$value["Cobertura"]])->one();
+            if($value["Cobertura"]==0){
+                $modelPrestadora            = Prestadoras::find()->where(["id_old"=>1])->one();
+            }else{
+                $modelPrestadora            = Prestadoras::find()->where(["id_old"=>$value["Cobertura"]])->one();
+            }
+
             $modelPacientePrestadora    = PacientePrestadora::find()->where(["Paciente_id"=>$modelPaciente->id,"Prestadoras_id"=>$modelPrestadora->id])->one();
 
             if(empty($modelPacientePrestadora) &&  !empty($modelPaciente)  && !empty($modelPrestadora)  ){
@@ -878,7 +861,6 @@ private function migrarPaciente($conn) {
     {
         Workflow::deleteAll();
         Informe::deleteAll();
-        return 1;
         Protocolo::deleteAll();
         Tarifas::deleteAll();
         PacientePrestadora::deleteAll();
@@ -929,7 +911,7 @@ private function migrarPaciente($conn) {
         $this->migrarCitologia($connection);
         $this->migrarBiopcia($connection);
         $this->migrarPap($connection);
-        //$this->migrarProtocolo($connection);
+
         //elimina de las entidades las fk id_old
        // $this->removeColumsOldId($conecctionNewEsquema);
         $verificar=Informe::find()->all();

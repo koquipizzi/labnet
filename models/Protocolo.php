@@ -56,7 +56,7 @@ class Protocolo extends \yii\db\ActiveRecord
                     [['nro_secuencia', 'Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id','numero_hospitalario','id_old'], 'integer'],
                     [['Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id'],'required'],
                     [['letra','nro_secuencia'],'required'],
-                    [['fecha_entrada'], 'safe'],
+                    [['fecha_entrada','fecha_entrega'], 'safe'],
                     [['anio'], 'string', 'max' => 4],
                     [['letra'], 'string', 'max' => 1],
                     [['registro'], 'string', 'max' => 45],

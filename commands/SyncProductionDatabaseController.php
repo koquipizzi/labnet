@@ -891,7 +891,7 @@ private function migrarPaciente($conn) {
 
         //$this->removeColumsOldId($conecctionNewEsquema);
         //prepara la base
-        $this->addColumsOldId($conecctionNewEsquema);
+        //$this->addColumsOldId($conecctionNewEsquema);
         //$this->clearAllDatabase();
 
         //comienza a migrar los datos de las entidades

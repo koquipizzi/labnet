@@ -891,7 +891,7 @@ private function migrarPaciente($conn) {
 
         //$this->removeColumsOldId($conecctionNewEsquema);
         //prepara la base
-        //$this->addColumsOldId($conecctionNewEsquema);
+        $this->addColumsOldId($conecctionNewEsquema);
         //$this->clearAllDatabase();
 
         //comienza a migrar los datos de las entidades
@@ -914,8 +914,8 @@ private function migrarPaciente($conn) {
 
         //elimina de las entidades las fk id_old
        // $this->removeColumsOldId($conecctionNewEsquema);
-        $verificar=Informe::find()->all();
-        var_dump($verificar);
+        //$verificar=Informe::find()->all();
+        //var_dump($verificar);
     }
     
 

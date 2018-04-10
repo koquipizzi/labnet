@@ -10,7 +10,6 @@
     });
     
     $("body").on("beforeSubmit", "form#create-localidad-form-pop", function () {
-        //alert("ddddd");
         var form = $(this);
         // return false if form still have some validation errors
         if (form.find(".has-error").length) 
@@ -251,22 +250,23 @@ $(document).on('ready pjax:success', function () {
 
 /********************************************************************************************************* */
 
-
+/*
  $('.add-item').click(function() {
+     var form = $(this);
        $.ajax({
             url    : "prestadoras/updatedataselect",
             type   : "post",
             data   : form.serialize(),
-            success: function (response) 
+            success: function (response)
             {
 
-                if (response.rta == "ok"){     
-                    $.each(response.data, function(key, value) {   
+                if (response.rta == "ok"){
+                    $.each(response.data, function(key, value) {
                     $('.selectoProcedencia  :not(:selected)').append($("<option></option>")
                                     .attr("value",key)
-                                    .text(value)); 
-                     });              
-               
+                                    .text(value));
+                     });
+
                     var n = noty({
                         text: ' agregada con éxito!',
                         type: 'success',
@@ -290,9 +290,9 @@ $(document).on('ready pjax:success', function () {
                         modal: false, // si pongo true me hace el efecto de pantalla gris
                     });
                 }
-               
+
             },
-            error  : function () 
+            error  : function ()
             {
                 console.log("internal server error");
             }
@@ -300,4 +300,4 @@ $(document).on('ready pjax:success', function () {
         return false;
       
  });
-    
+    */

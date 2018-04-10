@@ -7,10 +7,11 @@ class m161003_214140_inserts_entidades extends Migration
 {
     public function safeUp()
     {
+        return true;
         $this->insert('Procedencia', ['descipcion'=>'Hospital', 'Localidad_id'=>'2']);
-        $this->insert('Procedencia', ['descipcion'=>'Clinica', 'Localidad_id'=>'2']);        
+        $this->insert('Procedencia', ['descipcion'=>'Clinica', 'Localidad_id'=>'2']);
         $this->insert('Procedencia', ['descipcion'=>'Otra Procedencia', 'Localidad_id'=>'1']);
-    
+
         $this->insert('Medico', ['nombre' => 'Jorge Diaz', 'email'=> 'jd@gmail.com',
                                  'especialidad' => 'Clinico', 'domicilio'=>'Las Heras 123',
                                  'telefono' => '4423454', 'Localidad_id'=>'3']);
@@ -29,19 +30,19 @@ class m161003_214140_inserts_entidades extends Migration
         $this->insert('Paciente', ['nombre' => 'Julieta Venegas', 'email'=> 'jvenegas@gmail.com',
                                   'domicilio'=>'Las Heras 329','telefono' => '4423454', 'Localidad_id'=>'3', 'Tipo_documento_id'=>'1', 'nro_documento'=>'22334455']);
 
-    
+
         $this->insert('Paciente_prestadora', ['nro_afiliado' => 'AA2376-D', 'Paciente_id'=> '2',
                                   'Prestadoras_id'=>'1']);
-        
+
         $this->insert('Paciente_prestadora', ['nro_afiliado' => 'AA2376-D', 'Paciente_id'=> '1',
                                   'Prestadoras_id'=>'2']);
-        
+
         $this->insert('Nomenclador', ['descripcion' => 'Descartable 2', 'valor'=> '15',
                                   'Prestadoras_id'=>'2','servicio'=>'1', 'coseguro'=>'5' ]);
-        
+
         $this->insert('Nomenclador', ['descripcion' => 'Descartable 33', 'valor'=> '19',
                                   'Prestadoras_id'=>'1','servicio'=>'1', 'coseguro'=>'5' ]);
-       
+
        
 
 
@@ -50,6 +51,7 @@ class m161003_214140_inserts_entidades extends Migration
 
     public function safeDown()
     {
+        return true;
         $this->truncateTable('Nomenclador');
         $this->truncateTable('Paciente_prestadora');
         $this->truncateTable('Paciente');

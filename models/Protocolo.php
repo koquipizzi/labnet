@@ -26,6 +26,8 @@ use yii\db\Query;
  * @property integer $Paciente_prestadora_id
  * @property integer $FacturarA_id
  * @property integer $numero_hospitalario
+ * @property integer $id_old
+ *
  *
  * @property Informe[] $informes
  * @property Medico $medico
@@ -51,10 +53,10 @@ class Protocolo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-                    [['nro_secuencia', 'Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id','numero_hospitalario'], 'integer'],
-                    [['Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id','fecha_entrega'],'required'],
+                    [['nro_secuencia', 'Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id','numero_hospitalario','id_old'], 'integer'],
+                    [['Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id'],'required'],
                     [['letra','nro_secuencia'],'required'],
-                    [['fecha_entrada'], 'safe'],
+                    [['fecha_entrada','fecha_entrega'], 'safe'],
                     [['anio'], 'string', 'max' => 4],
                     [['letra'], 'string', 'max' => 1],
                     [['registro'], 'string', 'max' => 45],
@@ -97,33 +99,6 @@ class Protocolo extends \yii\db\ActiveRecord
         ];
     }
 
-
-
-    // public function behaviors()
-    //      {
-    //          return [
-    //              'ControlFecha' => [
-    //                 'class' => ControlFecha::className(),
-    //                  'attributes' => [
-    //                      ActiveRecord::EVENT_BEFORE_INSERT => ['fecha_entrada', 'fecha_entrega'],
-    //                  ],
-    //              ],
-    //          ];
-    //      }
-
-// public function behaviors()
-// {
-//     return [
-//         'blameable' => [
-//             'class' => BlameableBehavior::className(),
-//             'createdByAttribute' => 'created_by',
-//             'updatedByAttribute' => 'updated_by',
-//             'attributes' => [
-//                 ActiveRecord::EVENT_BEFORE_VALIDATE => ['updated_by', 'created_by']
-//             ]
-//         ],
-//     ];
-// }
 
 
 

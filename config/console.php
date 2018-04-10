@@ -21,6 +21,27 @@ $config = [
             ],
         ],
         'db' => $db,
+        'dbSqlServer' => [
+            'class' => 'yii\db\Connection',
+            'dsn' =>'dblib:host=192.168.3.109;port=1433;dbname=hellmund',
+            'username' => 'sa',
+            'password' => 'hellmund',
+            'charset' => 'utf-8',
+        ],
+        'dbSqlServerEmpresa' => [
+            'class' => 'yii\db\Connection',
+            'dsn' =>'dblib:host=10.0.0.201;port=1433;dbname=hellmund',
+            'username' => 'sa',
+            'password' => 'hellmund',
+            'charset' => 'utf-8',
+        ],
+        'dbMysqlServerDedicado' => [
+            'class' => 'yii\db\Connection',
+            'dsn' =>'mysql:host=192.168.3.109;port=3307;dbname=test_labnet',
+            'username' => 'root',
+            'password' => 'mysqlp4ss',
+        ],
+            
        /*  'authManager' => [
              'class' => 'yii\rbac\DbManager', // or use 'yii\rbac\PhpManager'
         ],*/

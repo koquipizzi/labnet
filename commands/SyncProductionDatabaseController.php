@@ -185,7 +185,7 @@ private function migrarPaciente($conn) {
 
             /*************************************************************************/
             //obtener id de facturar_A
-            $modelPrestadora= Prestadoras::find()->where(["id_old"=>$value["FacturarA"]])->one();
+            $modelPrestadora= Prestadoras::find()->where(["id_old"=>$value["FacturarA"],"facturable"=>"S"])->one();
             if(empty($modelPrestadora)){
                 var_dump($modelProtocolo->id_old);
                 var_dump($value);
@@ -891,8 +891,8 @@ private function migrarPaciente($conn) {
 
         //$this->removeColumsOldId($conecctionNewEsquema);
         //prepara la base
-        $this->addColumsOldId($conecctionNewEsquema);
-        //$this->clearAllDatabase();
+        //$this->addColumsOldId($conecctionNewEsquema);
+        $this->clearAllDatabase();
 
         //comienza a migrar los datos de las entidades
 
@@ -904,6 +904,7 @@ private function migrarPaciente($conn) {
         $this->migrarPaciente($connection);
         $this->migrarProcedencia($connection);
         $this->migrarTarifa($connection);
+
         $this->migrarProtocolo($connection);
 
         $this->migrarMolecular($connection);
@@ -916,6 +917,7 @@ private function migrarPaciente($conn) {
        // $this->removeColumsOldId($conecctionNewEsquema);
         //$verificar=Informe::find()->all();
         //var_dump($verificar);
+
     }
     
 

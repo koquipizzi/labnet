@@ -202,7 +202,7 @@ Pjax::end();
                                                     <h5 style="text-align: left; margin-left: 10px; font-weight: bold; ;">Citología Hormonal</h5>
 
                                                     <?php
-                                                    $dataCalidad = ArrayHelper::map(Leyenda::getTextoC(), 'id', 'texto');
+                                                    $dataCalidad = ArrayHelper::map(Leyenda::getTextoC(), 'codigo', 'texto');
 
                                                     echo $form->field($model, 'calidad', ['template' => "{label}
                                                                 <div class='col-md-7'>{input}</div>
@@ -212,7 +212,7 @@ Pjax::end();
                                                                  'attribute'=> 'codigo',
                                                                     'data' => $dataCalidad,
                                                                     'language' => 'es',
-                                                                    'options' => ['placeholder' => 'Seleccione una Leyenda'],
+                                                                    'options' => ['placeholder' => 'Seleccione una Leyenda','value'=>$model->calidad],
                                                                     'pluginOptions' => [
                                                                         'allowClear' => false
                                                                     ],
@@ -221,7 +221,7 @@ Pjax::end();
 
 
                                                     <?php
-                                                    $dataAspecto = ArrayHelper::map(Leyenda::getTextoA(), 'id', 'texto');
+                                                    $dataAspecto = ArrayHelper::map(Leyenda::getTextoA(), 'codigo', 'texto');
                                                     echo $form->field($model, 'aspecto', ['template' => "{label}
                                                             <div class='col-md-7'>{input}</div>
                                                             {hint}
@@ -229,7 +229,7 @@ Pjax::end();
                                                       ])->widget(select2::classname(), [
                                                             'data' => $dataAspecto,
                                                             'language' => 'es',
-                                                            'options' => ['placeholder' => 'Seleccione una Leyenda'],
+                                                            'options' => ['placeholder' => 'Seleccione una Leyenda','value'=>$model->aspecto],
                                                             'pluginOptions' => [
                                                                 'allowClear' => false
                                                             ],
@@ -238,7 +238,7 @@ Pjax::end();
 
 
                                                     <?php
-                                                    $dataAspecto = ArrayHelper::map(Leyenda::getTextoF(), 'id', 'texto');
+                                                    $dataAspecto = ArrayHelper::map(Leyenda::getTextoF(), 'codigo', 'texto');
                                                     echo $form->field($model, 'flora', ['template' => "{label}
                                                             <div class='col-md-7'>{input}</div>
                                                             {hint}
@@ -246,7 +246,7 @@ Pjax::end();
                                                        ])->widget(select2::classname(), [
                                                             'data' => $dataAspecto,
                                                             'language' => 'es',
-                                                            'options' => ['placeholder' => 'Seleccione una Leyenda'],
+                                                            'options' => ['placeholder' => 'Seleccione una Leyenda','value'=>$model->flora],
                                                             'pluginOptions' => [
                                                                 'allowClear' => false
                                                             ],
@@ -314,7 +314,7 @@ Pjax::end();
                                                     ?>
 
                                                     <?php
-                                                    $dataOtros = ArrayHelper::map(Leyenda::getTextoO(), 'id', 'texto');
+                                                    $dataOtros = ArrayHelper::map(Leyenda::getTextoO(), 'codigo', 'texto');
                                                     echo $form->field($model, 'otros', ['template' => "{label}
                                                             <div class='col-md-7'>{input}</div>
                                                             {hint}
@@ -322,7 +322,7 @@ Pjax::end();
                                                       ])->widget(select2::classname(), [
                                                             'data' => $dataOtros,
                                                             'language' => 'es',
-                                                            'options' => ['placeholder' => 'Seleccione una Leyenda'],
+                                                            'options' => ['placeholder' => 'Seleccione una Leyenda','value'=>$model->otros],
                                                             'pluginOptions' => [
                                                                 'allowClear' => false
                                                             ],
@@ -335,7 +335,7 @@ Pjax::end();
 
 
                                                     <?php
-                                                    $dataAspecto = ArrayHelper::map(Leyenda::getTextoM(), 'id', 'texto');
+                                                    $dataAspecto = ArrayHelper::map(Leyenda::getTextoM(), 'codigo', 'texto');
                                                     echo $form->field($model, 'microorganismos', ['template' => "{label}
                                                             <div class='col-md-7'>{input}</div>
                                                             {hint}
@@ -343,7 +343,7 @@ Pjax::end();
                                                        ])->widget(select2::classname(), [
                                                         'data' => $dataAspecto,
                                                             'language' => 'es',
-                                                            'options' => ['placeholder' => 'Seleccione una Leyenda'],
+                                                            'options' => ['placeholder' => 'Seleccione una Leyenda','value'=>$model->microorganismos],
                                                             'pluginOptions' => [
                                                                 'allowClear' => false
                                                             ],

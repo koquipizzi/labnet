@@ -26,7 +26,7 @@ use kartik\popover\PopoverX;
             $i = 0;
             
             //var_dump($historialPaciente); die();
-            foreach ($historialPaciente as $historial){    
+            foreach ($historialPaciente as $historial){
                 if( strlen($historial['diagnostico'])>0){
 
                         $diagnosticoAcortado=substr( $historial['diagnostico'],0,50)."...";
@@ -80,43 +80,63 @@ use kartik\popover\PopoverX;
                                                                 ");
                                         
                                             $id_i=$historial['id_informe'];
-                                            $modelI= Informe::find()->where("id=$id_i")->one();
+                                            $modelI= Informe::find()->where(["id"=>$id_i])->one();
                                         
                                             if (empty($modelI->aspecto))
                                                 $aspecto2 = "Sin datos";
                                             else
                                                {// $aspecto = Leyenda::find()->where(['=', 'id', $modelI->aspecto])->one(); 
-                                                $aspecto = Leyenda::find()->where("id=$modelI->aspecto")->one();
-                                            //    var_dump($modelI->aspecto); die();
-                                                $aspecto2 = $aspecto->texto;                                   
+                                                $aspecto = Leyenda::find()->where("codigo='{$modelI->aspecto}'")->one();
+                                                   Leyenda::find()->where(['=', 'id', $modelI->calidad])->one();
+                                                   if(!empty($aspecto)){
+                                                       $aspecto2 = $aspecto->texto;
+                                                   }else {
+                                                       $aspecto2 ='';
+                                                   }
                                             }
                                                
                                            if (empty($modelI->calidad))
                                                 $calidad = "Sin datos"; 
                                             else
-                                               {$c = Leyenda::find()->where(['=', 'id', $modelI->calidad])->one();
-                                                $calidad = $c->texto;
+                                               {$c = Leyenda::find()->where("codigo='{$modelI->calidad}'")->one();
+                                                   if(!empty($c)){
+                                                       $calidad = $c->texto;
+                                                   }else{
+                                                       $calidad ='';
+                                                   }
                                                }
                                                               
                                             if (empty($modelI->flora))
                                                 $flora = "Sin datos"; 
                                             else
-                                               { $f = Leyenda::find()->where(['=', 'id', $modelI->flora])->one();  
-                                                   $flora = $f->texto; 
+                                               { $f = Leyenda::find()->where("codigo='{$modelI->flora}'")->one();
+                                                   if(!empty($f )){
+                                                       $flora = $f->texto;
+                                                   }else {
+                                                       $flora = '';
+                                                   }
                                                } 
                                                
                                             if (empty($modelI->otros))
                                                $otros = "Sin datos"; 
                                             else
-                                              { $o = Leyenda::find()->where(['=', 'id', $modelI->otros])->one();
-                                                  $otros = $o->texto; 
-                                              } 
+                                              { $o = Leyenda::find()->where("codigo='{$modelI->otros}'")->one();
+                                                  if(!empty($o)){
+                                                      $otros = $o->texto;
+                                                  }else {
+                                                      $otros ='';
+                                                  }
+                                              }
 
                                             if (empty($modelI->microorganismos))
                                               $microorganismos = "Sin datos"; 
                                             else
-                                                {   $m = Leyenda::find()->where(['=', 'id', $modelI->microorganismos])->one();
-                                                    $microorganismos = $m->texto; 
+                                                {   $m = Leyenda::find()->where("codigo='{$modelI->microorganismos}'")->one();
+                                                    if(!empty($m)){
+                                                        $microorganismos = $m->texto;
+                                                    }else {
+                                                        $microorganismos ='';
+                                                    }
                                                 } 
 
                                             if($modelI->Estudio_id===Estudio::getEstudioPap()){

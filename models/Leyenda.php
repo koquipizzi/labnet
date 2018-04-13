@@ -60,26 +60,26 @@ class Leyenda extends \yii\db\ActiveRecord
     
     public static function getTextoA(){
     	return Leyenda::find()
-    	->select(['texto','id as id'])->distinct()->where(['categoria'=>'A'])
+    	->select(['texto','id as id','codigo'])->distinct()->where(['categoria'=>'A'])
     	->asArray()
     	->all();
     }
   
     public static function getTextoX(){
     	return Leyenda::find()
-    	->select(['texto','id as id'])->distinct()->where(['categoria'=>'X'])
+    	->select(['texto','id as id','codigo'])->distinct()->where(['categoria'=>'X'])
     	->asArray()
     	->all();
     }
     public static function getTextoC(){
     	return Leyenda::find()
-    	->select(['texto','id as id'])->distinct()->where(['categoria'=>'C'])
+    	->select(['texto','id as id','codigo'])->distinct()->where(['categoria'=>'C'])
     	->asArray()
     	->all();
     }
     public static function getTextoF(){
     	return Leyenda::find()
-    	->select(['texto','id as id'])->distinct()->where(['categoria'=>'F'])
+    	->select(['texto','id as id','codigo'])->distinct()->where(['categoria'=>'F'])
     	->asArray()
     	->all();
     }

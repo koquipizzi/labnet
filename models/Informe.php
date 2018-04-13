@@ -218,6 +218,18 @@ class Informe extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getCodigoProtocolo()
+    {
+        $codigo="";
+        $modelProtocolo= $this->protocolo;
+
+        return $modelProtocolo->codigo;
+
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getWorkflows()
     {
         return $this->hasMany(Workflow::className(), ['Informe_id' => 'id']);
@@ -390,7 +402,27 @@ class Informe extends \yii\db\ActiveRecord
     		}
     
     }
-    
+
+    /**
+     * @return informes del paciente
+     */
+    public function getNombrePaciente()
+    {
+        $nombre='';
+        $protocolo =$this->protocolo;
+        $pacientePrestadora_id= Protocolo::find('Paciente_prestadora_id')->where("id=$protocolo->id")->one()['Paciente_prestadora_id'];
+        $paciente_id=PacientePrestadora::find()->where("id=$pacientePrestadora_id")->one()['Paciente_id'];
+        $modelPaciente = Paciente::find()->where(["id"=>$paciente_id])->one();
+        if(!empty($modelPaciente)){
+            $nombre=$modelPaciente->nombre;
+        }
+        return $nombre;
+
+    }
+
+
+
+
     /**
      * @return nombre de un estudio
      */

@@ -23,6 +23,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php echo DetailView::widget([
                     'model' => $model,
                     'attributes' => [
+                        [
+                            'label' => 'Código Protocolo',
+                            'value' => $model->codigoProtocolo,
+                        ],
+                        [
+                            'label' => 'Paciente',
+                            'value' => $model->nombrePaciente,
+                        ],
                         'material',
                         'tecnica',
                         'macroscopia',

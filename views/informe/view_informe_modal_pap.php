@@ -8,7 +8,7 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\Informe */
 
-$this->title = "Estudio ".$model->getNameEstudio($model->Estudio_id) ;
+$this->title = $model->titulo ;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Informes'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

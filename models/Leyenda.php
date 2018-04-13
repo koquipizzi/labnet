@@ -98,21 +98,21 @@ class Leyenda extends \yii\db\ActiveRecord
     
      public static function getMaterialPAP(){
     	return Leyenda::find()
-    	->select(['texto','id as id'])->distinct()->where(['categoria'=>'PAP',"codigo"=>"Material"])
+    	->select(['texto','id as id','codigo'])->distinct()->where(['categoria'=>'PAP',"codigo"=>"Material"])
     	->asArray()
     	->all();
     }
 
     public static function getMTecnicaPAP(){
     	return Leyenda::find()
-    	  	->select(['texto','id as id'])->distinct()->where(['categoria'=>'PAP',"codigo"=>"Tecnica"])
+    	  	->select(['texto','id as id','codigo'])->distinct()->where(['categoria'=>'PAP',"codigo"=>"Tecnica"])
     	->asArray()
     	->all();
     }
     
     public static function getMLeucositosPAP(){
     	return Leyenda::find()
-    	->select(['texto','id as id'])->distinct()->where(['categoria'=>'1',"codigo"=>"LH"])
+    	->select(['texto','id as id','codigo'])->distinct()->where(['categoria'=>'1',"codigo"=>"LH"])
     	->asArray()
     	->all();
     }

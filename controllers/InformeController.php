@@ -86,6 +86,34 @@ class InformeController extends Controller {
                      ]);
              }
 	}
+
+
+
+    /**
+     * Displays a single Informe model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionViewEditObservacionesAdministrativas($id)
+    {
+        $model = $this->findModel($id);
+        $modelProtocolo = $model->protocolo;
+        if (!empty($modelProtocolo)) {
+            if ($modelProtocolo->load(Yii::$app->request->post())) {
+                    $modelProtocolo->update();
+            }
+        }
+        if ($model->estudio->nombre === 'PAP') {
+            return $this->render('view_informe_modal_pap', [
+                'model' => $model,
+            ]);
+        }else{
+            return $this->render('view_informe_modal', [
+                'model' => $model,
+            ]);
+        }
+    }
+
 	
 	/**
 	 * Displays a single Informe para el modal

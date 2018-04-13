@@ -462,6 +462,69 @@ class Informe extends \yii\db\ActiveRecord
          Informe::deleteAll(["id"=>$modelInforme->id]);
     }
 
+    public function getDescripcionCalidad()
+    {
+        $texto='';
+        $modelLeyenda=Leyenda::find()->where(["codigo"=>$this->calidad,'categoria'=>'C'])->one();
+        if(!empty($modelLeyenda)){
+            $texto=$modelLeyenda->texto;
+        }
+        return $texto;
+    }
+    public function getDescripcionAspecto()
+    {
+        $texto='';
+        $modelLeyenda=Leyenda::find()->where(["codigo"=>$this->aspecto,'categoria'=>'A'])->one();
+        if(!empty($modelLeyenda)){
+            $texto=$modelLeyenda->texto;
+        }
+        return $texto;
+    }
+    public function getDescripcionFlora()
+    {
+        $texto='';
+        $modelLeyenda=Leyenda::find()->where(["codigo"=>$this->flora,'categoria'=>'F'])->one();
+        if(!empty($modelLeyenda)){
+            $texto=$modelLeyenda->texto;
+        }
+        return $texto;
+    }
+    public function getdescripcionOtros()
+    {
+        $texto='';
+        $modelLeyenda=Leyenda::find()->where(["codigo"=>$this->otros,'categoria'=>'O'])->one();
+        if(!empty($modelLeyenda)){
+            $texto=$modelLeyenda->texto;
+        }
+        return $texto;
+    }
+    public function getdescripcionMicroorganismos()
+    {
+        $texto='';
+        $modelLeyenda=Leyenda::find()->where(["codigo"=>$this->microorganismos,'categoria'=>'M'])->one();
+        if(!empty($modelLeyenda)){
+            $texto=$modelLeyenda->texto;
+        }
+        return $texto;
+    }
+    public function getdescripcionLeucositos()
+    {
+        $texto='';
+        $modelLeyenda=Leyenda::find()->where("codigo='{$this->leucositos}'")->one();
+        if(!empty($modelLeyenda)){
+            $texto=$modelLeyenda->texto;
+        }
+        return $texto;
+    }
+    public function getdescripcionHematies()
+    {
+        $texto='';
+        $modelLeyenda=Leyenda::find()->where("codigo='{$this->hematies}'")->one();
+        if(!empty($modelLeyenda)){
+            $texto=$modelLeyenda->texto;
+        }
+        return $texto;
+    }
 
 
 }

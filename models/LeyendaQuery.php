@@ -9,6 +9,7 @@ namespace app\models;
  */
 class LeyendaQuery extends \yii\db\ActiveQuery
 {
+    public $texto;
     /*public function active()
     {
         return $this->andWhere('[[status]]=1');

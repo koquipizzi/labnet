@@ -85,13 +85,13 @@ class Leyenda extends \yii\db\ActiveRecord
     }
     public static function getTextoO(){
     	return Leyenda::find()
-    	->select(['texto','id as id'])->distinct()->where(['categoria'=>'O'])
+    	->select(['texto','id as id','codigo'])->distinct()->where(['categoria'=>'O'])
     	->asArray()
     	->all();
     }
     public static function getTextoM(){
     	return Leyenda::find()
-    	->select(['texto','id as id'])->distinct()->where(['categoria'=>'M'])
+    	->select(['texto','id as id','codigo'])->distinct()->where(['categoria'=>'M'])
     	->asArray()
     	->all();
     }

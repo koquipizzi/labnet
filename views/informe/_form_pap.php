@@ -314,7 +314,7 @@ Pjax::end();
                                                     ?>
 
                                                     <?php
-                                                    $dataOtros = ArrayHelper::map(Leyenda::getTextoO(), 'id', 'texto');
+                                                    $dataOtros = ArrayHelper::map(Leyenda::getTextoO(), 'codigo', 'texto');
                                                     echo $form->field($model, 'otros', ['template' => "{label}
                                                             <div class='col-md-7'>{input}</div>
                                                             {hint}
@@ -322,7 +322,7 @@ Pjax::end();
                                                       ])->widget(select2::classname(), [
                                                             'data' => $dataOtros,
                                                             'language' => 'es',
-                                                            'options' => ['placeholder' => 'Seleccione una Leyenda'],
+                                                            'options' => ['placeholder' => 'Seleccione una Leyenda','value'=>$model->otros],
                                                             'pluginOptions' => [
                                                                 'allowClear' => false
                                                             ],
@@ -335,7 +335,7 @@ Pjax::end();
 
 
                                                     <?php
-                                                    $dataAspecto = ArrayHelper::map(Leyenda::getTextoM(), 'id', 'texto');
+                                                    $dataAspecto = ArrayHelper::map(Leyenda::getTextoM(), 'codigo', 'texto');
                                                     echo $form->field($model, 'microorganismos', ['template' => "{label}
                                                             <div class='col-md-7'>{input}</div>
                                                             {hint}
@@ -343,7 +343,7 @@ Pjax::end();
                                                        ])->widget(select2::classname(), [
                                                         'data' => $dataAspecto,
                                                             'language' => 'es',
-                                                            'options' => ['placeholder' => 'Seleccione una Leyenda'],
+                                                            'options' => ['placeholder' => 'Seleccione una Leyenda','value'=>$model->microorganismos],
                                                             'pluginOptions' => [
                                                                 'allowClear' => false
                                                             ],

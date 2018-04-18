@@ -302,8 +302,13 @@ class Informe extends \yii\db\ActiveRecord
             return "Pendiente";
         else {
                 $usuario= $ls['Responsable_id'];
-                $nombre= User::find()->andWhere("id =$usuario")->one();
-                return  $nombre->attributes['username'];
+                if (empty($usuario)){
+                    return "Pendiente";
+                }else{
+                    $nombre= User::find()->andWhere("id =$usuario")->one();
+                    return  $nombre->attributes['username'];
+                }
+               
         }
     
     }

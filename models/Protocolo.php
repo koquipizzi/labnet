@@ -247,9 +247,16 @@ class Protocolo extends \yii\db\ActiveRecord
 
     public function getFechaEntrega()
     {
-        $fecha= $this->fecha_entrega;
-        $arr = explode('-',$fecha);
-        return $arr[2].'-'.$arr[1].'-'.$arr[0];
+        $reponse = new \Datetime();
+        $reponse = $reponse->format('d-m-Y');
+        if  (!empty($this->fecha_entrega))
+        {
+            $fecha = $this->fecha_entrega;
+            $arr = explode('-',$fecha);
+            $reponse = $arr[2].'-'.$arr[1].'-'.$arr[0];
+        }
+            return $reponse;
+        
     }
      /**
      * @return \yii\db\ActiveQuery

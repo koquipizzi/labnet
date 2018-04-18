@@ -884,15 +884,15 @@ private function migrarPaciente($conn) {
      */
     public function actionSync()
     {
-        //$connection = \Yii::$app->dbSqlServer;
-        $connection = \Yii::$app->dbSqlServerEmpresa;
+        $connection = \Yii::$app->dbSqlServer;
+       // $connection = \Yii::$app->dbSqlServerEmpresa;
         // $conecctionNewEsquema = \Yii::$app->dbMysqlServerDedicado;
         $conecctionNewEsquema = \Yii::$app->db;
 
         //$this->removeColumsOldId($conecctionNewEsquema);
         //prepara la base
         //$this->addColumsOldId($conecctionNewEsquema);
-        $this->clearAllDatabase();
+       // $this->clearAllDatabase();
 
         //comienza a migrar los datos de las entidades
 

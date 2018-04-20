@@ -124,39 +124,23 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'contentOptions' => ['style' => 'width:30%;'],
                             'value'=>function ($model, $key, $index, $widget) {
-                              $estados = array(
-                                                "1" => "danger",
-                                                "2" => "default",
-                                                "3" => "success",
-                                                "4" => "warning",
-                                                "5" => "primary",
-                                                "6" => "info",
-                                                );
-                                $estadosLeyenda = array(
-                                    "1" => "INFORME PENDIENTE",
-                                    "2" => "INFORME DESCARTADO",
-                                    "3" => "EN PROCESO",
-                                    "4" => "INFORME PAUSADO",
-                                    "5" => "FINALIZADO",
-                                    "6" => "ENTREGADO",
-                                );
+                                $estados = ["1" => "danger",  "2" => "default", "3" => "success","4" => "warning", "5" => "primary","6" => "info"];
+                                $estadosLeyenda =["1" => "INFORME PENDIENTE", "2" => "INFORME DESCARTADO","3" => "EN PROCESO","4" => "INFORME PAUSADO", "5" => "FINALIZADO", "6" => "ENTREGADO"];
                                 $val = " ";
                                 $idProtocolo = $model['id'];
                                 $informes = app\models\Informe::find()->where(['=','Informe.Protocolo_id',$idProtocolo])->all();
-                                //var_dump($model['id']); die();
                                 foreach ($informes as $inf){
-                                 //   var_dump($inf);
                                     $estado = $inf->workflowLastState;
                                     $clase = " label-".$estados[$estado];
                                     $url ='index.php?r=informe/update&id='.$inf->id;
-                                    $val = $val. Html::a(Html::encode($inf->estudio->nombre),$url,[
+                                    $val = $val. Html::a(Html::encode($inf->estudio->nombre),$url,
+                                    [
                                             'title' => "$estadosLeyenda[$estado]",
-                                            'class'=>'label '. $clase.' rounded protoClass2',
-                                            'value'=> "$url",
+                                            'class'=>'label '. $clase.' rounded ',
                                             'data-id'=> "$inf->id",
                                             'data-protocolo'=> "$inf->Protocolo_id",
                                     ]);
-                                    $val = $val."<br /><span></span>";
+                                    $val = $val."<br/><span></span>";
                                 }
                                 return $val;
                             },

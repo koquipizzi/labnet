@@ -42,9 +42,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filterModel' => $searchModel,
                     'columns' => [//'id',
                     [
-                            'label' => 'Fecha Entrada',
+                            'label' => 'Entrada',
                             'attribute' => 'fecha_entrada',
-                            'contentOptions' => ['style' => 'width:20%;'],
+                            'contentOptions' => ['style' => 'width:8%;'],
                             'format' => ['date', 'php:d/m/Y'],
                             'filter' => DateRangePicker::widget([
                             'template' => '
@@ -70,9 +70,9 @@ $this->params['breadcrumbs'][] = $this->title;
                              ])
                         ],
                         [
-                            'label' => 'Fecha de Entrega',
+                            'label' => 'Entrega',
                             'attribute' => 'fecha_entrega',
-                            'contentOptions' => ['style' => 'width:20%;'],
+                            'contentOptions' => ['style' => 'width:9%;'],
                             'format' => ['date', 'php:d/m/Y'],
                             'filter' => DateRangePicker::widget([
                                 'template' => '
@@ -100,13 +100,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'label' => 'Nro Protocolo',
                             'attribute' => 'codigo',
-                            'contentOptions' => ['style' => 'width:7%;'],
+                            'contentOptions' => ['style' => 'width:10%;'],
                         ],
 
                         [
                             'label' => 'Paciente',
                             'attribute'=>'nombre',
-                             'contentOptions' => ['style' => 'width:20%;'],
+                             'contentOptions' => ['style' => 'width:15%;'],
                             'value'=>function ($model, $key, $index, $widget) {
                                 if(strlen($model["nombre"])>17){
                                     return substr($model["nombre"], 0, 14)."...";

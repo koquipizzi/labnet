@@ -39,9 +39,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => 
                 [
                     [
-                    'label' => 'Fecha de Entrada',
+                    'label' => 'Entrada',
                     'attribute' => 'fecha_entrada',
-                    'contentOptions' => ['style' => 'width:20%;'],
+                    'contentOptions' => ['style' => 'width:8%;'],
                     'format' => ['date', 'php:d/m/Y'],
 
                     'filter' => DateRangePicker::widget([
@@ -67,9 +67,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]
                     ])
                 ],      [
-                    'label' => 'Fecha de Entrega',
+                    'label' => 'Entrega',
                     'attribute' => 'fecha_entrega',
-                    'contentOptions' => ['style' => 'width:20%;'],
+                    'contentOptions' => ['style' => 'width:9%;'],
                     'format' => ['date', 'php:d/m/Y'],
 
                     'filter' => DateRangePicker::widget([
@@ -99,16 +99,16 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Nro Protocolo',
                 'attribute' => 'codigo',
-                'contentOptions' => ['style' => 'width:7%;'],
+                'contentOptions' => ['style' => 'width:9%;'],
             ],
             [
                 'label' => 'Paciente',
                 'attribute'=>'nombre',
-                'contentOptions' => ['style' => 'width:30%;'],
+                'contentOptions' => ['style' => 'width:15%;'],
             ],
             [
                 'attribute'=>'nro_documento',
-                'contentOptions' => ['style' => 'width:6%;'],
+                'contentOptions' => ['style' => 'width:5%;'],
             ],
             [
                 'label' => 'Informes',

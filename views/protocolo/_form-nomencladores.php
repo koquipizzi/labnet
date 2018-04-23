@@ -10,7 +10,6 @@ use kartik\typeahead\TypeaheadBasic;
 use kartik\typeahead\Typeahead;
 
 ?>
-
 <?php DynamicFormWidget::begin([
     'widgetContainer' => 'dynamicform_inner',
     'widgetBody' => '.container-rooms',
@@ -19,7 +18,7 @@ use kartik\typeahead\Typeahead;
     'min' => 0,
     'insertButton' => '.add-room',
     'deleteButton' => '.remove-room',
-    'model' => $modelsNomenclador[0],
+    'model' => !empty($modelsNomenclador[0]) ? $modelsNomenclador[0] : new \app\models\InformeNomenclador(),
     'formId' => 'dynamic-form',
     'formFields' => [
         'servicio',

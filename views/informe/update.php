@@ -152,7 +152,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                     ?>                                                                     
                             <?php Pjax::end(); ?> 
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <?php Pjax::begin(['id'=>'estado']); ?>                                 
                                    <?php echo "Asignado: ". $model->workflowLastAsignationUser; ?>
                                    <?php if(Helper::checkRoute('/workflow/*')){?>
@@ -170,7 +170,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                     ?>                                                                     
                             <?php Pjax::end(); ?>   
                         </div> 
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <button class="btn btn-default btn-sm  mostrarTree pull-right" title="Agregar texto"><i class="fa fa-edit"></i></button>
                             <button class="btn btn-default btn-sm  guardarTexto pull-right" value="<?= Url::to(['textos/copy']) ?>"><i class="fa fa-copy"></i></button>
                             <?php  

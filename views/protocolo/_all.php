@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="clearfix"></div>
         </div>
 
-        <div style="margin-top: 30px;">
+        <div style="margin-top: 10px;">
                 <?php Pjax::begin(['id'=>'trab_prot', 'enablePushState' => FALSE]); ?>
             <?php
             echo GridView::widget([

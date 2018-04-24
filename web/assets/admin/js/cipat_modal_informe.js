@@ -1,6 +1,4 @@
-
-
-   $('.refresh').on('click', function (e) { 
+   $('.refresh').on('click', function (e) {
         e.preventDefault();        
         var $url = $(this).attr('href'); 
         $.ajax({
@@ -14,24 +12,20 @@
                         $('.content-galeria').html(response.gal);
                     }
                     else if(response.rta == 'error'){                        
-                   //     $('.field-informenomenclador-cantidad').removeClass('has-success');
-                   //     $('.field-informenomenclador-cantidad').addClass('has-error');
-                   //     $('.field-informenomenclador-cantidad .help-block').html(response.message.cantidad[0]);
-                    }  
 
-                    else {
+                    }else {
                         
                     }
                 }
            });
-    });
+   });
    
-    $('.mostrarTree').on('click', function (e) { 
+    $('.mostrarTree').on('click', function (e) { //toggle de estudios
         $('.tree-view-wrapper').toggle();
     });    
     
         
-    $('.click').on('click', function (e) {    
+    $('.click').on('click', function (e) {
         e.preventDefault();        
         var $url = 'index.php?r=informe-nomenclador/create'; 
         $p = $('#popNomenclador');       
@@ -78,7 +72,7 @@
                     }
                 }
            });
-    });
+    }); // Agregar Nomenclador
         
  
     $('.change-estado').on('click', function () {
@@ -133,7 +127,7 @@
                     console.log("internal server error");
                 }
             });
-    });
+    });    //Cambiar estado del informe del estudio
     
     
     function guardarInformeYredireccionarAIndex(){
@@ -176,7 +170,7 @@
       
     }
 
-    $('.guardarTexto').click(function (e) { 
+    $('.guardarTexto').click(function (e) {
             e.preventDefault(); 
             $('#modal').find('.modal-header').html('Nuevo Autotexto');
             var $url = 'index.php?r=textos/create'; 
@@ -218,13 +212,12 @@
                 });
             
             
-        });
+        });  //Guardado de AutoTexto a partir de informe
 
     
     $(document).on('ready pjax:success', function () {
-        $('.tree-view-wrapper').hide();
-        $('.kv-upload-progress').change(function(){ 
-          //  debugger;
+   
+        $('.kv-upload-progress').change(function(){
            alert('event.data'); 
         });
 
@@ -235,84 +228,76 @@
             $('[data-toggle="popover"]').popover('show');
         });
      
-    $("#idFile").on('fileuploaded', function(event) {
-        $.pjax.reload({container:"#galeriar"});
-     });
+        $("#idFile").on('fileuploaded', function(event) {
+            $.pjax.reload({container:"#galeriar"});
+         });
 
-    $("body").on("submit", "form#create-autotexto-form", function (e) {
-            $("body").keydown(function(event){
-                if(event.keyCode == 13) {
-                        event.preventDefault();
-                        return false;
-                }
-            }); 
-
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            var form = $(this);                       
-                // return false if form still have some validation errors
-            if (form.find(".has-error").length) 
-                {
-                    return false;
-                }
-                // submit form
-            $.ajax({
-                    url    : form.attr("action"),
-                    type   : "post",
-                    data   : form.serialize(),
-                    success: function (response) 
-                    {
-                     
-                        
-                        if (response.rdo == 'ko'){
-                            var n = noty({
-                                text: 'El código debe ser único',
-                                type: 'error',
-                                killer: true,
-                                class: 'animated pulse',
-                                layout: 'topRight',
-                                theme: 'relax',
-                                timeout: 3000, // delay for closing event. Set false for sticky notifications
-                                force: false, // adds notification to the beginning of queue when set to true
-                                modal: false, // si pongo true me hace el efecto de pantalla gris
-                            });
+        $("body").on("submit", "form#create-autotexto-form", function (e) {
+                $("body").keydown(function(event){
+                    if(event.keyCode == 13) {
+                            event.preventDefault();
                             return false;
-                        }
-                            
-                        else {
-                         //   $.pjax.reload({container:'#pjax-tree'});
-                            $("#modal").modal("toggle");
-                            
-                            //   $.pjax.reload({container:"#pacientes"}); //for pjax update
-                            var n = noty({
-                                   text: 'Autotexto generado con éxito!',
-                                   type: 'success',
-                                   class: 'animated pulse',
-                                   layout: 'topRight',
-                                   theme: 'relax',
-                                   killer: true,
-                                   timeout: 3000, // delay for closing event. Set false for sticky notifications
-                                   force: false, // adds notification to the beginning of queue when set to true
-                                   modal: false, // si pongo true me hace el efecto de pantalla gris
-                            });
-                               $.pjax.reload({container:"#pjax-container"});
-                        }
-                        
-
-                    },
-                    error  : function () 
-                    {
-                        console.log("internal server error");
                     }
-            });
-        return false;
-    });
-    
-        //$('.content-galeria').load($(this).attr('value'));
+                });
+
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var form = $(this);
+                    // return false if form still have some validation errors
+                if (form.find(".has-error").length)
+                    {
+                        return false;
+                    }
+                    // submit form
+                $.ajax({
+                        url    : form.attr("action"),
+                        type   : "post",
+                        data   : form.serialize(),
+                        success: function (response)
+                        {
+
+                            if (response.rdo == 'ko'){
+                                var n = noty({
+                                    text: 'El código debe ser único',
+                                    type: 'error',
+                                    killer: true,
+                                    class: 'animated pulse',
+                                    layout: 'topRight',
+                                    theme: 'relax',
+                                    timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                    force: false, // adds notification to the beginning of queue when set to true
+                                    modal: false, // si pongo true me hace el efecto de pantalla gris
+                                });
+                                return false;
+                            }
+
+                            else {
+                             //   $.pjax.reload({container:'#pjax-tree'});
+                                $("#modal").modal("toggle");
+
+                                //   $.pjax.reload({container:"#pacientes"}); //for pjax update
+                                var n = noty({
+                                       text: 'Autotexto generado con éxito!',
+                                       type: 'success',
+                                       class: 'animated pulse',
+                                       layout: 'topRight',
+                                       theme: 'relax',
+                                       killer: true,
+                                       timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                       force: false, // adds notification to the beginning of queue when set to true
+                                       modal: false, // si pongo true me hace el efecto de pantalla gris
+                                });
+                                   $.pjax.reload({container:"#pjax-container"});
+                            }
+                        },
+                        error  : function () {
+                            console.log("internal server error");
+                        }
+                });
+            return false;
+        });
 
         $('.deleteNomenclador').on('click', function (e) {
-            //   e.preventDefault(); 
-           //    debugger
             var $id = $(this).attr('id');
             var $url = 'index.php?r=informe-nomenclador/delete'; 
             $.ajax({
@@ -336,10 +321,9 @@
 
                        }
                   });
-           });
-      
-
-    });
+           });  //Borrar nomenclador
+        
+    });    //Cargado de eventos despues de un Pjax
           
     $( document ).ready(function(e) {
     	  setInterval(guardarInforme(), 20000);

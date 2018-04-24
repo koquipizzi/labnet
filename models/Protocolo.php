@@ -201,12 +201,16 @@ class Protocolo extends \yii\db\ActiveRecord
     {
         $paciente= $this->hasOne(ViewPacientePrestadora::className(), ['id' => 'Paciente_prestadora_id'])->one();
         $fecha1 = $paciente->fecha_nacimiento;
-        $fecha2 = date("Y-m-d");
-        //$fecha = $fecha2 - $fecha1;
-        $date1 = new DateTime($fecha1);
-        $date2 = new DateTime("now");
-        $diff = $date1->diff($date2);
-        $d=(string)$diff->format('%y');
+        $d = 'No tiene registro';
+        if (!empty($fecha1)){
+            $fecha2 = date("Y-m-d");
+            //$fecha = $fecha2 - $fecha1;
+            $date1 = new DateTime($fecha1);
+            $date2 = new DateTime("now");
+            $diff = $date1->diff($date2);
+            $d=(string)$diff->format('%y');
+        }
+      
         return $d;
     }
 

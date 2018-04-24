@@ -219,122 +219,70 @@ class InformeController extends Controller {
 	 */
 
 	public function actionUpdate($id=null) {
-
-		if(isset($id)){
-				$model = $this->findModel ( $id );
-		}else{
-				$model=$this->findModel(Yii::$app->request->post('Informe_id'));
-		}
-		if ($model) {
-        	$modelp = $model->protocolo;
+        
+        if(isset($id)){
+            $model = $this->findModel ( $id );
+        }else{
+            $model=$this->findModel(Yii::$app->request->post('Informe_id'));
         }
-
-		if (isset($_POST['Protocolo']['observaciones'])){
-			$modelp->observaciones = $_POST['Protocolo']['observaciones'];
-			$modelp->save(false);
-		}
-
-		if (isset($_POST['Informe']['editorTags'])){
-			$tagsPost=$_POST['Informe']['editorTags'];
-			$model->setEditorTags($tagsPost);
-		}
-
+        if ($model) {
+            $modelp = $model->protocolo;
+        }
+        if (isset($_POST['Protocolo']['observaciones'])){
+            $modelp->observaciones = $_POST['Protocolo']['observaciones'];
+            $modelp->save(false);
+        }
+        if (isset($_POST['Informe']['editorTags'])){
+            $tagsPost=$_POST['Informe']['editorTags'];
+            $model->setEditorTags($tagsPost);
+        }
+        
         $nominf = new InformeNomenclador();
         if (isset($_POST['hasEditable'])) {
-			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-				$nom = $model->getNomencladorInforme($_POST['id_nom_inf']);
-				$nominf = InformeNomenclador::find()->where(['=', 'id', $nom['id']])->one();
-				$cant = $_POST['cantidad'];
-				if (is_numeric($cant)){
-						$nominf->cantidad = $_POST['cantidad'];
-						$nominf->save();
-						return ['response'=>$nominf->cantidad, 'message'=>''];
-				}
-				else {
-						return ['response'=>$nominf->cantidad, 'message'=>'Ingrese un número'];
-				}
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $nom = $model->getNomencladorInforme($_POST['id_nom_inf']);
+            $nominf = InformeNomenclador::find()->where(['=', 'id', $nom['id']])->one();
+            $cant = $_POST['cantidad'];
+            if (is_numeric($cant)){
+                $nominf->cantidad = $_POST['cantidad'];
+                $nominf->save();
+                return ['response'=>$nominf->cantidad, 'message'=>''];
+            }
+            else {
+                return ['response'=>$nominf->cantidad, 'message'=>'Ingrese un número'];
+            }
         }
-
-
+        
         $searchModel = new InformeNomencladorSearch();
         $informeNomenclador = new InformeNomenclador();
         $searchModel->id_informe = $model->id;
         $dataProvider = $searchModel->search([]);
         $informe=$this->findModel( $model->id );
         $historialPaciente=$informe->getHistorialUsuario();
-
         if (is_null($model->titulo)) {
             $model->titulo = $model->estudio->titulo;
         }
         // View to Render
-
+        
         //Obtener fotos
         $dataproviderMultimedia = new ArrayDataProvider([
-                            'allModels' => Multimedia::findAll(['Informe_id'=>$model->id]),
-            ]);
-
-		$codigo = "";
+            'allModels' => Multimedia::findAll(['Informe_id'=>$model->id]),
+        ]);
+        
+        $codigo = "";
         if($model->WorkflowLastState != Workflow::estadoEntregado()){
             if($model->WorkflowLastState != Workflow::estadoFinalizado()) {
                 if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
+                    
                     //obtine el utlimo estado
                     $ultimoEstado = Workflow::find('id')->where([
                         'Informe_id' => $model->id
                     ])->orderBy([
                         '(id)' => SORT_DESC
                     ])->one();
-
-
-                    /*//se asigna un estudio y lo cambia al estado en proceso
-                    if ($ultimoEstado->Estado_id === Workflow::estadoPendiente()) {
-                        $this->autoAsignarEstudio($model->id, $ultimoEstado);
-                    } else {
-                        $this->updateEstadoEnProceso($model->id, $ultimoEstado);
-                    }*/
-
-
-
-                    if ($model->estudio->nombre === 'PAP') {
-                        //obtiene el texto seleccionado
-                        if (isset(Yii::$app->request->post ()["id_texto"])) {
-                        $textoModel = new \app\models\Textos();
-                        $texto = $textoModel->find()->where(['=', 'id', Yii::$app->request->post ()["id_texto"]])->one(); //findModel($_GET['idtexto']);
-                        $this->cargarModelo($model, $texto);
-                        $codigo = $texto->codigo;
-                        $model->save();
-                    }
-                        return $this->render('update_pap', [
-                            'model' => $model,
-                            'modelp' => $modelp,
-                            'dataProvider' => $dataProvider,
-                            'historialPaciente' => $historialPaciente,
-                            'modeloInformeNomenclador' => $informeNomenclador,
-                            'dataproviderMultimedia' => $dataproviderMultimedia,
-                            'codigo' => $codigo,
-                        ]);
-                    } else {
-                            //obtiene el texto seleccionado
-                            if (isset(Yii::$app->request->post ()["id_texto"])) {
-                            $textoModel = new \app\models\Textos();
-                            $texto = $textoModel->find()->where(['=', 'id', Yii::$app->request->post ()["id_texto"]])->one(); //findModel($_GET['idtexto']);
-
-                            $this->cargarModelo($model, $texto);
-                            $codigo = $texto->codigo;
-                            $model->save();
-                        }
-                        return $this->render('update', [
-                            'model' => $model,
-                            'modelp' => $modelp,
-                            'dataProvider' => $dataProvider,
-                            'historialPaciente' => $historialPaciente,
-                            'modeloInformeNomenclador' => $informeNomenclador,
-                            'dataproviderMultimedia' => $dataproviderMultimedia,
-                            'codigo' => $codigo,
-                        ]);
-                    }
+                    
                 }
-
+                
                 //multimedia
                 $file = Yii::$app->request->post('Informe_id');
                 if (isset($file)) {
@@ -348,27 +296,19 @@ class InformeController extends Controller {
                         'dataproviderMultimedia' => $dataproviderMultimedia,
                     ]);
                 }
-
-
+                
+                
             }
-
-            //multimedia
-            $file=Yii::$app->request->post('Informe_id');
-            if(isset($file)){
-                $this->multimediaUpload();
-				$id=$model->id;
-				$dataproviderMultimedia = new ArrayDataProvider([
-					'allModels' => Multimedia::findAll(['Informe_id'=>$model->id])]);
-					return true;
-				return $this->renderAjax('galeria_1', [
-					'model' => $model,
-					'dataproviderMultimedia' => $dataproviderMultimedia,
-				]);
-			}
-		}
-		$codigo = "";
+        }
+        $codigo = "";
         if ($model->estudio->nombre === 'PAP') {
-
+            if (isset(Yii::$app->request->post ()["id_texto"])) {
+                $textoModel = new \app\models\Textos();
+                $texto = $textoModel->find()->where(['=', 'id', Yii::$app->request->post ()["id_texto"]])->one(); 
+                $this->cargarModelo($model, $texto);
+                $codigo = $texto->codigo;
+                $model->save();
+            }
             return $this->render ( 'update_pap', [
                 'model' => $model,
                 'modelp' => $modelp,
@@ -377,22 +317,28 @@ class InformeController extends Controller {
                 'modeloInformeNomenclador' =>  $informeNomenclador,
                 'dataproviderMultimedia'=>$dataproviderMultimedia,
                 'codigo'=>$codigo,
-             ] );
-
-        }else {
-                return $this->render ( 'update', [
-                    'model' => $model,
-                    'modelp' => $modelp,
-                    'dataProvider' => $dataProvider,
-                    'historialPaciente'=>$historialPaciente,
-                    'modeloInformeNomenclador' =>  $informeNomenclador,
-                    'dataproviderMultimedia'=>$dataproviderMultimedia,
-                    'codigo'=>$codigo,
-                ] );
-         }
-
-		
-	}
+            ] );
+        } else {
+            if (isset(Yii::$app->request->post ()["id_texto"])) {
+                $textoModel = new \app\models\Textos();
+                $texto = $textoModel->find()->where(['=', 'id', Yii::$app->request->post ()["id_texto"]])->one();
+                $this->cargarModelo($model, $texto);
+                $codigo = $texto->codigo;
+                $model->save();
+            }
+            return $this->render ( 'update', [
+                'model' => $model,
+                'modelp' => $modelp,
+                'dataProvider' => $dataProvider,
+                'historialPaciente'=>$historialPaciente,
+                'modeloInformeNomenclador' =>  $informeNomenclador,
+                'dataproviderMultimedia'=>$dataproviderMultimedia,
+                'codigo'=>$codigo,
+            ] );
+        }
+        
+        
+    }
 
 
 

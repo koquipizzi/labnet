@@ -21,17 +21,27 @@ Pjax::begin([
 //echo \yii::$app->request->get();
 
 
+$urlTexto = Url::to(['informe/update', 'id' => $model->id]);
+
 $onSelect = new JsExpression(<<<JS
 function (undefined, item) {
+    var split=item.href.split("&");
+    var id_texto_split=split[2].split("=");
+    var id_texto=id_texto_split[1];
+ 
     if (item.href !== location.pathname) {
+       var form= $("#form-informe-complete").serialize();
         $.pjax({
             container: '#pjax-tree',
-            url: item.href,
-            timeout: null
+            url: '{$urlTexto}',
+            type   : "post",
+            timeout: null,
+            data:form + '&id_texto=' + id_texto,
+            
         });
     }
 
-    var otherTreeWidgetEl = $('.treeview.small').not($(this)),
+    var otherTreeWidgetEl = $('.treeview2.small').not($(this)),
         otherTreeWidget = otherTreeWidgetEl.data('treeview2'),
         selectedEl = otherTreeWidgetEl.find('.node-selected');
     if (selectedEl.length) {

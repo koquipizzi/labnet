@@ -146,14 +146,13 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                     <?php }?>  
                                     <ul class="dropdown-menu pull-right">
                                     <?php 
-                                        $dataEstado=Estado::find()->where("autoAsignado != 'S'")->asArray()->all();    
-                                        // var_dump($dataEstado);die();
-                                        foreach ($dataEstado as $estado) //var_dump($estado['descripcion']);die();
+                                        $dataEstado=Estado::find()->where(['estado_final' => '0'])->asArray()->all();
+                                        foreach ($dataEstado as $estado)
                                             echo "<li><a href='#".$estado['id']."' class='btn-view change-estado'  data-workflow='".$model->currentWorkflow."' data-informe='".$model->id."' data-estado='".$estado['id']."' data-estadotexto='".$estado['id']."' >".$estado['descripcion']."</a></li>";
                                     ?>                                                                     
                             <?php Pjax::end(); ?> 
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <?php Pjax::begin(['id'=>'estado']); ?>                                 
                                    <?php echo "Asignado: ". $model->workflowLastAsignationUser; ?>
                                    <?php if(Helper::checkRoute('/workflow/*')){?>
@@ -171,7 +170,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                     ?>                                                                     
                             <?php Pjax::end(); ?>   
                         </div> 
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <button class="btn btn-default btn-sm  mostrarTree pull-right" title="Agregar texto"><i class="fa fa-edit"></i></button>
                             <button class="btn btn-default btn-sm  guardarTexto pull-right" value="<?= Url::to(['textos/copy']) ?>"><i class="fa fa-copy"></i></button>
                             <?php  
@@ -224,13 +223,13 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 $this->registerJsFile('@web/assets/admin/js/cipat_modal_informe.js', ['depends' => [yii\web\AssetBundle::className()]]);
 
 
-    Modal::begin([
+/*    Modal::begin([
                     'id' => 'modal',    
                    // 'size'=>'modal-lg',
                     'options' => ['tabindex' => false ],
                 ]);
                 echo "<div id='modalContentAutotexto' ></div>";      
-    Modal::end();
+    Modal::end();*/
     
 
 ?>

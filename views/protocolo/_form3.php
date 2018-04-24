@@ -262,7 +262,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         <?php yii\widgets\Pjax::end() ?>
                     </div>
                     <button type='button'  id='addMedico'  class=' col-md-1   btn btn-success btn-xs' 
-                            value='index.php?r=medico/createpop'><?php   echo Yii::t('app', 'Add');  ?>
+                            value='index.php?r=medico/createpop' Style = 'width:80px;'><?php   echo Yii::t('app', 'Add');  ?>
                     </button>
             </div>
         </div>                
@@ -296,9 +296,9 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         ?>
                         <?php yii\widgets\Pjax::end() ?>
                     </div>
-                        <button type='button'  id='addProcedencia'  
-                             class=' col-md-1  addProcedencia btn btn-success btn-xs' 
-                             value='index.php?r=procedencia/createpop'><?php    echo Yii::t('app', 'Add');  ?>
+                        <button type='button'  id='addProcedencia'
+                             class=' col-md-1  addProcedencia btn btn-success btn-xs'
+                             value='index.php?r=procedencia/createpop' Style = 'width:80px;'><?php    echo Yii::t('app', 'Add');  ?>
                         </button>
             </div>
         </div>

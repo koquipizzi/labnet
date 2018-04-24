@@ -308,7 +308,7 @@
         return false;
     });
     
-        $('.content-galeria').load($(this).attr('value'));
+        //$('.content-galeria').load($(this).attr('value'));
 
         $('.deleteNomenclador').on('click', function (e) {
             //   e.preventDefault(); 

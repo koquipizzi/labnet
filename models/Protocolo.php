@@ -201,12 +201,16 @@ class Protocolo extends \yii\db\ActiveRecord
     {
         $paciente= $this->hasOne(ViewPacientePrestadora::className(), ['id' => 'Paciente_prestadora_id'])->one();
         $fecha1 = $paciente->fecha_nacimiento;
-        $fecha2 = date("Y-m-d");
-        //$fecha = $fecha2 - $fecha1;
-        $date1 = new DateTime($fecha1);
-        $date2 = new DateTime("now");
-        $diff = $date1->diff($date2);
-        $d=(string)$diff->format('%y');
+        $d = 'No tiene registro';
+        if (!empty($fecha1)){
+            $fecha2 = date("Y-m-d");
+            //$fecha = $fecha2 - $fecha1;
+            $date1 = new DateTime($fecha1);
+            $date2 = new DateTime("now");
+            $diff = $date1->diff($date2);
+            $d=(string)$diff->format('%y');
+        }
+      
         return $d;
     }
 
@@ -247,9 +251,16 @@ class Protocolo extends \yii\db\ActiveRecord
 
     public function getFechaEntrega()
     {
-        $fecha= $this->fecha_entrega;
-        $arr = explode('-',$fecha);
-        return $arr[2].'-'.$arr[1].'-'.$arr[0];
+        $reponse = new \Datetime();
+        $reponse = $reponse->format('d-m-Y');
+        if  (!empty($this->fecha_entrega))
+        {
+            $fecha = $this->fecha_entrega;
+            $arr = explode('-',$fecha);
+            $reponse = $arr[2].'-'.$arr[1].'-'.$arr[0];
+        }
+            return $reponse;
+        
     }
      /**
      * @return \yii\db\ActiveQuery

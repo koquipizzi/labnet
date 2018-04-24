@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="clearfix"></div>
         </div>
 
-        <div style="margin-top: 30px;">
+        <div style="margin-top: 10px;">
                 <?php Pjax::begin(['id'=>'trab_prot', 'enablePushState' => FALSE]); ?>
             <?php
             echo GridView::widget([
@@ -39,9 +39,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => 
                 [
                     [
-                    'label' => 'Fecha de Entrada',
+                    'label' => 'Entrada',
                     'attribute' => 'fecha_entrada',
-                    'contentOptions' => ['style' => 'width:20%;'],
+                    'contentOptions' => ['style' => 'width:8%;'],
                     'format' => ['date', 'php:d/m/Y'],
 
                     'filter' => DateRangePicker::widget([
@@ -67,9 +67,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]
                     ])
                 ],      [
-                    'label' => 'Fecha de Entrega',
+                    'label' => 'Entrega',
                     'attribute' => 'fecha_entrega',
-                    'contentOptions' => ['style' => 'width:20%;'],
+                    'contentOptions' => ['style' => 'width:9%;'],
                     'format' => ['date', 'php:d/m/Y'],
 
                     'filter' => DateRangePicker::widget([
@@ -99,16 +99,16 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Nro Protocolo',
                 'attribute' => 'codigo',
-                'contentOptions' => ['style' => 'width:7%;'],
+                'contentOptions' => ['style' => 'width:9%;'],
             ],
             [
                 'label' => 'Paciente',
                 'attribute'=>'nombre',
-                'contentOptions' => ['style' => 'width:30%;'],
+                'contentOptions' => ['style' => 'width:15%;'],
             ],
             [
                 'attribute'=>'nro_documento',
-                'contentOptions' => ['style' => 'width:6%;'],
+                'contentOptions' => ['style' => 'width:5%;'],
             ],
             [
                 'label' => 'Informes',
@@ -152,12 +152,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             return $val;
                         },
             ],            
-             ['class' => 'yii\grid\ActionColumn',
+            ['class' => 'yii\grid\ActionColumn',
                 'template' => '{edit}',
                 'contentOptions' => ['style' => 'width:10%;'],
                 'buttons' => [
                     //view button
                     'edit' => function ($url, $model) {
+                        
+                        $estadoInforme = \app\models\Workflow::find()->where(['informe_id' => $model['id']])->orderBy('fecha_inicio DESC')->one();
+                        if (!empty($estadoInforme)){
+                            if ($estadoInforme->Estado_id == \app\models\Workflow::estadoFinalizado() || $estadoInforme->Estado_id == \app\models\Workflow::estadoEntregado()){
+                                return null;
+                            }
+                        }
                         return Html::a('<span class="fa fa-pencil"></span>', $url, [
                                     'title' => Yii::t('app', 'edit'),  
                                     'class'=> 'btn-info btn-xs',
@@ -171,7 +178,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $url;
                     }
                 }
-             ],
+            ]
         ],
 
         ]);

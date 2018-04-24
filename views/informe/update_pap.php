@@ -145,7 +145,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                     <?php }?>  
                                     <ul class="dropdown-menu pull-right">
                                     <?php 
-                                        $dataEstado=Estado::find()->where("autoAsignado != 'S'")->asArray()->all();    
+                                        $dataEstado=Estado::find()->where(['estado_final' => '0'])->asArray()->all();
                                         // var_dump($dataEstado);die();
                                         foreach ($dataEstado as $estado) //var_dump($estado['descripcion']);die();
                                             echo "<li><a href='#".$estado['id']."' class='btn-view change-estado'  data-workflow='".$model->currentWorkflow."' data-informe='".$model->id."' data-estado='".$estado['id']."' data-estadotexto='".$estado['id']."' >".$estado['descripcion']."</a></li>";

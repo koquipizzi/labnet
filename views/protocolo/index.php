@@ -22,10 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
     $this->registerJsFile('@web/assets/admin/js/cipat_modal_protocolo.js', ['depends' => [yii\web\AssetBundle::className()]]);
   //  $this->registerJsFile('@web/assets/global/plugins/bower_components/peity/jquery.peity.min.js', ['depends' => [yii\web\AssetBundle::className()]]);
 //    $this->registerJsFile('@web/assets/admin/css/components/rating.css', ['depends' => [yii\web\AssetBundle::className()]]);
-    
     ?>
 
-    <div class="body-content animated fadeIn" >    
+    <div class="body-content animated fadeIn" />
     <div class="protocolo-index">    
         <div class="panel_titulo">
             <div class="panel-heading">

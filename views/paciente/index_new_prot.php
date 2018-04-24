@@ -65,19 +65,24 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'label' => 'Paciente',
                     'attribute'=>'nombre', 
-                    'contentOptions' => ['style' => 'width:30%;'],
+                    'contentOptions' => ['style' => 'width:25%;'],
             ],
-            'nro_documento',
+            [
+                'label' => 'Nro Documento',
+                'attribute'=>'nro_documento',
+                'contentOptions' => ['style' => 'width:10%;'],
+            ],
             [
                 'label' => 'Teléfono',
                 'format' => 'raw',
-                'contentOptions' =>['class' => 'table_class','style'=>'width:12%;'],
+                'contentOptions' =>['class' => 'table_class','style'=>'width:10%;'],
                 'attribute' => 'telefono',
             ],            
            // 'domicilio',
             [
                 'label' => 'Cobertura/OS - Nro Afiliado',
                 'attribute' => 'nombre_prest_nro',
+                'contentOptions' => ['style' => 'width:30%;'],
                 
             ], 
             [

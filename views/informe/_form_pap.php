@@ -48,8 +48,8 @@ function (undefined, item) {
         });
     }
 
-    var otherTreeWidgetEl = $('.treeview2.small').not($(this)),
-        otherTreeWidget = otherTreeWidgetEl.data('treeview2'),
+    var otherTreeWidgetEl = $('.treeview.small').not($(this)),
+        otherTreeWidget = otherTreeWidgetEl.data('treeview'),
         selectedEl = otherTreeWidgetEl.find('.node-selected');
     if (selectedEl.length) {
         otherTreeWidget.unselectNode(Number(selectedEl.attr('data-nodeid')));
@@ -72,7 +72,7 @@ foreach ($result as $row){
 
 $items = $tree->getTree();
 
-$this->registerCss(".treeview2 {
+$this->registerCss(".treeview {
                                     float:left;
                                     width:100%;
                                     overflow-y: auto;
@@ -480,12 +480,6 @@ Pjax::end();
                                                 ?>
                                             </div>
                                         </div>
-                                        <script type="text/javascript">
-
-// 												$("#idFile").on('fileuploaded',function(a,b,c,d){
-// 															alert("p file");
-// 													});
-                                        </script>
 
                                         <h3>Imágenes del informe</h3>
                                         <?php Pjax::begin(['id' => 'galeriar', 'enablePushState' => FALSE]); ?>    
@@ -513,35 +507,35 @@ Pjax::end();
 
                             </div><!-- /End pad 2 -->
                             <div class="tab-pane fade" id="tab2-3">
-                        <h4> Observaciones Administrativas </h4>
-                        <p>
-                        <div style="margin-top: 5px;">
-                             <?php
-                              $hid =   "<input type=\"hidden\" name=\"id_informe\" value=\"".$model->id."\">";
-                              $formObs = ActiveForm::begin([
-                                                'id' => 'form-informe-observaciones',
-                                                'options' => [
-                                                    'class' => 'form-horizontal'
-                                                ]
-                                    ]);
+                                <h4> Observaciones Administrativas </h4>
+                                <p>
+                                <div style="margin-top: 5px;">
+                                    <?php
+                                    $hid =   "<input type=\"hidden\" name=\"id_informe\" value=\"".$model->id."\">";
+                                    $formObs = ActiveForm::begin([
+                                                        'id' => 'form-informe-observaciones',
+                                                        'options' => [
+                                                            'class' => 'form-horizontal'
+                                                        ]
+                                            ]);
 
-                                     echo  $formObs->field($modelp, 'observaciones', ['template' => "
-                                                <div class='col-md-12'>{input}</div>
-                                                {hint}
-                                                {error}"
-                                            ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);     
-                                ?>
-                                <?= $formObs->field($model, 'id')->hiddenInput()->label(false); ?>
+                                            echo  $formObs->field($modelp, 'observaciones', ['template' => "
+                                                        <div class='col-md-12'>{input}</div>
+                                                        {hint}
+                                                        {error}"
+                                                    ])->textArea(['maxlength' => true, 'rows' => 4, 'cols' => 20]);     
+                                        ?>
+                                        <?= $formObs->field($model, 'id')->hiddenInput()->label(false); ?>
 
-                                <div class="form-footer">
-                                    <div style="text-align: right;">
-                                        <?= Html::submitButton($modelp->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $modelp->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-                                    </div>
+                                        <div class="form-footer">
+                                            <div style="text-align: right;">
+                                                <?= Html::submitButton($modelp->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $modelp->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+                                            </div>
+                                        </div>
+                                        <?php ActiveForm::end(); ?>  
                                 </div>
-                                <?php ActiveForm::end(); ?>  
-                        </div>
-                        </p>
-                    </div>          
+                                </p>
+                            </div>          
                         </div>
                     </div><!-- /.panel-body -->
                     <?php Pjax::end(); ?> 
@@ -561,9 +555,5 @@ Pjax::end();
 <?php
 
 $this->registerJsFile('@web/assets/admin/js/cipat_modal_informe.js', ['depends' => [yii\web\AssetBundle::className()]]);
-
-//$this->registerJsFile('@web/assets/admin/js/cipat_informe_pap.js', ['depends' => [yii\web\AssetBundle::className()]]);
-
-$this->registerJsFile('@web/assets/global/plugins/bower_components/jquery-easing-original/jquery.easing.1.3.min.js', ['depends' => [yii\web\AssetBundle::className()]]);
 
 ?>

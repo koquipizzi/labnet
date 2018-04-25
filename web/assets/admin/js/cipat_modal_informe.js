@@ -1,24 +1,4 @@
-   $('.refresh').on('click', function (e) {
-        e.preventDefault();        
-        var $url = $(this).attr('href'); 
-        $.ajax({
-                type: "POST",
-                url: $url,               
-                dataType: "JSON",
-               // data:  {id: status},
-                success: function(response) {                   
-                     $.pjax.reload({container:"#galeriar"});   
-                    if (response.rta == 'ok'){
-                        $('.content-galeria').html(response.gal);
-                    }
-                    else if(response.rta == 'error'){                        
 
-                    }else {
-                        
-                    }
-                }
-           });
-   });
    
     $('.mostrarTree').on('click', function (e) { //toggle de estudios
         $('.tree-view-wrapper').toggle();

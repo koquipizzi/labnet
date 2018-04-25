@@ -291,10 +291,6 @@ class InformeController extends Controller {
                     $dataproviderMultimedia = new ArrayDataProvider([
                         'allModels' => Multimedia::findAll(['Informe_id' => $model->id])]);
                     return TRUE;
-                    return $this->renderAjax('galeria_1', [
-                        'model' => $model,
-                        'dataproviderMultimedia' => $dataproviderMultimedia,
-                    ]);
                 }
                 
                 

@@ -228,9 +228,9 @@
             $('[data-toggle="popover"]').popover('show');
         });
      
-        $("#idFile").on('fileuploaded', function(event) {
+        $("#idFile").on('fileuploaded', function(event) { 
             $.pjax.reload({container:"#galeriar"});
-         });
+        });
 
         $("body").on("submit", "form#create-autotexto-form", function (e) {
                 $("body").keydown(function(event){

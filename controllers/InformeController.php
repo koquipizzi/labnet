@@ -259,7 +259,6 @@ class InformeController extends Controller {
         $codigo = " ";
         if (Yii::$app->request->post()) {
             
-            
             if (isset($_POST['hasEditable'])) {
                 \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                 $nom = $model->getNomencladorInforme($_POST['id_nom_inf']);
@@ -269,8 +268,7 @@ class InformeController extends Controller {
                     $informeNomenclador->cantidad = $_POST['cantidad'];
                     $informeNomenclador->save();
                     return ['response'=>$informeNomenclador->cantidad, 'message'=>''];
-                }
-                else {
+                }else {
                     return ['response'=>$informeNomenclador->cantidad, 'message'=>'Ingrese un número'];
                 }
             }
@@ -292,8 +290,7 @@ class InformeController extends Controller {
                 $id = $model->id;
                 $dataproviderMultimedia = new ArrayDataProvider([
                     'allModels' => Multimedia::findAll(['Informe_id' => $model->id])]);
-                return true;
-                die(); 
+                return TRUE;
             }
         }
     

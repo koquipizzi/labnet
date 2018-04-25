@@ -94,6 +94,12 @@ echo execut\widget\TreeView::widget([
 ]);
 Pjax::end();
 ?>
+        
+<?php
+
+$this->registerJsFile('@web/assets/admin/js/cipat_modal_informe.js', ['depends' => [yii\web\AssetBundle::className()]]);
+
+?>
 
 
          <div class="row">
@@ -557,13 +563,3 @@ Pjax::end();
 
             </div>
         </div><!-- /.row -->
-        
-<?php
-
-$this->registerJsFile('@web/assets/admin/js/cipat_modal_informe.js', ['depends' => [yii\web\AssetBundle::className()]]);
-
-//$this->registerJsFile('@web/assets/admin/js/cipat_informe_pap.js', ['depends' => [yii\web\AssetBundle::className()]]);
-
-$this->registerJsFile('@web/assets/global/plugins/bower_components/jquery-easing-original/jquery.easing.1.3.min.js', ['depends' => [yii\web\AssetBundle::className()]]);
-
-?>

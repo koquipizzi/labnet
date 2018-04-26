@@ -245,55 +245,59 @@ class InformeController extends Controller {
         $informeNomenclador = new InformeNomenclador();
         $searchModel->id_informe = $model->id;
         $dataProvider = $searchModel->search([]);
-        $informe=$this->findModel( $model->id );
-        $historialPaciente=$informe->getHistorialUsuario();
+        $informe = $this->findModel($model->id);
+        $historialPaciente = $informe->getHistorialUsuario();
         if (is_null($model->titulo)) {
             $model->titulo = $model->estudio->titulo;
         } // View to Render
-        
+
         //Obtener fotos
         $dataproviderMultimedia = new ArrayDataProvider([
-            'allModels' => Multimedia::findAll(['Informe_id'=>$model->id]),
+            'allModels' => Multimedia::findAll(['Informe_id' => $model->id]),
         ]);
-        
         $codigo = " ";
-        if (Yii::$app->request->post()) {
+        
+        if ($model->getWorkflowLastState() != Workflow::estadoEntregado()) {
             
-            if (isset($_POST['hasEditable'])) {
-                \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                $nom = $model->getNomencladorInforme($_POST['id_nom_inf']);
-                $informeNomenclador = InformeNomenclador::find()->where(['=', 'id', $nom['id']])->one();
-                $cant = $_POST['cantidad'];
-                if (is_numeric($cant)){
-                    $informeNomenclador->cantidad = $_POST['cantidad'];
-                    $informeNomenclador->save();
-                    return ['response'=>$informeNomenclador->cantidad, 'message'=>''];
-                }else {
-                    return ['response'=>$informeNomenclador->cantidad, 'message'=>'Ingrese un número'];
+            
+            if (Yii::$app->request->post()) {
+        
+                if (isset($_POST['hasEditable'])) {
+                    \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    $nom = $model->getNomencladorInforme($_POST['id_nom_inf']);
+                    $informeNomenclador = InformeNomenclador::find()->where(['=', 'id', $nom['id']])->one();
+                    $cant = $_POST['cantidad'];
+                    if (is_numeric($cant)) {
+                        $informeNomenclador->cantidad = $_POST['cantidad'];
+                        $informeNomenclador->save();
+                        return ['response' => $informeNomenclador->cantidad, 'message' => ''];
+                    } else {
+                        return ['response' => $informeNomenclador->cantidad, 'message' => 'Ingrese un número'];
+                    }
+                }
+        
+                if (isset(Yii::$app->request->post()["id_texto"])) {
+                    $textoModel = new \app\models\Textos();
+                    $texto = $textoModel->find()->where(['=', 'id', Yii::$app->request->post()["id_texto"]])->one();
+                    $this->cargarModelo($model, $texto);
+                    $codigo = $texto->codigo;
+                    $model->save();
+                }
+        
+                $model->load(Yii::$app->request->post()) && $model->save();
+        
+                //multimedia
+                $file = Yii::$app->request->post('Informe_id');
+                if (isset($file)) {
+                    $this->multimediaUpload();
+                    $id = $model->id;
+                    $dataproviderMultimedia = new ArrayDataProvider([
+                        'allModels' => Multimedia::findAll(['Informe_id' => $model->id])]);
+                    return TRUE;
                 }
             }
-            
-            if (isset(Yii::$app->request->post()["id_texto"])) {
-                $textoModel = new \app\models\Textos();
-                $texto = $textoModel->find()->where(['=', 'id', Yii::$app->request->post()["id_texto"]])->one();
-                $this->cargarModelo($model, $texto);
-                $codigo = $texto->codigo;
-                $model->save();
-            }
-            
-            $model->load(Yii::$app->request->post()) && $model->save();
-    
-            //multimedia
-            $file = Yii::$app->request->post('Informe_id');
-            if (isset($file)) {
-                $this->multimediaUpload();
-                $id = $model->id;
-                $dataproviderMultimedia = new ArrayDataProvider([
-                    'allModels' => Multimedia::findAll(['Informe_id' => $model->id])]);
-                return TRUE;
-            }
         }
-    
+        
         return $this->render ( $viewFile , [
             'model' => $model,
             'modelp' => $modelp,

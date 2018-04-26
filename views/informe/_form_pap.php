@@ -104,6 +104,20 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_informe.js', ['depends' 
 
          <div class="row">
             <div class="col-md-12">
+    
+                <?php
+                    if ($model->workflowLastState== Workflow::estadoEntregado()) {
+                        \insolita\wgadminlte\LteBox::begin([
+                            'type'=>\insolita\wgadminlte\LteConst::COLOR_MAROON,
+                            'tooltip'=>'Useful information!',
+                            'title'=>'Atención!',
+                            'isTile'=>true
+                        ]);
+                        echo "<i>El presente informe se encuentra entregado. ";
+                        echo "NO PUEDE MODIFICARSE.</i>";
+                        \insolita\wgadminlte\LteBox::end();
+                    }
+                ?>
 
                 <!-- Start double tabs -->
                 <div class="panel panel-tab panel-tab-double rounded shadow">

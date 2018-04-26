@@ -111,7 +111,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         <h3 class="box-title">Historial Paciente</h3>
                     </div>
 		             
-		  	        <div  id="historialPacientePanel" data-spy="scroll" data-offset="3" data-target="#historial" class="panel-body text-center" style=" position: relative;">	                                                         
+		  	        <div  id="historialPacientePanel" data-spy="scroll" data-offset="3" data-target="#historial" class="panel-body text-center" style=" position: relative;">	                                             
 	                        <?php 
 		                            if(is_array($historialPaciente)){
 		                                echo	$this->render('/informe/historialPaciente', [

@@ -1,5 +1,4 @@
 
-   
     $('.mostrarTree').on('click', function (e) { //toggle de estudios
         $('.tree-view-wrapper').toggle();
     });    
@@ -86,8 +85,18 @@
                 success: function (response) 
                 {
                     if (response.result == 'ok'){
-                                    guardarInformeYredireccionarAIndex();
-                            }else if (response.result == 'error'){
+                                    $.pjax.reload({container:"#estado"});
+                                    var n = noty({
+                                        text: 'El estado del informe se cambió exitosamente!',
+                                        type: 'success',
+                                        class: 'animated pulse',
+                                        layout: 'topRight',
+                                        theme: 'relax',
+                                        timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                        force: false, // adds notification to the beginning of queue when set to true
+                                        modal: false, // si pongo true me hace el efecto de pantalla gris
+                                    });
+                    }else if (response.result == 'error'){
                                      var n = noty({
                                       text: 'El estado actual "Entregado" no permite actualizar el informe!',
                                       type: 'success',
@@ -194,6 +203,11 @@
             
         });  //Guardado de AutoTexto a partir de informe
 
+    $("#idFile").on('fileuploaded', function(event) {
+
+        $.pjax.reload({container:"#galeriar"});
+    });
+
     
     $(document).on('ready pjax:success', function () {
    
@@ -207,8 +221,9 @@
             $('#popoverInforme').popover('show');
             $('[data-toggle="popover"]').popover('show');
         });
-     
-        $("#idFile").on('fileuploaded', function(event) { 
+
+
+        $("#idFile").on('fileuploaded', function(event) {
             $.pjax.reload({container:"#galeriar"});
         });
 

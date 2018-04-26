@@ -9,6 +9,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Paciente;
+use app\models\Medico;
 use app\models\Informe;
 use app\models\Tag;
 use app\models\Protocolo;
@@ -176,5 +177,15 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+    
+    public function actionSearch(){
+        $searchFeld = Yii::$app->request->post('q');
+        $infoPaciente = Paciente::find()->where(['LIKE', 'nombre', $searchFeld])->all();
+        $infoMedico = Medico::find()->where(['LIKE', 'nombre', $searchFeld])->all();
+        $infoProtocolo = Protocolo::find()->where(['LIKE', 'observaciones', $searchFeld])->all();
+        $info = array_merge($infoPaciente,$infoMedico);
+        $info = array_merge($info,$infoProtocolo);
+        return $this->render('search',['resultados' => $info , 'field' =>$searchFeld ]);
     }
 }

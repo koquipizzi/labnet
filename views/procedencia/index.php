@@ -37,6 +37,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_procedencia.js', ['depen
                 [
                     'label' => 'Procedencia',
                     'attribute' => 'descripcion',
+                    'contentOptions' => ['style' => 'width:30%;'],
                 ],
                 'telefono',
                 'domicilio',
@@ -50,6 +51,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_procedencia.js', ['depen
                 ],
             ['class' => 'yii\grid\ActionColumn',
             'template' => '{view}{edit}{delete}',
+            'contentOptions' => ['style' => 'width:10%;'],
             'buttons' => [
 
             //view button

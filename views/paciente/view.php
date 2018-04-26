@@ -15,7 +15,6 @@ $this->params['breadcrumbs'][] = ['label' => $model->nombre, 'url' => ['view', '
         <div class="box-header with-border">
                         <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="pull-right">
-                        <?= Html::a('<i class="fa fa-arrow-left"></i> Volver', ['paciente/index'], ['class'=>'btn btn-primary']) ?>
                         <?= Html::a('<i class="fa fa-pencil"></i> Editar ', ['paciente/update', 'id'=>$model->id], ['class'=>'btn btn-primary']) ?>
                 </div>
         </div>

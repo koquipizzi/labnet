@@ -301,18 +301,31 @@
                     dataType: "JSON",
                     data:  { 'id' : $id }, 
                     success: function(response) {                     
-                        $.pjax.reload({container:"#nomencladores"});                 
 
-                        var n = noty({
-                               text:  response.message,
-                               type: response.rta,
-                               class: 'animated pulse',
-                               layout: 'topRight',
-                               theme: 'relax',
-                               timeout: 3000, // delay for closing event. Set false for sticky notifications
-                               force: false, // adds notification to the beginning of queue when set to true
-                               modal: false, // si pongo true me hace el efecto de pantalla gris
-                        });
+                        if (response.rta == 'success') {
+                            $.pjax.reload({container:"#nomencladores"});
+                            var n = noty({
+                                text: response.message,
+                                type: response.rta,
+                                class: 'animated pulse',
+                                layout: 'topRight',
+                                theme: 'relax',
+                                timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                force: false, // adds notification to the beginning of queue when set to true
+                                modal: false, // si pongo true me hace el efecto de pantalla gris
+                            });
+                        }else{
+                            var n = noty({
+                                text: response.message,
+                                type: response.rta,
+                                class: 'animated pulse',
+                                layout: 'topRight',
+                                theme: 'relax',
+                                timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                force: false, // adds notification to the beginning of queue when set to true
+                                modal: false, // si pongo true me hace el efecto de pantalla gris
+                            });
+                        }
 
                        }
                   });

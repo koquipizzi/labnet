@@ -66,7 +66,7 @@ use kartik\popover\PopoverX;
                                             ?>
                                         </span>
 
-                                        <h3 class="timeline-header" ><a data-toggle="tooltip" title="<?= $diagnosticoCompleto ?>"  href="#"><?= $estudio->nombre;  ?></a> 
+                                        <h3 class="timeline-header" ><a data-toggle="tooltip" title="<?= $diagnosticoCompleto ?>" ><?= $estudio->nombre;  ?></a>
                                         </h3>
                                         <div class="timeline-body">
                                             <?= $diagnosticoAcortado ?>

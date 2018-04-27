@@ -179,6 +179,7 @@ class PacienteController extends Controller
      */
     public function actionActualizar()
     {
+        
         if (isset($_POST['Paciente']['id']))
             $id = $_POST['Paciente']['id'];
         $model = $this->findModel($id);
@@ -198,8 +199,10 @@ class PacienteController extends Controller
             return ['rta'=> 'ok', 'rtaPrest' => '']; die();
 
         } else {
-                   \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            return ['rta'=> 'nook', 'rtaPrest' => '']; die();
+
+            $errores = Json::encode($model->getErrors());
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return ['rta'=>'ko', 'rtaPrest' => '']; die();
           //  return $this->render('update', [
          //       'model' => $model,
          //   ]);

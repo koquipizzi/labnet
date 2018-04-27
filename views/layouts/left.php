@@ -55,7 +55,7 @@ use mdm\admin\components\Helper;
                 'items' => [
                     
                     ['label' => 'LabNET', 'options' => ['class' => 'header']],
-                    ['label' => 'Nuevo Protocolo', 'icon' => 'fa fa-file-code-o', 'url' => ['/paciente/buscar']],
+                    ['label' => 'Nuevo Protocolo', 'icon' => 'fa fa-file-code-o', 'url' => ['/protocolo/protocolo']],
                     ['label' => 'PROTOCOLOS', 'options' => ['class' => 'header']],
                     ['label' => 'Pendientes', 'icon' => 'edit', 'url' => ['/protocolo']],
                     ['label' => 'Asignados a mi', 'icon' => 'star', 'url' => ['/protocolo/asignados']],

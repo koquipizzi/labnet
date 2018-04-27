@@ -328,16 +328,145 @@ class ProtocoloController extends Controller
         $dataMedico=ArrayHelper::map(Medico::find()->asArray()->all(), 'id', 'nombre');
         $mdlProtocolo->scenario = Protocolo::SCENARIO_CREATE; 
         $mdlProtocolo->fecha_entrada = date('Y-m-d');
+        $pacientes = Paciente::find()->all();
+        $listData = ArrayHelper::map($pacientes,'id', 'nombre');
         return $this->render('_form3', [
+    //    return $this->render('_nuevo_prot', [
                             'model' => $mdlProtocolo,
                             'modelsInformes'=>(empty($modelsInformes)) ? [new Informe] : $modelsInformes,
                             'modelsNomenclador'=>(empty($modelsNomenclador)) ? [new InformeNomenclador] : $modelsNomenclador,
                             'pacprest' => $pacprest,
                             'paciente'=>$paciente,
                             'prestadora'=> $prestadora,
-                            'dataMedico' => $dataMedico
+                            'dataMedico' => $dataMedico,
+                            'listData' => $listData
                              ]);
     }
+
+
+    public function actionNuevo($pacprest=null){ 
+        $mostrarMensajeViewnNroSecuencia='';
+        $pacprest_modelo = \app\models\PacientePrestadora::findOne($pacprest);      
+        $paciente = Paciente::findOne($pacprest_modelo->Paciente_id);
+        $prestadora = \app\models\Prestadoras::findOne($pacprest_modelo->Prestadoras_id);       
+        $mdlProtocolo = new Protocolo();
+        $anio=date("Y");
+        $mdlProtocolo->anio=$anio;  
+        $mdlProtocolo->Paciente_prestadora_id=$pacprest;
+        $modelsInformes = [new Informe];
+        $modelsNomenclador = [[new InformeNomenclador]];
+
+        $fecha = date_create ();
+        $fecha = date_format ( $fecha, 'd-m-Y H:i:s' );
+        if ($mdlProtocolo->load(Yii::$app->request->post())) {
+                       
+            if($mdlProtocolo->existeNumeroSecuencia()){
+                if(!empty($mdlProtocolo->letra)){
+                    try{
+                        $mostrarMensajeViewnNroSecuencia="El Nro.Secuencia <strong> {$mdlProtocolo->nro_secuencia}</strong> ya existe. ";
+                        $mdlProtocolo->nro_secuencia=$mdlProtocolo->getNextNroSecuenciaByLetra($mdlProtocolo->letra,$anio);
+                        $mostrarMensajeViewnNroSecuencia.="El nuevo numero de secuencia es <strong>{$mdlProtocolo->nro_secuencia}</strong>.";                    
+                    } catch (\Exception $e) {
+                         $mdlProtocolo->nro_secuencia=sprintf("%07d",0);
+                         $mostrarMensajeViewnNroSecuencia="";   
+                    }
+       
+                } 
+               
+            }       
+            if ($mdlProtocolo->fecha_entrada == NULL)
+                $mdlProtocolo->fecha_entrada = date("Y-m-d");
+            $modelsInformes = Informe::createMultiple(Informe::classname());
+            Model::loadMultiple($modelsInformes, Yii::$app->request->post());
+            $valid = $mdlProtocolo->validate();
+            if (!empty($_POST['InformeNomenclador'])  && is_array($modelsNomenclador) ) {
+                foreach ($_POST['InformeNomenclador'] as $indexInforme => $nomencladores) {
+                    foreach ($nomencladores as $index => $nom) {
+                        $data['InformeNomenclador'] = $nom;
+                        $modelInformeNomenclador = new InformeNomenclador;
+                        $modelInformeNomenclador->load($data);
+                        $modelsNomenclador['informe_nom'][$indexInforme][$index] = $modelInformeNomenclador;
+                    }
+                }
+            }
+            else $modelsNomenclador = null;
+
+            if ($valid) {
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $mdlProtocolo->save(false)) {
+                        // model informe 
+                        foreach ($modelsInformes as $indexHouse => $modelInforme) {
+                            if ($flag === false) {
+                                break;
+                            }
+
+                            $modelInforme->Protocolo_id = $mdlProtocolo->id;
+
+                            if (!($flag = $modelInforme->save(false))) {
+                                break;
+                            }
+                            $workflow= new Workflow();
+                            $workflow->Informe_id= $modelInforme->id;
+                            $workflow->Estado_id=1;//estado 1 es pendiente 
+                            $workflow->fecha_inicio = $fecha;           
+                            $workflow->save();
+                            if (!empty($modelsNomenclador) && is_array($modelsNomenclador) &&  array_key_exists('informe_nom',$modelsNomenclador) && array_key_exists($indexHouse,$modelsNomenclador['informe_nom'])
+                             ) {
+                                foreach ($modelsNomenclador['informe_nom'][$indexHouse] as $index => $modelNom) {
+                                    $informeNomenclador= new InformeNomenclador();
+                                    $informeNomenclador->id_informe=$modelInforme->id;
+                                    $informeNomenclador->id_nomenclador=$modelNom->id_nomenclador;
+                                    $informeNomenclador->cantidad = $modelNom->cantidad;
+                                    $informeNomenclador->save();
+                                  
+                                    if (!($flag = $informeNomenclador->save(false))) {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if ($flag) {
+                        $transaction->commit();
+                        $searchModel = new InformeSearch();
+                        $dataProvider = $searchModel->search((Yii::$app->request->queryParams),$mdlProtocolo->id);
+                        $informe= new Informe();
+                        return $this->render('view', [
+                            'model' => $this->findModel($mdlProtocolo->id),
+                            'dataProvider'=>$dataProvider,
+                            'informe' => $informe,
+                            'mostrarMensajeView'=>$mostrarMensajeViewnNroSecuencia
+                        ]);
+                    } else {
+                        $transaction->rollBack();
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                }
+            }
+        }
+
+        $dataMedico=ArrayHelper::map(Medico::find()->asArray()->all(), 'id', 'nombre');
+        $mdlProtocolo->scenario = Protocolo::SCENARIO_CREATE; 
+        $mdlProtocolo->fecha_entrada = date('Y-m-d');
+        $pacientes = Paciente::find()->all();
+        $listData = ArrayHelper::map($pacientes,'id', 'nombre');
+    //    return $this->render('_form3', [
+        return $this->render('_nuevo_prot', [
+                            'model' => $mdlProtocolo,
+                            'modelsInformes'=>(empty($modelsInformes)) ? [new Informe] : $modelsInformes,
+                            'modelsNomenclador'=>(empty($modelsNomenclador)) ? [new InformeNomenclador] : $modelsNomenclador,
+                            'pacprest' => $pacprest,
+                            'paciente'=>$paciente,
+                            'prestadora'=> $prestadora,
+                            'dataMedico' => $dataMedico,
+                            'listData' => $listData
+                             ]);
+    }
+
+
 
     /**
      * Creates a new Protocolo model.
@@ -345,7 +474,30 @@ class ProtocoloController extends Controller
      *@param boolean $ajax
      *  @return mixed
      */
-    public function actionProtocolo($pacprest=null){ 
+    public function actionProtocolo(){ 
+
+        $mdlProtocolo = new Protocolo();
+     //   $modelSecuencia= new NroSecuenciaProtocolo();
+        $Estudio= new Estudio();
+        $paciente= new Paciente();
+ //       $prestadora= new Prestadora();
+
+        return $this->render('_nuevo_prot', [
+                            'paciente' => $paciente,
+                       //     'prestadora'=> $prestadora,
+                        //    'pacprest' => $pacprest,
+                            'model' => $mdlProtocolo,
+                         //   'searchModel' =>$searchModel ,
+                         //   'Estudio' => $Estudio,
+                         //   'dataProvider' => $dataProvider,
+                         //   'informe'=>$informetemp,
+                         //   'nomenclador'=>$nomenclador,
+                         //   'infnomenclador'=>$infnomenclador,
+                        //    'dataProviderIN'=> $dataProviderIN,
+                         //   "tanda"=>$tanda,
+                             ]);
+
+
      //   $pacprest = 74454;
         $pacprest_modelo = \app\models\PacientePrestadora::findOne($pacprest);      
         $paciente = Paciente::findOne($pacprest_modelo->Paciente_id);

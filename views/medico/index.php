@@ -8,6 +8,8 @@ use xj\bootbox\BootboxAsset;
 use yii\helpers\ArrayHelper;
 use app\models\Localidad; 
 use app\models\Especialidad; 
+
+
 BootboxAsset::register($this);
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\MedicoSearch */
@@ -16,6 +18,7 @@ BootboxAsset::register($this);
 $this->title = Yii::t('app', 'Médicos');
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerJsFile('@web/assets/admin/js/cipat_modal_medico.js', ['depends' => [yii\web\AssetBundle::className()]]);
+
 ?>
 
        <div class="header-content">
@@ -29,7 +32,9 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_medico.js', ['depends' =
         </div>
     
 
-    <?php Pjax::begin(['id'=>'medicos', 'enablePushState' => FALSE]); ?>    <?= GridView::widget([
+    <?php 
+
+        Pjax::begin(['id'=>'medicos', 'enablePushState' => FALSE]); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'options'=>array('class'=>'table table-striped table-lilac'),
         'filterModel' => $searchModel,

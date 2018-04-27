@@ -68,6 +68,8 @@ class MedicoController extends Controller
     {
         $model = new Medico();
 
+        $dataMedico=ArrayHelper::map(Medico::find()->asArray()->all(), 'id', 'nombre'); 
+                        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {        
              return $this->render('view', [
                 'model' => $model,
@@ -76,6 +78,8 @@ class MedicoController extends Controller
         else {            
             return $this->render('create', [
                 'model' => $model,	
+                'dataMedico' => $dataMedico
+                        
             ]);
         }
     }

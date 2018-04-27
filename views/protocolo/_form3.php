@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use kartik\form\ActiveForm;
+use kartik\form\ActiveField;
 use wbraganca\dynamicform\DynamicFormWidget;
 
 use yii\bootstrap\Modal;
@@ -144,6 +145,8 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
         ]);
         echo "<div id='modalContentProcedencia'></div>";
  Modal::end();
+
+  
 ?>
 
 
@@ -235,18 +238,13 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
         </div>      
         <div class="col-md-6" style="text-align: right;">
               <div class="row">
-                    <div class="col-md-10">
-                      <?php yii\widgets\Pjax::begin(['id' => 'new_medico']);                         
-                           $dataMedico=ArrayHelper::map(Medico::find()->asArray()->all(), 'id', 'nombre'); 
-                        
+                    <div class="col-md-12">
+                      <?php yii\widgets\Pjax::begin(['id' => 'new_medico']);                                                
                             echo $form->field($model, 'Medico_id',
                                     ['template' => "{label}
-                                        <div class='col-md-6' >
-                                            {input}  </div>
-                                            
-                                            {hint}{error}
-                                            "
-                                        ,'labelOptions' => [ 'class' => 'col-md-5  control-label' ],
+                                        <div class='col-md-7' >{input}</div>
+                                            {hint}{error}"
+                                        ,'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
                                     ])->widget(Widget::className(), [
                                         'options' => [
                                             'multiple' => false,

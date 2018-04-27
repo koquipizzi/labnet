@@ -7,10 +7,22 @@ use yii\helpers\Html;
 use yii\widgets\Pjax;
 
 $this->title = 'LabNET - Administración de Informes Patológicos';
+
+ // use app\assets\JSXAsset;
+ //   JSXAsset::register($this);
+///    $this->registerJsFile('@web/assets/admin/js/reactkoqui.js');
+
+// use this if you do not need addons
+\mimicreative\react\ReactAsset::register($this);
+
+// use this if you need addons
+//\mimicreative\react\ReactWithAddonsAsset::register($this);
+  
 ?>
 
       <!-- Info boxes -->
       <div class="row">
+<div id="koko">cc</div>
         <div class="col-md-3 col-sm-6">
           <div class="info-box">
             <span class="info-box-icon bg-aqua"><i class="fa fa-user"></i></span>

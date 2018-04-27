@@ -68,6 +68,42 @@ class PacienteController extends Controller
         ]);
     }
 
+    public function actionList($term = NULL)
+    { //die($term);
+        header('Content-type: application/json');
+        $clean['more'] = false;
+
+        $query = new \yii\db\Query;
+        if(!empty($term))
+        {
+            $mainQuery = $query->select('id, nombre')
+                            ->from('Paciente')->where('nombre like "%'.$term. '%"');
+            $command = $mainQuery->createCommand();
+       //     var_dump($command); die;
+            $rows = $command->queryAll();
+          //  var_dump($rows); die;
+            $clean['results'] = array_values($rows);
+        }
+        /*else
+        {
+          //  if(!is_null($code))
+           // {
+                $clean['results'] = [
+                    //'ean_no'=> $code, 
+                    'nombre' => Product::find($term)->nombre
+                    //,
+                //    'description' => Product::find($code)->description, 
+               //     'volume' => Product::find($code)->volume
+            ];
+          /*  }else
+            {*/
+              //  $clean['results'] = ['ean_no' => 123, 'name' => 'None found', 'description' => 'None found', 'volume' => 'None found'];
+        //    }
+       // }
+        echo \yii\helpers\Json::encode($clean['results']);
+        exit();
+    }
+
     /**
      * Displays a single Paciente model.
      * @param integer $id
@@ -88,6 +124,91 @@ class PacienteController extends Controller
         ]);
 
     }
+
+    /**
+     * Displays a single Paciente model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionDatos($id)
+    {
+        $id = (int) Yii::$app->request->getQueryParam('id');
+        $paciente = Paciente::find()->where(['id' => $id])->one();
+        $PacientePrestadorasmultiple =  PacientePrestadora::find()->where(['Paciente_id' => $id])->all();
+//var_dump($PacientePrestadorasmultiple); die;
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+     
+        $query = PacientePrestadora::find()->where(['Paciente_id' => $id]);
+        $dataPrestadoras = new ActiveDataProvider([
+                    'query' => $query,                       
+                ]);
+        $prestadoraTemp = new PacientePrestadora(); 
+        $prestadorasLista = $this->renderAjax('//paciente/_grid', [
+                        'dataProvider' => $dataPrestadoras,
+                        'model'=> $prestadoraTemp,
+                        'paciente_id' => $id
+                ]);
+                
+        return ['rta'=> $paciente, 'rtaPrest' => $prestadorasLista]; die();
+
+            $PacientePrestadorasmultiple = PacientePrestadora::find()->where(['Paciente_id' => $id])->all();
+            $searchModel = new PacientePrestadoraSearch();
+            $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$id);
+            $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
+            $dataTipoDocumento = ArrayHelper::map(TipoDocumento::find()->asArray()->all(), 'id', 'descripcion');
+            $pacientePrestadora = new \app\models\PacientePrestadora();
+            $prestadoraTemp = new \app\models\PrestadoraTemp();
+            return $this->renderAjax('_form2', [
+                'model' => $paciente,
+                'dataPrestadoras' => $dataPrestadoras,
+                'dataLocalidad'=> $dataLocalidad,
+                'dataTipoDocumento'=> $dataTipoDocumento,
+                'pacientePrestadora'=> $pacientePrestadora,
+                'prestadoraTemp'=>$prestadoraTemp,
+                'PacientePrestadorasmultiple'=>(empty($PacientePrestadorasmultiple)) ? [new PacientePrestadora] : $PacientePrestadorasmultiple,
+
+            //    'tanda' => $tanda,
+            ]);
+
+    }
+
+      /**
+     * Displays a single Paciente model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionActualizar()
+    {
+        if (isset($_POST['Paciente']['id']))
+            $id = $_POST['Paciente']['id'];
+        $model = $this->findModel($id);
+     //   var_dump($model);
+    //    die; 
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+           //  $dataProvider = new ActiveDataProvider([
+          //              'query' => Localidad::find()
+          //          ]);
+          //          $searchModel = new LocalidadSearch();
+          //          return $this->render('index', [
+          //             'dataProvider' => $dataProvider,
+          //              'searchModel' => $searchModel
+          //          ]);
+            //return $this->redirect(['view', 'id' => $model->id]);
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return ['rta'=> 'ok', 'rtaPrest' => 'sss']; die();
+
+        } else {
+                   \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return ['rta'=> 'nook', 'rtaPrest' => 'sss']; die();
+          //  return $this->render('update', [
+         //       'model' => $model,
+         //   ]);
+        }
+        
+             
+
+    }
+
 
     /**
      * Creates a new Paciente model.
@@ -270,7 +391,7 @@ class PacienteController extends Controller
 }
 
 
-        public function actionChequear($id)
+    public function actionChequear($id)
     {
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post())){

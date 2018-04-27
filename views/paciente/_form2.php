@@ -237,7 +237,7 @@ use kartik\datecontrol\DateControl;
 
             <div id="prestadorasTemp">
                 <?php Pjax::begin(['id' => 'prestadoras']);
-                    if ($model->isNewRecord ){
+          /*          if ($model->isNewRecord ){
                         $searchModel = new PrestadoratempSearch();
                         $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$tanda);
                         $prestadoraTemp = new Prestadoratemp();                        
@@ -246,13 +246,13 @@ use kartik\datecontrol\DateControl;
 //                        $searchModel = new PacientePrestadoraSearch();
 //                        $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$model->id);
 //                        $prestadoraTemp = new app\models\PacientePrestadora(); 
-                $query = PacientePrestadora::find()->where(['Paciente_id' => $paciente]);
-                $dataPrestadoras = new ActiveDataProvider([
+       //         $query = PacientePrestadora::find()->where(['Paciente_id' => $paciente]);
+      //          $dataPrestadoras = new ActiveDataProvider([
                     'query' => $query,                       
                 ]);
                 $prestadoraTemp = new PacientePrestadora();                          
                     }
-                    
+          */          
                 ?>
                 <?= $this->render('//paciente/_grid', [
                         'dataProvider' => $dataPrestadoras,

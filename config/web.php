@@ -71,6 +71,22 @@ $config = [
         ]
     ],
     'components' => [
+         /*   'assetManager' => [
+                'bundles' => [
+                    'mimicreative\react\ReactAsset' => [
+                    'js' => [
+                        'react.js',
+                        'react-dom.js'
+                    ]
+                    ],
+                    'mimicreative\react\ReactWithAddonsAsset' => [
+                    'js' => [
+                        'react-with-addons.js',
+                        'react-dom.js'
+                    ]
+                    ]
+                ]
+            ],*/
             /*'view' => [
                 'theme' => [
                     'pathMap' => [
@@ -83,6 +99,10 @@ $config = [
                 'class' => '\Da\QrCode\Component\QrCodeComponent',
                 // ... you can configure more properties of the component here
             ],
+     //       'kint' => [
+       //         'class' => '@vendor/kint-php/kint/src',
+                // ... you can configure more properties of the component here
+         //   ],
             'i18n' => [
                 'translations' => [
                     'app*' => [
@@ -178,10 +198,11 @@ $config = [
             'class' => 'yii\web\UrlManager',
             'showScriptName' => false,
             'rules' => [
-                  '<controller:\w+>/<id:\d+>' => '<controller>/view',
-                  '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-                  '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
-                  '<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
+                    'class' => 'yii\rest\UrlRule', 'controller' => 'post',
+                    '<controller:\w+>/<id:\d+>' => '<controller>/view',
+                    '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+                    '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+                    '<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
             ],
         ],
     ],

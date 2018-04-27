@@ -12,7 +12,8 @@
         "irc": "irc://irc.freenode.net/yii",
         "source": "https://github.com/yiisoft/yii2"
     },
-    "minimum-stability": "stable",
+    
+    "prefer-stable": true,
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "~2.0.5",
@@ -41,7 +42,10 @@
         "kartik-v/yii2-widget-typeahead": "*",
         "2amigos/yii2-chartjs-widget": "~2.0",
         "creocoder/yii2-taggable": "~2.0",
-        "2amigos/qrcode-library": "~1.1"
+        "2amigos/qrcode-library": "~1.1",
+        "kint-php/kint": "^2.2",
+        "opw/yii2-react": "dev-master",
+        "mimicreative/yii2-react": "^1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

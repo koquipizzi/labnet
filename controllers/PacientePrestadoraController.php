@@ -102,13 +102,16 @@ class PacientePrestadoraController extends Controller
      * @return mixed
      */
     public function actionCreate()
-    {
+    { 
         $model = new PacientePrestadora();
-        $model->Prestadoras_id = Yii::$app->request->post('Prestadora_id');
+        $model->Prestadoras_id = Yii::$app->request->post('Prestadoras_id');
         $model->Paciente_id = Yii::$app->request->post('Paciente_id');
         $model->nro_afiliado = Yii::$app->request->post('nro_afiliado');
+        $model->load(Yii::$app->request->post());
 
-        if ($model->save()) {
+       // var_dump($model);
+      //  die();
+        if ($model->save()) { 
             $searchModel = new PacientePrestadoraSearch();
             $dataPrestadoras = $searchModel->search(Yii::$app->request->queryParams,$model->Paciente_id);
             $prestadoraTemp = new PacientePrestadora(); 
@@ -120,19 +123,23 @@ class PacientePrestadoraController extends Controller
                     
             $done =  $this->renderAjax('//paciente/_grid',[
                                 'dataProvider'=>$dataPrestadoras,                                
-                                'model'=>$model
+                                'model'=>$model,
+                                'paciente_id' => $model->Paciente_id
                             ]);;                                
             Yii::$app->response->format = Response::FORMAT_JSON;
             return array(
-                "data" => $done,              
+                "response" => 'ok',  
+                "data" => $done            
+            );
+
+        } else { 
+            $errors = $model->getErrors();
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return array(
+                "response" => 'ko',   
+                "msn" => $errors,            
             );
          
-            return;
-            //$this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
         }
     }
 
@@ -142,7 +149,7 @@ class PacientePrestadoraController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
+    public function actionUpdateOld($id)
     {
         $model = $this->findModel($id);
 
@@ -151,6 +158,25 @@ class PacientePrestadoraController extends Controller
         } else {
             return $this->render('update', [
                 'model' => $model,
+            ]);
+        }
+    }
+
+
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+ 
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+        elseif (Yii::$app->request->isAjax) {
+            return $this->renderAjax('update', [
+                        'model' => $model
+            ]);
+        } else {
+            return $this->render('update', [
+                        'model' => $model
             ]);
         }
     }

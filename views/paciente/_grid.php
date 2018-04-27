@@ -157,15 +157,4 @@ echo Html::button(
             </div>
         </div>
 
- <?php
-     Modal::begin([
-        'header' =>'<h4>Ficha</h4>',
-        'id'     =>'modalKoki',
-        'size'   =>'modal-lg',
-        'clientOptions' => ['backdrop' => 'static', 'keyboard' => FALSE]
-        ]);
-    echo "<div id='modalContent'> </div>";
-    Modal::end();
 
-
- ?>

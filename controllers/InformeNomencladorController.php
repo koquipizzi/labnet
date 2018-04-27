@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\Informe;
+use app\models\Workflow;
 use Yii;
 use app\models\InformeNomenclador;
 use app\models\InformeNomencladorSearch;
@@ -66,24 +68,27 @@ class InformeNomencladorController extends Controller
     {       
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model = new InformeNomenclador();
-        $model->load(Yii::$app->request->post());        
-        $count = InformeNomenclador::find()
+        $model->load(Yii::$app->request->post());
+        $id_informe = (int) $model->id_informe;
+        $modelInforme = Informe::find()->where(['id' => $id_informe])->one();
+        if ($modelInforme->getWorkflowLastState() != Workflow::estadoEntregado()){
+            $count = InformeNomenclador::find()
                 ->where(['id_nomenclador' => $model->id_nomenclador, 'id_informe' => $model->id_informe])
                 ->count();
-        if ($count > 0){
-            return array("rta" => 'no ok',"message" =>'El nomenclador ya se encuentra agregado a la práctica');
-            die();
+            if ($count > 0){
+                return array("rta" => 'no ok',"message" =>'El nomenclador ya se encuentra agregado a la práctica');
+                die();
+            }
+    
+            if ($model->save()) {
+                return array("rta" => 'ok', "message" =>'Nomenclador Agregado ');
+                die();
+            }
         }
-       
-        if ($model->save()) {           
-            return array("rta" => 'ok', "message" =>'Nomenclador Agregado ');        
-            die();
-           // return $this->redirect(['view', 'id' => $model->id]);
-        } else {    
-             //var_dump($model->getErrors()['cantidad']);
+        
             return array("rta" => 'error',"message" =>$model->getErrors()); 
             die();
-        }
+       
     }
 
     /**
@@ -112,19 +117,21 @@ class InformeNomencladorController extends Controller
      * @return mixed
      */
     public function actionDelete()
-    {   
-
-        
+    {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $id = Yii::$app->request->post('id');
-        if ($this->findModel($id)->delete()){
-            return array("rta" => 'success',"message" =>'El nomenclador se eliminó de la práctica');
-            die();
+        $model = $this->findModel($id);
+        $id_informe = (int) $model->id_informe;
+        $modelInforme = Informe::find()->where(['id' => $id_informe])->one();
+        if ($modelInforme->getWorkflowLastState() != Workflow::estadoEntregado()){
+            if ($model->delete()){
+                return array("rta" => 'success',"message" =>'El nomenclador se eliminó de la práctica');
+                die();
+            }
         }
-        else {
-            return array("rta" => 'error',"message" =>'El nomenclador no se eliminó de la práctica');
-            die();
-        }
+        return array("rta" => 'error',"message" =>'El nomenclador no se eliminó de la práctica');
+        die();
+        
     }
 
     /**

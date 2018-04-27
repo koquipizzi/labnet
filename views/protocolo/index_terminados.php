@@ -71,9 +71,9 @@ $this->registerJs($js);
                                 'columns' =>    [ //'id',
                                      //   'value'=>'estudio',
                                      [
-                                        'label' => 'Fecha de Entrada',
+                                        'label' => 'Entrada',
                                         'attribute' => 'fecha_entrada',
-                                        'contentOptions' => ['style' => 'width:20%;'],
+                                        'contentOptions' => ['style' => 'width:8%;'],
                                         'format' => ['date', 'php:d/m/Y'],
                                         'filter' => DateRangePicker::widget([
                                         'template' => '
@@ -99,9 +99,9 @@ $this->registerJs($js);
                                         ]),
                                     ],
                                     [
-                                        'label' => 'Fecha de Entrega',
+                                        'label' => 'Entrega',
                                         'attribute' => 'fecha_entrega',
-                                        'contentOptions' => ['style' => 'width:20%;'],
+                                        'contentOptions' => ['style' => 'width:9%;'],
                                         'format' => ['date', 'php:d/m/Y'],
                                         'filter' => DateRangePicker::widget([
                                             'template' => '
@@ -129,12 +129,12 @@ $this->registerJs($js);
                                     [
                                         'label' => 'Nro Protocolo',
                                         'attribute' => 'codigo',
-                                        'contentOptions' => ['style' => 'width:7%;'],
+                                        'contentOptions' => ['style' => 'width:12%;'],
                                     ],
                                     [
                                         'label' => 'Paciente',
                                         'attribute'=>'nombre',
-                                         'contentOptions' => ['style' => 'width:20%;'],
+                                         'contentOptions' => ['style' => 'width:10%;'],
                                         'value'=>function ($model, $key, $index, $widget) {
                                             if(strlen($model["nombre"])>17){
                                                 return substr($model["nombre"], 0, 14)."...";
@@ -148,6 +148,7 @@ $this->registerJs($js);
                                         'contentOptions' => ['style' => 'width:6%;'],
                                     ],
                                     [
+                                        'label' => 'Propietario',
                                         'attribute'=>'ultimo_propietario',
                                         'contentOptions' => ['style' => 'width:10%;'],
                                     ],                                    

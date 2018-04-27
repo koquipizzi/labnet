@@ -28,13 +28,23 @@ Pjax::begin([
     'id' => 'pjax-container',
  ]);
 
+$urlTexto = Url::to(['informe/update', 'id' => $model->id]);
+
 $onSelect = new JsExpression(<<<JS
 function (undefined, item) {
+    var split=item.href.split("&");
+    var id_texto_split=split[2].split("=");
+    var id_texto=id_texto_split[1];
+ 
     if (item.href !== location.pathname) {
+       var form= $("#form-informe-complete").serialize();
         $.pjax({
             container: '#pjax-tree',
-            url: item.href,
-            timeout: null
+            url: '{$urlTexto}',
+            type   : "post",
+            timeout: null,
+            data:form + '&id_texto=' + id_texto,
+            
         });
     }
 
@@ -84,10 +94,30 @@ echo execut\widget\TreeView::widget([
 ]);
 Pjax::end();
 ?>
+        
+<?php
+
+$this->registerJsFile('@web/assets/admin/js/cipat_modal_informe.js', ['depends' => [yii\web\AssetBundle::className()]]);
+
+?>
 
 
          <div class="row">
             <div class="col-md-12">
+    
+                <?php
+                    if ($model->workflowLastState== Workflow::estadoEntregado()) {
+                        \insolita\wgadminlte\LteBox::begin([
+                            'type'=>\insolita\wgadminlte\LteConst::COLOR_MAROON,
+                            'tooltip'=>'Useful information!',
+                            'title'=>'Atención!',
+                            'isTile'=>true
+                        ]);
+                        echo "<i>El presente informe se encuentra entregado. ";
+                        echo "NO PUEDE MODIFICARSE.</i>";
+                        \insolita\wgadminlte\LteBox::end();
+                    }
+                ?>
 
                 <!-- Start double tabs -->
                 <div class="panel panel-tab panel-tab-double rounded shadow">
@@ -547,13 +577,3 @@ Pjax::end();
 
             </div>
         </div><!-- /.row -->
-        
-<?php
-
-$this->registerJsFile('@web/assets/admin/js/cipat_modal_informe.js', ['depends' => [yii\web\AssetBundle::className()]]);
-
-//$this->registerJsFile('@web/assets/admin/js/cipat_informe_pap.js', ['depends' => [yii\web\AssetBundle::className()]]);
-
-$this->registerJsFile('@web/assets/global/plugins/bower_components/jquery-easing-original/jquery.easing.1.3.min.js', ['depends' => [yii\web\AssetBundle::className()]]);
-
-?>

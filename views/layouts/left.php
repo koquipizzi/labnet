@@ -1,5 +1,7 @@
 <?php
 use mdm\admin\components\Helper;
+    use yii\helpers\Url;
+    use kartik\widgets\ActiveForm;
 ?>
 
 <aside class="main-sidebar">
@@ -20,17 +22,30 @@ use mdm\admin\components\Helper;
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
-
-        <!-- search form -->
-        <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Buscar..."/>
-              <span class="input-group-btn">
+        <?php
+            $form = ActiveForm::begin(['id' => 'search', 'action' => Url::to(['site/search'])]);
+        ?>
+         
+             <div class="sidebar-form ">
+                 <div class="input-group">
+                     <input type="text" name="q" class="form-control" placeholder="Buscar..."/>
+                     <span class="input-group-btn">
                 <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i>
                 </button>
               </span>
+                 </div>
+              
             </div>
-        </form>
+
+        
+        
+        <?php
+            ActiveForm::end();
+        ?>
+        <!-- search form -->
+        
+        
+        
         <!-- /.search form -->
 
         <?php echo dmstr\widgets\Menu::widget(
@@ -62,46 +77,8 @@ use mdm\admin\components\Helper;
                             ['label' => 'Usuarios', 'icon' => 'user', 'url' => ['/user'],],
                             ['label' => 'Administrativos', 'icon' => 'user-circle-o', 'url' => ['/user'],],
                              ['label' => 'Admin Usuarios', 'icon' => 'group', 'url' => ['/admin/assignment'],],
-                             
-                          
-
-                                                                 
-                               
-
-                          /*  [
-                                'label' => 'Level One',
-                                'icon' => 'fa fa-circle-o',
-                                'url' => '#',
-                                'items' => [
-                                    ['label' => 'Level Two', 'icon' => 'fa fa-circle-o', 'url' => '#',],
-                                    [
-                                        'label' => 'Level Two',
-                                        'icon' => 'fa fa-circle-o',
-                                        'url' => '#',
-                                        'items' => [
-                                            ['label' => 'Level Three', 'icon' => 'fa fa-circle-o', 'url' => '#',],
-                                            ['label' => 'Level Three', 'icon' => 'fa fa-circle-o', 'url' => '#',],
-                                        ],
-                                    ],
-                                ],
-                            ],*/
                         ],
                     ],
-                    //end personas
-          //          if(Helper::checkRoute('/pago/*')) {
-                  /*      [
-                        'label' => 'Pagos',
-                        'icon' => 'usd',
-                        'url' => '#',
-                        'items' => [
-                            ['label' => 'Pagos', 'icon' => 'shopping-bag', 'url' => ['/pago/index'],],
-                            ['label' => 'Impagos', 'icon' => 'exclamation', 'url' => ['/pago/impagos'],],
-                            ['label' => 'Nuevo Pago', 'icon' => 'plus', 'url' => ['/pago/create'],],
-                            ],
-                        ], */
-          //          }
-
-
                      [
                         'label' => 'Configuración',
                         'icon' => 'cogs',

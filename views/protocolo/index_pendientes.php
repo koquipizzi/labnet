@@ -42,9 +42,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filterModel' => $searchModel,
                     'columns' => [//'id',
                     [
-                            'label' => 'Fecha Entrada',
+                            'label' => 'Entrada',
                             'attribute' => 'fecha_entrada',
-                            'contentOptions' => ['style' => 'width:20%;'],
+                            'contentOptions' => ['style' => 'width:8%;'],
                             'format' => ['date', 'php:d/m/Y'],
                             'filter' => DateRangePicker::widget([
                             'template' => '
@@ -70,9 +70,9 @@ $this->params['breadcrumbs'][] = $this->title;
                              ])
                         ],
                         [
-                            'label' => 'Fecha de Entrega',
+                            'label' => 'Entrega',
                             'attribute' => 'fecha_entrega',
-                            'contentOptions' => ['style' => 'width:20%;'],
+                            'contentOptions' => ['style' => 'width:9%;'],
                             'format' => ['date', 'php:d/m/Y'],
                             'filter' => DateRangePicker::widget([
                                 'template' => '
@@ -100,13 +100,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'label' => 'Nro Protocolo',
                             'attribute' => 'codigo',
-                            'contentOptions' => ['style' => 'width:7%;'],
+                            'contentOptions' => ['style' => 'width:10%;'],
                         ],
 
                         [
                             'label' => 'Paciente',
                             'attribute'=>'nombre',
-                             'contentOptions' => ['style' => 'width:20%;'],
+                             'contentOptions' => ['style' => 'width:15%;'],
                             'value'=>function ($model, $key, $index, $widget) {
                                 if(strlen($model["nombre"])>17){
                                     return substr($model["nombre"], 0, 14)."...";
@@ -124,39 +124,23 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'contentOptions' => ['style' => 'width:30%;'],
                             'value'=>function ($model, $key, $index, $widget) {
-                              $estados = array(
-                                                "1" => "danger",
-                                                "2" => "default",
-                                                "3" => "success",
-                                                "4" => "warning",
-                                                "5" => "primary",
-                                                "6" => "info",
-                                                );
-                                $estadosLeyenda = array(
-                                    "1" => "INFORME PENDIENTE",
-                                    "2" => "INFORME DESCARTADO",
-                                    "3" => "EN PROCESO",
-                                    "4" => "INFORME PAUSADO",
-                                    "5" => "FINALIZADO",
-                                    "6" => "ENTREGADO",
-                                );
+                                $estados = ["1" => "danger",  "2" => "default", "3" => "success","4" => "warning", "5" => "primary","6" => "info"];
+                                $estadosLeyenda =["1" => "INFORME PENDIENTE", "2" => "INFORME DESCARTADO","3" => "EN PROCESO","4" => "INFORME PAUSADO", "5" => "FINALIZADO", "6" => "ENTREGADO"];
                                 $val = " ";
                                 $idProtocolo = $model['id'];
                                 $informes = app\models\Informe::find()->where(['=','Informe.Protocolo_id',$idProtocolo])->all();
-                                //var_dump($model['id']); die();
                                 foreach ($informes as $inf){
-                                 //   var_dump($inf);
                                     $estado = $inf->workflowLastState;
                                     $clase = " label-".$estados[$estado];
                                     $url ='index.php?r=informe/update&id='.$inf->id;
-                                    $val = $val. Html::a(Html::encode($inf->estudio->nombre),$url,[
+                                    $val = $val. Html::a(Html::encode($inf->estudio->nombre),$url,
+                                    [
                                             'title' => "$estadosLeyenda[$estado]",
-                                            'class'=>'label '. $clase.' rounded protoClass2',
-                                            'value'=> "$url",
+                                            'class'=>'label '. $clase.' rounded ',
                                             'data-id'=> "$inf->id",
                                             'data-protocolo'=> "$inf->Protocolo_id",
                                     ]);
-                                    $val = $val."<br /><span></span>";
+                                    $val = $val."<br/><span></span>";
                                 }
                                 return $val;
                             },

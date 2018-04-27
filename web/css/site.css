@@ -124,6 +124,10 @@ b, strong {
     font-weight: normal;
 }
 
+.search_strong strong {
+    font-weight: bold;
+}
+
 .timeline>li {
 
      margin-right: 0px; 

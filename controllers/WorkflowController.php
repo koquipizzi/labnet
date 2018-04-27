@@ -108,83 +108,68 @@ class WorkflowController extends Controller
         }
     }
     
-    public function actionUpdatestados()
-    {
-    	
-
+    public function actionUpdatestados(){
+        
     	$modeloinforme=Yii::$app->request->post();
+    
     	$id_inf =$modeloinforme['Workflow']['Informe_id'];
     	$fecha = date_create ();
     	$fecha = date_format ( $fecha, 'd-m-Y H:i:s' );
     	$model = new Workflow();
     	$model->fecha_inicio= $fecha;
     	
-    	/*	actualiza el ultimo workflow
-    	 */
-    	$ultimoWorkflow = Workflow::find ( 'id' )->where ( [
-    			'Informe_id' => $id_inf
-    	] )->orderBy (['(id)' => SORT_DESC])->one(); 
-    	if(isset($ultimoWorkflow)){
-    		$ultimoWorkflow->fecha_fin = $fecha;
-    		$ultimoWorkflow->update ();
-    	}
+    	/*	actualiza el ultimo workflow */
+        $ultimoWorkflow = Workflow::find()->where(['Informe_id' => $id_inf])->orderBy (['id' => SORT_DESC])->one();
+        if(isset($ultimoWorkflow)){
+            $ultimoWorkflow->fecha_fin = $fecha;
+            $ultimoWorkflow->update();
+        }
     	
-		/**
-		 * evalua si un responsable fue seteado
-		 */
+		/** evalua si un responsable fue seteado */
 		if(isset(Yii::$app->request->post('Workflow')['Responsable_id'])){
 			$model->Informe_id = Yii::$app->request->post('Workflow')['Informe_id'];
-			$model->Estado_id = Workflow::estadoPausado(); 
-			$model->Responsable_id =Yii::$app->request->post('Workflow')['Responsable_id'];
-			
+			if (!empty(Yii::$app->request->post('estado'))){
+                $model->Estado_id = Yii::$app->request->post('estado');
+            }else{
+                $model->Estado_id = Workflow::estadoEnProceso();
+            }
+            $model->Responsable_id =  Yii::$app->request->post('Workflow')['Responsable_id'];
+            
 		}else{
-                     if(Yii::$app->request->post('estado')== Workflow::estadoPendiente()  ){
-                              $model->Informe_id = Yii::$app->request->post('Workflow')['Informe_id'];
-                              $model->Estado_id = Yii::$app->request->post('estado');
-
-                        }
-			/**
-			 * crea un workflown y le setea el estado sin ser reasigado
-			 */
-			else if($ultimoWorkflow->Responsable_id===\Yii::$app->user->getId()){
-				$model->Informe_id = Yii::$app->request->post('Workflow')['Informe_id'];
-				$model->Responsable_id =\Yii::$app->user->getId();
-				$model->Estado_id = Yii::$app->request->post('estado');
-			}else {
-				$model->Informe_id = Yii::$app->request->post('Workflow')['Informe_id'];
-				$model->Responsable_id =$ultimoWorkflow->Responsable_id;
-				$model->Estado_id = Yii::$app->request->post('estado');
-			}
-
+		    
+		    if (!empty($ultimoWorkflow)){
+                if ( ($ultimoWorkflow->Responsable_id == null) && ($ultimoWorkflow->Estado_id == Workflow::estadoPendiente()) ){
+                    $model->Informe_id = Yii::$app->request->post('Workflow')['Informe_id'];
+                    $model->Estado_id = Yii::$app->request->post('estado');
+                    $model->Responsable_id =\Yii::$app->user->getId();
+                
+                }else if(Yii::$app->request->post('estado')){
+                    $model->Informe_id = Yii::$app->request->post('Workflow')['Informe_id'];
+                    $model->Estado_id = Yii::$app->request->post('estado');
+                    $model->Responsable_id = $ultimoWorkflow->Responsable_id;
+                }
+            }
 		}
-       if($ultimoWorkflow->Estado_id!=Workflow::estadoEntregado()){
-        if ($model->save() && $ultimoWorkflow->Estado_id!=Workflow::estadoEntregado()){
-           if($model->Estado_id== Workflow::estadoEntregado()){
-               $historial = new \app\models\HistorialPaciente();
-               $historial->registrar($id_inf);
-              
-           }
-             
-           $arr= array(
-                            "result" => 'ok'
-                        );
-            \Yii::$app->response->format = 'json';
-            return $arr;
-                        
+        $response = 0;
+		
+        if($ultimoWorkflow->Estado_id != Workflow::estadoEntregado()){
+            if ($model->save() && $ultimoWorkflow->Estado_id != Workflow::estadoEntregado()){
+                if($model->Estado_id == Workflow::estadoEntregado()){
+                    $historial = new \app\models\HistorialPaciente();
+                    $historial->registrar($id_inf);
+                }
+                $response= ["result" => 'ok'];
+                \Yii::$app->response->format = 'json';
+            }else{
+                $response = $model->errors;
+            }
+        }else{
+            $response = $model->errors;
         }
-          else{
-	          	$errors = $model->errors; 
-	            return "no";
-    		}
-    } else{
-	          	$errors = $model->errors; 
-	            return "error";
-    		}
-    
+       
+        return $response;
     }
 
-    
-    
     /**
      * Deletes an existing Workflow model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

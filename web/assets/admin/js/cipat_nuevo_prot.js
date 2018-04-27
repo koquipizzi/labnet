@@ -1,5 +1,4 @@
 
-
 function add_pac_prest() {
     $form = $("form#pac_prest");
     $.ajax({
@@ -21,6 +20,7 @@ function add_pac_prest() {
                     modal: false, // si pongo true me hace el efecto de pantalla gris
                 });
                 $('#pacienteprestadora-nro_afiliado').val('');
+                $('#pac_prest').trigger("reset");
 
             }
             else {
@@ -47,16 +47,7 @@ function add_pac_prest() {
     
     
 }
-/*
-function showModal(valor) {
-    alert(valor);
-    $('#modalKoki').modal('show')
-        .find('#modalContent').load(valor);
- //       .load('koko');
-    //dynamiclly set the header for the modal
- //   document.getElementById('modalHeader').innerHTML = '<h4>' + $(this).attr('title') + '</h4 > ';
-};
-*/
+
 
 $("body").on("beforeSubmit", "form#update-paciente-form", function (event) {
     event.preventDefault();
@@ -87,17 +78,30 @@ $("body").on("beforeSubmit", "form#update-paciente-form", function (event) {
         type: "post",
         data: form.serialize(),
         success: function (response) {
-            var n = noty({
-                text: 'Entidad actualizada con éxito!',
-                type: 'success',
-                class: 'animated pulse',
-                layout: 'topRight',
-                theme: 'relax',
-                timeout: 3000, // delay for closing event. Set false for sticky notifications
-                force: false, // adds notification to the beginning of queue when set to true
-                modal: false, // si pongo true me hace el efecto de pantalla gris
-            });
-
+            if (response.rta == 'ok') {
+                var n = noty({
+                    text: 'Entidad actualizada con éxito!',
+                    type: 'success',
+                    class: 'animated pulse',
+                    layout: 'topRight',
+                    theme: 'relax',
+                    timeout: 3000, // delay for closing event. Set false for sticky notifications
+                    force: false, // adds notification to the beginning of queue when set to true
+                    modal: false, // si pongo true me hace el efecto de pantalla gris
+                });
+            }
+            else {
+                var n = noty({
+                    text: 'sssss',
+                    type: 'error',
+                    class: 'animated pulse',
+                    layout: 'topRight',
+                    theme: 'relax',
+                    timeout: 3000, // delay for closing event. Set false for sticky notifications
+                    force: false, // adds notification to the beginning of queue when set to true
+                    modal: false, // si pongo true me hace el efecto de pantalla gris
+                });
+            }
         },
         error: function () {
             console.log("internal server error");

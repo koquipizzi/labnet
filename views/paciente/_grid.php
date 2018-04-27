@@ -52,21 +52,16 @@ use app\models\PacientePrestadora;
                                             $url = Url::toRoute(['paciente-prestadora/update-nro-afiliado', 'id' => $model->id ]);
                                             $editable = Editable::widget([
                                                 'name'=>'nro_afiliado',
-                                                'asPopover' => true,
+                                                'asPopover' => false,
                                                 'value' => $model->nro_afiliado,
-                                                'format' => Editable::FORMAT_BUTTON,
+                                                'format' => Editable::INPUT_TEXT,
                                                 'formOptions' => [
                                                     'method' => 'post',
                                                     'action' => $url,
                                                 ],
-                                                'pluginEvents' => [
-                                                    'editableSuccess'=>"function(event, val, form, data) {
-                                                        $.pjax.reload({container: '#prestadoras'});
-                                                    }",
-                                                ],
                                                 'header' => FALSE,
                                                 'size'=>'xs',
-                                                'editableValueOptions'=>['class'=>'well well-sm'],
+                                            //   'editableValueOptions'=>['class'=>'well well-sm'],
                                                 'options' => ['class'=>'form-control', 'placeholder'=>'Nro de Afiliado...'],
                                             ]);
                                             return $editable;

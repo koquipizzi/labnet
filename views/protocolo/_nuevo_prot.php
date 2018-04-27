@@ -214,8 +214,9 @@ $this->registerJs('var ajaxurl = "' .Url::to(['paciente/datos']). '";', \yii\web
                                         ?>
                                         <?php yii\widgets\Pjax::end() ?>
 
-                                            <button type='button' id='addLocalidad' class=' btn btn-success btn-xs'
-                                                    value='index.php?r=localidad/createpop'><?php   echo Yii::t('app', 'Add');  ?> </button>
+                                            <!--button type='button' id='addLocalidad' class=' btn btn-success btn-xs'
+                                                    value='index.php?r=localidad/createpop'><?php   echo Yii::t('app', 'Add');  ?> 
+                                            </button-->
 
                                         <?php
                                         
@@ -252,7 +253,7 @@ $this->registerJs('var ajaxurl = "' .Url::to(['paciente/datos']). '";', \yii\web
                             <div class='col-md-12'>
                             <div class="box-footer" >
                                     <div class="pull-right box-tools">
-                                        <?= Html::submitButton($paciente->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $paciente->isNewRecord ? 'enviarButon btn btn-info' : ' btn btn-primary']) ?>
+                                        <?= Html::submitButton(Yii::t('app', 'Update'), ['class' => $paciente->isNewRecord ? 'enviarButon btn btn-info' : ' btn btn-primary']) ?>
                                         <?= Html::resetButton(Yii::t('app', 'Cancel'), ['class' => ' btn btn-default']) ?>
                                     </div>
                                 </div>

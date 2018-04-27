@@ -173,7 +173,7 @@ class PacientePrestadoraController extends Controller
                 if (!empty($data)){
                     $model->nro_afiliado = $data;
                     if ( $model->save()){
-                        $rta =  ["output" => true, "message" =>'Se cambio el numero de afiliado exitosamente'];
+                        $rta =  ["output" => $data, "message" =>''];
                     }
                 }
             }

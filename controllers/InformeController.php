@@ -259,7 +259,6 @@ class InformeController extends Controller {
         
         if ($model->getWorkflowLastState() != Workflow::estadoEntregado()) {
             
-            
             if (Yii::$app->request->post()) {
         
                 if (isset($_POST['hasEditable'])) {
@@ -281,11 +280,9 @@ class InformeController extends Controller {
                     $texto = $textoModel->find()->where(['=', 'id', Yii::$app->request->post()["id_texto"]])->one();
                     $this->cargarModelo($model, $texto);
                     $codigo = $texto->codigo;
-                    $model->save();
+					$model->save();
                 }
-        
-                $model->load(Yii::$app->request->post()) && $model->save();
-        
+
                 //multimedia
                 $file = Yii::$app->request->post('Informe_id');
                 if (isset($file)) {

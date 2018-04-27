@@ -19,69 +19,21 @@ use app\models\Prestadoras;
 
 use yii\bootstrap\Modal;
 use app\models\PacientePrestadora;
-
-
-
 ?>
 
  <?php 
-                            $data =  Prestadoras::find()->asArray()->all();
-                            $data2 =  ArrayHelper::map($data, 'id', 'descripcion');
+        $data =  Prestadoras::find()->asArray()->all();
+        $data2 =  ArrayHelper::map($data, 'id', 'descripcion');
 
-                             $data = Prestadoras::find()->all();
-                            $data2 = ArrayHelper::map($data,'id', 'descripcion');
+        $data = Prestadoras::find()->all();
+        $data2 = ArrayHelper::map($data,'id', 'descripcion');
+        
+        $js =" $('#pac_prest').trigger(\"reset\"); ";
+        
+        $this->registerJs($js);
 
-                   /*         
-                            //$model->id = null;
-                            $modelIN = new PacientePrestadora(); 
-                        //    var_dump($modelIN);die();
-                            $url = Url::to(['/paciente_prestadora/create']);
-                            PopoverX::begin([
-                                'placement' => PopoverX::ALIGN_TOP,
-                                'id'=> 'popNomenclador',
-                                'toggleButton' => ['label'=>'', 'class'=>' fa fa-plus'],
-                                'header' => 'Agregar Prestadora',
-                                'footer'=> Html::a('<span class="btn btn-info add_prestadora click2"> Agregar</span>', $url)//Html::Button('Agregar', ['class'=>'btn btn-sm btn-primary click'])// .
-                                        // Html::resetButton('Cancelar', ['class'=>'btn btn-sm btn-default'])
-                            ]);
-                            $form = ActiveForm::begin([
-                                    'id' => 'addNom',
-                               //     'fieldConfig'=>['showLabels'=>false],                                   
-                                     'action' => Url::to(['/informe-nomenclador/create']),
-                                    ]);
-                            
-                            echo $form->field($model, 'Prestadoras_id',[
-                               'template' => "{label}
-                                            <div id='SelecNomenclador'>{input}</div>
-                                            {hint}
-                                            {error}"
-                                            ]
-                                            )->widget(Select2::classname(), [
-                                    'data'=>$data2,'language'=>'es',
-                                    'toggleAllSettings' => [                                    
-                                    'selectOptions' => ['class' => 'text-success'],
-                                    'unselectOptions' => ['class' => 'text-danger'],
-                                     ],
-                                    'options' => ['multiple' => false]
-                            ]);
-                            echo $form->field($modelIN, 'nro_afiliado')->textInput(['placeholder'=>'nro_afiliado...']);
-                            echo $form->field($modelIN, 'Paciente_id')->hiddenInput( array('value'=>$paciente_id))->label(false);
-                            ActiveForm::end(); 
-                            PopoverX::end();
-                           
-                            
-                            echo Html::a('<span class="btn btn-info custom_button "> Agregar</span>', $url);
-
-                            echo Html::button('Agregar PP', ['value'=>Url::to(['paciente-prestadora/create']),
-                           'class' => 'btn btn-success custom_button', 'onclick' => 'showModal("'. Url::to(['paciente-prestadora/create&paciente_id=24674']).'")','id'=>'modalButton']);
-     
-     */
-                           
-                        ?>
-                
-
+ ?>
         <?php Pjax::begin(['id' => 'prestadoras']); ?>
-
 
                             <?= GridView::widget([
                                 'dataProvider' => $dataProvider,                                
@@ -92,13 +44,37 @@ use app\models\PacientePrestadora;
                                         'label' => 'Prestadora',
                                         'value' => 'prestadoraTexto',
                                     ],
-                                    'nro_afiliado',
+                                    [
+                                        'attribute' => 'nro_afiliado',
+                                        'filter' => false,
+                                        'format' => 'raw',
+                                        'value' => function ($model, $data) {
+                                            $url = Url::to(['paciente-prestadora/update-nro-afiliado', 'id' => $model->id ]);
+                                            $editable = Editable::widget([
+                                                'name'=>'nro_afiliado',
+                                                'asPopover' => true,
+                                                'value' => $model->nro_afiliado,
+                                                'format' => Editable::FORMAT_BUTTON,
+                                                'formOptions' => [
+                                                    'method' => 'post',
+                                                    'action' => $url,
+                                                ],
+                                                'pluginEvents' => [
+                                                    'editableSuccess'=>"function(event, val, form, data) {
+                                                        $.pjax.reload({container: '#prestadoras'});
+                                                    }",
+                                                ],
+                                                'header' => FALSE,
+                                                'size'=>'xs',
+                                                'editableValueOptions'=>['class'=>'well well-sm'],
+                                                'options' => ['class'=>'form-control', 'placeholder'=>'Nro de Afiliado...'],
+                                            ]);
+                                            return $editable;
+                                        },
+                                    ],
                                     ['class' => 'yii\grid\ActionColumn',
                                     'template' => '{delete} {crear}',
                                     'buttons' => [
-                                    //view button
-                                    
-                                    
                                     'delete' => function ($url, $model) {
                                         $url = "test";
                                         return Html::a('<span class="fa fa-trash"></span>', FALSE, [

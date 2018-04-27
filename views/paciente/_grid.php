@@ -116,7 +116,7 @@ echo Html::button(
                 
                 <div class="paciente-prestadora-form">
 
-                        <?php $form = ActiveForm::begin(['action' => Url::to('/index.php?r=paciente-prestadora/create'),
+                        <?php $form = ActiveForm::begin(['action' => Url::toRoute('/paciente-prestadora/create'),
                                                                     'id' => 'pac_prest']); ?>
 
                         <?= $form->field($model, 'nro_afiliado')->textInput(['maxlength' => true]) ?>

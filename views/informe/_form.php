@@ -21,10 +21,23 @@ Pjax::begin([
 //echo \yii::$app->request->get();
 
 
-$urlTexto = Url::to(['informe/update', 'id' => $model->id]);
+$urlTexto = Url::toRoute(['informe/update', 'id' => $model->id]);
 
 $onSelect = new JsExpression(<<<JS
 function (undefined, item) {
+    $('.tree-view-wrapper').hide();
+
+    var n = noty({
+                    text: 'Se actualizaron los valores del informe exitosamente',
+                    type: 'success',
+                    class: 'animated pulse',
+                    layout: 'topRight',
+                    theme: 'relax',
+                    timeout: 3000, // delay for closing event. Set false for sticky notifications
+                    force: false, // adds notification to the beginning of queue when set to true
+                    modal: false, // si pongo true me hace el efecto de pantalla gris
+                });
+
     var split=item.href.split("&");
     var id_texto_split=split[2].split("=");
     var id_texto=id_texto_split[1];

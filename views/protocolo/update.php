@@ -21,8 +21,8 @@ $('#btn_delete').click(function()
     bootbox.dialog
     ({ 
     
-        message: '¿Confirma que desea eliminar el pedido?',
-        title: 'Sistema Fundalum.Sa',
+        message: '¿Confirma que desea eliminar el protocolo?',
+        title: 'Sistema LabNet',
         // className: 'modal-info modal-center',
         buttons: 
         {

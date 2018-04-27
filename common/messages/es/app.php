@@ -44,7 +44,7 @@ return [
     'Create Workflow' => '',
     'Código' => '',
     'Datos Paciente' => '',
-    'Delete' => '',
+    'Delete' => 'Borrar',
     'Descargar/imprimir' => '',
     'Descipcion Procedencia' => '',
     'Diagnóstico' => '',

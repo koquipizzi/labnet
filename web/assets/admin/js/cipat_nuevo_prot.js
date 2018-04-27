@@ -20,7 +20,6 @@ function add_pac_prest() {
                     modal: false, // si pongo true me hace el efecto de pantalla gris
                 });
                 $('#pacienteprestadora-nro_afiliado').val('');
-                $('#pac_prest').trigger("reset");
 
             }
             else {

@@ -21,7 +21,6 @@ use yii\bootstrap\Modal;
 use app\models\PacientePrestadora;
 
 
-
 ?>
 
  <?php 
@@ -30,52 +29,6 @@ use app\models\PacientePrestadora;
 
                              $data = Prestadoras::find()->all();
                             $data2 = ArrayHelper::map($data,'id', 'descripcion');
-
-                   /*         
-                            //$model->id = null;
-                            $modelIN = new PacientePrestadora(); 
-                        //    var_dump($modelIN);die();
-                            $url = Url::to(['/paciente_prestadora/create']);
-                            PopoverX::begin([
-                                'placement' => PopoverX::ALIGN_TOP,
-                                'id'=> 'popNomenclador',
-                                'toggleButton' => ['label'=>'', 'class'=>' fa fa-plus'],
-                                'header' => 'Agregar Prestadora',
-                                'footer'=> Html::a('<span class="btn btn-info add_prestadora click2"> Agregar</span>', $url)//Html::Button('Agregar', ['class'=>'btn btn-sm btn-primary click'])// .
-                                        // Html::resetButton('Cancelar', ['class'=>'btn btn-sm btn-default'])
-                            ]);
-                            $form = ActiveForm::begin([
-                                    'id' => 'addNom',
-                               //     'fieldConfig'=>['showLabels'=>false],                                   
-                                     'action' => Url::to(['/informe-nomenclador/create']),
-                                    ]);
-                            
-                            echo $form->field($model, 'Prestadoras_id',[
-                               'template' => "{label}
-                                            <div id='SelecNomenclador'>{input}</div>
-                                            {hint}
-                                            {error}"
-                                            ]
-                                            )->widget(Select2::classname(), [
-                                    'data'=>$data2,'language'=>'es',
-                                    'toggleAllSettings' => [                                    
-                                    'selectOptions' => ['class' => 'text-success'],
-                                    'unselectOptions' => ['class' => 'text-danger'],
-                                     ],
-                                    'options' => ['multiple' => false]
-                            ]);
-                            echo $form->field($modelIN, 'nro_afiliado')->textInput(['placeholder'=>'nro_afiliado...']);
-                            echo $form->field($modelIN, 'Paciente_id')->hiddenInput( array('value'=>$paciente_id))->label(false);
-                            ActiveForm::end(); 
-                            PopoverX::end();
-                           
-                            
-                            echo Html::a('<span class="btn btn-info custom_button "> Agregar</span>', $url);
-
-                            echo Html::button('Agregar PP', ['value'=>Url::to(['paciente-prestadora/create']),
-                           'class' => 'btn btn-success custom_button', 'onclick' => 'showModal("'. Url::to(['paciente-prestadora/create&paciente_id=24674']).'")','id'=>'modalButton']);
-     
-     */
                            
                         ?>
                 
@@ -100,12 +53,10 @@ use app\models\PacientePrestadora;
                                     
                                     
                                     'delete' => function ($url, $model) {
-                                        $url = "test";
                                         return Html::a('<span class="fa fa-trash"></span>', FALSE, [
                                                     'title' => Yii::t('app', 'Borrar'),
-                                                    'class'=>'btn btn-danger btn-flat custom_button btn-xs', 
-                                                    //'onclick'=>'deletePrestadora('.$model->id.',"'.$url.'")', 
-                                                    'onclick'=>'showModal('.$model->id.')', 
+                                                    'class'=>'btn btn-danger btn-xs', 
+                                                    'onclick'=>'deletePrestadora('.$model->id.',"'.$url.'")', 
                                                     'value'=> "$url",
                                         ]);
                                     },
@@ -114,8 +65,7 @@ use app\models\PacientePrestadora;
                                         return Html::a(' <span class="fa fa-arrow-right"></span> Crear Protocolo', $url, [
                                                     'title' => Yii::t('app', 'Borrar'),
                                                     'class'=>'btn bg-purple btn-flat custom_button btn-xs', 
-                                                    //'onclick'=>'deletePrestadora('.$model->id.',"'.$url.'")', 
-                                                  //  'onclick'=>'showModal('.$model->id.')', 
+                                                    'onclick'=> 'SimpleLoading.start();', 
                                                     'value'=> "$url",
                                         ]);
                                     },

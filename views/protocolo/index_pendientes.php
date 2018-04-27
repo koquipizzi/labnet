@@ -106,9 +106,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'label' => 'Paciente',
                             'attribute'=>'nombre',
-                             'contentOptions' => ['style' => 'width:15%;'],
+                             'contentOptions' => ['style' => 'width:25%;'],
                             'value'=>function ($model, $key, $index, $widget) {
-                                if(strlen($model["nombre"])>17){
+                                if(strlen($model["nombre"])>20){
                                     return substr($model["nombre"], 0, 14)."...";
                                 }  else {
                                        return $model["nombre"];
@@ -122,7 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'label' => 'Informes',
                             'format' => 'raw',
-                            'contentOptions' => ['style' => 'width:30%;'],
+                            'contentOptions' => ['style' => 'width:20%;'],
                             'value'=>function ($model, $key, $index, $widget) {
                                 $estados = ["1" => "danger",  "2" => "default", "3" => "success","4" => "warning", "5" => "primary","6" => "info"];
                                 $estadosLeyenda =["1" => "INFORME PENDIENTE", "2" => "INFORME DESCARTADO","3" => "EN PROCESO","4" => "INFORME PAUSADO", "5" => "FINALIZADO", "6" => "ENTREGADO"];

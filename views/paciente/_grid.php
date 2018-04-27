@@ -142,7 +142,7 @@ echo Html::button(
                         ?>
 
                         <div class="form-group">
-                            <?= Html::button($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'onclick' => 'add_pac_prest(this);']) ?>
+                            <?= Html::button('Agregar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'onclick' => 'add_pac_prest(this);']) ?>
                        
                         </div>
 

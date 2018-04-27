@@ -85,7 +85,7 @@ return [
     '{attribute} must be greater than or equal to "{compareValue}".' => '{attribute} debe ser superior o igual que la fecha actual.',
     '{attribute} must be less than "{compareValue}".' => '',
     '{attribute} must be less than or equal to "{compareValueOrAttribute}".' => '{attribute} debe ser anterior o igual que "{compareValueOrAttribute}".',
-    '{attribute} must be no greater than {max}.' => '',
+    '{attribute} must be no greater than {max}.' => '{attribute} debe ser menor que {max}.',
     '{attribute} must be repeated exactly.' => '',
     '{attribute} must not be a subnet.' => '',
     '{attribute} must not be an IPv4 address.' => '',

@@ -1,6 +1,12 @@
 
     $('.tree-view-wrapper').hide();
 
+$('li.select2-results__message').click(
+        function () {
+            alert('nuevo medico');
+        }
+    );
+
     $(function check_order(){
         $( "a" ).each(function( index ) {
             var attr = $(this).attr('data-sort');
@@ -250,6 +256,7 @@ $(document).on('ready pjax:success', function () {
     });
     
 
+    
 /********************************************************************************************************* */
 
 /*

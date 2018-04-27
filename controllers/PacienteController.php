@@ -195,11 +195,11 @@ class PacienteController extends Controller
           //          ]);
             //return $this->redirect(['view', 'id' => $model->id]);
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            return ['rta'=> 'ok', 'rtaPrest' => 'sss']; die();
+            return ['rta'=> 'ok', 'rtaPrest' => '']; die();
 
         } else {
                    \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            return ['rta'=> 'nook', 'rtaPrest' => 'sss']; die();
+            return ['rta'=> 'nook', 'rtaPrest' => '']; die();
           //  return $this->render('update', [
          //       'model' => $model,
          //   ]);

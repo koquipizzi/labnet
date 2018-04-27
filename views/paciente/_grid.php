@@ -87,8 +87,7 @@ use app\models\PacientePrestadora;
                                         $url = Url::toRoute(['protocolo/create3', 'pacprest' => $model->id]);
                                         return Html::a(' <span class="fa fa-arrow-right"></span> Crear Protocolo', $url, [
                                                     'title' => Yii::t('app', 'Borrar'),
-                                                    'class'=>'btn bg-purple btn-flat custom_button btn-xs', 
-                                                    'onclick'=> 'SimpleLoading.start();', 
+                                                    'class'=>'btn bg-purple btn-flat btn-xs', 
                                                     'value'=> "$url",
                                         ]);
                                     },

@@ -19,22 +19,21 @@ use app\models\Prestadoras;
 
 use yii\bootstrap\Modal;
 use app\models\PacientePrestadora;
-
-
 ?>
 
  <?php 
-                            $data =  Prestadoras::find()->asArray()->all();
-                            $data2 =  ArrayHelper::map($data, 'id', 'descripcion');
+        $data =  Prestadoras::find()->asArray()->all();
+        $data2 =  ArrayHelper::map($data, 'id', 'descripcion');
 
-                             $data = Prestadoras::find()->all();
-                            $data2 = ArrayHelper::map($data,'id', 'descripcion');
-                           
-                        ?>
-                
+        $data = Prestadoras::find()->all();
+        $data2 = ArrayHelper::map($data,'id', 'descripcion');
+        
+   //     $js =" $('#pac_prest').trigger(\"reset\"); ";
+   //     
+   //     $this->registerJs($js);
 
+ ?>
         <?php Pjax::begin(['id' => 'prestadoras']); ?>
-
 
                             <?= GridView::widget([
                                 'dataProvider' => $dataProvider,                                
@@ -45,13 +44,37 @@ use app\models\PacientePrestadora;
                                         'label' => 'Prestadora',
                                         'value' => 'prestadoraTexto',
                                     ],
-                                    'nro_afiliado',
+                                    [
+                                        'attribute' => 'nro_afiliado',
+                                        'filter' => false,
+                                        'format' => 'raw',
+                                        'value' => function ($model, $data) {
+                                            $url = Url::toRoute(['paciente-prestadora/update-nro-afiliado', 'id' => $model->id ]);
+                                            $editable = Editable::widget([
+                                                'name'=>'nro_afiliado',
+                                                'asPopover' => true,
+                                                'value' => $model->nro_afiliado,
+                                                'format' => Editable::FORMAT_BUTTON,
+                                                'formOptions' => [
+                                                    'method' => 'post',
+                                                    'action' => $url,
+                                                ],
+                                                'pluginEvents' => [
+                                                    'editableSuccess'=>"function(event, val, form, data) {
+                                                        $.pjax.reload({container: '#prestadoras'});
+                                                    }",
+                                                ],
+                                                'header' => FALSE,
+                                                'size'=>'xs',
+                                                'editableValueOptions'=>['class'=>'well well-sm'],
+                                                'options' => ['class'=>'form-control', 'placeholder'=>'Nro de Afiliado...'],
+                                            ]);
+                                            return $editable;
+                                        },
+                                    ],
                                     ['class' => 'yii\grid\ActionColumn',
                                     'template' => '{delete} {crear}',
                                     'buttons' => [
-                                    //view button
-                                    
-                                    
                                     'delete' => function ($url, $model) {
                                         return Html::a('<span class="fa fa-trash"></span>', FALSE, [
                                                     'title' => Yii::t('app', 'Borrar'),

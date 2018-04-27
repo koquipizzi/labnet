@@ -56,7 +56,6 @@ $id = $model->id;
 $query = "SELECT * FROM Textos where `estudio_id` = '".$estudio."' ";
 
 $result = \app\models\Textos::findBySql($query)->all();
-//var_dump($result); die();
 $tree = new AutoTextTreeController();
 foreach ($result as $row){
     $url = Url::to(['',  'id' => $id, 'idtexto'=> $row['id']]);

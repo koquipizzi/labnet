@@ -61,9 +61,7 @@ JS
 $estudio = $model->Estudio_id;
 $id = $model->id;
 $query = "SELECT * FROM Textos where `estudio_id` = '".$estudio."' ";
-//die($query);
 $result = \app\models\Textos::findBySql($query)->all();
-//var_dump($result); die();
 $tree = new AutoTextTreeController();
 foreach ($result as $row){
     $url = Url::to(['',  'id' => $id, 'idtexto'=> $row['id']]);
@@ -177,7 +175,6 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_informe.js', ['depends' 
                         </ul>
                     </div><!-- /.panel-heading -->
                     <!--/ End tabs heading -->
-                    
                      <?php Pjax::begin(['id'=>'pjax-tree']); ?>
                     <!-- Start tabs content -->
                     <div class="panel-body">

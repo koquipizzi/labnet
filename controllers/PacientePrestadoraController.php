@@ -161,6 +161,26 @@ class PacientePrestadoraController extends Controller
             ]);
         }
     }
+    
+    public function actionUpdateNroAfiliado($id)
+    {
+        $rta =  ["output" => false, "message" =>'No se pudo cambiar el numero de afiliado'];
+        $model = $this->findModel($id);
+        if (!empty(Yii::$app->request->post('hasEditable'))){
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            if  (!empty($model)){
+                $data = Yii::$app->request->post('nro_afiliado');
+                if (!empty($data)){
+                    $model->nro_afiliado = $data;
+                    if ( $model->save()){
+                        $rta =  ["output" => true, "message" =>'Se cambio el numero de afiliado exitosamente'];
+                    }
+                }
+            }
+        }
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return $rta;
+    }
 
 
     public function actionUpdate($id)

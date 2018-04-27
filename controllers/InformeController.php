@@ -260,6 +260,8 @@ class InformeController extends Controller {
         if ($model->getWorkflowLastState() != Workflow::estadoEntregado()) {
             
             if (Yii::$app->request->post()) {
+    
+                $model->load(Yii::$app->request->post());
         
                 if (isset($_POST['hasEditable'])) {
                     \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -282,7 +284,7 @@ class InformeController extends Controller {
                     $codigo = $texto->codigo;
 					$model->save();
                 }
-
+                
                 //multimedia
                 $file = Yii::$app->request->post('Informe_id');
                 if (isset($file)) {
@@ -292,6 +294,8 @@ class InformeController extends Controller {
                         'allModels' => Multimedia::findAll(['Informe_id' => $model->id])]);
                     return TRUE;
                 }
+    
+                $model->save();
             }
         }
         

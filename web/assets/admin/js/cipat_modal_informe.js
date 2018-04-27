@@ -204,7 +204,7 @@
         });  //Guardado de AutoTexto a partir de informe
 
     $("#idFile").on('fileuploaded', function(event) {
-
+        
         $.pjax.reload({container:"#galeriar"});
     });
 

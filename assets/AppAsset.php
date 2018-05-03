@@ -26,11 +26,6 @@ class AppAsset extends AssetBundle
          'assets/admin/js/jquery.fancybox.js',
          'assets/admin/js/cipat_general.js', 
          'assets/admin/js/cipat_nuevo_prot.js',
-    //     '//fb.me/react-0.13.1.min.js',
-     //   '//fb.me/JSXTransformer-0.13.1.js',
-     //  '//fb.me/react-dom-0.14.3.js',//fb.me/react-dom-0.14.3.js
-        'assets/admin/js/reactkoqui.js',
-     //   'assets/admin/js/cipat_nuevo_prot.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

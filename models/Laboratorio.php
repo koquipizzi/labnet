@@ -83,6 +83,7 @@ class Laboratorio extends \yii\db\ActiveRecord
         // the uploaded image instance
         return $image;
     }
+    
    public function getImageFilePath()
     {
     	if( substr(Yii::$app->params['uploadPathLogo'],-1) == DIRECTORY_SEPARATOR ){
@@ -91,21 +92,18 @@ class Laboratorio extends \yii\db\ActiveRecord
     	return Yii::$app->params['uploadPathLogo'] . DIRECTORY_SEPARATOR;
     }
     
-    public function getUrlImageFolder()
-    {
+    public function getUrlImageFolder(){
     	return Yii::$app->params['urlImageFolderLogo'];
     }
     
-       public function getImageFilePathFirma()
-    {
+    public function getImageFilePathFirma(){
     	if( substr(Yii::$app->params['uploadPathFirmaDigital'],-1) == DIRECTORY_SEPARATOR ){
     		return Yii::$app->params['uploadPathFirmaDigital'];
     	}
     	return Yii::$app->params['uploadPathFirmaDigital'] . DIRECTORY_SEPARATOR;
     }
     
-    public function getUrlImageFolderFirma()
-    {
+    public function getUrlImageFolderFirma(){
     	return Yii::$app->params['urlImageFolderFirmaDigital'];
     }
     

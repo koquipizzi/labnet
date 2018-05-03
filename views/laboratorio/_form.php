@@ -5,18 +5,44 @@ use yii\widgets\ActiveForm;
 use kartik\widgets\FileInput;
 use yii\helpers\Url;
 use yii\helpers\Helper;
+use yii\widgets\Pjax;
 
 ?>
+  <?php
+  
+  $js = '
+    
+    $("#idFile").on("fileuploaded", function(event) {
+        $.pjax.reload({container:"#galeriaL"});
+    });
+    
+    $("#idFile2").on("fileuploaded", function(event) {
+        $.pjax.reload({container:"#galeriaFD"});
+    });
 
+    $(document).on("pjax:success", function() {
+        $("#idFile").on("fileuploaded", function(event) {
+            $.pjax.reload({container:"#galeriaL"});
+        });
+        
+        $("#idFile2").on("fileuploaded", function(event) {
+            $.pjax.reload({container:"#galeriaFD"});
+        });
+    });
+    
+    ';
+ 
+    $this->registerJs($js);
+  ?>
 
-        <?php $form = ActiveForm::begin([            
-            'options' => [
-                'class' => 'form-horizontal mt-10',
-                'id' => 'create-localidad-form',
-                'options'=>['enctype'=>'multipart/form-data']
-                
-             ]
-        ]); ?>
+    <?php $form = ActiveForm::begin([
+        'options' => [
+            'class' => 'form-horizontal mt-10',
+            'id' => 'create-localidad-form',
+            'options'=>['enctype'=>'multipart/form-data']
+            
+         ]
+    ]); ?>
 
     <?= $form->field($model, 'nombre', ['template' => "{label}
             <div class='col-md-7'>{input}</div>
@@ -75,14 +101,12 @@ use yii\helpers\Helper;
             'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
     ])->textInput(['maxlength' => true]) ?>  
     <div class="col-md-3  control-label"><p>Cargar Logo</p></div>     
-    <div class="col-md-7  ">   
+    <div class="col-md-7  ">
+        <br>
         <?php 
         echo FileInput::widget([
                         'model' => $model,
                         'attribute' => 'files[]',
-
-        //         		'name' => 'files[]',
-
                         'options'=>[
                                         'multiple'=>false,
                                         'accept'=>'image/*',
@@ -106,17 +130,30 @@ use yii\helpers\Helper;
 
                   ]);
         ?>
-	
+        <br>
     </div>
+    <div class="row">
+        <br>
+        <?php Pjax::begin(['id' => 'galeriaL', 'enablePushState' => TRUE]); ?>
+        <div class="content-galeria">
+        
+            <?php //Muestra el logo
+                if (!empty( $model->web_path)){
+                    echo $this->render('galeria', [
+                        'path' => $model->web_path
+                    ]);
+                }
+            ?>
+        </div>
+        <?php Pjax::end(); ?>
+    </div>
+   
     <div class="col-md-3  control-label" style="margin-top:5px; "><p>Firma Digital</p></div>     
-    <div class="col-md-7  ">   
+    <div class="col-md-7">
         <?php 
         echo FileInput::widget([
                         'model' => $model,
                         'attribute' => 'files[]',
-
-        //         		'name' => 'files[]',
-
                         'options'=>[
                                         'multiple'=>false,
                                         'accept'=>'image/*',
@@ -140,9 +177,19 @@ use yii\helpers\Helper;
 
                   ]);
         ?>
-												   
-                                                                                                   
     </div>
+
+    <?php Pjax::begin(['id' => 'galeriaFD', 'enablePushState' => TRUE]); ?>
+    <div class="content-galeria">
+        <?php //muestra la firma
+            if (!empty($model->web_path_firma)){
+                echo $this->render('galeria', [
+                    'path' => $model->web_path_firma
+                ]);
+            }
+        ?>
+    </div>
+    <?php Pjax::end(); ?>
 
     <div class="box-footer" >
         <div class="pull-right box-tools">

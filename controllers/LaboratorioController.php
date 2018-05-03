@@ -19,10 +19,10 @@ class LaboratorioController extends Controller
     /**
      * @inheritdoc
      */
- //   public $layout = 'lay-admin-footer-fixed';
-    public $path_logos =[];
-            
-    public function behaviors()
+    //   public $layout = 'lay-admin-footer-fixed';
+    public $path_logos = [];
+    
+    public function behaviors ()
     {
         return [
             'verbs' => [
@@ -33,43 +33,45 @@ class LaboratorioController extends Controller
             ],
         ];
     }
-
+    
     /**
      * Lists all Laboratorio models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex ()
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Laboratorio::find(),
         ]);
-
+        
         return $this->render('index', [
             'dataProvider' => $dataProvider,
         ]);
     }
-
+    
     /**
      * Displays a single Laboratorio model.
+     *
      * @param integer $id
+     *
      * @return mixed
      */
-    public function actionView($id)
+    public function actionView ($id)
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
-
+    
     /**
      * Creates a new Laboratorio model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate ()
     {
         $model = new Laboratorio();
-
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -78,20 +80,19 @@ class LaboratorioController extends Controller
             ]);
         }
     }
-
+    
     /**
      * Updates an existing Laboratorio model.
      * If update is successful, the browser will be redirected to the 'view' page.
+     *
      * @param integer $id
+     *
      * @return mixed
      */
-  public function actionUpdate($id)
-    {
+    public function actionUpdate ($id){
         $model = $this->findModel($id);
-
-    if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//            $model->save();
-//            var_dump($model->getErrors());die();
+        
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
@@ -99,81 +100,72 @@ class LaboratorioController extends Controller
             ]);
         }
     }
-
-    public function actionLogo($id=null)
-{
-      
-   $model = \app\models\Laboratorio::find('id')->one();
- 
-    $carpeta = Yii::getAlias('@webroot').'/uploads/logo';
-    if (!file_exists($carpeta)) {
-        mkdir($carpeta, 0755, true);
-    }
-/*
-   if(!empty($model->web_path)){
-      unlike( Yii::getAlias('@app').'/web'.$model->web_path);
-      $model->web_path='';
-      $model->save();
-   }
-*/
     
-    if(!isset($model)){
-        $model= new \app\models\Laboratorio();
-        $model->save();
-    }
+    public function actionLogo($id=null){
+      
+        $model = \app\models\Laboratorio::find('id')->one();
+ 
+        $carpeta = Yii::getAlias('@webroot').'/uploads/logo';
+        if (!file_exists($carpeta)) {
+            mkdir($carpeta, 0755, true);
+        }
+    
+        if(!isset($model)){
+            $model= new \app\models\Laboratorio();
+            $model->save();
+        }
+        
         // Load images
         $img = UploadedFile::getInstances($model,'files');
-        $image=$img[0];
+        $image = $img[0];
       
         $model->path_logo = $image->name;
         $pathName = $model->getImageFilePath();
-        $pathFolder=$model->getUrlImageFolder();
+        $pathFolder = $model->getUrlImageFolder();
         
-
         $nameOfFile=explode(".", $image->name);
         $ext = end($nameOfFile);
-        $name =$nameOfFile[0];
-        $filename = "Logo_".$name.".{$ext}";
+        $filename = "Logo.{$ext}";
         $model->path_logo = $model->getImageFilePath(). $filename;
-        $model->web_path = $model->getUrlImageFolder()."/". $filename;
-//        var_dump( $model->getImageFilePath()); var_dump( $filename); var_dump(  $model->path_logo);var_dump($model->getUrlImageFolder()); die();
+        $model->web_path = $model->getUrlImageFolder(). $filename;
         if ($image->saveAs($model->path_logo, true)){
                 $model->save();
         }
-}
+        return true;
+    }
     
     public function actionFirmadigital($id=null)
-{
-      
+    {
+        $model = \app\models\Laboratorio::find('id')->one();
+        
         $carpeta = Yii::getAlias('@webroot').'/uploads/firma';
         if (!file_exists($carpeta)) {
             mkdir($carpeta, 0755, true);
         }
-
-        $model = \app\models\Laboratorio::find('id')->one();
+        
         if(!isset($model)){
             $model= new \app\models\Laboratorio();
             $model->save();
         }
         // Load images
         $img = UploadedFile::getInstances($model,'files');
-        $image=$img[0];
+        $image = $img[0];
       
         $model->path_firma = $image->name;
         $pathName = $model->getImageFilePathFirma();
-        $pathFolder=$model->getUrlImageFolderFirma();
+        $pathFolder = $model->getUrlImageFolderFirma();
         
 
-        $nameOfFile=explode(".", $image->name);
+        $nameOfFile = explode(".", $image->name);
         $ext = end($nameOfFile);
-        $name =$nameOfFile[0];
-        $filename = "Firma_Digital_".$name.".{$ext}";
+        $filename = "Firma_Digital.{$ext}";
         $model->path_firma = $model->getImageFilePathFirma() . $filename;
-        $model->web_path_firma = $model->getUrlImageFolderFirma()."/". $filename;
+        $model->web_path_firma = $model->getUrlImageFolderFirma(). $filename;
         if ($image->saveAs($model->path_firma, true)){
                 $model->save();
         }
-}
+        return true;
+    }
     
     /**
      * Deletes an existing Laboratorio model.

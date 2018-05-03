@@ -48,7 +48,9 @@ use mdm\admin\components\Helper;
         
         <!-- /.search form -->
 
-        <?php echo dmstr\widgets\Menu::widget(
+        <?php 
+            $urlLab = Url::to(['laboratorio/update',  'id' => '1']);
+            echo dmstr\widgets\Menu::widget(
             [
                 'options' => ['class' => 'sidebar-menu', 
                 'data-widget' => 'tree'],
@@ -92,6 +94,7 @@ use mdm\admin\components\Helper;
                             ['label' => 'Procedencias', 'icon' => '', 'url' => ['/procedencia'],],
                             ['label' => 'AutoTextos', 'icon' => 'file-text', 'url' => ['/textos'],],
                             ['label' => 'Localidades', 'icon' => 'map-marker', 'url' => ['/localidad'],],
+                            ['label' => 'General', 'icon' => 'cogs', 'url' => $urlLab],
                         ],
                     ],
 

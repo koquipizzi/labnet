@@ -51,7 +51,7 @@ table.pap_desc {
                 <td width="400px" style="padding-top: 180px; padding-left: 20px; float: left;">
                     <table class="header_pap">
                         <tr>
-                           <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PACIENTE </td><td><?php echo $modelp->pacienteTexto; ?> </td>
+                           <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PACIENTE  LALAL </td><td><?php echo $modelp->pacienteTexto; ?> </td>
                         </tr>
                         <tr>
                             <td style="white-space:nowrap; width: 3cm; font-weight: bold;">DOCUMENTO </td><td><?php echo $modelp->pacienteDoc; ?> </td>

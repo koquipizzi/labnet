@@ -7,6 +7,15 @@ use yii\helpers\Html;
 
 
 <div class="pagina">
+    <?php
+    
+        $model = \app\models\Laboratorio::find([])->one();
+        
+        var_dump($model);
+        die();
+    
+    
+    ?>
     <div class="header_pap">
         <table>
             <tr>
@@ -88,7 +97,7 @@ use yii\helpers\Html;
         </div>
     </div>
     <div style="position: fixed; margin-right: 35px; text-align: right;">
-        <img src="<?php echo Yii::getAlias('@webroot').'/images/firma/firma.jpg'; ?>" width="120"  \/>  
+        <img src="<?php echo Yii::getAlias('@webroot').'/images/firma/Firma_Digital.jpeg'; ?>" width="120"  \/>
     </div>
 </div>
 

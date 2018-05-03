@@ -1,7 +1,7 @@
 
 body{
     font-family: Arial;
-    font-size: 12px; 
+    font-size: 16px;
 }
 
 .pap_labels{
@@ -10,7 +10,7 @@ body{
          
 }
 .pap_desc{
-    font-size: 12px;
+    font-size: 14px;
     font-style: italic;
     padding-bottom: 15px; 
     padding-left: 50px; 
@@ -29,5 +29,5 @@ table.pap_desc {
 
 
 .header_pap{
-    font-size: 13px;
+    font-size: 16px;
 }

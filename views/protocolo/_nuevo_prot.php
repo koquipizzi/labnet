@@ -38,6 +38,11 @@ $this->title = 'Nuevo Protocolo ';
 
 $this->registerJs('var ajaxurl = "' .Url::to(['paciente/datos']). '";', \yii\web\View::POS_HEAD);
 
+$js = <<<JS
+
+JS;
+
+
 ?>
 
 <div class="box box-info">
@@ -62,18 +67,20 @@ $this->registerJs('var ajaxurl = "' .Url::to(['paciente/datos']). '";', \yii\web
                                                             id = this.value;
                                                             aux = ajaxurl + "&id=" + id;
                                                             $.get( aux , function( data ) {
-                                                                
+                                                                var d = new Date(data.rta.fecha_nacimiento);
                                                                 jQuery("#paciente-nombre").val(data.rta.nombre);
-                                                                jQuery(".lalala").html(data.rtaPrest);
+                                                                jQuery("#paciente-tipo_documento_id").val(data.rta.Tipo_documento_id).trigger("change");
                                                                 jQuery("#paciente-nro_documento").val(data.rta.nro_documento);
                                                                 jQuery("#paciente-hc").val(data.rta.hc);
                                                                 jQuery("#paciente-id").val(data.rta.id);
-                                                                jQuery("#paciente-sexo").val(data.rta.sexo);
+                                                                jQuery("#paciente-sexo").val(data.rta.sexo).trigger("change");
+                                                                jQuery("#paciente-fecha_nacimiento-disp").kvDatepicker("update",d);
                                                                 jQuery("#paciente-domicilio").val(data.rta.domicilio);
+                                                                jQuery("#paciente-localidad_id").val(data.rta.Localidad_id).trigger("change");
                                                                 jQuery("#paciente-telefono").val(data.rta.telefono);
-                                                                jQuery("#paciente-email").val(data.rta.notas);
-                                                                jQuery("#paciente-fecha_nacimiento").val(data.rta.fecha_nacimiento);
-                                                                jQuery("#paciente-tipo_documento_id").val(data.rta.Tipo_documento_id);
+                                                                jQuery("#paciente-email").val(data.rta.email);
+                                                                jQuery("#paciente-notas").val(data.rta.notas);
+                                                                jQuery(".lalala").html(data.rtaPrest);
                                                             });
                                                         '
                         ],

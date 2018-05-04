@@ -135,20 +135,20 @@ class PacienteController extends Controller
         $id = (int) Yii::$app->request->getQueryParam('id');
         $paciente = Paciente::find()->where(['id' => $id])->one();
         $PacientePrestadorasmultiple =  PacientePrestadora::find()->where(['Paciente_id' => $id])->all();
-//var_dump($PacientePrestadorasmultiple); die;
+
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
      
         $query = PacientePrestadora::find()->where(['Paciente_id' => $id]);
         $dataPrestadoras = new ActiveDataProvider([
-                    'query' => $query,                       
-                ]);
+                                'query' => $query,
+                            ]);
         $prestadoraTemp = new PacientePrestadora(); 
         $prestadorasLista = $this->renderAjax('//paciente/_grid', [
-                        'dataProvider' => $dataPrestadoras,
-                        'model'=> $prestadoraTemp,
-                        'paciente_id' => $id
-                ]);
-                
+                                    'dataProvider' => $dataPrestadoras,
+                                    'model'=> $prestadoraTemp,
+                                    'paciente_id' => $id
+                            ]);
+
         return ['rta'=> $paciente, 'rtaPrest' => $prestadorasLista]; die();
 
             $PacientePrestadorasmultiple = PacientePrestadora::find()->where(['Paciente_id' => $id])->all();

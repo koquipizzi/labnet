@@ -477,10 +477,8 @@ class ProtocoloController extends Controller
     public function actionProtocolo(){ 
 
         $mdlProtocolo = new Protocolo();
-     //   $modelSecuencia= new NroSecuenciaProtocolo();
         $Estudio= new Estudio();
         $paciente= new Paciente();
- //       $prestadora= new Prestadora();
 
         return $this->render('_nuevo_prot', [
                             'paciente' => $paciente,
@@ -496,13 +494,9 @@ class ProtocoloController extends Controller
                         //    'dataProviderIN'=> $dataProviderIN,
                          //   "tanda"=>$tanda,
                              ]);
-
-
-     //   $pacprest = 74454;
         $pacprest_modelo = \app\models\PacientePrestadora::findOne($pacprest);      
         $paciente = Paciente::findOne($pacprest_modelo->Paciente_id);
         $prestadora = \app\models\Prestadoras::findOne($pacprest_modelo->Prestadoras_id);
-//       var_dump($prestadora); die();
         $mdlProtocolo = new Protocolo();
         $modelSecuencia= new NroSecuenciaProtocolo();
         $Estudio= new Estudio();

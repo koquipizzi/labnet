@@ -133,8 +133,8 @@ use yii\widgets\Pjax;
         <br>
     </div>
     <div class="row">
-        <br>
         <?php Pjax::begin(['id' => 'galeriaL', 'enablePushState' => TRUE]); ?>
+        <br>
         <div class="content-galeria">
         
             <?php //Muestra el logo

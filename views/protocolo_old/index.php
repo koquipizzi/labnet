@@ -74,16 +74,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     </div>
                                 </a>
                             </li>
-<!--                            <li>
-                                <a href="#tab2-5" data-toggle="tab">
-                                    <i class="fa fa-user"></i>
-                                    <div>
-                                        <span class="text-strong">Protocolos Entregados</span>
-                                        <span>Impresos, por mail, por web</span>
-                                    </div>
-                                </a>
-                            </li>-->
-
                         </ul>
                     </div><!-- /.panel-heading -->
                     <!--/ End tabs heading -->
@@ -538,6 +528,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             </div>
         </div><!-- /.row -->
+    </div>
     </div>
      <!-- Start footer content -->
     <?php echo $this->render('/shares/_footer_admin') ;?>

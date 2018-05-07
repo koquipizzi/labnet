@@ -464,7 +464,7 @@ class ProtocoloSearch extends Protocolo
             'sql' => $query,
             'params' => $queryParams,
              'sort' => [
-                'defaultOrder' => ['fecha_entrega' => SORT_ASC],
+                'defaultOrder' => ['fecha_entrada' => SORT_DESC],
                 'attributes' => [
                      'nombre',
                      'fecha_entrada',
@@ -770,7 +770,7 @@ class ProtocoloSearch extends Protocolo
             'sql' => $query,
             'params' => $queryParams,
              'sort' => [
-                'defaultOrder' => ['fecha_entrega' => SORT_ASC],
+                'defaultOrder' => ['fecha_entrada' => SORT_DESC],
                 'attributes' => [
                      'nombre',
                      'fecha_entrada',
@@ -887,16 +887,17 @@ class ProtocoloSearch extends Protocolo
         $itemsCount = (int)$results[0]["total"];       
         $dataProvider_asignados = new \yii\data\SqlDataProvider([
             'sql' => $consulta,
-            'sort'=> ['defaultOrder' => ['fecha_entrega'=> SORT_ASC]], 
+            'sort'=> ['defaultOrder' => ['fecha_entrada' => SORT_DESC]],
             'totalCount' => $itemsCount,
             'pagination' => [
                     'pageSize' => 50,
             ],
         ]);
         $dataProvider_asignados->setSort([
+            'defaultOrder' => ['fecha_entrada' => SORT_DESC],
             'attributes' => [
-        'fecha_entrega',
-        'codigo',
+                'fecha_entrega',
+                'codigo',
                 'fecha_entrega',
                 'fecha_entrada',
                 'codigo',
@@ -995,7 +996,7 @@ class ProtocoloSearch extends Protocolo
             'sql' => $query,
             'params' => $queryParams,
              'sort' => [
-                'defaultOrder' => ['fecha_entrega' => SORT_ASC],
+                'defaultOrder' => ['fecha_entrada' => SORT_DESC],
                 'attributes' => [
                      'nombre',
                      'fecha_entrada',
@@ -1411,7 +1412,7 @@ class ProtocoloSearch extends Protocolo
 
         $dataProvider_asignados = new \yii\data\SqlDataProvider([
             'sql' => $consulta,
-            'sort'=> ['defaultOrder' => ['fecha_entrega'=> SORT_ASC]], 
+            'sort'=> ['defaultOrder' => ['fecha_entrega'=> SORT_DESC]],
             'totalCount' => $itemsCount,
             'pagination' => [
                     'pageSize' => 5,
@@ -1419,16 +1420,11 @@ class ProtocoloSearch extends Protocolo
         ]);
 
         $dataProvider_asignados->setSort([
+            'defaultOrder' => ['fecha_entrada' => SORT_DESC],
             'attributes' => [
-            'fecha_entrega',
-                'nombre'=> [
-                    'asc' => ['Paciente.nombre' => SORT_ASC],
-                    'desc' => ['Paciente.nombre' => SORT_DESC],
-                ],
-                'nro_documento' => [
-                    'asc' => ['Paciente.nro_documento' => SORT_ASC],
-                    'desc' => ['Paciente.nro_documento' => SORT_DESC],
-                ]
+                'fecha_entrega',
+                'nombre',
+                'nro_documento'
             ]
         ]);
 

@@ -60,7 +60,12 @@ $config = [
             // use ajax conversion for processing dates from display format to save format.
             'ajaxConversion' => true,
          ],
-        'redactor' => 'yii\redactor\RedactorModule',
+        'redactor' => [
+            'class' => 'yii\redactor\RedactorModule',
+            'uploadDir' => '@webroot/uploads/redactor',
+            'uploadUrl' => '@web/uploads/redactor',
+            'imageAllowExtensions'=>['jpg','png','gif']
+        ],
     ],
     'components' => [
             'qr' => [

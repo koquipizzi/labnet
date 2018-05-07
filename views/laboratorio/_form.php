@@ -10,18 +10,37 @@ use yii\widgets\Pjax;
 
 ?>
   <?php
-  
+      
+      $css = '
+      
+      
+      
+      ';
+      
       $js = '
+      
+
+            $(document).ready(function(){
+                 $(".re-image").parent().hide();
+                 $(".re-file").parent().hide();
+                 $(".re-link").parent().hide();
+                 $(".re-deleted").parent().hide();
+            });
+       
+            $("#idFile").on("fileuploaded", function(event) {
+                $.pjax.reload({container:"#galeriaL"});
+            });
+            
+            $("#idFile2").on("fileuploaded", function(event) {
+                $.pjax.reload({container:"#galeriaFD"});
+            });
+            
+       
         
-        $("#idFile").on("fileuploaded", function(event) {
-            $.pjax.reload({container:"#galeriaL"});
-        });
-        
-        $("#idFile2").on("fileuploaded", function(event) {
-            $.pjax.reload({container:"#galeriaFD"});
-        });
-    
         $(document).on("pjax:success", function() {
+        
+            $(".redactor-toolbar li a").css("display:none");
+        
             $("#idFile").on("fileuploaded", function(event) {
                 $.pjax.reload({container:"#galeriaL"});
             });
@@ -102,7 +121,7 @@ use yii\widgets\Pjax;
             'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
     ])->textInput(['maxlength' => true]) ?>  
     
-    <div class="col-md-3  control-label"><p>Cabezera PDF</p></div>
+    <div class="col-md-3  control-label"><p>Cabecera PDF</p></div>
     <div class="col-md-7  ">
         <?= $form->field($model, 'leyenda_informe')->widget(\yii\redactor\widgets\Redactor::className()) ?>
     </div>

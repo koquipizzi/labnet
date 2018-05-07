@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\redactor;
 use yii\widgets\ActiveForm;
 use kartik\widgets\FileInput;
 use yii\helpers\Url;
@@ -100,10 +101,15 @@ use yii\widgets\Pjax;
             {error}",
             'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
     ])->textInput(['maxlength' => true]) ?>  
-    <div class="col-md-3  control-label"><p>Cargar Logo</p></div>     
+    
+    <div class="col-md-3  control-label"><p>Cabezera PDF</p></div>
     <div class="col-md-7  ">
-        <br>
-        <?php 
+        <?= $form->field($model, 'leyenda_informe')->widget(\yii\redactor\widgets\Redactor::className()) ?>
+    </div>
+
+    <div class="col-md-3  control-label"><p>Cargar Logo</p></div>
+    <div class="col-md-7  ">
+        <?php
         echo FileInput::widget([
                         'model' => $model,
                         'attribute' => 'files[]',
@@ -111,7 +117,6 @@ use yii\widgets\Pjax;
                                         'multiple'=>false,
                                         'accept'=>'image/*',
                                         'id'=>"idFile",
-
                         ],
                         'pluginOptions' => [
                                         'uploadUrl' => Url::to(['/laboratorio/logo']),
@@ -125,31 +130,33 @@ use yii\widgets\Pjax;
                                                 '    <div class="file-preview-status text-center text-success"></div>' .
                                                 '    </div>' .
                                                 '</div>',
-                                             ],										
+                                             ],
                         ],
-
                   ]);
         ?>
-        <br>
-    </div>
-    <div class="row">
-        <?php Pjax::begin(['id' => 'galeriaL', 'enablePushState' => TRUE]); ?>
-        <br>
-        <div class="content-galeria">
-        
-            <?php //Muestra el logo
-                if (!empty( $model->web_path)){
-                    echo $this->render('galeria', [
-                        'path' => $model->web_path
-                    ]);
-                }
-            ?>
+
+
+        <div class="row pull-right">
+            <?php Pjax::begin(['id' => 'galeriaL', 'enablePushState' => TRUE]); ?>
+            <br>
+            <div class="content-galeria">
+            
+                <?php //Muestra el logo
+                    if (!empty( $model->web_path)){
+                        echo $this->render('galeria', [
+                            'path' => $model->web_path
+                        ]);
+                    }
+                ?>
+            </div>
+            <?php Pjax::end(); ?>
         </div>
-        <?php Pjax::end(); ?>
+        
     </div>
-   
+
     <div class="col-md-3  control-label" style="margin-top:5px; "><p>Firma Digital</p></div>     
     <div class="col-md-7">
+        <hr>
         <?php 
         echo FileInput::widget([
                         'model' => $model,
@@ -177,22 +184,25 @@ use yii\widgets\Pjax;
 
                   ]);
         ?>
+        
+        <div class="row pull-right">
+            <?php Pjax::begin(['id' => 'galeriaFD', 'enablePushState' => TRUE]); ?>
+            <div class="content-galeria">
+                <?php //muestra la firma
+                    if (!empty($model->web_path_firma)){
+                        echo $this->render('galeria', [
+                            'path' => $model->web_path_firma
+                        ]);
+                    }
+                ?>
+            </div>
+            <?php Pjax::end(); ?>
+        </div>
     </div>
-
-    <?php Pjax::begin(['id' => 'galeriaFD', 'enablePushState' => TRUE]); ?>
-    <div class="content-galeria">
-        <?php //muestra la firma
-            if (!empty($model->web_path_firma)){
-                echo $this->render('galeria', [
-                    'path' => $model->web_path_firma
-                ]);
-            }
-        ?>
-    </div>
-    <?php Pjax::end(); ?>
-
+    
     <div class="box-footer" >
         <div class="pull-right box-tools">
+            <hr style="border-top:0;">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
         </div>         

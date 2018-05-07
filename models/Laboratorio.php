@@ -19,6 +19,10 @@ use yii\web\UploadedFile;
  * @property string $mail
  * @property string $info_mail
  * @property string $path_firma
+ * @property string $director_nombre
+ * @property string $director_titulo
+ * @property string $director_matricula
+ * @property string $leyenda_informe
  */
 class Laboratorio extends \yii\db\ActiveRecord
 {
@@ -42,6 +46,11 @@ class Laboratorio extends \yii\db\ActiveRecord
             [['nombre'], 'string', 'max' => 1024],
             [['descripcion', 'admin', 'path_logo','path_firma', 'direccion', 'web', 'telefono', 'mail', 'info_mail'], 'string', 'max' => 255],
             [['path_logos','path_firma'], 'file', 'extensions'=>'jpg, gif, png'],
+            [['leyenda_informe'], 'string'],
+            [['director_nombre'], 'string', 'max' => 50],
+            [['director_titulo'], 'string', 'max' => 30],
+            [['director_matricula'], 'string', 'max' => 35],
+            
         ];
     }
 
@@ -61,6 +70,10 @@ class Laboratorio extends \yii\db\ActiveRecord
             'telefono' => Yii::t('app', 'Telefono'),
             'mail' => Yii::t('app', 'Mail'),
             'info_mail' => Yii::t('app', 'Info Mail'),
+            'director_nombre' => Yii::t('app', 'Director Nombre'),
+            'director_titulo' => Yii::t('app', 'Director Titulo'),
+            'director_matricula' => Yii::t('app', 'Director Matricula'),
+            'leyenda_informe' => Yii::t('app', 'Leyenda para Informe'),
         ];
     }
     

@@ -44,8 +44,6 @@
         "creocoder/yii2-taggable": "~2.0",
         "2amigos/qrcode-library": "~1.1",
         "kint-php/kint": "^2.2",
-        "opw/yii2-react": "dev-master",
-        "mimicreative/yii2-react": "^1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

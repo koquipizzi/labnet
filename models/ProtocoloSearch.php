@@ -28,8 +28,8 @@ class ProtocoloSearch extends Protocolo
     public function rules()
     {
         return [
-            [['id', 'nro_secuencia', 'Medico_id', 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id'], 'integer'],
-            [['fecha_entrada','fecha_entrega', 'anio', 'letra', 'registro', 'observaciones', 'nombre','nro_documento', 'codigo','ultimo_propietario'], 'safe'],
+            [['id', 'nro_secuencia', 'Medico_id' , 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id'], 'integer'],
+            [['fecha_entrada','fecha_entrega', 'anio', 'nombre_medico' , 'letra', 'registro', 'observaciones', 'nombre','nro_documento', 'codigo','ultimo_propietario'], 'safe'],
         ];
     }
 
@@ -45,12 +45,9 @@ class ProtocoloSearch extends Protocolo
     public function attributes()
     {
         // add related fields to searchable attributes
-        return array_merge(parent::attributes(), ['nombre', 'nro_documento', 'codigo']);
+        return array_merge(parent::attributes(), ['nombre', 'nro_documento', 'codigo','nombre_medico']);
     }
-
-  
-
-
+    
     private function paramExists($params, $key) {
         return
             is_array($params)
@@ -152,8 +149,15 @@ class ProtocoloSearch extends Protocolo
         }
     }
     
-
-
+    /**
+    * Filtro de nombre de Medico
+    */
+    private function medicoFilter($params, &$where, &$queryParams) {
+        if($this->paramExists($params, 'nombre_medico')) {
+            $queryParams[':nombre_medico'] = "%".$params['nombre_medico']."%";
+            $where = $this->addWhereSentence($where, "Medico.nombre like :nombre_medico");
+        }
+    }
 
 
     /**
@@ -264,9 +268,6 @@ class ProtocoloSearch extends Protocolo
         return $dataProvider;
     }
     
-
-
-
     /**
      * Creates data provider instance with search query applied
      *
@@ -275,9 +276,7 @@ class ProtocoloSearch extends Protocolo
      * @return ActiveDataProvider
      */
     
-     public function searchPendiente($params)
-    {     
-       
+     public function searchPendiente($params){
         $queryParams = [];
         $where = 'Workflow.Estado_id =1 ';
         $formParams = [];
@@ -380,11 +379,6 @@ class ProtocoloSearch extends Protocolo
         return $dataProvider;
     }
     
-    
-
-
-
-
     /**
      * Creates data provider instance with search query applied
      *
@@ -393,9 +387,7 @@ class ProtocoloSearch extends Protocolo
      * @return ActiveDataProvider
      */
     
-     public function searchTodos($params)
-    {     
-       
+     public function searchTodos($params){
         $queryParams = [];
         $where = '';
         $formParams = [];
@@ -497,9 +489,6 @@ class ProtocoloSearch extends Protocolo
 
         return $dataProvider;
     }
-    
-
-
 
      /**
      * Creates data provider instance with search query applied
@@ -508,8 +497,7 @@ class ProtocoloSearch extends Protocolo
      *
      * @return ActiveDataProvider
      */
-    public function searchAll($params)
-    {
+    public function searchAll($params){
        $query = "
                     Select 
                             Protocolo.id,
@@ -611,8 +599,6 @@ class ProtocoloSearch extends Protocolo
         return $dataProvider;
     }
     
-  
-    
     protected function addSearchParameter($query, $attribute, $partialMatch = true)
     {
         if (($pos = strrpos($attribute, '.')) !== false) {
@@ -630,9 +616,7 @@ class ProtocoloSearch extends Protocolo
 
     }
     
-
-    public function search_pendientes($params)
-    {
+    public function search_pendientes($params){
         $consulta = "Select
                         Protocolo.id,
                         Protocolo.anio,
@@ -684,19 +668,15 @@ class ProtocoloSearch extends Protocolo
      
         return $dataProvider;
     }
-    
 
-
- /**
+     /**
      * Creates data provider instance with search query applied
      *
      * @param array $params
      *
      * @return ActiveDataProvider
      */
-    
-     public function search_terminados($params)
-    {     
+     public function search_terminados($params){
        
         $queryParams = [];
         $where = 'Workflow.Estado_id = 5';
@@ -712,7 +692,9 @@ class ProtocoloSearch extends Protocolo
                         Protocolo.fecha_entrega,
                         Protocolo.letra,
                         Protocolo.nro_secuencia,
-                        Paciente.nro_documento,                        
+                        Paciente.nro_documento,
+                        Protocolo.Medico_id,
+                        Medico.nombre as nombre_medico,
                         Workflow.fecha_inicio,
                         Workflow.id AS workflow_id,
                         Informe.id as informe_id,
@@ -730,8 +712,11 @@ class ProtocoloSearch extends Protocolo
                 JOIN          view_informe_ult_workflow ON Informe.id = view_informe_ult_workflow.Informe_id
                 LEFT JOIN     Workflow                  ON view_informe_ult_workflow.id = Workflow.id
 				JOIN          Estudio                   ON (Informe.Estudio_id = Estudio.id)
-                JOIN          user u                    ON(Workflow.Responsable_id=u.id)
+                JOIN          user u                    ON (Workflow.Responsable_id=u.id)
+                JOIN          Medico                    ON (Medico.id = Protocolo.Medico_id)
         ';
+    
+        $this->medicoFilter($formParams, $where, $queryParams);
 
         $this->nombreFilter($formParams, $where, $queryParams);
         
@@ -776,18 +761,16 @@ class ProtocoloSearch extends Protocolo
                      'fecha_entrada',
                      'fecha_entrega',
                      'codigo',
-                     'ultimo_propietario',                     
-                    'nro_documento' => [
+                     'nombre_medico',
+                     'nro_documento' => [
                         'asc' => ['Paciente.nro_documento' => SORT_ASC],
                         'desc' => ['Paciente.nro_documento' => SORT_DESC],
-                    ],
-                    'id' => [
+                     ],
+                     'id' => [
                         'asc' => [new Expression('id')],
                         'desc' => [new Expression('id DESC ')],
                         'default' => SORT_DESC,
-                    ],
-                    
-                    
+                     ],
                 ],
             ],
             'totalCount' => $itemsCount,
@@ -799,17 +782,13 @@ class ProtocoloSearch extends Protocolo
         
         if (!($this->load($params) && $this->validate())) {
                 return $dataProvider;
-            }
+        }
 
         return $dataProvider;
     }
-
-
-
-  
-
-      public function search_asignados($id=null, $params=NULL)
-    {
+    
+    public function search_asignados($id=null, $params=NULL){
+        
         if (isset($id))
             $loggedUserId = $id;
         else $loggedUserId = 2;
@@ -918,8 +897,7 @@ class ProtocoloSearch extends Protocolo
     }
 
        
-     public function search_entregados($params)
-    {     
+     public function search_entregados($params){
        
         $queryParams = [];
         $where = 'Workflow.Estado_id = 6';
@@ -935,6 +913,8 @@ class ProtocoloSearch extends Protocolo
                 Protocolo.fecha_entrega,
                 Protocolo.letra,
                 Protocolo.nro_secuencia,
+                Protocolo.Medico_id,
+                Medico.nombre as nombre_medico,
                 Paciente.nro_documento,                        
                 Workflow.fecha_inicio,
                 Workflow.id AS workflow_id,
@@ -953,11 +933,13 @@ class ProtocoloSearch extends Protocolo
                 JOIN        view_informe_ult_workflow   ON Informe.id = view_informe_ult_workflow.Informe_id
                 LEFT JOIN   Workflow                    ON view_informe_ult_workflow.id = Workflow.id
 				JOIN        Estudio                     ON (Informe.Estudio_id = Estudio.id)
-                JOIN        user u                      ON(Workflow.Responsable_id=u.id)
+                JOIN        user u                      ON (Workflow.Responsable_id=u.id)
+                JOIN        Medico                      ON (Protocolo.Medico_id = Medico.id )
         ';
-     		
-                                        
-       $this->propietarioFilter($formParams, $where, $queryParams);	
+     	
+        $this->medicoFilter($formParams, $where, $queryParams);
+        
+        $this->propietarioFilter($formParams, $where, $queryParams);
 
         $this->nombreFilter($formParams, $where, $queryParams);
         
@@ -968,8 +950,6 @@ class ProtocoloSearch extends Protocolo
         $this->codigoFilter($formParams, $where, $queryParams);
 
         $this->fechaEntregaFilter($formParams, $where, $queryParams);
-
-        
 
         if(!empty($where)) {
             
@@ -1000,19 +980,17 @@ class ProtocoloSearch extends Protocolo
                 'attributes' => [
                      'nombre',
                      'fecha_entrada',
-                     'fecha_entrega',
                      'codigo',
-                     
-                    'nro_documento' => [
+                     'nro_documento' => [
                         'asc' => ['Paciente.nro_documento' => SORT_ASC],
                         'desc' => ['Paciente.nro_documento' => SORT_DESC],
-                    ],
-                    'ultimo_propietario',
-                    'id' => [
+                     ],
+                     'nombre_medico',
+                     'id' => [
                         'asc' => [new Expression('id')],
                         'desc' => [new Expression('id DESC ')],
                         'default' => SORT_DESC,
-                    ],
+                     ],
                     
                     
                 ],
@@ -1030,15 +1008,8 @@ class ProtocoloSearch extends Protocolo
 
         return $dataProvider;
     }
-
-
-
-
-
-
     
-    public function search_informes_contables($params)
-    {
+    public function search_informes_contables($params){
         
         $query = "Select concat(SUBSTRING(Protocolo.anio,-2),Protocolo.letra,'-', LPAD(Protocolo.nro_secuencia, 6, 0)) as codigo , 
                     Protocolo.* , 
@@ -1125,9 +1096,7 @@ class ProtocoloSearch extends Protocolo
         return $dataProvider;
     }
     
-    
-    public function search_informes_impagos($params)
-    {
+    public function search_informes_impagos($params){
         
         $query = "Select concat(SUBSTRING(Protocolo.anio,-2),Protocolo.letra,'-', LPAD(Protocolo.nro_secuencia, 6, 0)) as codigo , 
                     Protocolo.* , 
@@ -1213,8 +1182,7 @@ class ProtocoloSearch extends Protocolo
         return $dataProvider;
     }
    
-    public function search_facturables($params,$prestadora=null,$fechaHasta=null,$fechaDesde=null)
-    {
+    public function search_facturables($params,$prestadora=null,$fechaHasta=null,$fechaDesde=null){
         $query=null;
 
         $prestadora_default=  Prestadoras::getPaticular();
@@ -1318,8 +1286,7 @@ class ProtocoloSearch extends Protocolo
         return $dataProvider;
     }
 
-    public function search_asignados_index($id=null, $params=NULL)
-    {
+    public function search_asignados_index($id=null, $params=NULL){
         if (isset($id))
             $loggedUserId = $id;
         else $loggedUserId = 2;
@@ -1433,6 +1400,5 @@ class ProtocoloSearch extends Protocolo
         return $dataProvider_asignados;
     }
     
-
 }
 

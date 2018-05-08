@@ -40,16 +40,11 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="clearfix"></div>
         </div>
-
-            <!-- Start tabs content -->
             <div style="margin-top: 10px;">
                 <?php
-                $this->registerCss(".hasDatepicker {
-                                    width:90px;}");
-               // Pjax::begin(['id' => 'entregados']);
+                $this->registerCss(".hasDatepicker {width:90px;}");
                 echo GridView::widget([
-//                                    'id'=>'asignados',
-                    'dataProvider' => $dataProvider_entregados,
+                     'dataProvider' => $dataProvider_entregados,
                      'options'=>array('class'=>'table table-striped table-lilac'),
                                             'filterModel' => $searchModel,
                                             'columns' =>    [
@@ -82,39 +77,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     ])
                                                 ],
                                                 [
-                                                    'label' => 'Entrega',
-                                                    'attribute' => 'fecha_entrega',
-                                                    'contentOptions' => ['style' => 'width:9%;'],
-                                                    'format' => ['date', 'php:d/m/Y'],
-                                                    'filter' => DateRangePicker::widget([
-                                                    'template' => '
-                                                            <div class="input-group">
-                                                                <span class="input-group-addon">
-                                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                                </span>
-                                                                {input}
-                                                            </div>
-                                                        ',
-                                                        'model' => $searchModel,
-                                                        'locale'    => 'es-ES',
-                                                        'attribute' => 'fecha_entrega',
-                                                        'pluginOptions' => [
-                                                            'locale'=>[
-                                                                'format'=>'DD/MM/YYYY',
-                                                                'separator'=>' - ',
-                                                                'applyLabel' => 'Seleccionar',
-                                                                'cancelLabel' => 'Cancelar',
-                                                            ],
-                                                        'autoUpdateInput' => false,
-                                                        ]
-                                                    ])
-                                                ],
-                                                 [
                                                     'label' => 'Nro Protocolo',
                                                     'attribute' => 'codigo',
                                                     'contentOptions' => ['style' => 'width:11%;'],
                                                 ],
-
                                                 [
                                                     'label' => 'Paciente',
                                                     'attribute'=>'nombre',
@@ -132,9 +98,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     'contentOptions' => ['style' => 'width:6%;'],
                                                 ],
                                                 [
-                                                    'label' => 'Propietario',
-                                                    'attribute'=>'ultimo_propietario',
-                                                    'contentOptions' => ['style' => 'width:10%;'],
+                                                    'label' => 'Medico',
+                                                    'attribute'=>'nombre_medico',
+                                                    'contentOptions' => ['style' => 'width:20%;'],
                                                 ],                                                 
                                                 [
                                                       'label' => 'Informes',

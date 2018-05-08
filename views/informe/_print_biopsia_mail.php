@@ -4,43 +4,29 @@ use yii\helpers\Html;
 ?>
 
 <html>
-<body> 
-
-<style>
-
-body{
-    font-family: Arial;
-    font-size: 12px; 
-}
-
-.pap_labels{
-     font-weight: bold; 
-     padding-bottom: 10px;
-         
-}
-.pap_desc{
-    font-size: 12px;
-    font-style: italic;
-    padding-bottom: 15px; 
-    padding-left: 50px; 
-}
-
-.pap_desc_cito {
-    padding-left:50px;
-}
-.pap_labels_cito{
-    font-style: normal;
-}
-
-table.pap_desc {
-    padding-left: 0px;
-}
+<body>
 
 
-.header_pap{
-    font-size: 13px;
-}
-</style>
+<table >
+    <tr  style="float: left">
+    <tr>
+        <td  width="400px">
+            <?php if (!empty($laboratorio->web_path)){ ?>
+                <img src="<?php echo Yii::getAlias('@webroot').$laboratorio->web_path; ?>" width="170"  \/>
+            <?php } ?>
+        </td>
+
+        <td width="300px" style="float: left; padding-top: 40px">
+            <?php if (!empty($laboratorio->leyenda_informe)){ ?>
+                <div class="row"> <?php echo  $laboratorio->leyenda_informe ?></div>
+            <?php } ?>
+        </td>
+    </tr>
+    </tr>
+</table>
+
+
+<hr>
 
 <div class="pagina">
     <div class="header_pap">
@@ -86,7 +72,7 @@ table.pap_desc {
         INFORME ANATOMOPATÓLOGICO
     </h5>
     <div class="informe">
-        <div class="pap_labels">
+        <div class="pap_labels" style="text-decoration: underline;">
             MATERIAL
         </div>    
         <div class="pap_desc">
@@ -94,25 +80,25 @@ table.pap_desc {
             <br><br>
             <?php echo nl2br($model->tecnica); ?>
         </div>        
-        <div class="pap_labels">
+        <div class="pap_labels" style="text-decoration: underline;">
             MACROSCOPÍA
         </div>
         <div class="pap_desc">
             <?php echo nl2br($model->macroscopia); ?>
         </div>
-        <div class="pap_labels">
+        <div class="pap_labels" style="text-decoration: underline;">
             MICROSCOPÍA
         </div>
         <div class="pap_desc">
             <?php echo nl2br($model->microscopia); ?>
         </div>
-        <div class="pap_labels">
+        <div class="pap_labels" style="text-decoration: underline;">
             DIAGNÓSTICO
         </div> 
         <div class="pap_desc">
             <?php echo nl2br($model->diagnostico);  ?>
         </div>
-        <div class="pap_labels">
+        <div class="pap_labels" style="text-decoration: underline;">
             OBSERVACIONES
         </div>
         <div class="pap_desc">

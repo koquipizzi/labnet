@@ -56,123 +56,90 @@ $this->registerJs($js);
             </div>
             <div class="clearfix"></div>
         </div>
- 
-            <!-- Start tabs content -->
             <div style="margin-top: 10px;">
                 <?php
-                $this->registerCss(".hasDatepicker {
-                                    width:90px;}");
+                $this->registerCss(".hasDatepicker {width:90px;}");
                 Pjax::begin(['id' => 'terminados']);
-
-                                echo GridView::widget([
-                                'dataProvider' => $dataProvider_terminados,
-                                'options'=>array('class'=>'table table-striped'),
-                                'filterModel' => $searchModel,
-                                'columns' =>    [ //'id',
-                                     //   'value'=>'estudio',
-                                     [
-                                        'label' => 'Entrada',
-                                        'attribute' => 'fecha_entrada',
-                                        'contentOptions' => ['style' => 'width:8%;'],
-                                        'format' => ['date', 'php:d/m/Y'],
-                                        'filter' => DateRangePicker::widget([
-                                        'template' => '
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">
-                                                        <span class="glyphicon glyphicon-calendar"></span>
-                                                    </span>
-                                                    {input}
-                                                </div>
-                                            ',
-                                            'model' => $searchModel,
-                                            'locale'    => 'es-ES',
-                                            'attribute' => 'fecha_entrada',
-                                            'pluginOptions' => [ 'format' => 'dd-mm-yyyy',
-                                            'locale'=>[
-                                                'format'=>'DD/MM/YYYY',
-                                                'separator'=>' - ',
-                                                'applyLabel' => 'Seleccionar',
-                                                'cancelLabel' => 'Cancelar',
-                                            ],
-                                            'autoUpdateInput' => false,
-                                            ]
-                                        ]),
+                    echo GridView::widget([
+                        'dataProvider' => $dataProvider_terminados,
+                        'options'=>array('class'=>'table table-striped'),
+                        'filterModel' => $searchModel,
+                        'columns' =>    [ 
+                             [
+                                'label' => 'Entrada',
+                                'attribute' => 'fecha_entrada',
+                                'contentOptions' => ['style' => 'width:8%;'],
+                                'format' => ['date', 'php:d/m/Y'],
+                                'filter' => DateRangePicker::widget([
+                                'template' => '
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                            {input}
+                                        </div>
+                                    ',
+                                    'model' => $searchModel,
+                                    'locale'    => 'es-ES',
+                                    'attribute' => 'fecha_entrada',
+                                    'pluginOptions' => [ 'format' => 'dd-mm-yyyy',
+                                    'locale'=>[
+                                        'format'=>'DD/MM/YYYY',
+                                        'separator'=>' - ',
+                                        'applyLabel' => 'Seleccionar',
+                                        'cancelLabel' => 'Cancelar',
                                     ],
-                                    [
-                                        'label' => 'Entrega',
-                                        'attribute' => 'fecha_entrega',
-                                        'contentOptions' => ['style' => 'width:9%;'],
-                                        'format' => ['date', 'php:d/m/Y'],
-                                        'filter' => DateRangePicker::widget([
-                                            'template' => '
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon">
-                                                            <span class="glyphicon glyphicon-calendar"></span>
-                                                        </span>
-                                                        {input}
-                                                    </div>
-                                                ',
-                                            'model' => $searchModel,
-                                            'locale'    => 'es-ES',
-                                            'attribute' => 'fecha_entrega',
-                                            'pluginOptions' => [ 'format' => 'dd-mm-yyyy',
-                                            'locale'=>[
-                                                'format'=>'DD/MM/YYYY',
-                                                'separator'=>' - ',
-                                                'applyLabel' => 'Seleccionar',
-                                                'cancelLabel' => 'Cancelar',
-                                            ],
-                                            'autoUpdateInput' => false,
-                                            ]
-                                        ])
-                                    ],
-                                    [
-                                        'label' => 'Nro Protocolo',
-                                        'attribute' => 'codigo',
-                                        'contentOptions' => ['style' => 'width:12%;'],
-                                    ],
-                                    [
-                                        'label' => 'Paciente',
-                                        'attribute'=>'nombre',
-                                         'contentOptions' => ['style' => 'width:20%;'],
-                                        'value'=>function ($model, $key, $index, $widget) {
-                                            if(strlen($model["nombre"])>20){
-                                                return substr($model["nombre"], 0, 14)."...";
-                                            }  else {
-                                                   return $model["nombre"];
-                                            }
-                                        }
-                                    ],
-                                    [
-                                        'attribute'=>'nro_documento',
-                                        'contentOptions' => ['style' => 'width:6%;'],
-                                    ],
-                                    [
-                                        'label' => 'Propietario',
-                                        'attribute'=>'ultimo_propietario',
-                                        'contentOptions' => ['style' => 'width:10%;'],
-                                    ],                                    
-                                    [
-                                        'label' => 'Informes',
-                                        'format' => 'raw',
-                                        'contentOptions' => ['style' => 'width:20%;'],
-                                        'value' => function ($model, $key, $index, $widget) {
-                                        $estados = array(
-                                                            "1" => "danger",
-                                                            "2" => "default",
-                                                            "3" => "success",
-                                                            "4" => "warning",
-                                                            "5" => "primary",
-                                                            "6" => "info",
-                                                        );
-                                         $estadosLeyenda = array(
-                                            "1" => "INFORME PENDIENTE",
-                                            "2" => "INFORME DESCARTADO",
-                                            "3" => "EN PROCESO",
-                                            "4" => "INFORME PAUSADO",
-                                            "5" => "FINALIZADO",
-                                            "6" => "ENTREGADO",
-                                          );
+                                    'autoUpdateInput' => false,
+                                    ]
+                                ]),
+                            ],
+                            [
+                                'label' => 'Nro Protocolo',
+                                'attribute' => 'codigo',
+                                'contentOptions' => ['style' => 'width:11%;'],
+                            ],
+                            [
+                                'label' => 'Paciente',
+                                'attribute'=>'nombre',
+                                 'contentOptions' => ['style' => 'width:18%;'],
+                                'value'=>function ($model, $key, $index, $widget) {
+                                    if(strlen($model["nombre"])>20){
+                                        return substr($model["nombre"], 0, 14)."...";
+                                    }  else {
+                                           return $model["nombre"];
+                                    }
+                                }
+                            ],
+                            [
+                                'attribute'=>'nro_documento',
+                                'contentOptions' => ['style' => 'width:6%;'],
+                            ],
+                            [
+                                'label' => 'Médico',
+                                'attribute'=>'nombre_medico',
+                                'contentOptions' => ['style' => 'width:18%;'],
+                            ],
+                            [
+                                'label' => 'Informes',
+                                'format' => 'raw',
+                                'contentOptions' => ['style' => 'width:18%;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $estados = array(
+                                                        "1" => "danger",
+                                                        "2" => "default",
+                                                        "3" => "success",
+                                                        "4" => "warning",
+                                                        "5" => "primary",
+                                                        "6" => "info",
+                                                    );
+                                    $estadosLeyenda = array(
+                                        "1" => "INFORME PENDIENTE",
+                                        "2" => "INFORME DESCARTADO",
+                                        "3" => "EN PROCESO",
+                                        "4" => "INFORME PAUSADO",
+                                        "5" => "FINALIZADO",
+                                        "6" => "ENTREGADO",
+                                     );
                                     $val = "";
                                     $idProtocolo = $model['id'];
                                     $informe = app\models\Informe::findOne($model['informe_id']);
@@ -189,103 +156,60 @@ $this->registerJs($js);
                                     $val = $val . "<br /><span></span>";
                                     return $val;
                                 },
-                                    ],
-                                    [
-                                        'label' => 'Acciones',
-                                        'format' => 'raw',
-                                        'contentOptions' => ['style' => 'width:20%;'],
-                                        'value'=> function ($model) {
-                                        //llevatr esto al metodo
-
-                                                    $data = $model['informe_id'];
-                                                    //urls acciones
-                                                    $url ='index.php?r=informe/entregar&accion=mail&id='.$model['informe_id'];
-                                                    $urlPrint ='index.php?r=informe/entregar&accion=print&estudio='.$model['Estudio_id'].'&id='.$model['informe_id'];
-                                                    $urlPublicar ='index.php?r=informe/entregar&accion=publicar&id='.$model['informe_id'];
-                                                    $urlVer ='index.php?r=informe/view&id='.$model['informe_id'];
-                                                    $urlEditar ='index.php?r=informe/update&id='.$model['informe_id'];
-
-                                                    return Html::a(" <span class='fa fa-print'></span>",$urlPrint,[
-                                                        'title' => Yii::t('app', 'Descargar/imprimir'),
-                                                        'class'=>'btn btn-primary btn-xs printClass ',
-                                                        'value'=> "$urlPrint",
-                                                        'data-id'=> "$data",
-                                                        'data-protocolo'=> "$data",
-                                                        'target'=>'_blank',
-                                                        'data-pjax' => 0,
-                                                    ])."  " .Html::a(" <span class='fa fa-envelope'></span>",$url,[
-                                                        'title' => Yii::t('app', 'Enviar por Mail'),
-                                                        'class'=>'btn bg-olive btn-xs finalizado',
-                                                        'value'=> "$url",
-                                                        'data-id'=> "$data",
-                                                        'data-protocolo'=> "$data",
-                                                    ])."  " . Html::a("<i class='fa fa-cloud-upload'></i>",$urlPublicar,[
-                                                        'title' => Yii::t('app', 'Publicar en WEB'),
-                                                        'class'=>'btn btn-primary btn-xs',
-                                                        'value'=> "$urlPublicar",
-                                                        'data-id'=> "$data",
-                                                        'data-protocolo'=> "$data",
-                                                    ])
-                                                    . "  " .Html::a("<i class='fa fa-eye'></i>",$urlVer,[
-                                                        'title' => Yii::t('app', 'Ver'),
-                                                        'class'=>'btn bg-olive btn-xs',
-                                                        'value'=> "$urlVer",
-                                                        'data-id'=> "$data",
-                                                        'data-protocolo'=> "$data",
-                                                    ])
-                                                    ."  " . Html::a("<i class='glyphicon glyphicon-pencil'></i>",$urlEditar,[
-                                                        'title' => Yii::t('app', 'Editar'),
-                                                        'class'=>'btn btn-primary btn-xs',
-                                                        'value'=> "$urlEditar",
-                                                        'data-id'=> "$data",
-                                                        'data-protocolo'=> "$data",
-                                                    ]);
-
-
-                                                    },
-                                                 ],
-                                       /*                  ['class' => 'yii\grid\ActionColumn',
-                                                        'template' => '{view}{edit}',
-                                                        'buttons' => [
-
-                                                        //view button
-                                                       'view' => function ($url, $model) {
-                                                        if(Helper::checkRoute(substr($url, 12, 12))){
-                                                                    return Html::a('<span class="fa fa-eye "></span>', FALSE, [
-                                                                                'title' => Yii::t('app', 'View'),
-                                                                                'class'=>'btn btn-success ver btn-xs',
-                                                                                'value'=> "$url",
-                                                                    ]);
-                                                            }
-
-                                                        },
-                                                         'edit' => function ($url, $model) {
-                                                            if(Helper::checkRoute(substr($url, 12, 12))){
-                                                                return Html::a('<span class="fa fa-pencil"></span>', FALSE, [
-                                                                            'title' => Yii::t('app', 'Editar'),
-                                                                            'class'=>'btn btn-info btn-xs editar',
-                                                                            'value'=> "$url",
-                                                                        ]);
-
-                                                            }
-                                                        },
-
-                                                    ],
-                                                    'urlCreator' => function ($action, $model, $key, $index) {
-                                                        if ($action === 'view') {
-                                                            $url ='index.php?r=informe/view&id='.$model['informe_id'];
-                                                            return $url;
-                                                            }
-                                                        if ($action === 'edit') {
-                                                            $url ='index.php?r=informe/update&id='.$model['informe_id'];
-                                                            return $url;
-                                                            }
-
-                                                        }
-                                                    ] */
-                                                ],
-                                        ]);
-                                    ?>
+                            ],
+                            [
+                                'label' => 'Acciones',
+                                'format' => 'raw',
+                                'contentOptions' => ['style' => 'width:20%;'],
+                                'value'=> function ($model) {
+                                            $data = $model['informe_id'];
+                                            //urls acciones
+                                            $url ='index.php?r=informe/entregar&accion=mail&id='.$model['informe_id'];
+                                            $urlPrint ='index.php?r=informe/entregar&accion=print&estudio='.$model['Estudio_id'].'&id='.$model['informe_id'];
+                                            $urlPublicar ='index.php?r=informe/entregar&accion=publicar&id='.$model['informe_id'];
+                                            $urlVer ='index.php?r=informe/view&id='.$model['informe_id'];
+                                            $urlEditar ='index.php?r=informe/update&id='.$model['informe_id'];
+    
+                                            return Html::a(" <span class='fa fa-print'></span>",$urlPrint,[
+                                                'title' => Yii::t('app', 'Descargar/imprimir'),
+                                                'class'=>'btn btn-primary btn-xs printClass ',
+                                                'value'=> "$urlPrint",
+                                                'data-id'=> "$data",
+                                                'data-protocolo'=> "$data",
+                                                'target'=>'_blank',
+                                                'data-pjax' => 0,
+                                            ])."  " .Html::a(" <span class='fa fa-envelope'></span>",$url,[
+                                                'title' => Yii::t('app', 'Enviar por Mail'),
+                                                'class'=>'btn bg-olive btn-xs finalizado',
+                                                'value'=> "$url",
+                                                'data-id'=> "$data",
+                                                'data-protocolo'=> "$data",
+                                            ])."  " . Html::a("<i class='fa fa-cloud-upload'></i>",$urlPublicar,[
+                                                'title' => Yii::t('app', 'Publicar en WEB'),
+                                                'class'=>'btn btn-primary btn-xs',
+                                                'value'=> "$urlPublicar",
+                                                'data-id'=> "$data",
+                                                'data-protocolo'=> "$data",
+                                            ])
+                                            . "  " .Html::a("<i class='fa fa-eye'></i>",$urlVer,[
+                                                'title' => Yii::t('app', 'Ver'),
+                                                'class'=>'btn bg-olive btn-xs',
+                                                'value'=> "$urlVer",
+                                                'data-id'=> "$data",
+                                                'data-protocolo'=> "$data",
+                                            ])
+                                            ."  " . Html::a("<i class='glyphicon glyphicon-pencil'></i>",$urlEditar,[
+                                                'title' => Yii::t('app', 'Editar'),
+                                                'class'=>'btn btn-primary btn-xs',
+                                                'value'=> "$urlEditar",
+                                                'data-id'=> "$data",
+                                                'data-protocolo'=> "$data",
+                                            ]);
+                                },
+                            ],
+                        ],
+                    ]);
+                ?>
                 <?php Pjax::end() ?>
 
             </div>

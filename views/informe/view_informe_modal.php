@@ -17,6 +17,30 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="estudio-view">
                 <div class="panel-heading">
                     <h3 class="panel-title text-center"><?= Html::encode($this->title) ?>
+                        <div>
+                            <?php
+                                echo   Html::a("<i class='fa fa-list-alt'></i>",
+                                    Url::to(['/informe/printreducido','id'=>$model->id, 'estudio' => $model->Estudio_id ]),
+                                    [
+                                        'class'=>'btn btn-default btn-sm  pull-right',
+                                        'title'=>Yii::t('app', 'Informe Reducido'),
+                                        'data-toggle'=>'tooltip',
+                                        'target'=>'_blank'
+                                    ]
+                                );
+                            ?>
+                            <?php
+                                echo    Html::a("<i class='fa fa-file-pdf-o'></i>",
+                                    Url::to(['/informe/imprimir','id'=>$model->id, 'estudio' => $model->Estudio_id ]) ,
+                                    [
+                                        'class'=>'btn btn-default btn-sm  pull-right',
+                                        'title'=>Yii::t('app', 'Informe Preliminar'),
+                                        'data-toggle'=>'tooltip',
+                                        'target'=>'_blank'
+                                    ]
+                                );
+                            ?>
+                        </div>
                     </h3>
                 </div>
 

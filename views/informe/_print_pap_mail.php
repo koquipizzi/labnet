@@ -39,6 +39,7 @@ table.pap_desc {
 }
 </style>
 
+
 <table >
     <tr  style="float: left">
     <tr>
@@ -47,15 +48,10 @@ table.pap_desc {
                 <img src="<?php echo Yii::getAlias('@webroot').$laboratorio->web_path; ?>" width="170"  \/>
             <?php } ?>
         </td>
-        <td width="300px" style="float: left;">
-            <?php if (!empty($laboratorio->director_nombre)){ ?>
-                <div class="row"> <?php echo  $laboratorio->director_nombre ?></div>
-            <?php } ?>
-            <?php if (!empty($laboratorio->director_titulo)){ ?>
-                <div class="row"> <?php echo 'Especialidad en '.$laboratorio->director_titulo; ?></div>
-            <?php } ?>
-            <?php if (!empty($laboratorio->director_matricula)){ ?>
-                <div class="row"> <?php echo 'Medico '.$laboratorio->director_matricula; ?></div>
+
+        <td width="300px" style="float: left; padding-top: 40px">
+            <?php if (!empty($laboratorio->leyenda_informe)){ ?>
+                <div class="row"> <?php echo  $laboratorio->leyenda_informe ?></div>
             <?php } ?>
         </td>
     </tr>
@@ -113,19 +109,19 @@ table.pap_desc {
         <?php echo $model->titulo; ?>
     </h5>
     <div class="informe">
-        <div class="pap_labels">
+        <div class="pap_labels" style="text-decoration: underline;">
             MATERIAL
         </div>    
         <div class="pap_desc">
             <?php echo nl2br($model->material); ?>
         </div>
-        <div class="pap_labels">
+        <div class="pap_labels" style="text-decoration: underline;">
             TECNICA
         </div>    
         <div class="pap_desc">
             <?php echo nl2br($model->tecnica); ?>
         </div>        
-        <div class="pap_labels">
+        <div class="pap_labels" style="text-decoration: underline;">
             CITOLOGÍA HORMONAL
         </div>  
         <div class="pap_desc">
@@ -140,19 +136,19 @@ table.pap_desc {
             </table>
             
         </div>
-        <div class="pap_labels">
+        <div class="pap_labels" style="text-decoration: underline;">
             CITOLOGÍA ONCOLÓGICA
         </div>
         <div class="pap_desc">
             <?php echo nl2br($model->citologia); ?>
         </div>
-        <div class="pap_labels">
+        <div class="pap_labels" style="text-decoration: underline;">
             DIAGNÓSTICO
         </div> 
         <div class="pap_desc">
             <?php echo nl2br($model->diagnostico);  ?>
         </div>
-        <div class="pap_labels">
+        <div class="pap_labels" style="text-decoration: underline;">
             OBSERVACIONES
         </div>
         <div class="pap_desc">

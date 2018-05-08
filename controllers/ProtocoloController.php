@@ -482,18 +482,9 @@ class ProtocoloController extends Controller
 
         return $this->render('_nuevo_prot', [
                             'paciente' => $paciente,
-                       //     'prestadora'=> $prestadora,
-                        //    'pacprest' => $pacprest,
                             'model' => $mdlProtocolo,
-                         //   'searchModel' =>$searchModel ,
-                         //   'Estudio' => $Estudio,
-                         //   'dataProvider' => $dataProvider,
-                         //   'informe'=>$informetemp,
-                         //   'nomenclador'=>$nomenclador,
-                         //   'infnomenclador'=>$infnomenclador,
-                        //    'dataProviderIN'=> $dataProviderIN,
-                         //   "tanda"=>$tanda,
                              ]);
+        
         $pacprest_modelo = \app\models\PacientePrestadora::findOne($pacprest);      
         $paciente = Paciente::findOne($pacprest_modelo->Paciente_id);
         $prestadora = \app\models\Prestadoras::findOne($pacprest_modelo->Prestadoras_id);
@@ -538,10 +529,11 @@ class ProtocoloController extends Controller
                     }                             
                     $transaction->commit();
                 } 
-               catch (\Exception $e) {
-                            $transaction->rollBack();
-                            throw $e;
+                catch (\Exception $e) {
+                             $transaction->rollBack();
+                             throw $e;
                 }
+                
                 $searchModel = new InformeSearch();
                 $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $mdlProtocolo->id);
                 $nomenclador= new Nomenclador();
@@ -577,9 +569,7 @@ class ProtocoloController extends Controller
                             'model' => $mdlProtocolo,
                             'searchModel' =>$searchModel ,
                             'Estudio' => $Estudio,
-                       //     'dataProvider' => $dataProvider,
                             'informe'=>$informetemp,
-                    //        'nomenclador'=>$nomenclador,
                             "tanda"=>$tanda,
                              ]);
 

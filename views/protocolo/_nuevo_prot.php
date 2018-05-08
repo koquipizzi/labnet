@@ -97,7 +97,7 @@ JS;
                                         results: $.map(data, function(item, index) {
                                             return {
                                             "id": item.id,
-                                            "text": item.nombre
+                                            "text": item.nombre + " ( " + item.tipo_documento + " " + item.nro_documento + " )"
                                             };
                                         })
                                         };

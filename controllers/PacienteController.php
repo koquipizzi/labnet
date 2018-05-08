@@ -74,32 +74,21 @@ class PacienteController extends Controller
         $clean['more'] = false;
 
         $query = new \yii\db\Query;
-        if(!empty($term))
-        {
-            $mainQuery = $query->select('id, nombre')
-                            ->from('Paciente')->where('nombre like "%'.$term. '%"');
+        if(!empty($term)) {
+            $mainQuery = $query->select('Paciente.id
+                                        ,nombre
+                                        ,nro_documento
+                                        ,Tipo_documento.descripcion as tipo_documento
+                                        ')
+                                ->from('Paciente')
+                                ->innerJoin('Tipo_documento','Tipo_documento.id = Paciente.Tipo_documento_id')
+                                ->where(['like','Paciente.nombre',$term])
+                                ->orWhere(['like','nro_documento',$term])
+                                ->limit(15);                       //limito a 15, para mejorar performance
             $command = $mainQuery->createCommand();
-       //     var_dump($command); die;
             $rows = $command->queryAll();
-          //  var_dump($rows); die;
             $clean['results'] = array_values($rows);
         }
-        /*else
-        {
-          //  if(!is_null($code))
-           // {
-                $clean['results'] = [
-                    //'ean_no'=> $code, 
-                    'nombre' => Product::find($term)->nombre
-                    //,
-                //    'description' => Product::find($code)->description, 
-               //     'volume' => Product::find($code)->volume
-            ];
-          /*  }else
-            {*/
-              //  $clean['results'] = ['ean_no' => 123, 'name' => 'None found', 'description' => 'None found', 'volume' => 'None found'];
-        //    }
-       // }
         echo \yii\helpers\Json::encode($clean['results']);
         exit();
     }

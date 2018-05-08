@@ -1420,7 +1420,6 @@ class ProtocoloSearch extends Protocolo
         ]);
 
         $dataProvider_asignados->setSort([
-            'defaultOrder' => ['fecha_entrada' => SORT_DESC],
             'attributes' => [
                 'fecha_entrega',
                 'nombre',

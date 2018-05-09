@@ -116,7 +116,7 @@ class LaboratorioController extends Controller
         }
         
         // Load images
-        $img = UploadedFile::getInstances($model,'files');
+        $img = UploadedFile::getInstances($model,'file');
         $image = $img[0];
       
         $model->path_logo = $image->name;
@@ -148,7 +148,7 @@ class LaboratorioController extends Controller
             $model->save();
         }
         // Load images
-        $img = UploadedFile::getInstances($model,'files');
+        $img = UploadedFile::getInstances($model,'file');
         $image = $img[0];
       
         $model->path_firma = $image->name;
@@ -194,5 +194,25 @@ class LaboratorioController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    
+    public function actionDeletefirma($id){
+        if (($model = Laboratorio::findOne($id)) !== null) {
+            if (!empty($model->web_path_firma)){
+                $model->web_path_firma = "";
+                $model->save();
+            }
+        }
+        return $this->actionUpdate($id);
+    }
+    
+    public function actionDeletelogo($id){
+        if (($model = Laboratorio::findOne($id)) !== null) {
+            if (!empty($model->web_path)){
+                $model->web_path = "";
+                $model->save();
+            }
+        }
+        return $this->actionUpdate($id);
     }
 }

@@ -66,36 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'autoUpdateInput' => false,
                         ]
                     ])
-                ],      [
-                    'label' => 'Entrega',
-                    'attribute' => 'fecha_entrega',
-                    'contentOptions' => ['style' => 'width:9%;'],
-                    'format' => ['date', 'php:d/m/Y'],
-
-                    'filter' => DateRangePicker::widget([
-                        'template' => '
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                    {input}
-                                </div>
-                            ',
-                        'model' => $searchModel,
-                        'locale'    => 'es-ES',
-                        'attribute' => 'fecha_entrega',
-                        'pluginOptions' => [ 'format' => 'dd-mm-yyyy',
-                        'locale'=>[
-                            'format'=>'DD/MM/YYYY',
-                            'separator'=>' - ',
-                            'applyLabel' => 'Seleccionar',
-                            'cancelLabel' => 'Cancelar',
-                        ],
-                        'autoUpdateInput' => false,
-                        ]
-                    ])
                 ],
-
             [
                 'label' => 'Nro Protocolo',
                 'attribute' => 'codigo',

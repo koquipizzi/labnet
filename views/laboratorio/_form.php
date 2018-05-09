@@ -11,15 +11,7 @@ use yii\widgets\Pjax;
 ?>
   <?php
       
-      $css = '
-      
-      
-      
-      ';
-      
       $js = '
-      
-
             $(document).ready(function(){
                  $(".re-image").parent().hide();
                  $(".re-file").parent().hide();
@@ -34,21 +26,19 @@ use yii\widgets\Pjax;
             $("#idFile2").on("fileuploaded", function(event) {
                 $.pjax.reload({container:"#galeriaFD"});
             });
+        
+            $(document).on("pjax:success", function() {
             
-       
-        
-        $(document).on("pjax:success", function() {
-        
-            $(".redactor-toolbar li a").css("display:none");
-        
-            $("#idFile").on("fileuploaded", function(event) {
-                $.pjax.reload({container:"#galeriaL"});
-            });
+                $(".redactor-toolbar li a").css("display:none");
             
-            $("#idFile2").on("fileuploaded", function(event) {
-                $.pjax.reload({container:"#galeriaFD"});
+                $("#idFile").on("fileuploaded", function(event) {
+                    $.pjax.reload({container:"#galeriaL"});
+                });
+                
+                $("#idFile2").on("fileuploaded", function(event) {
+                    $.pjax.reload({container:"#galeriaFD"});
+                });
             });
-        });
         
       ';
  
@@ -158,9 +148,10 @@ use yii\widgets\Pjax;
                 <?php Pjax::begin(['id' => 'galeriaL', 'enablePushState' => TRUE]); ?>
                 <br>
                 <div class="content-galeria">
-                
+                    
                     <?php //Muestra el logo
                         if (!empty( $model->web_path)){
+                            echo Html::a('<i class="fa fa-fw fa-trash"></i>',['laboratorio/deletelogo', 'id' => $model->id], ['class' => 'btn btn-black', 'title' => 'Eliminar Logo']);
                             echo $this->render('galeria', [
                                 'path' => $model->web_path
                             ]);
@@ -202,12 +193,13 @@ use yii\widgets\Pjax;
             
                 ]);
             ?>
-
+           
             <div class="row pull-right">
                 <?php Pjax::begin(['id' => 'galeriaFD', 'enablePushState' => TRUE]); ?>
                 <div class="content-galeria">
                     <?php //muestra la firma
                         if (!empty($model->web_path_firma)){
+                            echo  Html::a('<i class="fa fa-fw fa-trash"></i>',['laboratorio/deletefirma', 'id' => $model->id], ['class' => 'btn btn-black', 'title' => 'Eliminar Firma']);
                             echo $this->render('galeria', [
                                 'path' => $model->web_path_firma
                             ]);

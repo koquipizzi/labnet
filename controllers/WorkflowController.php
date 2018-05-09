@@ -6,6 +6,7 @@ use Yii;
 use app\models\Workflow;
 
 use yii\data\ActiveDataProvider;
+use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -109,64 +110,93 @@ class WorkflowController extends Controller
     }
     
     public function actionUpdatestados(){
+        $informe_id = 0;
+        $nuevoEstado = 0;
+        $reponsable_id = 0;
+        $response = [];
+        $fecha = date_create();
+        $fecha = date_format($fecha, 'd-m-Y H:i:s');
         
-    	$modeloinforme=Yii::$app->request->post();
+        try{
     
-    	$id_inf =$modeloinforme['Workflow']['Informe_id'];
-    	$fecha = date_create ();
-    	$fecha = date_format ( $fecha, 'd-m-Y H:i:s' );
-    	$model = new Workflow();
-    	$model->fecha_inicio= $fecha;
-    	
-    	/*	actualiza el ultimo workflow */
-        $ultimoWorkflow = Workflow::find()->where(['Informe_id' => $id_inf])->orderBy (['id' => SORT_DESC])->one();
-        if(isset($ultimoWorkflow)){
-            $ultimoWorkflow->fecha_fin = $fecha;
-            $ultimoWorkflow->update();
-        }
-    	
-		/** evalua si un responsable fue seteado */
-		if(isset(Yii::$app->request->post('Workflow')['Responsable_id'])){
-			$model->Informe_id = Yii::$app->request->post('Workflow')['Informe_id'];
-			if (!empty(Yii::$app->request->post('estado'))){
-                $model->Estado_id = Yii::$app->request->post('estado');
-            }else{
-                $model->Estado_id = Workflow::estadoEnProceso();
+            if (empty(Yii::$app->request->post())) {
+                throw new Exception('No se encontro una solicitud post');
             }
-            $model->Responsable_id =  Yii::$app->request->post('Workflow')['Responsable_id'];
+    
+            if (!empty(Yii::$app->request->post('Workflow')['Informe_id'])) {
+                $informe_id = Yii::$app->request->post('Workflow')['Informe_id'];
+            }else{
+                throw new Exception('El ID del informe es obligatorio para esta accion');
+            }
             
-		}else{
-		    
-		    if (!empty($ultimoWorkflow)){
-                if ( ($ultimoWorkflow->Responsable_id == null) && ($ultimoWorkflow->Estado_id == Workflow::estadoPendiente()) ){
-                    $model->Informe_id = Yii::$app->request->post('Workflow')['Informe_id'];
-                    $model->Estado_id = Yii::$app->request->post('estado');
-                    $model->Responsable_id =\Yii::$app->user->getId();
-                
-                }else if(Yii::$app->request->post('estado')){
-                    $model->Informe_id = Yii::$app->request->post('Workflow')['Informe_id'];
-                    $model->Estado_id = Yii::$app->request->post('estado');
-                    $model->Responsable_id = $ultimoWorkflow->Responsable_id;
-                }
+            if (!empty(Yii::$app->request->post('estado'))) {
+                $nuevoEstado = Yii::$app->request->post('estado');
             }
-		}
-        $response = 0;
-		
-        if($ultimoWorkflow->Estado_id != Workflow::estadoEntregado()){
-            if ($model->save() && $ultimoWorkflow->Estado_id != Workflow::estadoEntregado()){
-                if($model->Estado_id == Workflow::estadoEntregado()){
-                    $historial = new \app\models\HistorialPaciente();
-                    $historial->registrar($id_inf);
-                }
-                $response= ["result" => 'ok'];
-                \Yii::$app->response->format = 'json';
+            
+            if (!empty(Yii::$app->request->post('Workflow')['Responsable_id'])){
+                $reponsable_id = Yii::$app->request->post('Workflow')['Responsable_id'];
+            }
+    
+            //Obtengo el ultimo WorkFlow para el informe
+            $ultimoWorkflow = Workflow::find()->where(['Informe_id' => $informe_id])->orderBy(['id' => SORT_DESC])->one();
+    
+            //Seteo el fin del estado previo
+            if (!empty($ultimoWorkflow)) {
+                $ultimoWorkflow->fecha_fin = $fecha;
+                $ultimoWorkflow->update();
+            }
+            
+            //creo el nuevo WorkFlow debido al requirimiento post de un cambio de estado del informe
+            $WorkFlowModel = new Workflow();
+            $WorkFlowModel->fecha_inicio = $fecha;
+            $WorkFlowModel->Informe_id = $informe_id;
+    
+            //Seteo el responsable en el nuevo WorkFlow
+            if (!empty($reponsable_id)) {
+                $WorkFlowModel->Responsable_id = $reponsable_id;
             }else{
-                $response = $model->errors;
+                //Si no se seteo el responsable  en esta accion, le asigno el anterior
+                if (!empty($ultimoWorkflow->Responsable_id)){
+                    $WorkFlowModel->Responsable_id = $ultimoWorkflow->Responsable_id;
+                }else{
+                    //Si no tenia un responsable previamente, le asigno el usuario que acciono la accion
+                    $WorkFlowModel->Responsable_id =\Yii::$app->user->getId();
+                }
             }
-        }else{
-            $response = $model->errors;
+    
+            //Seteo el estado en el nuevo WorkFlow
+            if (!empty($nuevoEstado)) {
+                $WorkFlowModel->Estado_id = $nuevoEstado;
+            }else{
+                //Si no se seteo un nuevo estado en esta accion, le asigno el anterior
+                if (!empty($ultimoWorkflow->Estado_id)){
+                    $WorkFlowModel->Estado_id = $ultimoWorkflow->Estado_id;
+                }
+            }
+    
+            if ($ultimoWorkflow->Estado_id != Workflow::estadoEntregado()) {
+                if ($WorkFlowModel->save() && $ultimoWorkflow->Estado_id != Workflow::estadoEntregado()) {
+                    if ($WorkFlowModel->Estado_id == Workflow::estadoEntregado()) {
+                        $historial = new \app\models\HistorialPaciente();
+                        $historial->registrar($informe_id);
+                    }
+                    if (!empty($reponsable_id)){
+                        $response = ["result" => 'ok',"mensaje" => "Se cambio exitosamente el responsable del informe"];
+                    }
+                    if (!empty($nuevoEstado)){
+                        $response = ["result" => 'ok',"mensaje" => "Se cambio exitosamente el estado del informe"];
+                    }
+                } else {
+                    $response = $WorkFlowModel->errors;
+                }
+            } else {
+                $response = $WorkFlowModel->errors;
+            }
+        }catch (Exception $e){
+            $response = ["result" => "error", "mensaje" => "Se encontro un error durante el proceso"];
         }
-       
+        
+        \Yii::$app->response->format = 'json';
         return $response;
     }
 

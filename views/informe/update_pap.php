@@ -29,8 +29,6 @@ $this->title = 'Protocolo N°: '. $modelp->codigo;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Informes'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
-//         $this->registerJs("
-//             $('#historialPacientePanel').scrollspy({ target: '#historial' })");
   ?>  
 
 <div class="row">
@@ -46,7 +44,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
             </div>
         </div>
         <div class="box">
-            
             <div class="box-header with-border">
                 <h3 class="box-title">Nomencladores</h3>
                 <div class="pull-right">
@@ -64,10 +61,8 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                 'id'=> 'popNomenclador',
                                 'toggleButton' => ['label'=>'', 'class'=>' fa fa-plus'],
                                 'header' => '<!--i class="glyphicon glyphicon-lock"></i-->Agregar nomenclador',
-                                'footer'=> Html::a('<span class="btn btn-info click"> Agregar</span>', $url)//Html::Button('Agregar', ['class'=>'btn btn-sm btn-primary click'])// .
-                                        // Html::resetButton('Cancelar', ['class'=>'btn btn-sm btn-default'])
+                                'footer'=> Html::a('<span class="btn btn-info click"> Agregar</span>', $url)
                             ]);
-                           // echo $form->field($model, 'id_nomenclador')->textInput(['placeholder'=>'Nomenclador...']);
                             $form = ActiveForm::begin([
                                     'id' => 'addNom',
                                     'fieldConfig'=>['showLabels'=>false],                                   
@@ -106,25 +101,21 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
             </div>
         </div>
         <div  class="box">  
-		             <div class="box-header with-border">
-                        <h3 class="box-title">Historial Paciente</h3>
-                    </div>
-		             
-		  	        <div  id="historialPacientePanel" data-spy="scroll" data-offset="3" data-target="#historial" class="panel-body text-center" style=" position: relative;">	                                                         
-	                        <?php 
-		                            if(is_array($historialPaciente)){
-		                                echo	$this->render('/informe/historialPaciente', [
-		                                    'historialPaciente'=>$historialPaciente
-		                                ]) ;
-		                            }else{
-		                                    echo "El Paciente no tiene historial.";
-		                            }
-                                         
-	                        ?>
-                    </div>
-                            
-      		</div>
-
+            <div class="box-header with-border">
+                <h3 class="box-title">Historial Paciente</h3>
+            </div>
+            <div  id="historialPacientePanel" data-spy="scroll" data-offset="3" data-target="#historial" class="panel-body text-center" style=" position: relative;">
+                <?php
+                    if(is_array($historialPaciente)){
+                        echo	$this->render('/informe/historialPaciente', [
+                            'historialPaciente'=>$historialPaciente
+                        ]) ;
+                    }else{
+                            echo "El Paciente no tiene historial.";
+                    }
+                ?>
+            </div>
+      	</div>
     </div>
     <div class="col-md-9">
         <div class="box">
@@ -133,45 +124,45 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                     <div class="col-md-6">
                         <h3 class="box-title"><strong><?php echo 'Estudio: '.$model->estudio->descripcion; ?></strong></h3>
                     </div>
-                     <div class="col-md-3">                       
-                            <?php Pjax::begin(['id'=>'estado']); ?>                                 
-                                   <?php echo "Estado: ". $model->workflowLastStateName; ?>
-                                   <?php if(Helper::checkRoute('/workflow/*')){?>
-                                    <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                            <span class="rounded estadoDesc">                                    
-                                             <i class="fa fa-chevron-down"></i>                                
-                                            </span>
-                                        </button>
-                                    <?php }?>  
-                                    <ul class="dropdown-menu pull-right">
-                                    <?php 
-                                        $dataEstado=Estado::find()->where(['estado_final' => '0'])->asArray()->all();
-                                        // var_dump($dataEstado);die();
-                                        foreach ($dataEstado as $estado) //var_dump($estado['descripcion']);die();
-                                            echo "<li><a href='#".$estado['id']."' class='btn-view change-estado'  data-workflow='".$model->currentWorkflow."' data-informe='".$model->id."' data-estado='".$estado['id']."' data-estadotexto='".$estado['id']."' >".$estado['descripcion']."</a></li>";
-                                    ?>                                                                     
-                            <?php Pjax::end(); ?> 
+                    <?php Pjax::begin(['id'=>'estado']); ?>
+                        <div class="col-md-3">
+                            <div>
+                               <?php echo "Estado: ". $model->workflowLastStateName; ?>
+                               <?php if(Helper::checkRoute('/workflow/*')){?>
+                                   <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <span class="rounded estadoDesc">
+                                     <i class="fa fa-chevron-down"></i>
+                                    </span>
+                                   </button>
+                               <?php }?>
+                               <ul class="dropdown-menu pull-right">
+                                   <?php
+                                       $dataEstado=Estado::find()->where(['estado_final' => '0'])->asArray()->all();
+                                       // var_dump($dataEstado);die();
+                                       foreach ($dataEstado as $estado) //var_dump($estado['descripcion']);die();
+                                           echo "<li><a href='#".$estado['id']."' class='btn-view change-estado'  data-workflow='".$model->currentWorkflow."' data-informe='".$model->id."' data-estado='".$estado['id']."' data-estadotexto='".$estado['id']."' >".$estado['descripcion']."</a></li>";
+                                   ?>
+                            </div>
                         </div>
                         <div class="col-md-3">
-                            <?php Pjax::begin(['id'=>'estado']); ?>                                 
-                                   <?php echo "Asignado: ". $model->workflowLastAsignationUser; ?>
-                                   <?php if(Helper::checkRoute('/workflow/*')){?>
+                            <div>
+                                <?php echo "Asignado: ". $model->workflowLastAsignationUser; ?>
+                                <?php if(Helper::checkRoute('/workflow/*')){?>
                                     <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                            <span class="rounded estadoDesc">                                    
-                                            <i class="fa fa-chevron-down"></i>                              
+                                            <span class="rounded estadoDesc">
+                                            <i class="fa fa-chevron-down"></i>
                                             </span>
-                                        </button>
-                                    <?php }?>  
-                                    <ul class="dropdown-menu pull-right">
-                                    <?php 
-                                        $dataUsuarios=User::find()->asArray()->all();    
-                                        foreach ($dataUsuarios as $usuario) 
+                                    </button>
+                                <?php }?>
+                                <ul class="dropdown-menu pull-right">
+                                    <?php
+                                        $dataUsuarios=User::find()->asArray()->all();
+                                        foreach ($dataUsuarios as $usuario)
                                             echo "<li><a href='#".$usuario['id']."' class='btn-view change-estado' ' data-usuario='".$usuario['id']."' data-estadotexto='".$usuario['id']."' data-informe='".$model->id."' >".$usuario['username']."</a></li>";
-                                    ?>                                                                     
-                            <?php Pjax::end(); ?>   
-                        </div> 
-                    
-                     
+                                    ?>
+                            </div>
+                        </div>
+                     <?php Pjax::end(); ?>
                 </div>    
 
                 <!-- botones derecha_-->

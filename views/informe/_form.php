@@ -122,37 +122,64 @@ Pjax::end();
         <!-- Start double tabs -->
         <div class="panel panel-tab panel-tab-double rounded shadow">                
             <!-- Start tabs heading -->
-                    <div class="panel-heading panel-labnet no-padding">
-                        <ul class="nav nav-tabs">
-                            <li class="active">
-                                <a href="#tab2-1" data-toggle="tab">
-                                    <div>
-                                       <i class="fa fa-file-text"></i>
-                                        <span>Carga de detalle del estudio</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#tab2-2" data-toggle="tab">
-                                    <div>
-                                        <i class="fa fa-image"></i>
-                                        <span>Adjuntar imágenes</span>
+            <!-- Start tabs heading -->
+            <div class="panel-heading panel-labnet no-padding">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#tab2-1" data-toggle="tab">
+                            <div>
+                                <i class="fa fa-file-text"></i>
+                                <span>Carga de detalle del estudio</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#tab2-2" data-toggle="tab">
+                            <div>
+                                <i class="fa fa-image"></i>
+                                <span>Adjuntar imágenes</span>
 
-                                    </div>
-                                </a>
-                            </li> 
-                            <li>
-                                <a href="#tab2-3" data-toggle="tab">
-                                    <div>
-                                        <i class="fa fa-image"></i>
-                                        <span>Observaciones</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#tab2-3" data-toggle="tab">
+                            <div>
+                                <i class="fa fa-image"></i>
+                                <span>Observaciones</span>
 
-                                    </div>
-                                </a>
-                            </li> 
-                            
-                        </ul>
-                    </div><!-- /.panel-heading -->
+                            </div>
+                        </a>
+                    </li>
+                    <li class="pull-right ">
+                        <a class="btn btn-default btn-sm  mostrarTree pull-right" title="Agregar texto"><i class="fa fa-edit"></i></a>
+                        <a class="btn btn-default btn-sm  guardarTexto pull-right" value="<?= Url::to(['textos/copy']) ?>"><i class="fa fa-copy"></i></a>
+                        <?php
+                            echo   Html::a("<i class='fa fa-list-alt'></i>",
+                                Url::to(['/informe/printreducido','id'=>$model->id, 'estudio' => $model->Estudio_id ]),
+                                [
+                                    'class'=>'btn btn-default btn-sm  pull-right',
+                                    'title'=>Yii::t('app', 'Informe Reducido'),
+                                    'data-toggle'=>'tooltip',
+                                    'target'=>'_blank'
+                                ]
+                            );
+                        ?>
+                        <?php
+                            echo    Html::a("<i class='fa fa-file-pdf-o'></i>",
+                                Url::to(['/informe/imprimir','id'=>$model->id, 'estudio' => $model->Estudio_id ]) ,
+                                [
+                                    'class'=>'btn btn-default btn-sm  pull-right',
+                                    'title'=>Yii::t('app', 'Informe Preliminar'),
+                                    'data-toggle'=>'tooltip',
+                                    'target'=>'_blank'
+                                ]
+                            );
+                        ?>
+                    </li>
+
+                </ul>
+            </div><!-- /.panel-heading -->
             <!--/ End tabs heading -->
         <?php Pjax::begin(['id'=>'pjax-tree']); ?>
             <!-- Start tabs content -->

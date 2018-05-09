@@ -76,7 +76,8 @@
                 url    : $url,
                 type   : "post",
                 dataType: "JSON",
-                data: { 'id' : $workflow,
+                data: {
+                        'id' : $workflow,
                         'estado' : $estado,
                         'Workflow[fecha_fin]' : $today,
                         'Workflow[Informe_id]': $informe,
@@ -87,25 +88,27 @@
                     if (response.result == 'ok'){
                                     $.pjax.reload({container:"#estado"});
                                     var n = noty({
-                                        text: 'El estado del informe se cambió exitosamente!',
+                                        text: response.mensaje,
                                         type: 'success',
                                         class: 'animated pulse',
                                         layout: 'topRight',
                                         theme: 'relax',
                                         timeout: 3000, // delay for closing event. Set false for sticky notifications
-                                        force: false, // adds notification to the beginning of queue when set to true
+                                        force: true, // adds notification to the beginning of queue when set to true
                                         modal: false, // si pongo true me hace el efecto de pantalla gris
+                                        killer: true
                                     });
                     }else if (response.result == 'error'){
                                      var n = noty({
-                                      text: 'El estado actual "Entregado" no permite actualizar el informe!',
+                                      text: response.mensaje,
                                       type: 'success',
                                       class: 'animated pulse',
                                       layout: 'topRight',
                                       theme: 'relax',
                                       timeout: 3000, // delay for closing event. Set false for sticky notifications
-                                      force: false, // adds notification to the beginning of queue when set to true
+                                      force: true, // adds notification to the beginning of queue when set to true
                                       modal: false, // si pongo true me hace el efecto de pantalla gris
+                                      killer: true
                                   });
                             }
 
@@ -210,6 +213,70 @@
 
     
     $(document).on('ready pjax:success', function () {
+
+        $('.change-estado').on('click', function () {
+            var $estado = $(this).data('estado');
+            var $informe = $(this).data('informe');
+            var $workflow = $(this).data('workflow');
+            var $workflow = $(this).data('usuario');
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1; //January is 0!
+            var yyyy = today.getFullYear();
+            if(dd<10) {
+                dd='0'+dd
+            }
+            if(mm<10) {
+                mm='0'+mm
+            }
+            $today = yyyy +'-'+ mm+'-'+dd;
+            //document.write(today);
+            $url = 'index.php?r=workflow/updatestados';
+            $.ajax({
+                url    : $url,
+                type   : "post",
+                dataType: "JSON",
+                data: { 'id' : $workflow,
+                    'estado' : $estado,
+                    'Workflow[fecha_fin]' : $today,
+                    'Workflow[Informe_id]': $informe,
+                    'Workflow[Responsable_id]': $workflow
+                },
+                success: function (response)
+                {
+                    if (response.result == 'ok'){
+                        $.pjax.reload({container:"#estado"});
+                        var n = noty({
+                            text: response.mensaje,
+                            type: 'success',
+                            class: 'animated pulse',
+                            layout: 'topRight',
+                            theme: 'relax',
+                            timeout: 3000, // delay for closing event. Set false for sticky notifications
+                            force: true, // adds notification to the beginning of queue when set to true
+                            modal: false, // si pongo true me hace el efecto de pantalla gris
+                            killer: true
+                        });
+                    }else if (response.result == 'error'){
+                        var n = noty({
+                            text: response.mensaje,
+                            type: 'success',
+                            class: 'animated pulse',
+                            layout: 'topRight',
+                            theme: 'relax',
+                            timeout: 3000, // delay for closing event. Set false for sticky notifications
+                            force: true, // adds notification to the beginning of queue when set to true
+                            modal: false, // si pongo true me hace el efecto de pantalla gris
+                            killer: true
+                        });
+                    }
+                },
+                error  : function ()
+                {
+                    console.log("internal server error");
+                }
+            });
+        });    //Cambiar estado del informe del estudio
    
         $('.kv-upload-progress').change(function(){
            alert('event.data'); 

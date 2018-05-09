@@ -151,26 +151,38 @@ class WorkflowController extends Controller
             $WorkFlowModel->fecha_inicio = $fecha;
             $WorkFlowModel->Informe_id = $informe_id;
     
+            //Seteo el estado en el nuevo WorkFlow
+            if (!empty($nuevoEstado)) {
+                $WorkFlowModel->Estado_id = $nuevoEstado;
+                //Si el estado previo era Pendiente y se cambio de estado se le auto asigna al usuario que realiza la accion
+                if (!empty($ultimoWorkflow->Estado_id) ){
+                    if ($ultimoWorkflow->Estado_id == Workflow::estadoPendiente()){
+                        $WorkFlowModel->Responsable_id = \Yii::$app->user->getId();
+                    }
+                }
+            }else{
+                //Si no se seteo un nuevo estado en esta accion, le asigno el anterior
+                if (!empty($ultimoWorkflow->Estado_id)){
+                    $WorkFlowModel->Estado_id = $ultimoWorkflow->Estado_id;
+                }
+            }
+    
             //Seteo el responsable en el nuevo WorkFlow
             if (!empty($reponsable_id)) {
                 $WorkFlowModel->Responsable_id = $reponsable_id;
+                //Si el estado del Informe era en Pendiente y se le asigno un responsable, el estado sera en proceso
+                if (!empty($ultimoWorkflow->Estado_id) ){
+                    if ($ultimoWorkflow->Estado_id == Workflow::estadoPendiente()){
+                        $WorkFlowModel->Estado_id = Workflow::estadoEnProceso();
+                    }
+                }
             }else{
                 //Si no se seteo el responsable  en esta accion, le asigno el anterior
                 if (!empty($ultimoWorkflow->Responsable_id)){
                     $WorkFlowModel->Responsable_id = $ultimoWorkflow->Responsable_id;
                 }else{
                     //Si no tenia un responsable previamente, le asigno el usuario que acciono la accion
-                    $WorkFlowModel->Responsable_id =\Yii::$app->user->getId();
-                }
-            }
-    
-            //Seteo el estado en el nuevo WorkFlow
-            if (!empty($nuevoEstado)) {
-                $WorkFlowModel->Estado_id = $nuevoEstado;
-            }else{
-                //Si no se seteo un nuevo estado en esta accion, le asigno el anterior
-                if (!empty($ultimoWorkflow->Estado_id)){
-                    $WorkFlowModel->Estado_id = $ultimoWorkflow->Estado_id;
+                    $WorkFlowModel->Responsable_id = \Yii::$app->user->getId();
                 }
             }
     

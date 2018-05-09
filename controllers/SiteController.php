@@ -19,6 +19,10 @@ use yii\db\Query;
 
 class SiteController extends Controller
 {
+    const ID_ENTIDAD_TODAS = 1;
+    const ID_ENTIDAD_PACIENTES = 2;
+    const ID_ENTIDAD_PROTOCOLOS = 3;
+    const ID_ENTIDAD_MEDICOS = 4;
 
     public function behaviors()
     {
@@ -183,13 +187,69 @@ class SiteController extends Controller
         return $this->render('about');
     }
     
-    public function actionSearch(){
-        $searchFeld = Yii::$app->request->post('q');
+    private function searchAll($searchFeld){
         $infoPaciente = Paciente::find()->where(['LIKE', 'nombre', $searchFeld])->all();
         $infoMedico = Medico::find()->where(['LIKE', 'nombre', $searchFeld])->all();
         $infoProtocolo = Protocolo::find()->where(['LIKE', 'observaciones', $searchFeld])->all();
         $info = array_merge($infoPaciente,$infoMedico);
         $info = array_merge($info,$infoProtocolo);
-        return $this->render('search',['resultados' => $info , 'field' =>$searchFeld ]);
+        return ['resultados' => $info , 'field' =>$searchFeld ];
+    }
+    
+    public function actionSearch(){
+        $searchFeld = Yii::$app->request->post('q');
+        $response = $this->searchAll($searchFeld);
+        return $this->render('search', $response);
+    }
+    
+    public function actionFiltrarBusqueda(){
+        $textoIngresado = 0;
+        $fecha = 0;
+        $entidad = 0;
+        $tipoDeEstudio = 0;
+        $response = [];
+    
+        try{
+            
+            if (empty(Yii::$app->request->post())) {
+                throw new Exception('No se encontro una solicitud post');
+            }
+            
+            if (!empty(Yii::$app->request->post('palabra'))){
+                $textoIngresado =  Yii::$app->request->post('palabra');
+            }
+            if (!empty(Yii::$app->request->post('entidad'))){
+                $entidad = (int) Yii::$app->request->post('entidad');
+            }
+            if (!empty(Yii::$app->request->post('fecha'))){
+                $fecha =  Yii::$app->request->post('fecha');
+                if (!empty($fecha)){
+                    $fecha = new \DateTime();
+                    $fecha->setTimestamp(Yii::$app->request->post('fecha'));
+                }
+            }
+            if (!empty(Yii::$app->request->post('tipoInforme'))){
+                $tipoDeEstudio =  Yii::$app->request->post('tipoInforme');
+            }
+            
+            if (!empty($entidad)){
+                if ($entidad = self::ID_ENTIDAD_TODAS){
+                    $info = $this->searchAll($textoIngresado);
+                }elseif ($entidad = self::ID_ENTIDAD_PACIENTES){
+                    $info = Paciente::find()->where(['LIKE', 'nombre', $textoIngresado])->all();
+                }elseif ($entidad = self::ID_ENTIDAD_PROTOCOLOS){
+                    $info = Protocolo::find()->where(['LIKE', 'observaciones', $textoIngresado])->all();
+                }elseif ($entidad = self::ID_ENTIDAD_MEDICOS){
+                    $info = Medico::find()->where(['LIKE', 'nombre', $textoIngresado])->all();
+                }
+            }
+    
+            $response = ["result" => "ok", "mensaje" => "La busqueda se realizo correctamente", 'info' => $info ];
+            
+        }catch (Exception $e){
+            $response = ["result" => "error", "mensaje" => "Se encontro un error durante el proceso"];
+        }
+        \Yii::$app->response->format = 'json';
+        return $response;
     }
 }

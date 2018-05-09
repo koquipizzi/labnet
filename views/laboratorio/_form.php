@@ -121,7 +121,7 @@ use yii\widgets\Pjax;
             <?php
                 echo FileInput::widget([
                     'model' => $model,
-                    'attribute' => 'files[]',
+                    'attribute' => 'web_path',
                     'options'=>[
                         'multiple'=>false,
                         'accept'=>'image/*',
@@ -169,7 +169,7 @@ use yii\widgets\Pjax;
             <?php
                 echo FileInput::widget([
                     'model' => $model,
-                    'attribute' => 'files[]',
+                    'attribute' => 'web_path_firma',
                     'options'=>[
                         'multiple'=>false,
                         'accept'=>'image/*',

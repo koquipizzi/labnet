@@ -116,7 +116,7 @@ class LaboratorioController extends Controller
         }
         
         // Load images
-        $img = UploadedFile::getInstances($model,'file');
+        $img = UploadedFile::getInstances($model,'web_path');
         $image = $img[0];
       
         $model->path_logo = $image->name;
@@ -148,7 +148,7 @@ class LaboratorioController extends Controller
             $model->save();
         }
         // Load images
-        $img = UploadedFile::getInstances($model,'file');
+        $img = UploadedFile::getInstances($model,'web_path_firma');
         $image = $img[0];
       
         $model->path_firma = $image->name;

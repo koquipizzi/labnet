@@ -32,9 +32,8 @@
         }
         $.post( ajaxurl , data ,function( data ) {
                 if (data.result == 'ok'){
-                    $.pjax.reload({container:"#search-result"});
+                    $('#result').html(data.info);
                 }
-                
         });
     })
 JS;
@@ -81,8 +80,10 @@ JS;
                 <?php
                 $estudios = Estudio::find()->all();
                 foreach ($estudios as $estudio){
+                    $id = $estudio->id;
                 ?>
-                    <option><?php echo $estudio->nombre ?></option>
+                    
+                    <option value="<?php echo $id;?>"><?php echo $estudio->nombre ?></option>
                     <?php
                 }
                 ?>
@@ -93,73 +94,14 @@ JS;
         <button id="search-filtro" class="btn btn-primary">Buscar</button>
     </div>
 </div>
+<div id="result">
+    
+    <?php
+        if (!empty($html)){
+            echo $html;
+        }
+    ?>
 
-<?php Pjax::begin(['id' => 'search-result']); ?>
-
-<?php
-    if (!empty($resultados))
-        echo "<h4> Resultados de la busqueda de : <strong> $field <strong> </h4>";
-    else
-        echo "<h4> No se encontraron Resultados para : <strong> $field <strong> </h4>";
-?>
-
-<section id="page-content">
-    <div class="body-content animated fadeIn" >
-        <div class="panel_titulo">
-            <div class="panel-heading ">
-                <div class="pull-right">
-                </div>
-                <?php
-                    foreach ($resultados as $resultado){
-                        if ($resultado->className() === "app\models\Paciente") {
-                ?>
-                            <div class="box box-info box-header search_strong" style="padding-top: 0px" >
-                                <div class="">
-                                    <h3 style="margin-top: 10px"><?php echo Html::a("Paciente: $resultado->nombre", Url::to(['paciente/view' , 'id'=> $resultado->id ]))?></h3>
-                                </div>
-                                           <?php
-                                                if (!empty($resultado->nro_documento))
-                                                    echo "<strong> Nro de Documento: </strong>   $resultado->nro_documento";
-                                                if (!empty($resultado->fecha_nacimiento))
-                                                    echo "<strong> - Fecha de Nacimiento: </strong> $resultado->fecha_nacimiento";
-                                                if (!empty($resultado->email))
-                                                    echo "<strong> - Email: </strong>   $resultado->email";
-                                                if (!empty($resultado->telefono))
-                                                    echo "<strong> - Telefono: </strong> $resultado->telefono";
-                                           ?>
-                            </div>
-                <?php
-                        }else if ($resultado->className() === "app\models\Medico") {
-                ?>
-                            <div class="box box-info box-header search_strong" style="padding-top: 0px" >
-                                <div class="">
-                                    <h3 style="margin-top: 10px"><?php echo Html::a("Medico : $resultado->nombre", Url::to(['medico/view' , 'id'=> $resultado->id ]))?></h3>
-                                </div>
-                                <?php
-                                    if (!empty($resultado->email))
-                                        echo "<strong> - Email: </strong>   $resultado->email";
-                                    if (!empty($resultado->telefono))
-                                        echo "<strong> - Telefono: </strong> $resultado->telefono";
-                                ?>
-                            </div>
-                <?php
-                        }else if ($resultado->className() === "app\models\Protocolo") {
-                ?>
-                            <div class="box box-info box-header search_strong" style="padding-top: 0px" >
-                                <div class="">
-                                    <h3 style="margin-top: 10px"><?php echo Html::a("Protocolo: $resultado->codigo", Url::to(['protocolo/view' , 'id'=> $resultado->id ]))?></h3>
-                                </div>
-                                <p><?php echo $resultado->observaciones  ?></p>
-                            </div>
-                <?php
-                        }
-                    }
-                ?>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-    </div>
-</section>
-<?php Pjax::end(); ?>
+</div>
 
 

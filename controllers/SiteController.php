@@ -6,6 +6,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Paciente;
@@ -199,11 +200,13 @@ class SiteController extends Controller
     public function actionSearch(){
         $searchFeld = Yii::$app->request->post('q');
         $response = $this->searchAll($searchFeld);
-        return $this->render('search', $response);
+        $html = $this->renderAjax('resultadosBusqueda', $response);
+        return $this->render('search', ['html' => $html] );
     }
     
     public function actionFiltrarBusqueda(){
         $textoIngresado = 0;
+        $informes = 0;
         $fecha = 0;
         $entidad = 0;
         $tipoDeEstudio = 0;
@@ -231,20 +234,30 @@ class SiteController extends Controller
             if (!empty(Yii::$app->request->post('tipoInforme'))){
                 $tipoDeEstudio =  Yii::$app->request->post('tipoInforme');
             }
-            
+            $query = [];
             if (!empty($entidad)){
-                if ($entidad = self::ID_ENTIDAD_TODAS){
+                if ($entidad == self::ID_ENTIDAD_TODAS){
                     $info = $this->searchAll($textoIngresado);
-                }elseif ($entidad = self::ID_ENTIDAD_PACIENTES){
-                    $info = Paciente::find()->where(['LIKE', 'nombre', $textoIngresado])->all();
-                }elseif ($entidad = self::ID_ENTIDAD_PROTOCOLOS){
-                    $info = Protocolo::find()->where(['LIKE', 'observaciones', $textoIngresado])->all();
-                }elseif ($entidad = self::ID_ENTIDAD_MEDICOS){
-                    $info = Medico::find()->where(['LIKE', 'nombre', $textoIngresado])->all();
+                }elseif ($entidad == self::ID_ENTIDAD_PACIENTES){
+                    $info['resultados'] = Paciente::find()->where(['LIKE', 'nombre', $textoIngresado])->all();
+                    $info['field'] = $textoIngresado;
+                }elseif ($entidad == self::ID_ENTIDAD_PROTOCOLOS){
+                    $query = Protocolo::find()->where(['LIKE', 'observaciones', $textoIngresado])->all();
+                    /*$query = Protocolo::find()->select('id')->where(['LIKE', 'observaciones', $textoIngresado])->all();
+                    if (!empty($tipoDeEstudio)){
+                        $informes = Informe::find()->where(['in','protocolo_id',$query])->andFilterWhere(['estudio_id' => $tipoDeEstudio])->all();
+                    }
+                    $info['resultados'] = $informes;*/
+                    $info['resultados'] = $query;
+                    $info['field'] = $textoIngresado;
+                }elseif ($entidad == self::ID_ENTIDAD_MEDICOS){
+                    $info['resultados'] = Medico::find()->where(['LIKE', 'nombre', $textoIngresado])->all();
+                    $info['field'] = $textoIngresado;
                 }
             }
+            $html = $this->renderAjax('resultadosBusqueda', $info);
     
-            $response = ["result" => "ok", "mensaje" => "La busqueda se realizo correctamente", 'info' => $info ];
+            $response = ["result" => "ok", "mensaje" => "La busqueda se realizo correctamente", 'info' => $html ];
             
         }catch (Exception $e){
             $response = ["result" => "error", "mensaje" => "Se encontro un error durante el proceso"];

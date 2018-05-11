@@ -207,13 +207,12 @@
         });  //Guardado de AutoTexto a partir de informe
 
     $("#idFile").on('fileuploaded', function(event) {
-        
         $.pjax.reload({container:"#galeriar"});
     });
 
     
     $(document).on('ready pjax:success', function () {
-
+        $('.change-estado').unbind();
         $('.change-estado').on('click', function () {
             var $estado = $(this).data('estado');
             var $informe = $(this).data('informe');

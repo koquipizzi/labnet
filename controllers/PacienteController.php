@@ -3,24 +3,26 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Paciente;
-use app\models\PacientePrestadora;
-use app\models\PacienteSearch;
+use yii\web;
+use yii\base\Model;
+use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
-use app\models\Localidad;
-use app\models\Protocolo;
-use app\models\TipoDocumento;
 use yii\helpers\ArrayHelper;
 use yii\data\ArrayDataProvider;
 use yii\db\Query;
 use app\models\PrestadoraTemp;
 use app\models\PrestadoratempSearch;
 use app\models\PacientePrestadoraSearch;
-use yii\data\ActiveDataProvider;
-use yii\web;
-use yii\base\Model;
+use app\models\Localidad;
+use app\models\Protocolo;
+use app\models\TipoDocumento;
+use app\models\Paciente;
+use app\models\PacientePrestadora;
+use app\models\PacienteSearch;
+
 
 /**
  * PacienteController implements the CRUD actions for Paciente model.
@@ -376,8 +378,6 @@ class PacienteController extends Controller
                 'pacientePrestadora'=> $pacientePrestadora,
                 'prestadoraTemp'=>$prestadoraTemp,
                 'PacientePrestadorasmultiple'=>(empty($PacientePrestadorasmultiple)) ? [new PacientePrestadora] : $PacientePrestadorasmultiple,
-
-            //    'tanda' => $tanda,
             ]);
     }
 }
@@ -413,11 +413,9 @@ class PacienteController extends Controller
                 'dataTipoDocumento'=> $dataTipoDocumento,
                 'pacientePrestadora'=> $pacientePrestadora,
                 'prestadoraTemp'=>$prestadoraTemp,
-            //    'tanda' => $tanda,
             ]);
         }
     }
-
 
     /**
      * Deletes an existing Paciente model.
@@ -425,17 +423,40 @@ class PacienteController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id){
+        $prestadoras = [];
         $response = [];
-        if ($this->findModel($id)->delete())
-            $response = ['rta'=>'ok', 'message'=>'Se elimino el paciente correctamente'];
-        else
-            $response = ['rta'=>'error', 'message'=>'No se pudo eliminar el paciente'];
+        try{
+            if (!empty($id)){
+                $pacientePrestadoras = PacientePrestadora::find()->select('id')->where(['paciente_id' => $id ])->all();
+                foreach ($pacientePrestadoras as $pacientePrestadora){
+                    $prestadoras[] = $pacientePrestadora->id;
+                }
+                $pacienteProtocolos = Protocolo::find()->where(['in','Paciente_prestadora_id' , $prestadoras])->all();
+                if (empty($pacienteProtocolos)){
+                    foreach ($prestadoras as $prestadora){
+                        $pp = PacientePrestadora::find()->where(['id' =>$prestadora ])->one();
+                        if (!$pp->delete()){
+                            throw new Exception('No se pudo eliminar la relacion Paciente - Prestadora');
+                        }
+                    }
+                    if ($this->findModel($id)->delete()){
+                        $response = ['rta'=>'ok', 'message'=>'Se elimino el paciente correctamente'];
+                    }else{
+                        throw new Exception('No se pudo borrar el paciente');
+                    }
+                }else{
+                    throw new Exception('El paciente tiene asociado al menos un protocolo');
+                }
+            }else{
+                throw new Exception('El id del paciente llego nulo');
+            }
+        }catch (Exception $e){
+            $response = ['rta'=>'error', 'message'=> $e->getMessage()];
+        }
         
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return $response;
-      
     }
 
     /**

@@ -12,6 +12,77 @@ BootboxAsset::register($this);
 $this->title = Yii::t('app', 'Pacientes');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<?php
+    $js = <<<JS
+    $('.deletePaciente').on('click',function() {
+         var ajaxurl = $(this).attr('value');
+         $.get( ajaxurl , function( data ) {
+                if (data.result == 'ok'){
+                        $.pjax.reload({container: '#pacientes'})
+                        var n = noty({
+                                text: data.message,
+                                type: 'success',
+                                class: 'animated pulse',
+                                layout: 'topRight',
+                                theme: 'relax',
+                                timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                force: false, // adds notification to the beginning of queue when set to true
+                                modal: false, // si pongo true me hace el efecto de pantalla gris
+                                killer : true,
+                        });
+                }else{
+                        var n = noty({
+                                text: data.message,
+                                type: 'alert',
+                                class: 'animated pulse',
+                                layout: 'topRight',
+                                theme: 'relax',
+                                timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                force: false, // adds notification to the beginning of queue when set to true
+                                modal: false, // si pongo true me hace el efecto de pantalla gris
+                                killer : true
+                        });
+                }
+        });
+    })
+    
+     $(document).on('ready pjax:success', function () {
+         $('.deletePaciente').on('click',function() {
+             var ajaxurl = $(this).attr('value');
+             $.get( ajaxurl , function( data ) {
+                 if (data.result == 'ok'){
+					 $.pjax.reload({container: '#pacientes'})
+                     var n = noty({
+                            text: data.message,
+                            type: 'success',
+                            class: 'animated pulse',
+                            layout: 'topRight',
+                            theme: 'relax',
+                            timeout: 3000, // delay for closing event. Set false for sticky notifications
+                            force: false, // adds notification to the beginning of queue when set to true
+                            modal: false, // si pongo true me hace el efecto de pantalla gris
+                            killer : true,
+                     });
+                 }else{
+                     var n = noty({
+                            text: data.message,
+                            type: 'alert',
+                            class: 'animated pulse',
+                            layout: 'topRight',
+                            theme: 'relax',
+                            timeout: 3000, // delay for closing event. Set false for sticky notifications
+                            force: false, // adds notification to the beginning of queue when set to true
+                            modal: false, // si pongo true me hace el efecto de pantalla gris
+                            killer : true
+                     });
+                 }
+            });
+         })
+     });
+JS;
+    $this->registerJs($js);
+
+?>
 <div class="header-content">
     <div class="pull-left">
         <h3 class="panel-title">Listado de <?= Html::encode($this->title) ?></h3>
@@ -22,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="clearfix"></div>
 </div>
 
-<?php Pjax::begin(['id'=>'pacientes', 'enablePushState' => FALSE]); ?>    
+<?php Pjax::begin(['id'=>'pacientes', 'enablePushState' => true]); ?>
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'options'=>array('class'=>'table table-striped table-lilac'),
@@ -50,8 +121,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn',
             'template' => '{view} {edit} {delete}',
             'buttons' => [
-
-            //view button
             'view' => function ($url, $model) {
                 return Html::a('<span class="fa fa-eye "></span>', $url, [
                             'title' => Yii::t('app', 'View'),
@@ -65,9 +134,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]);
             },
              'delete' => function ($url, $model) {
-                return Html::a('<span class="fa fa-trash"></span>', $url, [
+                return Html::a('<span class="fa fa-trash "></span>', null, [
                             'title' => Yii::t('app', 'Borrar'),
-                            'class'=>'btn btn-danger borrar btn-xs',   
+                            'class'=>'btn btn-danger borrar btn-xs deletePaciente',
                             'value'=>"$url",    
                 ]);
             },        
@@ -90,10 +159,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 <?php Pjax::end(); ?>
-
-
 <?php 
-    $this->registerJsFile('@web/assets/admin/js/cipat_modal_paciente.js',
-    ['depends' => [yii\web\AssetBundle::className()]]);
+    /*$this->registerJsFile('@web/assets/admin/js/cipat_modal_paciente.js',
+    ['depends' => [yii\web\AssetBundle::className()]]);*/
 ?>
 

@@ -30,8 +30,11 @@
                                            <?php
                                                 if (!empty($resultado->nro_documento))
                                                     echo "<strong> Nro de Documento: </strong>   $resultado->nro_documento";
-                                                if (!empty($resultado->fecha_nacimiento))
-                                                    echo "<strong> - Fecha de Nacimiento: </strong> $resultado->fecha_nacimiento";
+                                                if (!empty($resultado->fecha_nacimiento)){
+                                                    $fecha = new \DateTime($resultado->fecha_nacimiento);
+                                                    $fechaNacimiento = $fecha->format('d/m/y');
+                                                    echo "<strong> - Fecha de Nacimiento: </strong> $fechaNacimiento";
+                                                }
                                                 if (!empty($resultado->email))
                                                     echo "<strong> - Email: </strong>   $resultado->email";
                                                 if (!empty($resultado->telefono))

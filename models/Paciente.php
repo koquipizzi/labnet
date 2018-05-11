@@ -153,41 +153,5 @@ class Paciente extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Prestadoras::className(), ['id' => 'prestadora_id'])->viaTable('paciente_prestadora', ['paciente_id' => 'id']);
     }
-
-     public function afterSave($insert, $changedAttributes)
-    {
-//        $actualPrestadoras = [];
-//        $prestadoraExists = 0; //for updates
-//
-//        if (isset(Yii::$app->request->post('Paciente')['PrestadorasIds']))
-//            $nuevosPrestadoras  = Yii::$app->request->post('Paciente')['PrestadorasIds'];
-//        else $nuevosPrestadoras = [];
-//
-//        if (($actualPrestadoras = PacientePrestadora::find()
-//                ->andWhere("Paciente_id = $this->id")
-//                ->asArray()->all()) !== null)
-//                {
-//                    $actualPrestadoras = ArrayHelper::getColumn($actualPrestadoras, 'Prestadoras_id');
-//                    $prestadoraExists = 1; // if there is authors relations, we will work it latter
-//                 }
-//
-//        if ($prestadoraExists == 1) { //delete colecciones y acervo
-//            foreach ($actualPrestadoras as $remove) {
-//              $r = PacientePrestadora::findOne(['Prestadoras_id' => $remove, 'Paciente_id' => $this->id]);
-//              $r->delete();
-//            }
-//        }
-//
-//        if (!empty($nuevosPrestadoras)) { //save the relations
-//          foreach ($nuevosPrestadoras as $id) {
-//            //$actualTemas = array_diff($nuevosTemas, [$id]); //remove remaining authors from array
-//            $r = new PacientePrestadora();
-//            $r->Paciente_id = $this->id;
-//            $r->Prestadoras_id = $id;
-//            $r->save();
-//            }
-//        }
-
-
-    }
+    
 }

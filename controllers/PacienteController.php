@@ -427,16 +427,15 @@ class PacienteController extends Controller
      */
     public function actionDelete($id)
     {
-        if ($this->findModel($id)->delete()){
-             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                     return ['rta'=>'ok', 'message'=>''];die();
-        }
-        else {
-             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                     return ['rta'=>'error', 'message'=>''];die();
-        }
-
-      //  return $this->redirect(['index']);
+        $response = [];
+        if ($this->findModel($id)->delete())
+            $response = ['rta'=>'ok', 'message'=>'Se elimino el paciente correctamente'];
+        else
+            $response = ['rta'=>'error', 'message'=>'No se pudo eliminar el paciente'];
+        
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return $response;
+      
     }
 
     /**

@@ -193,10 +193,10 @@ class WorkflowController extends Controller
                         $historial->registrar($informe_id);
                     }
                     if (!empty($reponsable_id)){
-                        $response = ["result" => 'ok',"mensaje" => "Se cambio exitosamente el responsable del informe"];
+                        $response = ["result" => 'ok',"mensaje" => "Se cambió exitosamente el responsable del informe"];
                     }
                     if (!empty($nuevoEstado)){
-                        $response = ["result" => 'ok',"mensaje" => "Se cambio exitosamente el estado del informe"];
+                        $response = ["result" => 'ok',"mensaje" => "Se cambió exitosamente el estado del informe"];
                     }
                 } else {
                     $response = $WorkFlowModel->errors;

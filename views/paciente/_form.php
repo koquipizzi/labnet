@@ -16,6 +16,7 @@ use app\models\PacientePrestadoraSearch;
 use app\models\PacientePrestadora;
 use yii\data\ActiveDataProvider;
 use vova07\select2\Widget;
+use kartik\select2\Select2;
 use kartik\datecontrol\DateControl;
 use xj\bootbox\BootboxAsset;
 
@@ -303,7 +304,7 @@ $this->registerJs($js);
                                         <?php
                                            
                                                 $dataPrestadoras=ArrayHelper::map(app\models\Prestadoras::find()->where(['cobertura'=>1])->all(), 'id', 'descripcion');
-                                                echo $form->field($modelPrestadora, "[{$index}]Prestadoras_id", ['template' => "{label}
+                                               /* echo $form->field($modelPrestadora, "[{$index}]Prestadoras_id", ['template' => "{label}
                                                 <div class='col-md-8'>{input}</div>
                                                 {hint}
                                                 {error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
@@ -311,15 +312,28 @@ $this->registerJs($js);
                                                                                    ['onchange' => 'var $this=$(this);$.post("'.Yii::$app->urlManager->createUrl(["prestadoras/recargardropdown"]).'", function( data ) {
                                                                                      console.log($this);    
                                                                                      
-                                                                                       /*$this.siblings().find().remove(); */
+                                                                                       //$this.siblings().find().remove();
                                                                                        $this.empty();     
                                                                                               
                                                                                      $.each(data.data, function(id,descripcion){
                                                                                             $this.append("<option value="+id+">"+descripcion+"</option>");
                                                                                         });                                                                                                                                                                           
-                                                                                    })','class'=>'selectoProcedencia form-control','prompt' => ''])->error([ 'style' => ' margin-left: 35%;']);
-                                            
+                                                                                    })','class'=>'selectoProcedencia form-control','prompt' => ''])->error([ 'style' => ' margin-left: 35%;']); */
+    
+                                        echo $form->field($modelPrestadora, "[{$index}]Prestadoras_id", ['template' => "{label}
+                                                <div class='col-md-8'>{input}</div>
+                                                {hint}
+                                                {error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
+                                        ])->widget(select2::classname(), [
+                                                'data' => $dataPrestadoras ,
+                                                'language' => 'es',
+                                                'options' => ['placeholder' => 'Seleccione una prestadora...'],
+                                                'pluginOptions' => [
+                                                    'allowClear' => false
+                                                ]
+                                            ]);
                                         ?>
+                                   
                                 </div>
                             </div>
                         <?php endforeach; 

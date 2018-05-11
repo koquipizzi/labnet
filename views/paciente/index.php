@@ -47,8 +47,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'telefono',
             ],            
             'domicilio',
-            
-
             ['class' => 'yii\grid\ActionColumn',
             'template' => '{view} {edit} {delete}',
             'buttons' => [
@@ -67,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]);
             },
              'delete' => function ($url, $model) {
-                return Html::a('<span class="fa fa-trash"></span>', FALSE, [
+                return Html::a('<span class="fa fa-trash"></span>', $url, [
                             'title' => Yii::t('app', 'Borrar'),
                             'class'=>'btn btn-danger borrar btn-xs',   
                             'value'=>"$url",    
@@ -89,7 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             }
         ],
-         ],
+        ],
     ]); ?>
 <?php Pjax::end(); ?>
 

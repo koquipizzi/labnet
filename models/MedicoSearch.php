@@ -15,7 +15,9 @@ class MedicoSearch extends Medico
     /**
      * @inheritdoc
      */
-     public $especialidadTexto;
+    public $especialidadTexto;
+    public $localidad_nombre;
+    public $especialidad_nombre;
     public function rules()
     {
         return [
@@ -40,9 +42,11 @@ class MedicoSearch extends Medico
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params)                                                       
     {
-        $query = Medico::find();
+        $query = Medico::find()
+                                ->join('INNER JOIN','Especialidad','Especialidad.id = Medico.especialidad_id')
+                                ->join('INNER JOIN','Localidad','Localidad.id = Medico.localidad_id');
 
         // add conditions that should always apply here
 
@@ -54,6 +58,8 @@ class MedicoSearch extends Medico
                     'especialidad_id',
                     'Localidad_id',
                     'nombre',
+                    'Especialidad.nombre',
+                    'Localidad.nombre',
                     'domicilio',
                     'telefono',
                     'Email'
@@ -79,6 +85,8 @@ class MedicoSearch extends Medico
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'especialidad_id', $this->especialidad_id])
             ->andFilterWhere(['like', 'domicilio', $this->domicilio])
+            ->andFilterWhere(['like', 'Especialidad.nombre', $this->especialidad_nombre])
+            ->andFilterWhere(['like', 'Localidad.nombre', $this->localidad_nombre])
             ->andFilterWhere(['like', 'telefono', $this->telefono]);
 
         return $dataProvider;

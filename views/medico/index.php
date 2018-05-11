@@ -44,16 +44,21 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_medico.js', ['depends' =
             'email:email',
              [
                 'label' => 'Especialidad',
-                'attribute' => 'especialidad_id',
-                'value'=>'especialidadTexto',
+                'attribute' => 'Especialidad.nombre',
+                'value'=>'especialidadTexto',          
+                 'contentOptions' => ['style' => 'width:15%;'],
                 'filter' => Html::activeDropDownList($searchModel, 'especialidad_id', ArrayHelper::map(Especialidad::find()->asArray()->all(), 'id', 'nombre'),['class'=>'form-control','prompt' => 'Especialidad...']),
                 
             ],
-            'domicilio',
+            [
+                'attribute' => 'domicilio',
+                'contentOptions' => ['style' => 'width:12%;'],
+            ],
             [
                 'label' => 'Localidad',
-                'attribute' => 'Localidad_id',
+                'attribute' => 'Localidad.nombre',
                 'value'=>'localidadTexto',
+                'contentOptions' => ['style' => 'width:12%;'],
                 'filter' => Html::activeDropDownList($searchModel, 'Localidad_id', ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre'),['class'=>'form-control','prompt' => 'Localidad...']),
                 
             ],

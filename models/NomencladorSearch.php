@@ -73,7 +73,6 @@ class NomencladorSearch extends Nomenclador
             'valor' => $this->valor,
             'Prestadoras_id' => $this->Prestadoras_id,
             'coseguro' => $this->coseguro,
-            'servicio'=> $this->servicio,
         ]);
 
         $query->andFilterWhere(['like', 'descripcion', $this->descripcion])

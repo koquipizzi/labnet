@@ -21,22 +21,26 @@ use kartik\datecontrol\DateControl;
 use xj\bootbox\BootboxAsset;
 
 use wbraganca\dynamicform\DynamicFormWidget;
-$js = '
-jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
-    jQuery(".dynamicform_wrapper .panel-title-address").each(function(index) {
-        jQuery(this).html("Prestadora: " + (index + 1))
-    });
-});
+$js = <<<JS
+       
+          jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
+                var linea = 0;
+                jQuery(".dynamicform_wrapper .panel-title-prestadora").each(function(index) {
+                    jQuery(this).html("Prestadora: " + (index + 1));
+                    linea = index;
+                });
+                var select0 = jQuery(item).find("#select2-"+linea+"-prestadoras_id").html("Seleccione una Prestadora...");
+                var begin = "prestadoradetalle-"+linea;
+                jQuery( "*[id^="+begin+"]" ).val( "" );
+          });
 
-jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
-    jQuery(".dynamicform_wrapper .panel-title-address").each(function(index) {
-        jQuery(this).html("Prestadora: " + (index + 1))
-    });
-});
-
-
-';
-
+          jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
+              jQuery(".dynamicform_wrapper .panel-title-prestadora").each(function(index) {
+                  jQuery(this).html("Prestadora: " + (index + 1))
+              });
+          });
+        
+JS;
 
 BootboxAsset::register($this);
 $this->registerJs($js);
@@ -46,69 +50,41 @@ $this->registerJs($js);
 
 ?>
 
-<?php
-    Modal::begin([
-            'id' => 'modalPaciente',
-           // 'size'=>'modal-lg',
-            'options' => ['tabindex' => false ],
-        ]);
-        echo "<div id='modalContent'></div>";
- Modal::end();
- Modal::begin([
-            'id' => 'modalPrestadoras',
-           // 'size'=>'modal-lg',
-            'options' => ['tabindex' => false ],
-        ]);
-        echo "<div id='divPrestadoras'></div>";
- Modal::end();
-?>
-<?= Html::csrfMetaTags() ?>
-  <?php /* \insolita\wgadminlte\LteBox::begin([
-             'type'=>\insolita\wgadminlte\LteConst::TYPE_INFO,
-             'isSolid'=>true,
-             'boxTools'=>'<button class="btn btn-success btn-xs create_button" ><i class="fa fa-plus-circle"></i> Add</button>',
-             'tooltip'=>'this tooltip description',
-             'title'=>'Manage users',
-             'footer'=>'total 44 active users',
-         ])?>
-        ANY BOX CONTENT HERE
-    <?php \insolita\wgadminlte\LteBox::end() */ ?>
-
     <?php
-   // if (isset())
-/* echo \insolita\wgadminlte\Alert::widget([
-              'type'=>\insolita\wgadminlte\LteConst::TYPE_SUCCESS,
-              'text'=>'Operation Complete',
-              'closable'=>true
-          ]);*/
+     Modal::begin([
+                'id' => 'modalPrestadoras',
+               // 'size'=>'modal-lg',
+                'options' => ['tabindex' => false ],
+            ]);
+            echo "<div id='divPrestadoras'></div>";
+     Modal::end();
     ?>
-
-<div class="paciente-form">
-   <?php
+    
+    <div class="paciente-form">
+    <?php
         $form = ActiveForm::begin(['id'=>'create-paciente-form'  ,
             'options' => [
                 'class' => 'form-horizontal mt-10',
                 'id' => 'create-paciente-form',
                 'enableAjaxValidation' => true,
-            //    'data-pjax' => '',
              ]
-        ]); ?>
+        ]);
+    ?>
     <div id="row">
         <div class="col-lg-6">
             <input type="hidden" id="PacienteId" value="<?= $model->id ?>">
-            <?= $form->field($model, 'nombre', ['template' => "{label}
+            <?=
+                $form->field($model, 'nombre', ['template' => "{label}
                 <div class='col-md-8'>{input}</div>
-                {hint}
-                {error}",
-                'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
-            ])->textInput(['maxlength' => true])->error([ 'style' => ' margin-left: 35%;']);?>
+                {hint}{error}", 'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
+                ])->textInput(['maxlength' => true])->error([ 'style' => ' margin-left: 35%;']);
+            ?>
             <?php
                 $dataTipo = ArrayHelper::map(TipoDocumento::find()->asArray()->all(), 'id', 'descripcion');
                 $paciente = $model->id;
                 echo $form->field($model, 'Tipo_documento_id', ['template' => "{label}
                 <div class='col-md-8'>{input}</div>
-                {hint}
-                {error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
+                {hint}{error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
                 ])->widget(Widget::className(), [
                                     'options' => [
                                         'multiple' => false,
@@ -119,7 +95,7 @@ $this->registerJs($js);
                                         'width' => '100%','text-align' => 'left'
                                     ],
                             ])->error([ 'style' => ' margin-left: 35%;']);;
-                ?>
+            ?>
             <?= $form->field($model, 'nro_documento', ['template' => "{label}
             <div class='col-md-8'>{input}</div>
             {hint}
@@ -264,9 +240,9 @@ $this->registerJs($js);
                     'model' => $PacientePrestadorasmultiple[0],
                     'formId' => 'create-paciente-form',
                     'formFields' => [
-                    'Paciente_id',
-                    'Prestadoras_id',
-                    'nro_afiliado',
+                        'Paciente_id',
+                        'Prestadoras_id',
+                        'nro_afiliado',
                     ],
                 ]); ?>
                 <div class="panel panel-default">
@@ -282,7 +258,7 @@ $this->registerJs($js);
                         <?php foreach ($PacientePrestadorasmultiple as $index => $modelPrestadora): ?>
                             <div class="item panel panel-default"><!-- widgetBody -->
                                 <div class="panel-heading">
-                                    <span class="panel-title-address">Prestadora: <?= ($index + 1) ?></span>
+                                    <span class="panel-title-prestadora">Prestadora: <?= ($index + 1) ?></span>
                                     <button type="button" class="pull-right remove-item btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
                                     <div class="clearfix"></div>
                                 </div>
@@ -294,46 +270,34 @@ $this->registerJs($js);
                                         }
                                     ?>
 
-                                        <?php echo $form->field($modelPrestadora, "[{$index}]nro_afiliado", ['template' => "{label}
+                                    <?php
+                                    
+                                        echo $form->field($modelPrestadora, "[{$index}]nro_afiliado", ['template' => "{label}
+                                            <div class='col-md-8'>{input}</div>
+                                            {hint}
+                                            {error}",
+                                            'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
+                                        ])->textInput(['maxlength' => true, 'class'=> $model->isNewRecord ? 'form-control crear':'form-control editar' ])
+                                    ?>
+                                    <?php
+                                       
+                                        $prestadoras = app\models\Prestadoras::find()->where(['cobertura'=>1])->all();
+                                        $dataPrestadoras = ArrayHelper::map($prestadoras, 'id', 'descripcion');
+
+                                        echo $form->field ($modelPrestadora, "[{$index}]Prestadoras_id", ['template' => "{label}
                                                 <div class='col-md-8'>{input}</div>
-                                                {hint}
-                                                {error}",
-                                                'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
-                                            ])->textInput(['maxlength' => true, 'class'=> $model->isNewRecord ? 'form-control crear':'form-control editar' ])
-                                        ?>
-                                        <?php
-                                           
-                                                $dataPrestadoras=ArrayHelper::map(app\models\Prestadoras::find()->where(['cobertura'=>1])->all(), 'id', 'descripcion');
-                                               /* echo $form->field($modelPrestadora, "[{$index}]Prestadoras_id", ['template' => "{label}
-                                                <div class='col-md-8'>{input}</div>
-                                                {hint}
-                                                {error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
-                                                ])->dropDownList( $dataPrestadoras,
-                                                                                   ['onchange' => 'var $this=$(this);$.post("'.Yii::$app->urlManager->createUrl(["prestadoras/recargardropdown"]).'", function( data ) {
-                                                                                     console.log($this);    
-                                                                                     
-                                                                                       //$this.siblings().find().remove();
-                                                                                       $this.empty();     
-                                                                                              
-                                                                                     $.each(data.data, function(id,descripcion){
-                                                                                            $this.append("<option value="+id+">"+descripcion+"</option>");
-                                                                                        });                                                                                                                                                                           
-                                                                                    })','class'=>'selectoProcedencia form-control','prompt' => ''])->error([ 'style' => ' margin-left: 35%;']); */
-    
-                                        echo $form->field($modelPrestadora, "[{$index}]Prestadoras_id", ['template' => "{label}
-                                                <div class='col-md-8'>{input}</div>
-                                                {hint}
-                                                {error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
-                                        ])->widget(select2::classname(), [
-                                                'data' => $dataPrestadoras ,
-                                                'language' => 'es',
-                                                'options' => ['placeholder' => 'Seleccione una prestadora...'],
-                                                'pluginOptions' => [
-                                                    'allowClear' => false
-                                                ]
-                                            ]);
-                                        ?>
-                                   
+                                                {hint} {error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]]
+                                        )->widget(Widget::className(), [
+                                            'options' => [
+                                                'multiple' => false,
+                                                'placeholder' => 'Choose item'
+                                            ],
+                                            'items' => $dataPrestadoras,
+                                            'settings' => [
+                                                'width' => '100%',
+                                            ],
+                                        ]);
+                                    ?>
                                 </div>
                             </div>
                         <?php endforeach; 

@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
             
             </div>
                 <div class="pull-right">
-                    <?= Html::a('<i class="fa fa-plus-circle"></i> Nuevo Protocolo', ['paciente/buscar'], ['class'=>'btn btn-success']) ?>
+                    <?= Html::a('<i class="fa fa-plus-circle"></i> Nuevo Protocolo', ['protocolo/protocolo'], ['class'=>'btn btn-success']) ?>
                     <?= Html::a('<i class="fa fa-star"></i> Asignados a mí', ['protocolo/asignados'], ['class'=>'btn btn-primary']) ?>
                     <?= Html::a('<i class="fa fa-pause-circle"></i> Pendientes', ['protocolo/'], ['class'=>'btn btn-primary']) ?>
                     <?= Html::a('<i class="fa fa-stop-circle"></i> Terminados', ['protocolo/terminados'], ['class'=>'btn btn-primary']) ?>

@@ -29,9 +29,9 @@ $js = <<<JS
                     jQuery(this).html("Prestadora: " + (index + 1));
                     linea = index;
                 });
-                var select0 = jQuery(item).find("#select2-"+linea+"-prestadoras_id").html("Seleccione una Prestadora...");
-                var begin = "prestadoradetalle-"+linea;
-                jQuery( "*[id^="+begin+"]" ).val( "" );
+                var select0 = jQuery(item).find("#pacienteprestadora-"+linea+"-prestadoras_id").html("Seleccione una Prestadora...");
+             //   var begin = "prestadoradetalle-"+linea;
+             //   jQuery( "*[id^="+begin+"]" ).val( "" );
           });
 
           jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
@@ -284,7 +284,7 @@ $this->registerJs($js);
                                         $prestadoras = app\models\Prestadoras::find()->where(['cobertura'=>1])->all();
                                         $dataPrestadoras = ArrayHelper::map($prestadoras, 'id', 'descripcion');
 
-                                        echo $form->field ($modelPrestadora, "[{$index}]Prestadoras_id", ['template' => "{label}
+                                  /*      echo $form->field ($modelPrestadora, "[{$index}]Prestadoras_id", ['template' => "{label}
                                                 <div class='col-md-8'>{input}</div>
                                                 {hint} {error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]]
                                         )->widget(Widget::className(), [
@@ -297,7 +297,41 @@ $this->registerJs($js);
                                                 'width' => '100%',
                                             ],
                                         ]);
+                                        */
+                                        
                                     ?>
+
+                                         <?php
+          
+                echo $form->field($modelPrestadora, "[{$index}]Prestadoras_id", ['template' => "{label}
+                <div class='col-md-8'>{input}</div>
+                {hint}{error}",  'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
+                ])->widget(Widget::className(), [
+                                    'options' => [
+                                        'multiple' => false,
+                                        'placeholder' => 'Choose item'
+                                    ],
+                                    'items' => $dataPrestadoras,
+                                    'settings' => [
+                                        'width' => '100%','text-align' => 'left'
+                                    ],
+                            ])->error([ 'style' => ' margin-left: 35%;']);;
+            ?>
+<?php   
+                                                   /*         echo $form->field($modelPrestadora, "[{$index}]Prestadoras_id", ['template' => "{label}
+                                                                    <div class='col-md-8'>{input}</div>
+                                                                    {hint}
+                                                                    {error}", 'labelOptions' => [ 'class' => 'col-md-4  control-label']
+                                                                ])->widget(select2::classname(), [
+                                                                    'data' => $dataPrestadoras,
+                                                                    'language' => 'es',
+                                                                    'options' => ['placeholder' => 'Pieza...'   
+                                                                    ],
+                                                                    'pluginOptions' => [
+                                                                        'allowClear' => false
+                                                                    ],]);
+                                                                    */
+                                                                 ?>
                                 </div>
                             </div>
                         <?php endforeach; 

@@ -537,23 +537,16 @@ class InformeController extends Controller {
 				}
 					
 			} else{//mail
+                $response = [];
 					if(!empty($modelp->pacienteMail)){	
 						if ($this->actionMailing($model)){
-					
-							if($estado_actual==5){//finalizado
-								return $this->redirect ( [ 
-											'//protocolo/terminados' 
-									] );
-							}else{
-								return $this->redirect ( [ 
-											'//protocolo/entregados' 
-									] );
-							}
+						    $response = ['rta'=>'ok', 'message'=>'Se envio el mail correctamente'];
 						}	
 					}else{
-						\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-						return ['rta'=>'error', 'message'=>'Error, el paciente no tiene mail.'];die();
-					}  	
+						 $response = ['rta'=>'error', 'message'=>'Error, el paciente no tiene mail.'];
+					}
+                \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return  $response;
 				}
 							
 		}   
@@ -604,11 +597,10 @@ class InformeController extends Controller {
 	
 	public function actionMailing($model=null,$estudio=null){
 		$laboratorio = Laboratorio::find()->where(['id' => 1])->one();
-		
-		if ($model) {
+		if (!empty($model)) {
 			$modelp = $model->protocolo;
-			if ( $modelp) {
-			
+			if (!empty( $modelp)) {
+
 					$estudio = $model->Estudio_id; 
 					switch ($estudio){
 						case \app\models\Estudio::getEstudioPap(): //pap
@@ -627,10 +619,6 @@ class InformeController extends Controller {
 							$vista = '_print_inf_mail';
 							break;
 					}
-
-
-
-							
 					$mpdf=new Pdf();
 					$pdf1 = new Pdf ( [
 							// 'mode' => Pdf::MODE_CORE,

@@ -11,6 +11,56 @@ $this->title = Yii::t('app', 'Estudios');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php
+    
+    $js = <<<JS
+
+            $('.sendMail').on('click',function() {
+                var ajaxurl = $(this).attr('value');
+                var n = noty({
+                                    text: 'Se esta procesando el envio de mail',
+                                    type: 'success',
+                                    class: 'animated pulse',
+                                    layout: 'topRight',
+                                    theme: 'relax',
+                                    timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                    force: false, // adds notification to the beginning of queue when set to true
+                                    modal: false, // si pongo true me hace el efecto de pantalla gris
+                                    killer : true,
+                });
+                
+                $.get( ajaxurl , function( data ) {
+                   
+                    if (data.rta == 'ok'){
+                            var n = noty({
+                                    text: data.message,
+                                    type: 'success',
+                                    class: 'animated pulse',
+                                    layout: 'topRight',
+                                    theme: 'relax',
+                                    timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                    force: false, // adds notification to the beginning of queue when set to true
+                                    modal: false, // si pongo true me hace el efecto de pantalla gris
+                                    killer : true,
+                            });
+                    }else{
+                          var n = noty({
+                                    text: data.message,
+                                    type: 'success',
+                                    class: 'animated pulse',
+                                    layout: 'topRight',
+                                    theme: 'relax',
+                                    timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                    force: false, // adds notification to the beginning of queue when set to true
+                                    modal: false, // si pongo true me hace el efecto de pantalla gris
+                                    killer : true,
+                            });
+                    }
+                });
+            });
+JS;
+
+    $this->registerJs($js);
+    
     Modal::begin([
             'id' => 'modal',
            // 'size'=>'modal-lg',
@@ -46,202 +96,149 @@ $this->params['breadcrumbs'][] = $this->title;
                 echo GridView::widget([
                      'dataProvider' => $dataProvider_entregados,
                      'options'=>array('class'=>'table table-striped table-lilac'),
-                                            'filterModel' => $searchModel,
-                                            'columns' =>    [
-                                                 [
-                                                    'label' => 'Entrada',
-                                                    'attribute' => 'fecha_entrada',
-                                                    'contentOptions' => ['style' => 'width:8%;'],
-                                                    'format' => ['date', 'php:d/m/Y'],
-                                                    'filter' => DateRangePicker::widget([
-                                                    'template' => '
-                                                            <div class="input-group">
-                                                                <span class="input-group-addon">
-                                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                                </span>
-                                                                {input}
-                                                            </div>
-                                                        ',
-                                                        'model' => $searchModel,
-                                                        'locale'    => 'es-ES',
-                                                        'attribute' => 'fecha_entrada',
-                                                        'pluginOptions' => [
-                                                            'locale'=>[
-                                                                'format'=>'DD/MM/YYYY',
-                                                                'separator'=>' - ',
-                                                                'applyLabel' => 'Seleccionar',
-                                                                'cancelLabel' => 'Cancelar',
-                                                            ],
-                                                            'autoUpdateInput' => false,
-                                                        ]
-                                                    ])
-                                                ],
-                                                [
-                                                    'label' => 'Nro Protocolo',
-                                                    'attribute' => 'codigo',
-                                                    'contentOptions' => ['style' => 'width:11%;'],
-                                                ],
-                                                [
-                                                    'label' => 'Paciente',
-                                                    'attribute'=>'nombre',
-                                                     'contentOptions' => ['style' => 'width:20%;'],
-                                                    'value'=>function ($model, $key, $index, $widget) {
-                                                        if(strlen($model["nombre"])>20){
-                                                            return substr($model["nombre"], 0, 14)."...";
-                                                        }  else {
-                                                               return $model["nombre"];
-                                                        }
-                                                    }
-                                                ],
-                                                [
-                                                    'attribute'=>'nro_documento',
-                                                    'contentOptions' => ['style' => 'width:6%;'],
-                                                ],
-                                                [
-                                                    'label' => 'Medico',
-                                                    'attribute'=>'nombre_medico',
-                                                    'contentOptions' => ['style' => 'width:20%;'],
-                                                ],                                                 
-                                                [
-                                                      'label' => 'Informes',
-                                                      'format' => 'raw',
-                                                      'contentOptions' => ['style' => 'width:20%;'],
-                                                      'value' => function ($model, $key, $index, $widget) {
-                                                        $estados = array(
-                                                                            "1" => "danger",
-                                                                            "2" => "default",
-                                                                            "3" => "success",
-                                                                            "4" => "warning",
-                                                                            "5" => "primary",
-                                                                            "6" => "info",
-                                                                            );
-                                                        $estadosLeyenda = array(
-                                                            "1" => "INFORME PENDIENTE",
-                                                            "2" => "INFORME DESCARTADO",
-                                                            "3" => "EN PROCESO",
-                                                            "4" => "INFORME PAUSADO",
-                                                            "5" => "FINALIZADO",
-                                                            "6" => "ENTREGADO",
-                                                        );
-                                                        $val = "";
-                                                        $idProtocolo = $model['id'];
-                                                        $informe = app\models\Informe::findOne($model['informe_id']);
-                                                        $estado = $informe->workflowLastState;
-                                                        $clase = " label-" . $estados[$estado];
-                                                        $informes = app\models\Informe::find()->where(['=', 'Informe.Protocolo_id', $idProtocolo])->all();
-                                                        $url = 'index.php?r=informe/update&id=' . $model['informe_id'];
-                                                        $val = $val . Html::a(Html::encode($model['nombre_estudio']), $url, [
-                                                                    'title' => "$estadosLeyenda[$estado]",
-                                                                    'class' => 'label ' . $clase . ' rounded protoClass2',
-                                                                    'value' => "$url",
-                                                                    'data-id' => $model['informe_id'],
-                                                                    'data-protocolo' => $model['id'],
-                                                        ]);
-                                                        $val = $val . "<br /><span></span>";
-                                                        return $val;
-                                                    },
-                                                  ],
-                                                [
-                                                    'label' => 'Acciones',
-                                                    'format' => 'raw',
-                                                    'contentOptions' => ['style' => 'width:20%;'],
-                                                    'value'=> function ($model) {
-                                                    //llevatr esto al metodo
+                        'filterModel' => $searchModel,
+                        'columns' => [
+                            [
+                                'label' => 'Entrada',
+                                'attribute' => 'fecha_entrada',
+                                'contentOptions' => ['style' => 'width:8%;'],
+                                'format' => ['date', 'php:d/m/Y'],
+                                'filter' => DateRangePicker::widget([
+                                    'template' => '
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                                {input}
+                                            </div>
+                                        ',
+                                    'model' => $searchModel,
+                                    'locale'    => 'es-ES',
+                                    'attribute' => 'fecha_entrada',
+                                    'pluginOptions' => [
+                                        'locale'=>[
+                                            'format'=>'DD/MM/YYYY',
+                                            'separator'=>' - ',
+                                            'applyLabel' => 'Seleccionar',
+                                            'cancelLabel' => 'Cancelar',
+                                        ],
+                                        'autoUpdateInput' => false,
+                                    ]
+                                ])
+                            ],
+                            [
+                                'label' => 'Nro Protocolo',
+                                'attribute' => 'codigo',
+                                'contentOptions' => ['style' => 'width:11%;'],
+                            ],
+                            [
+                                'label' => 'Paciente',
+                                'attribute'=>'nombre',
+                                 'contentOptions' => ['style' => 'width:20%;'],
+                                'value'=>function ($model, $key, $index, $widget) {
+                                    if(strlen($model["nombre"])>20){
+                                        return substr($model["nombre"], 0, 14)."...";
+                                    }  else {
+                                           return $model["nombre"];
+                                    }
+                                }
+                            ],
+                            [
+                                'attribute'=>'nro_documento',
+                                'contentOptions' => ['style' => 'width:6%;'],
+                            ],
+                            [
+                                'label' => 'Medico',
+                                'attribute'=>'nombre_medico',
+                                'contentOptions' => ['style' => 'width:20%;'],
+                            ],
+                            [
+                                'label' => 'Informes',
+                                'format' => 'raw',
+                                'contentOptions' => ['style' => 'width:20%;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $estados = ["1" => "danger", "2" => "default", "3" => "success", "4" => "warning", "5" => "primary", "6" => "info"];
+                                    $estadosLeyenda =[
+                                                        "1" => "INFORME PENDIENTE",
+                                                        "2" => "INFORME DESCARTADO",
+                                                        "3" => "EN PROCESO",
+                                                        "4" => "INFORME PAUSADO",
+                                                        "5" => "FINALIZADO",
+                                                        "6" => "ENTREGADO",
+                                                    ];
+                                    $val = "";
+                                    $idProtocolo = $model['id'];
+                                    $informe = app\models\Informe::findOne($model['informe_id']);
+                                    $estado = $informe->workflowLastState;
+                                    $clase = " label-" . $estados[$estado];
+                                    $informes = app\models\Informe::find()->where(['=', 'Informe.Protocolo_id', $idProtocolo])->all();
+                                    $url = Url::to(['informe/update', 'id' => $model['informe_id']]);
+                                    $val = $val . Html::a(Html::encode($model['nombre_estudio']), $url, [
+                                                'title' => "$estadosLeyenda[$estado]",
+                                                'class' => 'label ' . $clase . ' rounded protoClass2',
+                                                'value' => "$url",
+                                                'data-id' => $model['informe_id'],
+                                                'data-protocolo' => $model['id'],
+                                    ]);
+                                    $val = $val . "<br /><span></span>";
+                                    return $val;
+                                },
+                            ],
+                            [
+                                'label' => 'Acciones',
+                                'format' => 'raw',
+                                'contentOptions' => ['style' => 'width:20%;'],
+                                'value'=> function ($model) {
 
-                                                                $data = $model['informe_id'];
-                                                                //urls acciones
-                                                                $url ='index.php?r=informe/entregar&accion=mail&id='.$model['informe_id'];
-                                                                $urlPrint ='index.php?r=informe/entregar&accion=print&estudio='.$model['Estudio_id'].'&id='.$model['informe_id'];
-                                                                $urlPublicar ='index.php?r=informe/entregar&accion=publicar&id='.$model['informe_id'];
-                                                                $urlVer ='index.php?r=informe/view&id='.$model['informe_id'];
-                                                                $urlEditar ='index.php?r=informe/update&id='.$model['informe_id'];
-
-                                                                return Html::a("<i class='fa fa-print'></i>",$urlPrint,[
-                                                                    'title' => Yii::t('app', 'Descargar/imprimir'),
-                                                                    'class'=>'btn btn-primary btn-xs',
-                                                                    'value'=> "$urlPrint",
-                                                                    'data-id'=> "$data",
-                                                                    'data-protocolo'=> "$data",
-                                                                    'target'=>'_blank',
-                                                                    'data-pjax' => 0                                                                    
-                                                                ])." ".Html::a("<i class='fa fa-envelope'></i>",$url,[
-                                                                    'title' => Yii::t('app', 'Enviar por Mail'),
-                                                                    'class'=>'btn btn-primary btn-xs finalizado ',
-                                                                    'value'=> "$url",
-                                                                    'data-id'=> "$data",
-                                                                    'data-protocolo'=> "$data",
-                                                                ])
-                                                                . " ".Html::a("<i class='fa fa-cloud-upload'></i>",$urlPublicar,[
-                                                                    'title' => Yii::t('app', 'Publicar en WEB'),
-                                                                    'class'=>'btn btn-primary btn-xs ',
-                                                                    'value'=> "$urlPublicar",
-                                                                    'data-id'=> "$data",
-                                                                    'data-protocolo'=> "$data",
-                                                                ])
-                                                                ." ". Html::a("<i class='fa fa-eye'></i>",$urlVer,[
-                                                                    'title' => Yii::t('app', 'Ver'),
-                                                                    'class'=>'btn btn-primary btn-xs ',
-                                                                    'value'=> "$urlVer",
-                                                                    'data-id'=> "$data",
-                                                                    'data-protocolo'=> "$data",
-                                                                ])
-                                                                . " ".Html::a("<i class='fa fa-pencil'></i>",$urlEditar,[
-                                                                    'title' => Yii::t('app', 'Editar'),
-                                                                    'class'=>'btn btn-primary btn-xs',
-                                                                    'value'=> "$urlEditar",
-                                                                    'data-id'=> "$data",
-                                                                    'data-protocolo'=> "$data",
-                                                                ]);
-
-
-                                                    },
-                                                 ],
-                                                     /*    ['class' => 'yii\grid\ActionColumn',
-                                                        'template' => '{view}{edit}',
-                                                        'buttons' => [
-
-                                                        //view button
-
-                                                        'view' => function ($url, $model) {
-                                                        if(Helper::checkRoute(substr($url, 12, 12))){
-                                                                    return Html::a('<span class="fa fa-eye "></span>', FALSE, [
-                                                                                'title' => Yii::t('app', 'View'),
-                                                                                'class'=>'btn btn-success ver btn-xs',
-                                                                                'value'=> "$url",
-                                                                    ]);
-                                                            }
-
-                                                        },
-                                                         'edit' => function ($url, $model) {
-                                                            if(Helper::checkRoute(substr($url, 12, 12))){
-                                                                return Html::a('<span class="fa fa-pencil"></span>', FALSE, [
-                                                                            'title' => Yii::t('app', 'Editar'),
-                                                                            'class'=>'btn btn-info btn-xs editar',
-                                                                            'value'=> "$url",
-                                                                        ]);
-
-                                                            }
-                                                        },
-
-                                                    ],
-                                                    'urlCreator' => function ($action, $model, $key, $index) {
-                                                        if ($action === 'view') {
-                                                            $url ='index.php?r=informe/view&id='.$model['informe_id'];
-                                                            return $url;
-                                                            }
-                                                        if ($action === 'edit') {
-                                                            $url ='index.php?r=informe/update&id='.$model['informe_id'];
-                                                            return $url;
-                                                            }
-
-                                                        }
-                                                    ]   */
-
-                                                ]
-                                        ]);
-                                    ?>
-                <?php //Pjax::end() ?>
-
+                                    $data = $model['informe_id'];
+                                    //urls acciones
+                                    $url = Url::to(['informe/entregar', 'accion' => 'mail', 'id' => $data]);
+                                    $urlPrint = Url::to(['informe/entregar', 'accion' => 'print', 'id' => $data]);
+                                    $urlPublicar = Url::to(['informe/entregar', 'accion' => 'publicar', 'id' => $data]);
+                                    $urlVer = Url::to(['informe/view',  'id' => $data]);
+                                    $urlEditar = Url::to(['informe/update', 'id' => $data]);
+                                    
+                                    return Html::a("<i class='fa fa-print'></i>",$urlPrint,[
+                                        'title' => Yii::t('app', 'Descargar/imprimir'),
+                                        'class'=>'btn btn-primary btn-xs',
+                                        'value'=> "$urlPrint",
+                                        'data-id'=> "$data",
+                                        'data-protocolo'=> "$data",
+                                        'target'=>'_blank',
+                                        'data-pjax' => 0
+                                    ])." ".Html::a("<i class='fa fa-envelope '></i>",null,[
+                                        'title' => Yii::t('app', 'Enviar por Mail'),
+                                        'class'=>'btn btn-primary btn-xs finalizado sendMail ',
+                                        'value'=> "$url",
+                                        'data-id'=> "$data",
+                                        'data-protocolo'=> "$data",
+                                    ])
+                                    . " ".Html::a("<i class='fa fa-cloud-upload'></i>",$urlPublicar,[
+                                        'title' => Yii::t('app', 'Publicar en WEB'),
+                                        'class'=>'btn btn-primary btn-xs ',
+                                        'value'=> "$urlPublicar",
+                                        'data-id'=> "$data",
+                                        'data-protocolo'=> "$data",
+                                    ])
+                                    ." ". Html::a("<i class='fa fa-eye'></i>",$urlVer,[
+                                        'title' => Yii::t('app', 'Ver'),
+                                        'class'=>'btn btn-primary btn-xs ',
+                                        'value'=> "$urlVer",
+                                        'data-id'=> "$data",
+                                        'data-protocolo'=> "$data",
+                                    ])
+                                    . " ".Html::a("<i class='fa fa-pencil'></i>",$urlEditar,[
+                                        'title' => Yii::t('app', 'Editar'),
+                                        'class'=>'btn btn-primary btn-xs',
+                                        'value'=> "$urlEditar",
+                                        'data-id'=> "$data",
+                                        'data-protocolo'=> "$data",
+                                    ]);
+                                },
+                            ],
+                        ]
+                     ]);
+                ?>
             </div>
             </p>
 <style>

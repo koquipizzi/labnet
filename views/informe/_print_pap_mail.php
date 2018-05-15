@@ -85,7 +85,7 @@ table.pap_desc {
                         </tr>
                     </table>
                 </td>
-                <td width="400px" style="padding-top: 180px; margin-left: 20px; float: right;">
+                <td width="400px" style="padding-top: 0px; margin-left: 20px; float: right;">
                     <table class="header_pap">
                         <tr>
                             <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PROTOCOLO</td><td><?php echo $modelp->codigo; ?> </td>

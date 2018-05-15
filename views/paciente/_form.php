@@ -57,7 +57,7 @@ $this->registerJs($js);
     <?php
      Modal::begin([
                 'id' => 'modalPrestadoras',
-               // 'size'=>'modal-lg',
+                'header' => '<h4 style="margin-top: 0px;margin-bottom: 0px;">Nueva Cobertura/OS</h4>',
                 'options' => ['tabindex' => false ],
             ]);
             echo "<div id='divPrestadoras'></div>";

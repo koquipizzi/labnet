@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="box box-info">
     <div class="box-header">
-        <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+       
     </div>
     
     <?php $form = ActiveForm::begin([
@@ -59,15 +59,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 'template' => "{label} <div class='col-md-7'>{input}</div> {hint} {error}",
                                                 'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
                                             ])->widget(Widget::className(), [
-                                                                                'options' => [
-                                                                                    'multiple' => false,
-                                                                                    'placeholder' => 'Choose item'
-                                                                                ],
-                                                                                'items' => ['1' => 'Si', '0' => 'No'],
-                                                                                'settings' => [
-                                                                                    'width' => '100%',
-                                                                                ],
-                                                                            ]);
+                                                                            'options' => [
+                                                                                'multiple' => false,
+                                                                                'placeholder' => 'Choose item'
+                                                                            ],
+                                                                            'items' => ['1' => 'Si', '0' => 'No'],
+                                                                            'settings' => [
+                                                                                'width' => '100%',
+                                                                            ],
+                                                                        ]);
     ?>
     
     <?= $form->field($model, 'notas',   [

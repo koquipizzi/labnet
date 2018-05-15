@@ -22,23 +22,27 @@ use xj\bootbox\BootboxAsset;
 
 use wbraganca\dynamicform\DynamicFormWidget;
 $js = <<<JS
-       
-          jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
-                var linea = 0;
-                jQuery(".dynamicform_wrapper .panel-title-prestadora").each(function(index) {
-                    jQuery(this).html("Prestadora: " + (index + 1));
-                    linea = index;
-                });
-                var select0 = jQuery(item).find("#select2-"+linea+"-prestadoras_id").html("Seleccione una Prestadora...");
-                var begin = "prestadoradetalle-"+linea;
-                jQuery( "*[id^="+begin+"]" ).val( "" );
-          });
 
-          jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
-              jQuery(".dynamicform_wrapper .panel-title-prestadora").each(function(index) {
-                  jQuery(this).html("Prestadora: " + (index + 1))
-              });
-          });
+        $('#modalPrestadoras').on('hidden.bs.modal', function () {
+            $.pjax.reload({container:"#pjax_prestadoras"});
+        })
+       
+        jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
+            var linea = 0;
+            jQuery(".dynamicform_wrapper .panel-title-prestadora").each(function(index) {
+                jQuery(this).html("Prestadora: " + (index + 1));
+                linea = index;
+            });
+            var select0 = jQuery(item).find("#select2-"+linea+"-prestadoras_id").html("Seleccione una Prestadora...");
+            var begin = "prestadoradetalle-"+linea;
+            jQuery( "*[id^="+begin+"]" ).val( "" );
+        });
+        
+        jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
+            jQuery(".dynamicform_wrapper .panel-title-prestadora").each(function(index) {
+              jQuery(this).html("Prestadora: " + (index + 1))
+            });
+        });
         
 JS;
 
@@ -228,23 +232,24 @@ $this->registerJs($js);
                     <div class="line line-dashed"></div>
                 </div>
                 <?php
-                
-                 DynamicFormWidget::begin([
-                    'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
-                    'widgetBody' => '.container-items', // required: css class selector
-                    'widgetItem' => '.item', // required: css class
-                    'limit' => 100, // the maximum times, an element can be cloned (default 999)
-                    'min' => 1, // 0 or 1 (default 1)
-                    'insertButton' => '.add-item', // css class
-                    'deleteButton' => '.remove-item', // css class
-                    'model' => $PacientePrestadorasmultiple[0],
-                    'formId' => 'create-paciente-form',
-                    'formFields' => [
-                        'Paciente_id',
-                        'Prestadoras_id',
-                        'nro_afiliado',
-                    ],
-                ]); ?>
+                    Pjax::begin(['id' => 'pjax_prestadoras']);
+                    DynamicFormWidget::begin([
+                        'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                        'widgetBody' => '.container-items', // required: css class selector
+                        'widgetItem' => '.item', // required: css class
+                        'limit' => 100, // the maximum times, an element can be cloned (default 999)
+                        'min' => 1, // 0 or 1 (default 1)
+                        'insertButton' => '.add-item', // css class
+                        'deleteButton' => '.remove-item', // css class
+                        'model' => $PacientePrestadorasmultiple[0],
+                        'formId' => 'create-paciente-form',
+                        'formFields' => [
+                            'Paciente_id',
+                            'Prestadoras_id',
+                            'nro_afiliado',
+                        ],
+                    ]);
+                ?>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         Prestadoras
@@ -279,6 +284,7 @@ $this->registerJs($js);
                                             'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
                                         ])->textInput(['maxlength' => true, 'class'=> $model->isNewRecord ? 'form-control crear':'form-control editar' ])
                                     ?>
+                                    
                                     <?php
                                        
                                         $prestadoras = app\models\Prestadoras::find()->where(['cobertura'=>1])->all();
@@ -306,7 +312,10 @@ $this->registerJs($js);
                         
                     </div>
                 </div>
-                <?php DynamicFormWidget::end(); ?>
+                <?php
+                    DynamicFormWidget::end();
+                    Pjax::end();
+                ?>
             </div>
         </div>
 

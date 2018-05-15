@@ -232,7 +232,7 @@ $this->registerJs($js);
                     <div class="line line-dashed"></div>
                 </div>
                 <?php
-                    Pjax::begin(['id' => 'pjax_prestadoras']);
+                   
                     DynamicFormWidget::begin([
                         'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                         'widgetBody' => '.container-items', // required: css class selector
@@ -259,7 +259,7 @@ $this->registerJs($js);
                         <div class="clearfix"></div>
                     </div>
                     <div class="panel-body container-items"><!-- widgetContainer -->
-                    
+                        <?php  Pjax::begin(['id' => 'pjax_prestadoras']); ?>
                         <?php foreach ($PacientePrestadorasmultiple as $index => $modelPrestadora): ?>
                             <div class="item panel panel-default"><!-- widgetBody -->
                                 <div class="panel-heading">
@@ -306,15 +306,15 @@ $this->registerJs($js);
                                     ?>
                                 </div>
                             </div>
-                        <?php endforeach; 
-                       
+                        <?php endforeach;
+                            Pjax::end();
                          ?>
                         
                     </div>
                 </div>
                 <?php
                     DynamicFormWidget::end();
-                    Pjax::end();
+                    
                 ?>
             </div>
         </div>

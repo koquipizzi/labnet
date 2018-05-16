@@ -117,6 +117,16 @@ $config = [
             'errorHandler' => [
                 'errorAction' => 'site/error',
             ],
+            'assetManager' => [
+                'bundles' => [
+                    'wbraganca\dynamicform\DynamicFormAsset' => [
+                        'sourcePath' => '@app/web/js',
+                        'js' => [
+                            'yii2-dynamic-form.js'
+                        ],
+                    ],
+                ],
+            ],
             'mailer' => [
                 'class' => 'yii\swiftmailer\Mailer',
                 // send all mails to a file by default. You have to set

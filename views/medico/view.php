@@ -1,6 +1,8 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+    use yii\grid\GridView;
+    use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Medico */
@@ -35,13 +37,56 @@ $this->params['breadcrumbs'][] = $this->title;
                              ]
                      ])
         ?>
+
+<div class="box-body">
+
+    <h3> Informes Pedidos por el Medico </h3>
+    
+    <?php
+        $sqlDataProvider = $model->getInformes();
+        echo GridView::widget([
+            'dataProvider' => $sqlDataProvider,
+            'layout' => '{items}{pager}',
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'attribute' => 'codigo_protocolo',
+                    'format' => 'raw',
+                    'value'=>function ($data) {
+                        return Html::a(Html::encode($data['codigo_protocolo']),Url::to(["protocolo/view/", 'id' => $data['protocolo_id']]));
+                    },
+                ],
+                [
+                    'attribute' => 'tipo_estudio',
+                    'contentOptions' => ['style' => 'width:8%;'],
+                    'format' => 'raw',
+                    'value'=>function ($data) {
+                        return Html::a(Html::encode($data['tipo_estudio']),Url::to(["informe/update/", 'id' => $data['informe_id']]));
+                    },
+                ],
+                [
+                    'attribute' => 'fecha_protocolo',
+                    'contentOptions' => ['style' => 'width:8%;'],
+                    'format' => ['date', 'php:d/m/Y'],
+                ],
+                [
+                    'attribute' => 'medico_nombre',
+                    'format' => 'raw',
+                    'value'=>function ($data) {
+                        if (!empty($data['medico_id'])){
+                            return Html::a(Html::encode($data['medico_nombre']),Url::to(["medico/view/", 'id' => $data['medico_id']]));
+                        }else{
+                            return Html::encode($data['medico_nombre']);
+                        }
+                        
+                    },
+                ],
+                [
+                    'attribute' => 'observaciones_administrativas'
+                ]
+            ]
+        
+        ]);
+    ?>
 </div>
-
-
-
-
-    <!--div class="form-footer">
-        <div style="text-align: right;">
-        <button type="button" class="btn btn-teal" data-dismiss="modal">Cerrar</button>
-        </div>
-    </div-->
+</div>

@@ -2,6 +2,8 @@
 
 namespace app\models;
 use yii\helpers\ArrayHelper;
+use yii\data\ActiveDataProvider;
+use yii\data\SqlDataProvider;
 use Empathy\Validators\DateTimeCompareValidator;
 use Yii;
 
@@ -91,8 +93,7 @@ class Paciente extends \yii\db\ActiveRecord
             $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
             return $nuevafecha;
     }
-
-
+    
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -141,17 +142,66 @@ class Paciente extends \yii\db\ActiveRecord
     }
 
     // You will need a getter for the current set o Acervo in this Tema
-    public function getPrestadorasIds()
-    {
-       // $data = PacientePrestadora::find()->asArray()->all()
+    public function getPrestadorasIds(){
           $data =  \yii\helpers\ArrayHelper::getColumn(
           PacientePrestadora::find()->asArray()->all(), 'Prestadoras_id');
           return $data;
     }
 
-    public function getPrestadoras()
-    {
+    public function getPrestadoras(){
         return $this->hasMany(Prestadoras::className(), ['id' => 'prestadora_id'])->viaTable('paciente_prestadora', ['paciente_id' => 'id']);
+    }
+    
+    public function getInformes(){
+        $query = "SELECT
+                           Estudio.nombre as tipo_estudio
+                          ,Protocolo.codigo as codigo_protocolo
+                          ,Protocolo.fecha_entrada as fecha_protocolo
+                          ,Medico.nombre as medico_nombre
+                          ,Medico.id as medico_id
+                          ,Protocolo.id as protocolo_id
+                          ,Informe.id as informe_id
+                          ,Protocolo.observaciones as observaciones_administrativas
+                    FROM Informe
+                    JOIN Estudio  on (Estudio.id = Informe.Estudio_id)
+                    JOIN Protocolo ON (Informe.Protocolo_id = Protocolo.id)
+                    JOIN Paciente_prestadora ON (Paciente_prestadora.id = Protocolo.Paciente_prestadora_id)
+                    JOIN Medico on (Medico.id = Protocolo.Medico_id)
+                    WHERE Paciente_prestadora.Paciente_id = {$this->id}";
+        
+        $count = \Yii::$app->db->createCommand("
+                                                    SELECT  count(Estudio.nombre)
+                                                    FROM Informe
+                                                    JOIN Estudio  on (Estudio.id = Informe.Estudio_id)
+                                                    JOIN Protocolo ON (Informe.Protocolo_id = Protocolo.id)
+                                                    JOIN Paciente_prestadora ON (Paciente_prestadora.id = Protocolo.Paciente_prestadora_id)
+                                                    JOIN Medico on (Medico.id = Protocolo.Medico_id)
+                                                    WHERE Paciente_prestadora.Paciente_id = {$this->id}
+                                                ")->queryAll();
+    
+        $dataProvider = new SqlDataProvider([
+            'sql' => $query,
+            'totalCount' => $count,
+            'sort' => [
+                'attributes' => [
+                    'tipo_estudio' => [
+                        'default' => SORT_DESC,
+                    ],
+                    'codigo_protocolo' => [
+                        'default' => SORT_DESC,
+                    ],
+                    'fecha_protocolo' => [
+                        'default' => SORT_DESC,
+                    ],
+                    'medico_nombre' => [
+                        'default' => SORT_DESC,
+                    ],
+                ],
+            ],
+            'pagination' => ['pageSize' => 10],
+        ]);
+        
+        return $dataProvider;
     }
     
 }

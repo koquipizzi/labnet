@@ -126,7 +126,7 @@ use app\models\Prestadoras;
                           ])->widget(select2::classname(), [
                       'data' => $data,
                       'language'=>'es',
-                      'options' => ['placeholder' => 'Seleccione Dni, Cobertura, Nro_Afiliado ...'],
+                      'options' => ['placeholder' => 'Seleccione DNI, Cobertura, Nro_Afiliado ...'],
                       'pluginOptions' => [
                           'allowClear' => false
                           ],

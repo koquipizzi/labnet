@@ -67,8 +67,10 @@ JS;
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
                         [
+                            'label' => 'Código Protocolo',
                             'attribute' => 'codigo_protocolo',
                             'format' => 'raw',
+                            'contentOptions' => ['style' => 'width:12%;'],
                             'value'=>function ($data) {
                                 return Html::a(Html::encode($data['codigo_protocolo']),Url::to(["protocolo/view/", 'id' => $data['protocolo_id']]));
                             },
@@ -87,6 +89,7 @@ JS;
                             'format' => ['date', 'php:d/m/Y'],
                         ],
                         [
+                            'label' => 'Médico Nombre',
                             'attribute' => 'medico_nombre',
                             'format' => 'raw',
                             'value'=>function ($data) {

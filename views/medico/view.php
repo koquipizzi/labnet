@@ -50,8 +50,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 [
+                    'label' => 'Código Protocolo',
                     'attribute' => 'codigo_protocolo',
                     'format' => 'raw',
+                    'contentOptions' => ['style' => 'width:12%;'],
                     'value'=>function ($data) {
                         return Html::a(Html::encode($data['codigo_protocolo']),Url::to(["protocolo/view/", 'id' => $data['protocolo_id']]));
                     },
@@ -70,13 +72,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => ['date', 'php:d/m/Y'],
                 ],
                 [
-                    'attribute' => 'medico_nombre',
+                    'attribute' => 'paciente_nombre',
                     'format' => 'raw',
+                    'contentOptions' => ['style' => 'width:22%;'],
                     'value'=>function ($data) {
-                        if (!empty($data['medico_id'])){
-                            return Html::a(Html::encode($data['medico_nombre']),Url::to(["medico/view/", 'id' => $data['medico_id']]));
+                        if (!empty($data['paciente_id'])){
+                            return Html::a(Html::encode($data['paciente_nombre']),Url::to(["paciente/view/", 'id' => $data['paciente_id']]));
                         }else{
-                            return Html::encode($data['medico_nombre']);
+                            return Html::encode($data['paciente_nombre']);
                         }
                         
                     },

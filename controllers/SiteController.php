@@ -201,7 +201,7 @@ class SiteController extends Controller
         $searchFeld = Yii::$app->request->post('q');
         $response = $this->searchAll($searchFeld);
         $html = $this->renderAjax('resultadosBusqueda', $response);
-        return $this->render('search', ['html' => $html] );
+        return $this->render('search', ['html' => $html, 'searchFeld' => $searchFeld] );
     }
     
     public function actionFiltrarBusqueda(){

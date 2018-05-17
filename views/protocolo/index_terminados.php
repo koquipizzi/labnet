@@ -12,19 +12,65 @@ BootboxAsset::register($this);
 $this->title = Yii::t('app', 'Estudios');
 $this->params['breadcrumbs'][] = $this->title;
 
-$js = '
-$( document ).ready(function() {
-    $(".printClass").click(function() {       
-         setTimeout(reload, 2000);
-    });
-    function reload(){
-    $.pjax.reload({container:"#terminados"});
-    } 
- });
-';
-$this->registerJs($js);    
- 
+    $js = <<<JS
+          $( document ).ready(function() {
+            $(".printClass").click(function() {
+                 setTimeout(reload, 2000);
+            });
+            function reload(){
+            $.pjax.reload({container:"#terminados"});
+            }
+         });
+JS;
+    
+    $js2 = <<<JS
 
+            $('.sendMail').on('click',function() {
+                var ajaxurl = $(this).attr('value');
+                var n = noty({
+                                    text: 'Se esta procesando el envio de mail',
+                                    type: 'success',
+                                    class: 'animated pulse',
+                                    layout: 'topRight',
+                                    theme: 'relax',
+                                    timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                    force: false, // adds notification to the beginning of queue when set to true
+                                    modal: false, // si pongo true me hace el efecto de pantalla gris
+                                    killer : true,
+                });
+                
+                $.get( ajaxurl , function( data ) {
+                   
+                    if (data.rta == 'ok'){
+                            var n = noty({
+                                    text: data.message,
+                                    type: 'success',
+                                    class: 'animated pulse',
+                                    layout: 'topRight',
+                                    theme: 'relax',
+                                    timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                    force: false, // adds notification to the beginning of queue when set to true
+                                    modal: false, // si pongo true me hace el efecto de pantalla gris
+                                    killer : true,
+                            });
+                    }else{
+                          var n = noty({
+                                    text: data.message,
+                                    type: 'success',
+                                    class: 'animated pulse',
+                                    layout: 'topRight',
+                                    theme: 'relax',
+                                    timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                    force: false, // adds notification to the beginning of queue when set to true
+                                    modal: false, // si pongo true me hace el efecto de pantalla gris
+                                    killer : true,
+                            });
+                    }
+                });
+            });
+JS;
+    $this->registerJs($js);
+    $this->registerJs($js2);
 
 ?>
 <?php
@@ -164,11 +210,11 @@ $this->registerJs($js);
                                 'value'=> function ($model) {
                                             $data = $model['informe_id'];
                                             //urls acciones
-                                            $url ='index.php?r=informe/entregar&accion=mail&id='.$model['informe_id'];
-                                            $urlPrint ='index.php?r=informe/entregar&accion=print&estudio='.$model['Estudio_id'].'&id='.$model['informe_id'];
-                                            $urlPublicar ='index.php?r=informe/entregar&accion=publicar&id='.$model['informe_id'];
-                                            $urlVer ='index.php?r=informe/view&id='.$model['informe_id'];
-                                            $urlEditar ='index.php?r=informe/update&id='.$model['informe_id'];
+                                            $url = Url::to(['informe/entregar', 'accion' => 'mail', 'id' => $data]);
+                                            $urlPrint = Url::to(['informe/entregar', 'accion' => 'print', 'id' => $data]);
+                                            $urlPublicar = Url::to(['informe/entregar', 'accion' => 'publicar', 'id' => $data]);
+                                            $urlVer = Url::to(['informe/view',  'id' => $data]);
+                                            $urlEditar = Url::to(['informe/update', 'id' => $data]);
     
                                             return Html::a(" <span class='fa fa-print'></span>",$urlPrint,[
                                                 'title' => Yii::t('app', 'Descargar/imprimir'),
@@ -178,9 +224,9 @@ $this->registerJs($js);
                                                 'data-protocolo'=> "$data",
                                                 'target'=>'_blank',
                                                 'data-pjax' => 0,
-                                            ])."  " .Html::a(" <span class='fa fa-envelope'></span>",$url,[
+                                            ])."  " .Html::a(" <span class='fa fa-envelope'></span>",null,[
                                                 'title' => Yii::t('app', 'Enviar por Mail'),
-                                                'class'=>'btn bg-olive btn-xs finalizado',
+                                                'class'=>'btn bg-olive btn-xs finalizado sendMail',
                                                 'value'=> "$url",
                                                 'data-id'=> "$data",
                                                 'data-protocolo'=> "$data",

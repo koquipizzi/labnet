@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\data\SqlDataProvider;
 
 
 /**
@@ -95,6 +96,56 @@ class Medico extends \yii\db\ActiveRecord
         if (isset($esp) && $esp!="" )
             return $esp->nombre;
         return 'No tiene';
+    }
+    
+    public function getInformes(){
+        $query = "SELECT
+                           Estudio.nombre as tipo_estudio
+                          ,Protocolo.codigo as codigo_protocolo
+                          ,Protocolo.fecha_entrada as fecha_protocolo
+                          ,Medico.nombre as medico_nombre
+                          ,Medico.id as medico_id
+                          ,Protocolo.id as protocolo_id
+                          ,Informe.id as informe_id
+                          ,Protocolo.observaciones as observaciones_administrativas
+                    FROM Informe
+                    JOIN Estudio  on (Estudio.id = Informe.Estudio_id)
+                    JOIN Protocolo ON (Informe.Protocolo_id = Protocolo.id)
+                    JOIN Medico on (Medico.id = Protocolo.Medico_id)
+                    WHERE Medico.id =  {$this->id}";
+        
+        $count = \Yii::$app->db->createCommand("
+                                                    SELECT  count(Estudio.nombre)
+                                                    FROM Informe
+                                                    JOIN Estudio  on (Estudio.id = Informe.Estudio_id)
+                                                    JOIN Protocolo ON (Informe.Protocolo_id = Protocolo.id)
+                                                    JOIN Medico on (Medico.id = Protocolo.Medico_id)
+                                                    WHERE Medico.id =  {$this->id}
+                                                ")->queryAll();
+        
+        $dataProvider = new SqlDataProvider([
+            'sql' => $query,
+            'totalCount' => $count,
+            'sort' => [
+                'attributes' => [
+                    'tipo_estudio' => [
+                        'default' => SORT_DESC,
+                    ],
+                    'codigo_protocolo' => [
+                        'default' => SORT_DESC,
+                    ],
+                    'fecha_protocolo' => [
+                        'default' => SORT_DESC,
+                    ],
+                    'medico_nombre' => [
+                        'default' => SORT_DESC,
+                    ],
+                ],
+            ],
+            'pagination' => ['pageSize' => 10],
+        ]);
+        
+        return $dataProvider;
     }
     
     

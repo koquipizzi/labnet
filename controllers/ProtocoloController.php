@@ -24,7 +24,7 @@ use yii\data\ArrayDataProvider;
 use app\models\User;
 use app\models\Medico;
 use yii\base\Model;
-use Da\QrCode\QrCode;
+//use Da\QrCode\QrCode;
 use yii\web\Response;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;

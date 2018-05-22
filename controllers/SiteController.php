@@ -203,7 +203,7 @@ class SiteController extends Controller
         $html = $this->renderAjax('resultadosBusqueda', $response);
         return $this->render('search', ['html' => $html, 'searchFeld' => $searchFeld] );
     }
-    
+ /*   
     public function actionFiltrarBusqueda(){
         $textoIngresado = 0;
         $informes = 0;
@@ -243,11 +243,7 @@ class SiteController extends Controller
                     $info['field'] = $textoIngresado;
                 }elseif ($entidad == self::ID_ENTIDAD_PROTOCOLOS){
                     $query = Protocolo::find()->where(['LIKE', 'observaciones', $textoIngresado])->all();
-                    /*$query = Protocolo::find()->select('id')->where(['LIKE', 'observaciones', $textoIngresado])->all();
-                    if (!empty($tipoDeEstudio)){
-                        $informes = Informe::find()->where(['in','protocolo_id',$query])->andFilterWhere(['estudio_id' => $tipoDeEstudio])->all();
-                    }
-                    $info['resultados'] = $informes;*/
+                    
                     $info['resultados'] = $query;
                     $info['field'] = $textoIngresado;
                 }elseif ($entidad == self::ID_ENTIDAD_MEDICOS){
@@ -265,4 +261,5 @@ class SiteController extends Controller
         \Yii::$app->response->format = 'json';
         return $response;
     }
+    */
 }

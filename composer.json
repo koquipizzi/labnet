@@ -42,7 +42,6 @@
         "kartik-v/yii2-widget-typeahead": "*",
         "2amigos/yii2-chartjs-widget": "~2.0",
         "creocoder/yii2-taggable": "~2.0",
-        "2amigos/qrcode-library": "~1.1",
         "kint-php/kint": "^2.2",
         "yiidoc/yii2-redactor": "*"
     },

@@ -14,7 +14,7 @@
                 
 
             function crearProtocolo($id, $url_post){ 
-                 $('#modal').find('.modal-header').html('Crear Protocolo');
+                $('#modal').find('.modal-header').html('Crear Protocolo');
                 $('#modal').find('#modalContent').load($url_post);
                 $('#modal').modal('show');
             }

@@ -14,7 +14,6 @@
     use app\models\PacientePrestadoraSearch;
     use app\models\PacientePrestadora;
     use yii\data\ActiveDataProvider;
-    use vova07\select2\Widget;
     use kartik\select2\Select2;
     use kartik\datecontrol\DateControl;
     use xj\bootbox\BootboxAsset;
@@ -116,10 +115,10 @@ JS;
             <div class="">
                 <?php
                     echo $form->field($model, 'fecha_nacimiento',['template' => "{label}
-                <div class='input-group col-md-8' style='padding-left:10px; padding-right:10px; margin-bottom:-4px;' >
+                <div class='input-group col-md-8' style='padding-left:15px; padding-right:15px; margin-bottom:-4px;' >
                 {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
                     ])->widget(DateControl::classname(), [
-                        'type'=>DateControl::FORMAT_DATE,
+                       // 'type'=>DateControl::FORMAT_DATE,
                         'ajaxConversion'=>true,
                         'class' => 'col-md-8',
                         'options' => [
@@ -140,20 +139,19 @@ JS;
 
 
             <div class='row'>
-                <div class="col-md-10">
+                <div class="col-md-12">
                     <?php yii\widgets\Pjax::begin(['id' => 'new_localidad']);
                         $dataLocalidad = ArrayHelper::map(Localidad::find()->asArray()->all(), 'id', 'nombre');
                         echo $form->field($model, 'Localidad_id', ['template' => "{label}
-                        <div class='col-md-7'>{input}</div>
-                        {hint}
-                        {error}
-                    "
-                            ,  'labelOptions' => [ 'class' => 'col-md-5  control-label' ]
-                        ])->widget(Select2::classname(),
-                            [
-                                'data' => $dataLocalidad,
-                                'language' => 'es'
-                            ])->error([ 'style' => ' margin-left: 35%;']);;
+                           <div class='col-md-8'>{input}</div>
+                            {hint}
+                            {error}",  
+                            'labelOptions' => [ 'class' => 'col-md-4  control-label' ]
+                            ])->widget(Select2::classname(),
+                    [
+                        'data' => $dataLocalidad,
+                        'language' => 'es'
+                    ]);
                     ?>
                     <?php yii\widgets\Pjax::end() ?>
                 </div>

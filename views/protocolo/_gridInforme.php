@@ -26,7 +26,7 @@ use yii\widgets\Pjax;
                                 'descripcion',
                                 'observaciones',
                                 'nomencladores',
-                                [
+                                /*[
                                     'attribute' => 'QR',
                                     'filter' => false,
                                     'format' => 'raw',
@@ -34,7 +34,7 @@ use yii\widgets\Pjax;
                                          return "<img src='". Url::to(['/protocolo/qr-code', 'id' => $data->id])."' width='100'/>";
                                          
                                      },
-                                  ],
+                                  ],*/
                                   
 
  

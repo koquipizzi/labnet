@@ -192,23 +192,19 @@ class PrestadorasController extends Controller
             }
             if (!$model->save())
             {
-                $mensaje = '';
+                $mensaje = [];
                  foreach ($model->getErrors () as $attribute => $error)
                 {
-                        foreach ($error as $message)
-                        {
-                                $mensaje = $mensaje.".".$attribute.": ".$message;
+                        foreach ($error as $message) {
+                            $mensaje[] = $message;
                         }
                 }
                 header('Content-type: application/json');
                 $response = ["result" => "error", "mensaje" => $mensaje];
                 echo \yii\helpers\Json::encode($response);
                 exit();
-
-
             }
         }
-        
         else if (Yii::$app->request->isAjax) {
             return $this->renderAjax('_form_modal', [
                         'model' => $model

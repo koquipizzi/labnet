@@ -142,12 +142,12 @@ JS;
                             [
                                 'label' => 'Nro Protocolo',
                                 'attribute' => 'codigo',
-                                'contentOptions' => ['style' => 'width:11%;'],
+                                'contentOptions' => ['style' => 'width:10%;'],
                             ],
                             [
                                 'label' => 'Paciente',
                                 'attribute'=>'nombre',
-                                'contentOptions' => ['style' => 'width:25%;'],
+                                'contentOptions' => ['style' => 'width:24%;'],
                                 
                             ],
                             [

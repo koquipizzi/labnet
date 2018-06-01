@@ -14,36 +14,19 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Coberturas/OS'), 'ur
 $this->params['breadcrumbs'][] = $this->title;
 */
 
-        $js =" 
-
-            $('.addModalPrestadora').click( function (e) {
+        $js = <<<JS
+        
+           $('.addModalPrestadora').click( function (e) {
                 var form = $('form#create-prestadora-form');
                 $.ajax({
-        url: form.attr('action'),
-        type: 'post',
-        data: form.serialize(),
-        success: function (data) {
-            
-            if (data.result == 'ok') {     
-                var n = noty({
-                    text: 'Se agregó la nueva prestadora',
-                    type: 'success',
-                    class: 'animated pulse',
-                    layout: 'topRight',
-                    theme: 'relax',
-                    timeout: 3000, // delay for closing event. Set false for sticky notifications
-                    force: false, // adds notification to the beginning of queue when set to true
-                    modal: false, // si pongo true me hace el efecto de pantalla gris
-                });
-                $('#modal').modal('toggle');
-
-            }
-            else
-                if (data.result == 'error') {
-                    {
+                url: form.attr('action'),
+                type: 'post',
+                data: form.serialize(),
+                success: function (data) {
+                    if (data.result == 'ok') {
                         var n = noty({
-                            text: data.mensaje,
-                            type: 'error',
+                            text: 'Se agregó la nueva prestadora',
+                            type: 'success',
                             class: 'animated pulse',
                             layout: 'topRight',
                             theme: 'relax',
@@ -51,29 +34,37 @@ $this->params['breadcrumbs'][] = $this->title;
                             force: false, // adds notification to the beginning of queue when set to true
                             modal: false, // si pongo true me hace el efecto de pantalla gris
                         });
+                        $('#modal').modal('toggle');
+                    } else {
+                        if (data.result == 'error') {
+                            var arr = data.mensaje;
+                            console.log(arr);
+                            arr.forEach(function(elem) {
+                                var n = noty({
+                                text: elem,
+                                type: 'error',
+                                class: 'animated pulse',
+                                layout: 'topRight',
+                                theme: 'relax',
+                                timeout: 16000, // delay for closing event. Set false for sticky notifications
+                                force: false, // adds notification to the beginning of queue when set to true
+                                modal: false, // si pongo true me hace el efecto de pantalla gris
+                                });
+                            })
+                            
+                        }
                     }
-            }
-           
-        },
-        error: function () {
-            console.log('internal server error');
-        }
-    });
-
-        }); ";
-        
+                },
+                error: function () {
+                    console.log('internal server error');
+                }
+            }); //END AJAX
+        });  //END EVENT
+JS;
         $this->registerJs($js);
 ?>
 
-
-
 <div class="">
-            <!--div class="box-header with-border">
-              <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-              <div class="pull-right">
-                            <?= Html::a('<i class="fa fa-arrow-left"></i> Volver', ['prestadoras/index'], ['class'=>'btn btn-primary']) ?>
-              </div>
-            </div-->
             <?php $form = ActiveForm::begin([  'id'=>'create-prestadora-form',
             'options' => [
                 'class' => 'form-horizontal mt-10',

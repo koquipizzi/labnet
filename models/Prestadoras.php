@@ -41,7 +41,7 @@ class Prestadoras extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['Localidad_id'], 'required'],
+            [['Localidad_id','facturable'], 'required'],
             [['Localidad_id', 'Tipo_prestadora_id','id_old'], 'integer'],
             [['domicilio'], 'string', 'max' => 45],
             [['descripcion'], 'required'],

@@ -134,14 +134,14 @@ JS;
                             [
                                 'label' => 'Paciente',
                                 'attribute'=>'nombre',
-                                 'contentOptions' => ['style' => 'width:20%;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'contentOptions' => ['style' => 'width:24%;'],
+                                /*'value'=>function ($model, $key, $index, $widget) {
                                     if(strlen($model["nombre"])>20){
                                         return substr($model["nombre"], 0, 14)."...";
                                     }  else {
                                            return $model["nombre"];
                                     }
-                                }
+                                }*/
                             ],
                             [
                                 'attribute'=>'nro_documento',
@@ -150,12 +150,12 @@ JS;
                             [
                                 'label' => 'Medico',
                                 'attribute'=>'nombre_medico',
-                                'contentOptions' => ['style' => 'width:20%;'],
+                                'contentOptions' => ['style' => 'width:25%;'],
                             ],
                             [
                                 'label' => 'Informes',
                                 'format' => 'raw',
-                                'contentOptions' => ['style' => 'width:20%;'],
+                                'contentOptions' => ['style' => 'width:10%;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $estados = ["1" => "danger", "2" => "default", "3" => "success", "4" => "warning", "5" => "primary", "6" => "info"];
                                     $estadosLeyenda =[
@@ -187,7 +187,7 @@ JS;
                             [
                                 'label' => 'Acciones',
                                 'format' => 'raw',
-                                'contentOptions' => ['style' => 'width:20%;'],
+                                'contentOptions' => ['style' => 'width:18%;'],
                                 'value'=> function ($model) {
 
                                     $data = $model['informe_id'];

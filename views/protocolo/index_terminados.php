@@ -147,14 +147,8 @@ JS;
                             [
                                 'label' => 'Paciente',
                                 'attribute'=>'nombre',
-                                 'contentOptions' => ['style' => 'width:18%;'],
-                                'value'=>function ($model, $key, $index, $widget) {
-                                    if(strlen($model["nombre"])>20){
-                                        return substr($model["nombre"], 0, 14)."...";
-                                    }  else {
-                                           return $model["nombre"];
-                                    }
-                                }
+                                'contentOptions' => ['style' => 'width:25%;'],
+                                
                             ],
                             [
                                 'attribute'=>'nro_documento',
@@ -163,12 +157,12 @@ JS;
                             [
                                 'label' => 'Médico',
                                 'attribute'=>'nombre_medico',
-                                'contentOptions' => ['style' => 'width:18%;'],
+                                'contentOptions' => ['style' => 'width:25%;'],
                             ],
                             [
                                 'label' => 'Informes',
                                 'format' => 'raw',
-                                'contentOptions' => ['style' => 'width:18%;'],
+                                'contentOptions' => ['style' => 'width:10%;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $estados = array(
                                                         "1" => "danger",
@@ -206,7 +200,7 @@ JS;
                             [
                                 'label' => 'Acciones',
                                 'format' => 'raw',
-                                'contentOptions' => ['style' => 'width:20%;'],
+                                'contentOptions' => ['style' => 'width:16%;'],
                                 'value'=> function ($model) {
                                             $data = $model['informe_id'];
                                             //urls acciones

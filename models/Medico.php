@@ -108,10 +108,15 @@ class Medico extends \yii\db\ActiveRecord
                           ,Protocolo.id as protocolo_id
                           ,Informe.id as informe_id
                           ,Protocolo.observaciones as observaciones_administrativas
+                          ,Paciente.nombre as paciente_nombre
+                          ,Paciente.id as paciente_id
+                          
                     FROM Informe
                     JOIN Estudio  on (Estudio.id = Informe.Estudio_id)
                     JOIN Protocolo ON (Informe.Protocolo_id = Protocolo.id)
                     JOIN Medico on (Medico.id = Protocolo.Medico_id)
+                    JOIN Paciente_prestadora ON (Paciente_prestadora.id = Protocolo.Paciente_prestadora_id)
+                    JOIN Paciente ON (Paciente.id = Paciente_prestadora.Paciente_id)
                     WHERE Medico.id =  {$this->id}";
         
         $count = \Yii::$app->db->createCommand("
@@ -137,12 +142,12 @@ class Medico extends \yii\db\ActiveRecord
                     'fecha_protocolo' => [
                         'default' => SORT_DESC,
                     ],
-                    'medico_nombre' => [
+                    'paciente_nombre' => [
                         'default' => SORT_DESC,
                     ],
                 ],
             ],
-            'pagination' => ['pageSize' => 10],
+            'pagination' => ['pageSize' => 150],
         ]);
         
         return $dataProvider;

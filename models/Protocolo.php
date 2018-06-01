@@ -94,7 +94,7 @@ class Protocolo extends \yii\db\ActiveRecord
             'numero_hospitalario' => Yii::t('app', 'Número Hospitalario'),
             'Codigo' => Yii::t('app', 'Código'),
             'ultimo_propietario'=>Yii::t('app', 'Propietario Actual'),
-            'nro_documento'=>Yii::t('app', 'Dni'),
+            'nro_documento'=>Yii::t('app', 'DNI'),
 
         ];
     }

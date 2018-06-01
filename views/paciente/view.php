@@ -21,40 +21,82 @@ JS;
 //$this->registerJs($js);
 
 ?>
+<div class="row">
+    <div class="col-xs-7">
+        <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+                    <div class="pull-right">
+                        <?= Html::a('<i class="fa fa-pencil"></i> Editar ', ['paciente/update', 'id'=>$model->id], ['class'=>'btn btn-primary']) ?>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <?= DetailView::widget([
+                        'model' => $model,
+                        'attributes' =>
+                            [
+                                'nombre',
+                                'nro_documento',
+                                [
+                                    'label'=>'Género',
+                                    'value'=>$model->getGeneroTexto(),
+                                ],
+                                [
+                                    'attribute' => 'fecha_nacimiento',
+                                    'format' => ['date', 'php:d/m/Y']
+                                ],
+                                'telefono',
+                                'email:email',
+                                'domicilio',
+                                [
+                                    'label'=>'Localidad',
+                                    'value'=>$model->getLocalidadTexto(),
+                                ],
+                                'notas',
+                            ],
+                    ])
+                    ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-5">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title"><?= Html::encode('Prestadoras') ?></h3>
+            </div>
+            <div class="box-body">
+                <?php
+                    $pacientesPrestadora = $model->getPacientePrestadoraDP();
+                    if (!empty($pacientesPrestadora)){
+                        echo GridView::widget([
+                            'dataProvider' => $pacientesPrestadora,
+                            'layout' => '{items}{pager}',
+                            'columns' => [
+                                [
+                                    'label' => 'Prestadora',
+                                    'attribute' => 'Prestadoras_id',
+                                    'format' => 'raw',
+                                    'value' => function($data){
+                                        $prestadora = \app\models\Prestadoras::find()->where(['id' => $data['Prestadoras_id']])->one();
+                                        return $prestadora->descripcion;
+                    
+                                    }
+                                ],
+                                [
+                                    'label' => 'Nro Afiliado',
+                                    'attribute' => 'nro_afiliado'
+                                ],
+                            ]
+                        ]);
+                    }
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="box box-info">
-        <div class="box-header with-border">
-                        <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-                <div class="pull-right">
-                        <?= Html::a('<i class="fa fa-pencil"></i> Editar ', ['paciente/update', 'id'=>$model->id], ['class'=>'btn btn-primary']) ?>
-                </div>
-        </div>
-
-        <?= DetailView::widget([
-            'model' => $model,
-            'attributes' =>
-                    [
-                        'nombre',
-                        'nro_documento',
-                        [
-                            'label'=>'Género',
-                            'value'=>$model->getGeneroTexto(),
-                        ],
-                        [
-                            'attribute' => 'fecha_nacimiento',
-                            'format' => ['date', 'php:d/m/Y']
-                        ],
-                        'telefono',
-                        'email:email',
-                        'domicilio',
-                        [
-                            'label'=>'Localidad',
-                            'value'=>$model->getLocalidadTexto(),
-                        ],
-                        'notas',
-                    ],
-            ])
-        ?>
     <div class="box-body">
         
         <h3> Informes Del Paciente </h3>
@@ -67,8 +109,10 @@ JS;
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
                         [
+                            'label' => 'Código Protocolo',
                             'attribute' => 'codigo_protocolo',
                             'format' => 'raw',
+                            'contentOptions' => ['style' => 'width:12%;'],
                             'value'=>function ($data) {
                                 return Html::a(Html::encode($data['codigo_protocolo']),Url::to(["protocolo/view/", 'id' => $data['protocolo_id']]));
                             },
@@ -87,6 +131,7 @@ JS;
                             'format' => ['date', 'php:d/m/Y'],
                         ],
                         [
+                            'label' => 'Médico',
                             'attribute' => 'medico_nombre',
                             'format' => 'raw',
                             'value'=>function ($data) {

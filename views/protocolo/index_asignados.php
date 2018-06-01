@@ -104,14 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'label' => 'Paciente',
                             'attribute'=>'nombre', 
-                             'contentOptions' => ['style' => 'width:15%;'],
-                            'value'=>function ($model, $key, $index, $widget) { 
-                                if(strlen($model["nombre"])>20){
-                                    return substr($model["nombre"], 0, 17)."...";
-                                }  else {
-                                       return $model["nombre"];
-                                }
-                            }
+                             'contentOptions' => ['style' => 'width:25%;'],
                         ],
                         [
                             'attribute' => 'nro_documento',
@@ -120,7 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'label' => 'Informes',
                             'format' => 'raw',
-                            'contentOptions' => ['style' => 'width:30%;'],
+                            'contentOptions' => ['style' => 'width:8%;'],
                             'value' => function ($model, $key, $index, $widget) {
                             $estados = array(
                                                 "1" => "danger",

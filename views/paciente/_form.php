@@ -4,18 +4,22 @@
     use yii\bootstrap\Modal;
     use yii\widgets\ActiveForm;
     use yii\helpers\ArrayHelper;
+    use yii\widgets\Pjax;
+    use yii\data\ActiveDataProvider;
+    
+    use kartik\form\ActiveField;
+    use kartik\select2\Select2;
+    use kartik\datecontrol\DateControl;
+    
     use app\models\Localidad;
     use app\models\Sexo;
     use app\models\TipoDocumento;
-    use kartik\form\ActiveField;
-    use yii\widgets\Pjax;
     use app\models\PrestadoratempSearch;
     use app\models\Prestadoratemp;
     use app\models\PacientePrestadoraSearch;
     use app\models\PacientePrestadora;
-    use yii\data\ActiveDataProvider;
-    use kartik\select2\Select2;
-    use kartik\datecontrol\DateControl;
+    
+    
     use xj\bootbox\BootboxAsset;
     use wbraganca\dynamicform\DynamicFormWidget;
     $js = <<<JS
@@ -45,15 +49,6 @@ JS;
     /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<?php
-    Modal::begin([
-        'id' => 'modalPrestadoras',
-        'header' => '<h4 style="margin-top: 0px;margin-bottom: 0px;">Nueva Cobertura/OS</h4>',
-        'options' => ['tabindex' => false ],
-    ]);
-    echo "<div id='divPrestadoras'></div>";
-    Modal::end();
-?>
 
 <div class="paciente-form">
     <?php
@@ -193,16 +188,13 @@ JS;
 
 
         </div>
-
+        <?php  Pjax::begin(['id' => 'pjax_prestadoras']); ?>
         <div class="col-sm-6">
             <div class="customer-form">
-
-
                 <div class="padding-v-md">
                     <div class="line line-dashed"></div>
                 </div>
                 <?php
-                    
                     DynamicFormWidget::begin([
                         'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                         'widgetBody' => '.container-items', // required: css class selector
@@ -220,18 +212,16 @@ JS;
                         ],
                     ]);
                 ?>
- 
         <div class="panel panel-default">
             <div class="panel-heading">
                 Prestadoras
-                <button type="button" id="addPrestadoras"  value='index.php?r=prestadoras/createpop' style="float:right; margin-left:5%;" class="btn btn-success btn-xs"><i class="fa fa-plus"></i><?php  echo ' '.Yii::t('app', 'Agregar Nueva Prestadora'); ?></button>
                 <button type="button" class="pull-right add-item btn btn-success btn-xs">
                     <i class="fa fa-plus"></i> Agregar Prestadora</button>
                 <div class="clearfix"></div>
                 <div class="clearfix"></div>
             </div>
             <div class="panel-body container-items"><!-- widgetContainer -->
-                <?php  Pjax::begin(['id' => 'pjax_prestadoras']); ?>
+                
                 <?php foreach ($PacientePrestadorasmultiple as $index => $modelPrestadora): ?>
                     <div class="item panel panel-default"><!-- widgetBody -->
                         <div class="panel-heading">
@@ -273,7 +263,7 @@ JS;
                             ?>
                           </div>
                     </div>
-                <?php endforeach; Pjax::end(); ?>
+                <?php endforeach;  ?>
             </div>
         </div>
                 <?php DynamicFormWidget::end(); ?>
@@ -283,6 +273,7 @@ JS;
     <div class="" style="clear: both;"></div>
     </div>
     </div>
+    <?php Pjax::end();  ?>
     <div class="box-footer col-sm-12" >
         <div class="pull-right box-tools">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'id'=> 'enviar_paciente']) ?>

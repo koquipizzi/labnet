@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Paciente',
                 'attribute'=>'nombre',
-                'contentOptions' => ['style' => 'width:15%;'],
+                'contentOptions' => ['style' => 'width:25%;'],
             ],
             [
                 'attribute'=>'nro_documento',
@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Informes',
                 'format' => 'raw',
-                'contentOptions' => ['style' => 'width:20%;'],
+                'contentOptions' => ['style' => 'width:10%;'],
                 'value'=>function ($model, $key, $index, $widget) {
                             $estados = array(
                                                 "1" => "danger",
@@ -125,7 +125,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],            
             ['class' => 'yii\grid\ActionColumn',
                 'template' => '{edit}',
-                'contentOptions' => ['style' => 'width:10%;'],
+                'contentOptions' => ['style' => 'width:4%;'],
                 'buttons' => [
                     //view button
                     'edit' => function ($url, $model) {

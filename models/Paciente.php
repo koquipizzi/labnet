@@ -204,4 +204,17 @@ class Paciente extends \yii\db\ActiveRecord
         return $dataProvider;
     }
     
+    //funcion que me devuelve un data provider con las prestadoras del paciente
+    public function getPacientePrestadoraDP(){
+        $query = PacientePrestadora::find()->where(['Paciente_id' => $this->id]);
+    
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => ['pageSize' =>  50]
+    
+        ]);
+        
+        return $dataProvider;
+    }
+    
 }

@@ -131,7 +131,7 @@ JS;
                             'format' => ['date', 'php:d/m/Y'],
                         ],
                         [
-                            'label' => 'Médico Nombre',
+                            'label' => 'Médico',
                             'attribute' => 'medico_nombre',
                             'format' => 'raw',
                             'value'=>function ($data) {

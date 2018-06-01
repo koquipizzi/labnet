@@ -32,12 +32,12 @@ use app\models\ViewPacientePrestadora;
 use app\models\ViewPacientePrestadoraQuery;
 use app\models\Prestadoras;
 use app\models\InformeTemp;
-use dosamigos\select2\Select2Bootstrap;
+use kartik\date\DatePicker;
 
 $this->title = 'Nuevo Protocolo ';
 
 $this->registerJs('var ajaxurl = "' .Url::to(['paciente/datos']). '";', \yii\web\View::POS_HEAD);
-
+                                           
 $js = <<<JS
 
 JS;
@@ -91,14 +91,37 @@ $this->registerCss($css);
                                                             div.className = "loader";
                                                             jQuery(".lalala").append(div);
                                                             $.get( aux , function( data ) {
-                                                                var d = new Date(data.rta.fecha_nacimiento);
+                                                                var fecha = data.rta.fecha_nacimiento;
+                                                                var d =  fecha.split("-");
+                                                                var year = d[0];
+                                                                var month = d[1];
+                                                                var day = d[2];
+                                                                var d = new Date(year,month-1,day);
+                                                                console.log(d);
                                                                 jQuery("#paciente-nombre").val(data.rta.nombre);
                                                                 jQuery("#paciente-tipo_documento_id").val(data.rta.Tipo_documento_id).trigger("change");
                                                                 jQuery("#paciente-nro_documento").val(data.rta.nro_documento);
                                                                 jQuery("#paciente-hc").val(data.rta.hc);
                                                                 jQuery("#paciente-id").val(data.rta.id);
                                                                 jQuery("#paciente-sexo").val(data.rta.sexo).trigger("change");
-                                                                jQuery("#paciente-fecha_nacimiento-disp").kvDatepicker("update",d);
+                                                                jQuery("#paciente-fecha_nacimiento-disp").val(day+"/"+month+"/"+year);
+                                                                jQuery("#paciente-fecha_nacimiento").val(year+"-"+month+"-"+day);
+                                                                //Vuelvo a cargar el componente con su configuracion
+                                                                var $hasDateControl = jQuery("[data-krajee-kvdatepicker]");
+                                                                if ($hasDateControl.length > 0) {
+                                                                    $hasDateControl.each(function() {
+                                                                           var id = $(this).attr("id");
+                                                                           var dcElementOptions = eval($(this).attr("data-krajee-kvdatepicker"));
+                                                                           if (id.indexOf(dcElementOptions.idSave) < 0) {
+                                                                               // initialize the NEW DateControl element
+                                                                               var cdNewOptions = $.extend(true, {}, dcElementOptions);
+                                                                               $(this).parent().kvDatepicker(eval($(this).attr("data-krajee-kvdatepicker")));
+                                                                               cdNewOptions.idSave = $(this).parent().next().attr("id");
+                                                                               $(this).removeAttr("value name data-krajee-datecontrol");
+                                                                               $(this).datecontrol(cdNewOptions);
+                                                                           }
+                                                                    });
+                                                                }
                                                                 jQuery("#paciente-domicilio").val(data.rta.domicilio);
                                                                 jQuery("#paciente-localidad_id").val(data.rta.Localidad_id).trigger("change");
                                                                 jQuery("#paciente-telefono").val(data.rta.telefono);
@@ -202,20 +225,21 @@ $this->registerCss($css);
                                                 'allowClear' => true
                                             ],
                                         ]);
-
+    
+                         
                                     echo $formpaciente->field($paciente, 'fecha_nacimiento',['template' => "{label}
                                         <div class='input-group col-md-8' style='padding-left:10px; padding-right:10px; margin-bottom:-4px;' >
                                         {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
-                                        ])->widget(DateControl::classname(), [
-                                            'type'=>DateControl::FORMAT_DATE,
-                                            'ajaxConversion'=>true,
-                                            'class' => 'col-md-8',
-                                            'options' => [
-                                                'pluginOptions' => [
-                                                    'autoclose' => true
-                                                ]
+                                    ])->widget(DateControl::classname(), [
+                                        'type'=>DateControl::FORMAT_DATE,
+                                        'ajaxConversion'=>true,
+                                        'class' => 'col-md-8',
+                                        'options' => [
+                                            'pluginOptions' => [
+                                                'autoclose' => true
                                             ]
-                                        ])->error([ 'style' => ' margin-left: 35%;']);
+                                        ]
+                                    ])->error([ 'style' => ' margin-left: 35%;']);
                                 
                                     echo $formpaciente->field($paciente, 'domicilio', ['template' => "{label}
                                         <div class='col-md-8'>{input}</div>

@@ -40,6 +40,8 @@ $this->registerJs('var ajaxurl = "' .Url::to(['paciente/datos']). '";', \yii\web
 
 $js = <<<JS
 
+
+
 JS;
 
 
@@ -49,15 +51,13 @@ JS;
     <div class="box-header with-border">
         <h3 class="box-title">Paciente</h3>
         <div class="box-tools pull-right">
-            <a href="<?= Url::toRoute(['paciente/create'])?>" class="btn btn-sm btn-primary btn-flat pull-right">Agregar Paciente</a>
+            <a href="<?= Url::toRoute(['paciente/create'])?>" class="btn btn-sm btn-success btn-flat pull-right">Nuevo Paciente</a>
         </div>
     </div>
     <div class="box-body">
         <div class="row">
             <div class='col-md-6'>
-        <?php
-                $url = \yii\helpers\Url::to(['/paciente/pacientelist']);                             
-                            
+        <?php          
                 echo Select2::widget([
                         'name' => 'kv-repo-template',
                         'value' => '14719648',
@@ -272,7 +272,6 @@ JS;
     </div>
 </div>
 
- <?php
+<?php
       $this->registerJsFile('@web/assets/admin/js/cipat_nuevo_prot.js', ['depends' => [yii\web\AssetBundle::className()]]);    
-      //$this->registerJsFile('@web/assets/admin/js/cipat_modal_paciente.js', ['depends' => [yii\web\AssetBundle::className(),  'yii\web\JqueryAsset']]);
- ?>
+?>

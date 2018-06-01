@@ -1,5 +1,6 @@
 
 
+
 function add_pac_prest() {
     $form = $("form#pac_prest");
     $.ajax({
@@ -21,7 +22,6 @@ function add_pac_prest() {
                     modal: false, // si pongo true me hace el efecto de pantalla gris
                 });
                 $('#pacienteprestadora-nro_afiliado').val('');
-
             }
             else {
                 var n = noty({
@@ -42,9 +42,6 @@ function add_pac_prest() {
             console.log("internal server error");
         }
     });
-
-
-    
     
 }
 

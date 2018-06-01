@@ -20,6 +20,16 @@ use app\models\Prestadoras;
 use yii\bootstrap\Modal;
 use app\models\PacientePrestadora;
 ?>
+<?php 
+    Modal::begin([
+            'id' => 'modal',    
+           // 'size'=>'modal-lg',
+            'options' => ['tabindex' => false ],
+        ]);
+        echo "<div id='modalContent'></div>";
+       
+     Modal::end();
+    ?> 
 
  <?php 
         $data =  Prestadoras::find()->asArray()->all();
@@ -28,9 +38,69 @@ use app\models\PacientePrestadora;
         $data = Prestadoras::find()->all();
         $data2 = ArrayHelper::map($data,'id', 'descripcion');
         
-   //     $js =" $('#pac_prest').trigger(\"reset\"); ";
-   //     
-   //     $this->registerJs($js);
+        $js =" $('.showModalButton').click( function (e) {
+            $('#modal').find('.modal-header').html('Nueva Prestadora');".
+            "$('#modal').find('#modalContent').load('".Url::to(['prestadoras/create_modal'])."');".
+            "$('#modal').modal('show');
+            });
+
+            $('#modal').find('#modalContent').find('.addModalPrestadora').click( function (e) {
+                alert('dd');
+        });
+        
+        
+        ";
+        
+        $this->registerJs($js);
+
+         yii\bootstrap\Modal::begin([
+        'header' => 'Update Lesson Learned',
+        'id'=>'editModalId',
+        'class' =>'modal',
+        'size' => 'modal-md',
+    ]);
+        echo "<div class='modalContent'></div>";
+    yii\bootstrap\Modal::end();
+
+        $this->registerJs(
+        "$(document).on('ready pjax:success', function() {
+                $('.modalButton').click(function(e){
+                   e.preventDefault(); //for prevent default behavior of <a> tag.
+                   var tagname = $(this)[0].tagName;
+                   $('#editModalId').modal('show').find('.modalContent').load($(this).attr('href'));
+               });
+            });
+        ");
+
+        // JS: Update response handling
+        $this->registerJs(
+    'jQuery(document).ready(function($){
+        $(document).ready(function () {
+            $("body").on("beforeSubmit", "form#lesson-learned-form-id", function () {
+                var form = $(this);
+                // return false if form still have some validation errors
+                if (form.find(".has-error").length) {
+                    return false;
+                }
+                // submit form
+                $.ajax({
+                    url    : form.attr("action"),
+                    type   : "post",
+                    data   : form.serialize(),
+                    success: function (response) {
+                        $("#editModalId").modal("toggle");
+                        $.pjax.reload({container:"#lessons-grid-container-id"}); //for pjax update
+                    },
+                    error  : function () {
+                        console.log("internal server error");
+                    }
+                });
+                return false;
+             });
+            });
+            });'
+        );
+
 
  ?>
         <?php Pjax::begin(['id' => 'prestadoras']); ?>
@@ -101,7 +171,7 @@ use app\models\PacientePrestadora;
 
 <?php
 echo Html::button(
-    'Agregar Prestadora',
+    'Asignar Prestadora',
     [
         'class' => 'btn btn-primary boton_addP',
         'onclick' => '$(".addP").show(); $(".boton_addP").hide();',
@@ -110,7 +180,10 @@ echo Html::button(
 ?>
         <div class="box box-primary addP" style="display:none; margin-top: 10px;">
             <div class="box-header">
-                Nueva Prestadora
+                Asignar Prestadora
+                <div class="box-tools pull-right">
+                    <a class="btn btn-primary btn-flat btn-xs showModalButton" value="/index.php?r=prestadoras%2Fcreate" >Nueva Prestadora</a>
+                </div>
             </div>
             <div class="box-body">
                 
@@ -123,23 +196,69 @@ echo Html::button(
 
                         <?php echo $form->field($model, 'Paciente_id')->hiddenInput( array('value'=>$paciente_id))->label(false);?>
 
-                        <?php //$form->field($model, 'Prestadoras_id')->textInput() ?>
-
-                        <?php echo $form->field($model, 'Prestadoras_id',[
-                               'template' => "{label}
-                                            <div id='SelecNomenclador'>{input}</div>
-                                            {hint}
-                                            {error}"
-                                            ]
-                                            )->widget(Select2::classname(), [
-                                    'data'=>$data2,'language'=>'es',
-                                    'toggleAllSettings' => [                                    
-                                    'selectOptions' => ['class' => 'text-success'],
-                                    'unselectOptions' => ['class' => 'text-danger'],
-                                     ],
-                                    'options' => ['multiple' => false]
+                        <?php 
+                        
+                            echo $form->field($model, 'Prestadoras_id')->widget(Select2::classname(), [
+                                    'name' => 'kv-repo-template',
+                                    'value' => '14719648',
+                                    'initValueText' => 'Ingrese Prestadora',
+                                    'options' => [  'placeholder' => 'Buscar Prestadora ...',
+                                    ],
+                                    'pluginOptions' => [
+                                        'allowClear' => true,
+                                        'minimumInputLength' => 1,
+                                        'ajax' => [
+                                            'url' => Url::to(['prestadoras/list']),
+                                            'dataType' => 'json',
+                                            'delay' => 250,
+                                            'data' => new JsExpression('function(params) { return {term:params.term  }; }'),
+                                            'processResults' => new JsExpression('function(data) {
+                                                return {
+                                                    results: $.map(data, function(item, index) {
+                                                        return {
+                                                        "id": item.id,
+                                                        "text": item.descripcion 
+                                                        };
+                                                    })
+                                                    };
+                                                }'),
+                                        
+                                            'cache' => true
+                                        ],
+                                    ],
                             ]);
-                        ?>
+                        
+
+                      /*      echo Select2::widget([
+                                    'name' => 'kv-repo-template',
+                                    'value' => '14719648',
+                                    'initValueText' => 'Ingrese Prestadora',
+                                    'options' => [  'placeholder' => 'Buscar Prestadora ...',
+                                    ],
+                                    'pluginOptions' => [
+                                        'allowClear' => true,
+                                        'minimumInputLength' => 1,
+                                        'ajax' => [
+                                            'url' => Url::to(['prestadoras/list']),
+                                            'dataType' => 'json',
+                                            'delay' => 250,
+                                            'data' => new JsExpression('function(params) { return {term:params.term  }; }'),
+                                            'processResults' => new JsExpression('function(data) {
+                                                return {
+                                                    results: $.map(data, function(item, index) {
+                                                        return {
+                                                        "id": item.id,
+                                                        "text": item.descripcion 
+                                                        };
+                                                    })
+                                                    };
+                                                }'),
+                                        
+                                            'cache' => true
+                                        ],
+                                    ],
+                            ]);*/
+                            ?>
 
                         <div class="form-group">
                             <?= Html::button('Agregar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'onclick' => 'add_pac_prest(this);']) ?>

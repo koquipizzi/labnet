@@ -160,6 +160,62 @@ class PrestadorasController extends Controller
         }
     }
 
+    public function actionCreate_modal()
+    {  
+        $model = new Prestadoras();
+
+        /*if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                     $dataProvider = new ActiveDataProvider([
+                        'query' => Prestadoras::find()
+                    ]);
+                    $searchModel = new PrestadorasSearch();
+                    return $this->render('index', [
+                       'dataProvider' => $dataProvider,
+                        'searchModel' => $searchModel
+                    ]);
+          //  return $this->renderAjax(['index', 'id' => $model->id]);
+        } else {
+            return $this->renderAjax('_form', [
+                'model' => $model,
+            ]);
+        }
+        */
+       
+        if ($model->load(Yii::$app->request->post()))
+        {
+            if ($model->save()) {
+             header('Content-type: application/json');
+            $response = ["result" => "ok", "mensaje" => "Se guardó la prestadora"];
+            echo \yii\helpers\Json::encode($response);
+            exit();
+
+            }
+            if (!$model->save())
+            {
+                $mensaje = '';
+                 foreach ($model->getErrors () as $attribute => $error)
+                {
+                        foreach ($error as $message)
+                        {
+                                $mensaje = $mensaje.".".$attribute.": ".$message;
+                        }
+                }
+                header('Content-type: application/json');
+                $response = ["result" => "error", "mensaje" => $mensaje];
+                echo \yii\helpers\Json::encode($response);
+                exit();
+
+
+            }
+        }
+        
+        else if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_form_modal', [
+                        'model' => $model
+            ]);
+        }
+    }
+
     /**
      * Updates an existing Prestadoras model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -289,6 +345,29 @@ class PrestadorasController extends Controller
                         'model' => $model
             ]);
         }
+    }
+
+    public function actionList($term = NULL)
+    { //die($term);
+        header('Content-type: application/json');
+        $clean['more'] = false;
+
+        $query = new \yii\db\Query;
+        if(!empty($term)) {
+            $mainQuery = $query->select('Prestadoras.id
+                                        ,descripcion
+                                        ')
+                                ->from('Prestadoras')
+                             //   ->innerJoin('Tipo_documento','Tipo_documento.id = Paciente.Tipo_documento_id')
+                                ->where(['like','Prestadoras.descripcion',$term])
+                            //    ->orWhere(['like','nro_documento',$term])
+                                ->limit(15);                       //limito a 15, para mejorar performance
+            $command = $mainQuery->createCommand();
+            $rows = $command->queryAll();
+            $clean['results'] = array_values($rows);
+        }
+        echo \yii\helpers\Json::encode($clean['results']);
+        exit();
     }
 
   

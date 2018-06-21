@@ -140,9 +140,9 @@ JS;
     ])->textArea(['maxlength' => true]) ?>
 
     <div class="modal-footer">
-       <?php echo Html::button(('Guardar'), ['class' => 'btn btn-success addModalPrestadora']) ?>
+        <?php echo Html::button(('Guardar'), ['class' => 'btn btn-success addModalPrestadora']) ?>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-      </div>
+    </div>
 
     <?php ActiveForm::end(); ?>
 

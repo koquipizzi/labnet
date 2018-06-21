@@ -37,33 +37,6 @@ use kartik\date\DatePicker;
 $this->title = 'Nuevo Protocolo ';
 
 $this->registerJs('var ajaxurl = "' .Url::to(['paciente/datos']). '";', \yii\web\View::POS_HEAD);
-                                           
-$js = <<<JS
-
-
-
-JS;
-
-$css = <<<CSS
-    .loader {
-            border: 16px solid #32b3ff; /* Light grey */
-            border-top: 16px solid #000000; /* Blue */
-            border-radius: 50%;
-            height: 60px;
-            margin: 100px auto 0;
-            width: 60px;
-            text-align: center;
-            animation: spin 2s linear infinite;
-        }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-
-CSS;
-
-$this->registerCss($css);
 
 ?>
 

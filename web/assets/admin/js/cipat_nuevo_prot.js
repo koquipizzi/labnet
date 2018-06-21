@@ -7,12 +7,18 @@ function add_pac_prest() {
         url: $form.attr("action"),
         type: "post",
         data: $form.serialize(),
+        beforeSend: function (params) {
+            let div = document.createElement("div");
+            div.className = "loader";
+            div.setAttribute("id", "loading");
+            $(".addP").prepend(div);
+        },
         success: function (data) {
             //  $("#modal").modal("toggle");
             if (data.response == 'ok') {
                 $(".lalala").html(data.data); //for pjax update
                 var n = noty({
-                    text: 'Se agregó la nueva prestadora al cliente',
+                    text: 'Se agregó la nueva prestadora al paciente',
                     type: 'success',
                     class: 'animated pulse',
                     layout: 'topRight',
@@ -22,21 +28,30 @@ function add_pac_prest() {
                     modal: false, // si pongo true me hace el efecto de pantalla gris
                 });
                 $('#pacienteprestadora-nro_afiliado').val('');
+                $('#pacienteprestadora-prestadoras_id').val('');
             }
             else {
-                var n = noty({
-                    text: data.msn,
-                    type: 'error',
-                    class: 'animated pulse',
-                    layout: 'topRight',
-                    theme: 'relax',
-                    timeout: 3000, // delay for closing event. Set false for sticky notifications
-                    force: false, // adds notification to the beginning of queue when set to true
-                    modal: false, // si pongo true me hace el efecto de pantalla gris
-                });
-
+                if (data.response == 'ko') {
+                    var arr = data.msn;
+                    jQuery.each(arr, function (i, val) {
+                        var n = noty({
+                            text: val,
+                            type: 'error',
+                            class: 'animated pulse',
+                            layout: 'topRight',
+                            theme: 'relax',
+                            timeout: 3000, // delay for closing event. Set false for sticky notifications
+                            force: false, // adds notification to the beginning of queue when set to true
+                            modal: false
+                        });
+                    });
+                }
+                $(".addP").show();
             }
            
+        },
+        complete: function () {
+            $('#loading').remove();
         },
         error: function () {
             console.log("internal server error");

@@ -22,7 +22,7 @@ JS;
 
 ?>
 <div class="row">
-    <div class="col-xs-7">
+    <div class="col-md-7">
         <div class="box box-info">
                 <div class="box-header with-border">
                     <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
@@ -59,7 +59,7 @@ JS;
             </div>
         </div>
     </div>
-    <div class="col-xs-5">
+    <div class="col-md-5">
         <div class="box box-info">
             <div class="box-header with-border">
                 <h3 class="box-title"><?= Html::encode('Prestadoras') ?></h3>

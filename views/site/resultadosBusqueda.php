@@ -17,10 +17,17 @@
     <div class="body-content animated fadeIn" >
         <div class="panel_titulo">
             <div class="panel-heading ">
-                <div class="pull-right">
-                </div>
+            </div>
+                <div class="box-body">
                 <?php
+                    $cont = 1;
                     foreach ($resultados as $resultado){
+                        
+                        if ($cont % 2){
+                            echo "<div class=\"row\">";
+                        }
+                            echo "<div class='col-xs-6'>";
+                        
                         if ($resultado->className() === "app\models\Paciente") {
                 ?>
                             <div class="box box-info box-header search_strong" style="padding-top: 0px" >
@@ -29,16 +36,16 @@
                                 </div>
                                            <?php
                                                 if (!empty($resultado->nro_documento))
-                                                    echo "<strong> Nro de Documento: </strong>   $resultado->nro_documento";
+                                                    echo "<strong> Nro de Documento: </strong>   $resultado->nro_documento <br>";
                                                 if (!empty($resultado->fecha_nacimiento)){
                                                     $fecha = new \DateTime($resultado->fecha_nacimiento);
                                                     $fechaNacimiento = $fecha->format('d/m/y');
-                                                    echo "<strong> - Fecha de Nacimiento: </strong> $fechaNacimiento";
+                                                    echo "<strong>Fecha de Nacimiento: </strong> $fechaNacimiento <br>";
                                                 }
                                                 if (!empty($resultado->email))
-                                                    echo "<strong> - Email: </strong>   $resultado->email";
+                                                    echo "<strong> Email: </strong>   $resultado->email <br>";
                                                 if (!empty($resultado->telefono))
-                                                    echo "<strong> - Telefono: </strong> $resultado->telefono";
+                                                    echo "<strong> Telefono: </strong> $resultado->telefono <br>";
                                            ?>
                             </div>
                 <?php
@@ -50,9 +57,9 @@
                                 </div>
                                 <?php
                                     if (!empty($resultado->email))
-                                        echo "<strong> - Email: </strong>   $resultado->email";
+                                        echo "<strong>  Email: </strong>   $resultado->email <br>";
                                     if (!empty($resultado->telefono))
-                                        echo "<strong> - Telefono: </strong> $resultado->telefono";
+                                        echo "<strong>  Telefono: </strong> $resultado->telefono <br>";
                                 ?>
                             </div>
                 <?php
@@ -64,17 +71,29 @@
                                 </div>
                                 <p><?php echo $resultado->observaciones  ?></p>
                             </div>
+                <?php } ?>
+                            
                 <?php
-                        }else if ($resultado->className() === "app\models\Informe") {
-                ?>
-                            <div> Informe</div>
-                <?php
-                    }
-                    
-                }
-                ?>
+                        echo '</div>';
+                        $cont = $cont+1;
+                        if ($cont % 2) {
+                            echo '</div>';
+                        }
+                        
+                        
+                        
+                } ?>
+                
                 <div class="clearfix"></div>
             </div>
+            
+            <?php   if (!empty($resultados)){ ?>
+                        <div class="pull-right">
+                            <button id="goBack" class="btn btn-primary"> <i class="fa fa-arrow-left"></i> Anterior </button>
+                            <button id="goFoward" class="btn btn-primary">Siguiente <i class="fa fa-arrow-right"></i> </button>
+                        </div>
+            <?php   } ?>
+            <div class="clearfix"></div>
         </div>
     </div>
 </section>

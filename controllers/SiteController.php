@@ -183,34 +183,114 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionAbout()
-    {
+    public function actionAbout(){
         return $this->render('about');
     }
     
-    private function searchAll($searchFeld){
-        $infoPaciente = Paciente::find()->where(['LIKE', 'nombre', $searchFeld])->all();
-        $infoMedico = Medico::find()->where(['LIKE', 'nombre', $searchFeld])->all();
-        $infoProtocolo = Protocolo::find()->where(['LIKE', 'observaciones', $searchFeld])->all();
-        $info = array_merge($infoPaciente,$infoMedico);
-        $info = array_merge($info,$infoProtocolo);
-        return ['resultados' => $info , 'field' =>$searchFeld ];
-    }
-    
+    //Llamado a la accion de buscar desde el barra lateral
     public function actionSearch(){
         $searchFeld = Yii::$app->request->post('q');
-        $response = $this->searchAll($searchFeld);
+        $response = $this->stringMatchingSearchAll($searchFeld,100);
         $html = $this->renderAjax('resultadosBusqueda', $response);
         return $this->render('search', ['html' => $html, 'searchFeld' => $searchFeld] );
     }
- /*   
+    
+    //funcion que une los select de String Matching y crea la union
+    private function stringMatchingSearchAll($searchFeld,$limit){
+        $selectPacientes =  $this->stringMatchingSearchPacientes($searchFeld,$limit);
+        $selectMedicos =  $this->stringMatchingSearchMedicos($searchFeld,$limit);
+        $selectInformes =  $this->stringMatchingSearchInformes($searchFeld,$limit,null,null);
+        
+        $query = "
+        SELECT t.*
+        FROM ( ( {$selectPacientes}) UNION ({$selectMedicos}) UNION ({$selectInformes}) ) AS t
+        ORDER by t.RANKING DESC
+        LIMIT {$limit}
+        OFFSET 1";
+        
+        $busqueda = $this->getQueryResultModels($query);
+        return ['resultados' => $busqueda , 'field' =>$searchFeld ];
+    }
+    
+    //Devuelve el select de pacientes para que busque con string matching
+    private function stringMatchingSearchPacientes($searchFeld,$limit){
+        $query = "
+        SELECT
+            CONCAT(IFNULL(nombre,''),' ',IFNULL(email,'')) as descripcion,
+            id as id,
+            'Paciente' as modelo,
+            MATCH (nombre,email) AGAINST ('{$searchFeld}') as RANKING
+        FROM Paciente
+        WHERE MATCH (nombre,email) AGAINST ('{$searchFeld}' IN BOOLEAN MODE)
+        ORDER by RANKING DESC
+        LIMIT {$limit} ";
+        return $query;
+    }
+
+    //Devuelve el select de medicos para que busque con string matching
+    private function stringMatchingSearchMedicos($searchFeld,$limit){
+        $query = "
+        SELECT
+            CONCAT (IFNULL(nombre,''),' ',IFNULL(email,'')) as descripcion,
+            id as id,
+            'Medico' as modelo,
+        MATCH (nombre,email) AGAINST ('{$searchFeld}') as RANKING
+        FROM Medico
+        WHERE MATCH (nombre,email) AGAINST ('{$searchFeld}' IN BOOLEAN MODE)
+        ORDER by RANKING DESC
+        LIMIT {$limit}";
+        
+        return $query;
+    }
+    
+    //Devuelve el select de Informes para que busque con string matching
+    private function stringMatchingSearchInformes($searchFeld,$limit,$filter,$fecha){
+        
+        if (!empty($filter)){
+            $filter = "AND  ESTUDIO_ID = $filter";
+        }
+        if (!empty($fecha)){
+            $fecha = "AND  Protocolo.fecha_entrada > '{$fecha->format('Y-m-d')}' ";
+        }
+        
+        $query = "
+        SELECT
+            CONCAT(IFNULL(material,''),' ',IFNULL(tecnica,''),' ',IFNULL(macroscopia,''),' ', IFNULL(microscopia,''),' ',IFNULL(diagnostico,'')) as descripcion,
+            Informe.id as id,
+            'Informe' as modelo,
+        MATCH(material,tecnica,macroscopia,microscopia,diagnostico) AGAINST ('{$searchFeld}') as RANKING
+        FROM Informe
+        JOIN Protocolo ON (Protocolo.id = Informe.protocolo_id )
+        WHERE MATCH (material,tecnica,macroscopia,microscopia,diagnostico) AGAINST ('{$searchFeld}' IN BOOLEAN MODE)
+        {$filter}{$fecha}
+        ORDER by RANKING DESC
+        LIMIT {$limit} ";
+        return $query;
+        
+    }
+    
+    private function getQueryResultModels($query){
+        $busqueda = [];
+        $resuts = Yii::$app->db->createCommand($query)->queryAll();
+
+        foreach ($resuts as $resut){
+            $modeloNombre = $resut["modelo"];
+            $modelo = "app\models"."\\"."$modeloNombre";
+            $id = (int) $resut['id'];
+            $busqueda[] =  $modelo::find()->where(['id' => $id])->one();
+        }
+        return $busqueda;
+    }
+    
     public function actionFiltrarBusqueda(){
+
         $textoIngresado = 0;
         $informes = 0;
         $fecha = 0;
         $entidad = 0;
         $tipoDeEstudio = 0;
         $response = [];
+        $limit = 100; //Default
     
         try{
             
@@ -237,29 +317,31 @@ class SiteController extends Controller
             $query = [];
             if (!empty($entidad)){
                 if ($entidad == self::ID_ENTIDAD_TODAS){
-                    $info = $this->searchAll($textoIngresado);
+                    $info = $this->stringMatchingSearchAll($textoIngresado,$limit);
                 }elseif ($entidad == self::ID_ENTIDAD_PACIENTES){
-                    $info['resultados'] = Paciente::find()->where(['LIKE', 'nombre', $textoIngresado])->all();
+                    $selectPacientes =  $this->stringMatchingSearchPacientes($textoIngresado,$limit);
+                    $info['resultados'] = $this->getQueryResultModels($selectPacientes);
                     $info['field'] = $textoIngresado;
                 }elseif ($entidad == self::ID_ENTIDAD_PROTOCOLOS){
-                    $query = Protocolo::find()->where(['LIKE', 'observaciones', $textoIngresado])->all();
-                    
-                    $info['resultados'] = $query;
+                    $selectInforme = $this->stringMatchingSearchInformes($textoIngresado,$limit,$tipoDeEstudio,$fecha);
+                    $info['resultados'] =  $this->getQueryResultModels($selectInforme);
                     $info['field'] = $textoIngresado;
                 }elseif ($entidad == self::ID_ENTIDAD_MEDICOS){
-                    $info['resultados'] = Medico::find()->where(['LIKE', 'nombre', $textoIngresado])->all();
+                    $selectMedicos =  $this->stringMatchingSearchMedicos($textoIngresado,$limit);
+                    $info['resultados'] = $this->getQueryResultModels($selectMedicos);
                     $info['field'] = $textoIngresado;
                 }
             }
+            
             $html = $this->renderAjax('resultadosBusqueda', $info);
-    
+            
             $response = ["result" => "ok", "mensaje" => "La busqueda se realizo correctamente", 'info' => $html ];
             
         }catch (Exception $e){
             $response = ["result" => "error", "mensaje" => "Se encontro un error durante el proceso"];
         }
-        \Yii::$app->response->format = 'json';
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return $response;
     }
-    */
+    
 }

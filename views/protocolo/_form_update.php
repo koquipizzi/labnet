@@ -136,12 +136,16 @@ $( document ).ready(function() {
      $("#protocolo-letra").change(function() {
         var letra   = $("#protocolo-letra").val();
         var anio    = $("#protocolo-anio").val();
+        var nro_sec         = $("#protocolo-nro_secuencia").val();
+        var protocolo_id    = $("#protocolo-id").val();
         $.ajax({
-            url    : "index.php?r=protocolo/nro-secuencia-letra",
+            url    : "index.php?r=protocolo/cambio-letra",
             type   : "post",
             data   : {
                         letra:  letra,
-                        anio:   anio
+                        anio:   anio,
+                        nro_secuencia:  nro_sec,
+                        protocolo_id:   protocolo_id
                     },
             success: function (response) 
             {                         
@@ -202,22 +206,33 @@ function numeroSecuenciaLetraUpdate(){
 
 
 $("#protocolo-nro_secuencia").keydown(function(e) {
-    var numeroSinCeros= parseInt(this.value,10);
-    var digitos = numeroSinCeros.toString().length;
-    if( (digitos>=7) && (e.keyCode != 8) ){
-        return false;
+    if(!isNaN(this.value)){
+        var numeroSinCeros= parseInt(this.value,10);
+        var digitos = numeroSinCeros.toString().length;
+        if( (digitos>=7) && (e.keyCode != 8) ){
+            return false;
+        }
     }
     
 });
 
 $("#protocolo-nro_secuencia").keyup(function() {
-    function pad(input, length, padding) { 
-        var str = input + "";
-        return (length <= str.length) ? str : pad( padding + str, length, padding);
+ 
+    function pad(input, length, padding) {
+        var
+        str = input + "";
+        return (length <= str . length) ? str : pad(padding + str, length, padding);
     }
-    var numeroSinCeros=  parseInt(this.value,10);
-    var digitos = numeroSinCeros.toString().length;
-    $("#protocolo-nro_secuencia").val(pad(numeroSinCeros,7,0) );
+   if (!isNaN(this.value)){
+        var
+        numeroSinCeros = parseInt(this . value, 10);
+        var
+        digitos = numeroSinCeros . toString() . length;
+        $("#protocolo-nro_secuencia") . val(pad(numeroSinCeros, 7, 0));
+    }else{
+        $("#protocolo-nro_secuencia").val(pad(0, 7, 0));
+    }
+
  });
 
 

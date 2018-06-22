@@ -874,6 +874,27 @@ class ProtocoloController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return ['rta'=>$rta,"nro_secuencia"=>$nro_secuencia,"mensaje"=>$mensaje];
     }
+    
+    public function actionNroSecuenciaLetraUpdate()
+    {
+        $rta=false;
+        $nro_secuencia=sprintf("%07d",0);
+        $mensaje="";
+        $modelProtocolo=new Protocolo();
+        try{
+            if ( !empty(Yii::$app->request->post()["letra"]) && !empty(Yii::$app->request->post()["anio"]) )  {
+                $letra          =Yii::$app->request->post()["letra"];
+                $anio           =Yii::$app->request->post()["anio"];
+                $nro_secuencia  =$modelProtocolo->getNextNroSecuenciaByLetra($letra,$anio);
+                $rta            =true;
+            }
+        } catch (\Exception $e) {
+            $mensaje=$e->getMessage();
+        }
+        
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return ['rta'=>$rta,"nro_secuencia"=>$nro_secuencia,"mensaje"=>$mensaje];
+    }
 
     public function actionExisteNroSecuenciaLetra()
     {
@@ -895,10 +916,14 @@ class ProtocoloController extends Controller
         if($rta){
             $mensaje="El nro de secuencia {$nro_secuencia} para la letra {$letra} ya existe.";
         }
-
+        
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return ['rta'=>$rta,"mensaje"=>$mensaje,"mensajeError"=> $mensajeError];
     }
+    
+    
+    
+    
     public function actionExisteNroSecuenciaLetraUpdate()
     {
 
@@ -924,7 +949,37 @@ class ProtocoloController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return ['rta'=>$rta,"mensaje"=>$mensaje,"mensajeError"=> $mensajeError];
     }
-
+    
+    public function actionCambioLetra()
+    {
+        $rta=false;
+        $mensaje="";
+        $mensajeError="";
+        $modelProtocolo= new Protocolo();
+        try{
+            if( empty(Yii::$app->request->post()["letra"]) || empty(Yii::$app->request->post()["anio"]) || empty(Yii::$app->request->post()["nro_secuencia"]) || empty(Yii::$app->request->post()["protocolo_id"])   ){
+                throw new \yii\base\Exception("the request especification is wrong ");
+            }
+            $letra          = Yii::$app->request->post()["letra"];
+            $anio           = Yii::$app->request->post()["anio"];
+            $nro_secuencia  = Yii::$app->request->post()["nro_secuencia"];
+            $protocolo_id  = Yii::$app->request->post()["protocolo_id"];
+            $rowProtocolo  = Protocolo::find()->where(["letra"=>$letra,"anio"=>$anio,"id"=>$protocolo_id])->one();
+         
+            if(!empty($rowProtocolo)){
+                $nro_secuencia= $nro_secuencia=sprintf("%07d",$rowProtocolo->nro_secuencia);
+            }else{
+                $nro_secuencia=$modelProtocolo->getNextNroSecuenciaByLetra($letra,$anio);
+            }
+            $rta            =true;
+        } catch (\Exception $e) {
+            $nro_secuencia= $nro_secuencia=sprintf("%07d",0);
+            $mensajeError=$e->getMessage();
+        }
+    
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return ['rta'=>$rta,"nro_secuencia"=>$nro_secuencia,"mensaje"=>$mensajeError];
+    }
 
 }
 

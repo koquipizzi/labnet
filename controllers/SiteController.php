@@ -134,15 +134,11 @@ class SiteController extends Controller
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-   //     var_dump(Yii::$app->user); die();
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         }
-
-  //      $this->layout = 'lay-account';
-          $this->layout = 'main-login';
-   //    $this->layout = '../site/login';
+        $this->layout = 'main-login';
         return $this->render('login', [
             'model' => $model,
         ]);
@@ -209,6 +205,9 @@ class SiteController extends Controller
         OFFSET 1";
         
         $busqueda = $this->getQueryResultModels($query);
+        
+        
+        
         return ['resultados' => $busqueda , 'field' =>$searchFeld ];
     }
     
@@ -247,10 +246,14 @@ class SiteController extends Controller
     private function stringMatchingSearchInformes($searchFeld,$limit,$filter,$fecha){
         
         if (!empty($filter)){
-            $filter = "AND  ESTUDIO_ID = $filter";
+            $filter = "AND ( ESTUDIO_ID = $filter ) ";
+        }else{
+            $filter = null;
         }
         if (!empty($fecha)){
-            $fecha = "AND  Protocolo.fecha_entrada > '{$fecha->format('Y-m-d')}' ";
+            $fecha = "AND ( Protocolo.fecha_entrada > '{$fecha->format('Y-m-d')}' ) ";
+        }else{
+            $fecha = null;
         }
         
         $query = "
@@ -265,6 +268,7 @@ class SiteController extends Controller
         {$filter}{$fecha}
         ORDER by RANKING DESC
         LIMIT {$limit} ";
+        
         return $query;
         
     }

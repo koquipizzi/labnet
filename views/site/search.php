@@ -99,6 +99,7 @@ JS;
         <div class="col-xs-3 protocolo-search" style="display: none; ">
             <div class="box-footer">
                 <select id="informe-filter" class="form-group form-control" data-live-search="true">
+                    <option value="0">Todos</option>
                     <?php
                     $estudios = Estudio::find()->all();
                     foreach ($estudios as $estudio){

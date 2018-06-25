@@ -6,13 +6,132 @@ use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use app\models\Prestadoras;
+use yii\web\View;
+use xj\bootbox\BootboxAsset;
+BootboxAsset::register($this);
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\NomencladorSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Nomencladors');
 $this->params['breadcrumbs'][] = $this->title;
-$this->registerJsFile('@web/assets/admin/js/cipat_modal_nomenclador.js');
+$js = <<<JS
+$(document).one("pjax:success", function() {
+  $('.borrar').click(function(e){
+        e.preventDefault();
+        var urlw = $(this).attr('value');
+        bootbox.dialog
+        ({
+            message: '¿Confirma que desea eliminar Nomenclador?',
+            title: 'Sistema LABnet',
+            className: 'modal-info modal-center',
+            buttons: {
+                success: {
+                    label: 'Aceptar',
+                    className: 'btn-primary',
+                    callback: function() {
+                        $.ajax(urlw, {
+                                type: 'POST',
+                                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                   bootbox.alert('No se puede eliminar esa entidad.');
+                                }
+                            }).done(function(data) {
+                                if(data.rta==="ok"){
+                                    $.pjax.reload({container: '#nomenclador'});
+                                    var n = noty({
+                                        text: 'Entidad eliminada con éxito!',
+                                        type: 'success',
+                                        class: 'animated pulse',
+                                        layout: 'topRight',
+                                        theme: 'relax',
+                                        timeout: 2000, // delay for closing event. Set false for sticky notifications
+                                        force: false, // adds notification to the beginning of queue when set to true
+                                        modal: false, // si pongo true me hace el efecto de pantalla gris
+                                        //       maxVisible  : 10
+                                    });
+                                }
+                                if(data.rta==="error"){
+                                    var n = noty({
+                                        text: data.message,
+                                        type: 'alert',
+                                        class: 'animated pulse',
+                                        layout: 'topRight',
+                                        theme: 'relax',
+                                        timeout: 2000, // delay for closing event. Set false for sticky notifications
+                                        force: false, // adds notification to the beginning of queue when set to true
+                                        modal: false, // si pongo true me hace el efecto de pantalla gris
+                                        //       maxVisible  : 10
+                                    });
+                                }
+                            });
+                        }
+                    },
+                cancel: {
+                    label: 'Cancelar',
+                    className: 'btn-danger',
+                        }
+                }
+         });
+    });
+});
+    $('.borrar').click(function(e){
+        e.preventDefault();
+        var urlw = $(this).attr('value');
+        bootbox.dialog
+        ({
+            message: '¿Confirma que desea eliminar Nomenclador?',
+            title: 'Sistema LABnet',
+            className: 'modal-info modal-center',
+            buttons: {
+                success: {
+                    label: 'Aceptar',
+                    className: 'btn-primary',
+                    callback: function() {
+                        $.ajax(urlw, {
+                                type: 'POST',
+                                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                   bootbox.alert('No se puede eliminar esa entidad.');
+                                }
+                            }).done(function(data) {
+                                if(data.rta==="ok"){
+                                    $.pjax.reload({container: '#nomenclador'});
+                                    var n = noty({
+                                        text: 'Entidad eliminada con éxito!',
+                                        type: 'success',
+                                        class: 'animated pulse',
+                                        layout: 'topRight',
+                                        theme: 'relax',
+                                        timeout: 2000, // delay for closing event. Set false for sticky notifications
+                                        force: false, // adds notification to the beginning of queue when set to true
+                                        modal: false, // si pongo true me hace el efecto de pantalla gris
+                                        //       maxVisible  : 10
+                                    });
+                                }
+                                if(data.rta==="error"){
+                                    var n = noty({
+                                        text: data.message,
+                                        type: 'alert',
+                                        class: 'animated pulse',
+                                        layout: 'topRight',
+                                        theme: 'relax',
+                                        timeout: 2000, // delay for closing event. Set false for sticky notifications
+                                        force: false, // adds notification to the beginning of queue when set to true
+                                        modal: false, // si pongo true me hace el efecto de pantalla gris
+                                        //       maxVisible  : 10
+                                    });
+                                }
+                            });
+                        }
+                    },
+                cancel: {
+                    label: 'Cancelar',
+                    className: 'btn-danger',
+                        }
+                }
+         });
+    });
+JS;
+$this->registerJs($js);
 ?>
 
 
@@ -22,11 +141,11 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_nomenclador.js');
             </div>
             <div class="pull-right">
                 <?= Html::a('<i class="fa fa-plus-circle"></i> Nuevo Nomenclador', ['nomenclador/create'], ['class'=>'btn btn-primary']) ?>
-            </div>   
+            </div>
             <div class="clearfix"></div>
         </div>
 
-<?php Pjax::begin(['id' => 'nomenclador', 'enablePushState' => FALSE]); ?>
+<?php Pjax::begin(['id' => 'nomenclador', 'enablePushState' => true]); ?>
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'options'=>array('class'=>'table table-striped table-lilac'),
@@ -44,7 +163,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_nomenclador.js');
             'descripcion',
             'valor',
             'coseguro',
-            [   
+            [
                 'label' =>'Prestadora',
                 'attribute' => 'Prestadoras_id',
                 'value' => function ($model) {
@@ -95,10 +214,9 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_nomenclador.js');
             }
         ],
          ],
-        'rowOptions'=>function ($model, $key, $index, $grid){
-                $class=$index%2?'odd':'even';
-                return array('key'=>$key,'index'=>$index,'class'=>$class);
-            },
+       
     ]); ?>
-<?php Pjax::end(); ?>
+<?php Pjax::end();
+ //$this->registerJsFile('@web/assets/admin/js/cipat_modal_nomenclador.js',['depends' => [\yii\web\JqueryAsset::className()]]);
+?>
 

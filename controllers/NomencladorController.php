@@ -101,39 +101,26 @@ class NomencladorController extends Controller
      * @param integer $id
      * @return mixed
      */
+ 
     public function actionDelete($id)
     {
-       try {
-            if($this->findModel($id)->delete()){
-                if (Yii::$app->getRequest()->isAjax) {
-                    $dataProvider = new ActiveDataProvider([
-                        'query' => Nomenclador::find()
-                    ]);
-                    $searchModel = new NomencladorSearch();
-                    return $this->render('index', [
-                       'dataProvider' => $dataProvider,
-                        'searchModel' => $searchModel
-                    ]);
-                }
-            }
-        } catch (\yii\db\IntegrityException $exc) {
-//            Yii::$app->session->setFlash('error',
-//                [
-//                    //'type' => 'error',
-//                    'icon' => 'fa fa-users',
-//                    'message' => 'Localidad posee elementos relacionados',
-//                    'title' => 'Error de Borrado',
-//                    'positonY' => 'top',
-//                    'positonX' => 'left'
-//                ]                    
-//            );
-           // return $this->redirect(redirect(['index']);
-           
-        }        
-       
-        return $this->redirect(['index']);
-    }
+        $rta="error";
+        $mjs="";
+        try {
+            $md=$this->findModel($id);
+            $md->delete();
+            $rta="ok";
+        } catch (\Exception $e) {
+            $e = $e->getMessage();
+            $mjs= "No puede eliminarse el nomenclador. Puede deberse a que el mismo ya ha sido utilizado en un estudio.";
+        }
 
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return ['rta'=>$rta, 'message'=>$mjs];
+        die();
+        
+        
+    }
     /**
      * Finds the Nomenclador model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

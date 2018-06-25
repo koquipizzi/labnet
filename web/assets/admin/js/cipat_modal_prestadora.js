@@ -61,61 +61,118 @@
                     $('#modal').find('#modalContent').load($(this).attr('value'));
                     $('#modal').modal('show');
                 });
-                
+    
                 $('.borrar').click(function(e){
                     e.preventDefault();
-                    var $urlw = $(this).attr("value");
-                    bootbox.dialog({
-                              message: '¿Confirma que desea eliminar la Cobertura?',
-                              title: 'Sistema LABnet',
-                              className: 'modal-info modal-center',
-                              buttons: {
-                                  success: {
-                                      label: 'Aceptar',
-                                      className: 'btn-primary',
-                                      callback: function() {
-                                        $.ajax($urlw, {
-                                            type: 'POST',
-                                            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                                bootbox.alert('No se puede eliminar esa entidad.');                                    
-                                            }
-                                        }).done(function(data) {
-                                            if (data== 'error')
-                                            {
-                                                var n = noty({
-                                                    text: 'No se pudo eliminar la entidad ya que está siendo usada por otras entidades',
-                                                    type: 'error',
-                                                    class: 'animated pulse',
-                                                    layout: 'topRight',
-                                                    theme: 'relax',
-                                                    timeout: 3000, // delay for closing event. Set false for sticky notifications
-                                                    force: false, // adds notification to the beginning of queue when set to true
-                                                    modal: false, // si pongo true me hace el efecto de pantalla gris
-                                                });
-                                            }
-                                            else {
-                                                $.pjax.reload({container: '#prestadoras'});
-                                              //  if (data == '')
-                                                var n = noty({
-                                                    text: 'Entidad eliminada con éxito!',
-                                                    type: 'success',
-                                                    class: 'animated pulse',
-                                                    layout: 'topRight',
-                                                    theme: 'relax',
-                                                    timeout: 3000, // delay for closing event. Set false for sticky notifications
-                                                    force: false, // adds notification to the beginning of queue when set to true
-                                                    modal: false, // si pongo true me hace el efecto de pantalla gris
-                                                });
-                                            }
-                                        });                                        
-                                      }
-                                  },
-                                  cancel: {
-                                      label: 'Cancelar',
-                                      className: 'btn-danger',                                     
-                                  }                                  
+                    var urlw = $(this).attr('value');
+                    bootbox.dialog
+                    ({
+                        message: '¿Confirma que desea eliminar la Cobertura?',
+                        title: 'Sistema LABnet',
+                        className: 'modal-info modal-center',
+                        buttons: {
+                            success: {
+                                label: 'Aceptar',
+                                className: 'btn-primary',
+                                callback: function() {
+                                    $.ajax(urlw, {
+                                        type: 'POST',
+                                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                            bootbox.alert('No se puede eliminar esa Cobertura.');
+                                        }
+                                    }).done(function(data) {
+                                        if(data.rta==="ok"){
+                                            $.pjax.reload({container: '#prestadoras'});
+                                            var n = noty({
+                                                text: 'Cobertura eliminada con éxito!',
+                                                type: 'success',
+                                                class: 'animated pulse',
+                                                layout: 'topRight',
+                                                theme: 'relax',
+                                                timeout: 2000, // delay for closing event. Set false for sticky notifications
+                                                force: false, // adds notification to the beginning of queue when set to true
+                                                modal: false, // si pongo true me hace el efecto de pantalla gris
+                                                //       maxVisible  : 10
+                                            });
+                                        }
+                                        if(data.rta==="error"){
+                                            var n = noty({
+                                                text: data.message,
+                                                type: 'alert',
+                                                class: 'animated pulse',
+                                                layout: 'topRight',
+                                                theme: 'relax',
+                                                timeout: 2000, // delay for closing event. Set false for sticky notifications
+                                                force: false, // adds notification to the beginning of queue when set to true
+                                                modal: false, // si pongo true me hace el efecto de pantalla gris
+                                                //       maxVisible  : 10
+                                            });
+                                        }
+                                    });
                                 }
-                            });
+                            },
+                            cancel: {
+                                label: 'Cancelar',
+                                className: 'btn-danger',
+                            }
+                        }
+                    });
+                });
+                $('.borrarEntidadFacturable').click(function(e){
+                    e.preventDefault();
+                    var urlw = $(this).attr('value');
+                    bootbox.dialog
+                    ({
+                        message: '¿Confirma que desea eliminar la Entidad Facturable?',
+                        title: 'Sistema LABnet',
+                        className: 'modal-info modal-center',
+                        buttons: {
+                            success: {
+                                label: 'Aceptar',
+                                className: 'btn-primary',
+                                callback: function() {
+                                    $.ajax(urlw, {
+                                        type: 'POST',
+                                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                            bootbox.alert('No se puede eliminar esa Entidad Facturable.');
+                                        }
+                                    }).done(function(data) {
+                                        if(data.rta==="ok"){
+                                            $.pjax.reload({container: '#prestadoras'});
+                                            var n = noty({
+                                                text: 'Entidad Facturable eliminada con éxito!',
+                                                type: 'success',
+                                                class: 'animated pulse',
+                                                layout: 'topRight',
+                                                theme: 'relax',
+                                                timeout: 2000, // delay for closing event. Set false for sticky notifications
+                                                force: false, // adds notification to the beginning of queue when set to true
+                                                modal: false, // si pongo true me hace el efecto de pantalla gris
+                                                //       maxVisible  : 10
+                                            });
+                                        }
+                                        if(data.rta==="error"){
+                                            var n = noty({
+                                                text: data.message,
+                                                type: 'alert',
+                                                class: 'animated pulse',
+                                                layout: 'topRight',
+                                                theme: 'relax',
+                                                timeout: 2000, // delay for closing event. Set false for sticky notifications
+                                                force: false, // adds notification to the beginning of queue when set to true
+                                                modal: false, // si pongo true me hace el efecto de pantalla gris
+                                                //       maxVisible  : 10
+                                            });
+                                        }
+                                    });
+                                }
+                            },
+                            cancel: {
+                                label: 'Cancelar',
+                                className: 'btn-danger',
+                            }
+                        }
+                    });
                 });
                                 
  });

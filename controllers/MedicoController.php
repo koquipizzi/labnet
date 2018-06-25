@@ -10,6 +10,7 @@ use app\models\Medico_especialidad;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 //use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * MedicoController implements the CRUD actions for Medico model.

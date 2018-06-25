@@ -14,43 +14,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php
     $js = <<<JS
-    $('.deletePaciente').on('click',function() {
-         var ajaxurl = $(this).attr('value');
-         $.get( ajaxurl , function( data ) {
-                if (data.result == 'ok'){
-                        $.pjax.reload({container: '#pacientes'})
-                        var n = noty({
-                                text: data.message,
-                                type: 'success',
-                                class: 'animated pulse',
-                                layout: 'topRight',
-                                theme: 'relax',
-                                timeout: 3000, // delay for closing event. Set false for sticky notifications
-                                force: false, // adds notification to the beginning of queue when set to true
-                                modal: false, // si pongo true me hace el efecto de pantalla gris
-                                killer : true,
-                        });
-                }else{
-                        var n = noty({
-                                text: data.message,
-                                type: 'alert',
-                                class: 'animated pulse',
-                                layout: 'topRight',
-                                theme: 'relax',
-                                timeout: 3000, // delay for closing event. Set false for sticky notifications
-                                force: false, // adds notification to the beginning of queue when set to true
-                                modal: false, // si pongo true me hace el efecto de pantalla gris
-                                killer : true
-                        });
-                }
-        });
-    })
-    
+     
      $(document).on('ready pjax:success', function () {
          $('.deletePaciente').on('click',function() {
              var ajaxurl = $(this).attr('value');
              $.get( ajaxurl , function( data ) {
-                 if (data.result == 'ok'){
+                 if (data.rta == 'ok'){ 
 					 $.pjax.reload({container: '#pacientes'})
                      var n = noty({
                             text: data.message,
@@ -93,7 +62,7 @@ JS;
     <div class="clearfix"></div>
 </div>
 
-<?php Pjax::begin(['id'=>'pacientes', 'enablePushState' => true]); ?>
+<?php Pjax::begin(['id'=>'pacientes']); ?>
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'options'=>array('class'=>'table table-striped table-lilac'),

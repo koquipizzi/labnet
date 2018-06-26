@@ -1,6 +1,7 @@
 html,
 body {
     height: 100%;
+    font-size: 13px;
 }
 
 .wrap {
@@ -210,3 +211,11 @@ b, strong {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+.table > thead > tr > th, .table > tbody > tr > th, 
+.table > tfoot > tr > th, .table > thead > tr > td,
+ .table > tbody > tr > td, .table > tfoot > tr > td
+ {
+    padding:3px;
+    padding-left:6px;
+ }

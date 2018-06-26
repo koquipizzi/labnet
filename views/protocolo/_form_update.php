@@ -15,7 +15,7 @@ use yii\web\JsExpression;
 use yii\widgets\Pjax;
 //yii fue sustituido por
 use kartik\select2\Select2;
-use vova07\select2\Widget;
+//use vova07\select2\Widget;
 use kartik\datecontrol\DateControl;
 //Models
 use app\models\Estudio;
@@ -368,8 +368,42 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
         </div>      
         <div class="col-md-6" style="text-align: right;">
               <div class="row">
-                    <div class="col-md-10">
-                      <?php yii\widgets\Pjax::begin(['id' => 'new_medico']);                         
+                    <div class="col-md-12">
+                        <?php 
+                            echo $form->field($model, 'Medico_id',
+                            ['template' => "{label}
+                                <div class='col-md-7' >
+                                {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
+                                ]
+                                )->widget(Select2::classname(), [
+                                    'initValueText' => 'Ingrese Médico',
+                                    'options' => [  'placeholder' => 'Buscar Médico ...',
+                                    ],
+                                    'pluginOptions' => [
+                                  //      'allowClear' => true,
+                                        'minimumInputLength' => 1,
+                                        'ajax' => [
+                                            'url' => Url::to(['medico/list']),
+                                            'dataType' => 'json',
+                                            'delay' => 250,
+                                            'data' => new JsExpression('function(params) { return {term:params.term  }; }'),
+                                            'processResults' => new JsExpression('function(data) {
+                                                return {
+                                                    results: $.map(data, function(item, index) {
+                                                        return {
+                                                        "id": item.id,
+                                                        "text": item.nombre 
+                                                        };
+                                                    })
+                                                    };
+                                                }'),
+                                            'cache' => true
+                                        ],
+                                    ],
+                            ]);  
+                        
+                        ?>
+                      <?php /*yii\widgets\Pjax::begin(['id' => 'new_medico']);                         
                            $dataMedico=ArrayHelper::map(Medico::find()->asArray()->all(), 'id', 'nombre');                         
                             echo $form->field($model, 'Medico_id',
                                     ['template' => "{label}
@@ -389,20 +423,20 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                             'width' => '100%',
                                         ]
                                     ]);
-                        
+                        */
                         ?>
-                        <?php yii\widgets\Pjax::end() ?>
+                        <?php //yii\widgets\Pjax::end() ?>
                     </div>
-                    <button type='button'  id='addMedico'  class=' col-md-1   btn btn-success btn-xs' 
+                    <!--button type='button'  id='addMedico'  class=' col-md-1   btn btn-success btn-xs' 
                             value='index.php?r=medico/createpop'><?php   echo Yii::t('app', 'Add');  ?>
-                    </button>
+                    </button-->
             </div>
         </div>                
         <div class="col-md-6" style="text-align: right;">
            
               <div class="row">
-                    <div class="col-md-10">
-                      <?php yii\widgets\Pjax::begin(['id' => 'new_procedencia']);                         
+                    <div class="col-md-12">
+                      <?php /* yii\widgets\Pjax::begin(['id' => 'new_procedencia']);                         
                             $dataProcedencia=ArrayHelper::map(Procedencia::find()->asArray()->all(), 'id', 'descripcion');  
                         
                             echo $form->field($model, 'Procedencia_id',
@@ -424,39 +458,101 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                 'width' => '100%',
                             ]
                         ]);
-                        
+                        */
                         ?>
-                        <?php yii\widgets\Pjax::end() ?>
+                        <?php 
+                            echo $form->field($model, 'Procedencia_id',
+                                ['template' => "{label}
+                                                <div class='col-md-7'>{input}</div>
+                                                {hint}{error}",
+                                                'labelOptions' => [ 'class' => 'col-md-4 control-label' ]]
+                                    )->widget(Select2::classname(), [
+                                        'initValueText' => 'Procedencia',
+                                        'options' => [  'placeholder' => 'Procedencia ...',
+                                        ],
+                                        'pluginOptions' => [
+                                        //'allowClear' => true,
+                                            'minimumInputLength' => 1,
+                                            'ajax' => [
+                                                'url' => Url::to(['procedencia/list']),
+                                                'dataType' => 'json',
+                                                'delay' => 250,
+                                                'data' => new JsExpression('function(params) { return {term:params.term  }; }'),
+                                                'processResults' => new JsExpression('function(data) {
+                                                    return {
+                                                        results: $.map(data, function(item, index) {
+                                                            return {
+                                                            "id": item.id,
+                                                            "text": item.descripcion 
+                                                            };
+                                                        })
+                                                        };
+                                                    }'),
+                                                'cache' => true
+                                            ],
+                                        ],
+                                ]);  
+                        ?>
+                        <?php //yii\widgets\Pjax::end() ?>
                     </div>
-                        <button type='button'  id='addProcedencia'  
+                        <!--button type='button'  id='addProcedencia'  
                              class=' col-md-1  addProcedencia btn btn-success btn-xs' 
                              value='index.php?r=procedencia/createpop'><?php    echo Yii::t('app', 'Add');  ?>
-                        </button>
+                        </button-->
             </div>
         </div>    
         <div class="col-md-6" style="text-align: right;">
             <?php
-                $dataFacturar=ArrayHelper::map(Prestadoras::find()->where(['facturable' => 'S'])->asArray()->all(), 'id', 'descripcion');
+                //$dataFacturar=ArrayHelper::map(Prestadoras::find()->where(['facturable' => 'S'])->asArray()->all(), 'id', 'descripcion');
                 echo $form->field($model, 'FacturarA_id',
-                        ['template' => "{label}
-                        <div class='col-md-7'>
-                        {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
-                        ]
-                        )->widget(Widget::className(), [
-                        'options' => [
-                            'multiple' => false,
-                            'placeholder' => 'Choose item'
-                        ],
-                        'items' => $dataFacturar,
-                        'settings' => [
-                            'width' => '100%',
-                        ]
-                ]);
+                            ['template' => "{label}
+                                <div class='col-md-7' >
+                                {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
+                                ]
+                                )->widget(Select2::classname(), [
+                                    'initValueText' => 'Facturar a',
+                                    'options' => [  'placeholder' => 'Facturar a ...',
+                                    ],
+                                    'pluginOptions' => [
+                                    //    'allowClear' => true,
+                                        'minimumInputLength' => 1,
+                                        'ajax' => [
+                                            'url' => Url::to(['prestadoras/facturar']),
+                                            'dataType' => 'json',
+                                            'delay' => 250,
+                                            'data' => new JsExpression('function(params) { return {term:params.term  }; }'),
+                                            'processResults' => new JsExpression('function(data) {
+                                                return {
+                                                    results: $.map(data, function(item, index) {
+                                                        return {
+                                                        "id": item.id,
+                                                        "text": item.descripcion 
+                                                        };
+                                                    })
+                                                    };
+                                                }'),
+                                            'cache' => true
+                                        ],
+                                    ],
+                            ]);  
             ?>
         </div>
         <div class="col-md-6" style="text-align: left;">
-            <?php                
-                echo $form->field($model, 'Paciente_prestadora_id',
+            <?php               
+            echo $form->field($model, 'Paciente_prestadora_id',
+                            ['template' => "{label}
+                                <div class='col-md-7' >
+                                {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
+                                ]
+                                )->widget(Select2::classname(), [
+                                    'data' => $PacientePrestadora,
+                                    'initValueText' => 'Prestadora',
+                                    'options' => [  'placeholder' => 'Facturar a ...',
+                                    ],
+                                    
+                            ]);  
+
+             /*   echo $form->field($model, 'Paciente_prestadora_id',
                         ['template' => "{label}
                         <div class='col-md-7'>
                         {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
@@ -470,7 +566,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         'settings' => [
                             'width' => '100%',
                         ]
-                ]);
+                ]);*/
             ?>
         </div>        
         <div class="col-md-6" style="text-align: right;">

@@ -17,8 +17,9 @@ $this->params['breadcrumbs'][] = $this->title;
     $('.deletePaciente').on('click',function() {
          var ajaxurl = $(this).attr('value');
          $.get( ajaxurl , function( data ) {
-                if (data.result == 'ok'){
+                if (data.rta == 'ok'){
                         $.pjax.reload({container: '#pacientes'})
+                        console.log("entre2");
                         var n = noty({
                                 text: data.message,
                                 type: 'success',
@@ -50,7 +51,8 @@ $this->params['breadcrumbs'][] = $this->title;
          $('.deletePaciente').on('click',function() {
              var ajaxurl = $(this).attr('value');
              $.get( ajaxurl , function( data ) {
-                 if (data.result == 'ok'){
+                 if (data.rta == 'ok'){
+                     console.log("entre");
 					 $.pjax.reload({container: '#pacientes'})
                      var n = noty({
                             text: data.message,
@@ -93,7 +95,7 @@ JS;
     <div class="clearfix"></div>
 </div>
 
-<?php Pjax::begin(['id'=>'pacientes', 'enablePushState' => true]); ?>
+<?php Pjax::begin(['id'=>'pacientes']); ?>
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'options'=>array('class'=>'table table-striped table-lilac'),

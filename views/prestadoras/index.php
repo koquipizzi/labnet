@@ -17,6 +17,68 @@ BootboxAsset::register($this);
 
 $this->title = Yii::t('app', 'Coberturas');
 $this->params['breadcrumbs'][] = $this->title;
+    
+    
+$js = <<<JS
+    $('.borrar').click(function(e){
+        e.preventDefault();
+        var urlw = $(this).attr('value');
+        bootbox.dialog
+        ({
+            message: '¿Confirma que desea eliminar la Cobertura?',
+            title: 'Sistema LABnet',
+            className: 'modal-info modal-center',
+            buttons: {
+                success: {
+                    label: 'Aceptar',
+                    className: 'btn-primary',
+                    callback: function() {
+                        $.ajax(urlw, {
+                                type: 'POST',
+                                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                   bootbox.alert('No se puede eliminar esa Cobertura.');
+                                }
+                            }).done(function(data) {
+                                if(data.rta==="ok"){
+                                    $.pjax.reload({container: '#prestadoras'});
+                                    var n = noty({
+                                        text: 'Cobertura eliminada con éxito!',
+                                        type: 'success',
+                                        class: 'animated pulse',
+                                        layout: 'topRight',
+                                        theme: 'relax',
+                                        timeout: 2000, // delay for closing event. Set false for sticky notifications
+                                        force: false, // adds notification to the beginning of queue when set to true
+                                        modal: false, // si pongo true me hace el efecto de pantalla gris
+                                        //       maxVisible  : 10
+                                    });
+                                }
+                                if(data.rta==="error"){
+                                    var n = noty({
+                                        text: data.message,
+                                        type: 'alert',
+                                        class: 'animated pulse',
+                                        layout: 'topRight',
+                                        theme: 'relax',
+                                        timeout: 2000, // delay for closing event. Set false for sticky notifications
+                                        force: false, // adds notification to the beginning of queue when set to true
+                                        modal: false, // si pongo true me hace el efecto de pantalla gris
+                                        //       maxVisible  : 10
+                                    });
+                                }
+                            });
+                        }
+                    },
+                cancel: {
+                    label: 'Cancelar',
+                    className: 'btn-danger',
+                        }
+                }
+         });
+    });
+JS;
+$this->registerJs($js);
+
   ?>
 
     <div class="header-content">

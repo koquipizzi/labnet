@@ -273,17 +273,23 @@ class PrestadorasController extends Controller
      * @return mixed
      */
     public function actionDelete($id)
-    {     
+    {
+        $rta="error";
+        $mjs="";
         try {
-            if($this->findModel($id)->delete()){
-                if (Yii::$app->getRequest()->isAjax) {
-                    return 'ok';
-                }
-            }
-        } catch (\yii\db\IntegrityException $exc) {
-                        //notificar catch
-            return 'error';
-        }        
+            $md=$this->findModel($id);
+            $md->delete();
+            $rta="ok";
+        } catch (\Exception $e) {
+            $e = $e->getMessage();
+            $mjs= "No puede eliminarse la Cobertura.";
+        }
+        
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return ['rta'=>$rta, 'message'=>$mjs];
+        die();
+        
+        
     }
     /**
      * Deletes an existing Entidad Facturable model.
@@ -293,16 +299,22 @@ class PrestadorasController extends Controller
      */
     public function actionDeletefacturable($id)
     {
+        $rta="error";
+        $mjs="";
         try {
-            if($this->findModel($id)->delete()){
-                if (Yii::$app->getRequest()->isAjax) {
-                    return 'ok';
-                }
-            }
-        } catch (\yii\db\IntegrityException $exc) {
-            //notificar catch
-            return 'error';
+            $md=$this->findModel($id);
+            $md->delete();
+            $rta="ok";
+        } catch (\Exception $e) {
+            $e = $e->getMessage();
+            $mjs= "No puede eliminarse la Entidad Facturable.";
         }
+    
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return ['rta'=>$rta, 'message'=>$mjs];
+        die();
+    
+    
     }
 
     /**

@@ -30,7 +30,6 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 
         <div style="margin-top: 10px;">
-                <?php Pjax::begin(['id'=>'trab_prot', 'enablePushState' => FALSE]); ?>
             <?php
             echo GridView::widget([
             'dataProvider' => $dataProviderTodosLosProtocolos,
@@ -154,7 +153,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
         ]);
         ?>
-        <?php Pjax::end(); ?>
      </div>
 
 

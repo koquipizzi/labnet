@@ -140,7 +140,7 @@ class MedicoController extends Controller
 
 
     public function actionCreatepop()
-        {
+    {
             $model = new Medico();
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -153,7 +153,29 @@ class MedicoController extends Controller
                             'model' => $model
                 ]);
             }
+    }
+
+    public function actionList($term = NULL)
+    {   
+        header('Content-type: application/json');
+        $clean['more'] = false;
+
+        $query = new \yii\db\Query;
+        if(!empty($term)) {
+            $mainQuery = $query->select('Medico.id
+                                        ,nombre
+                                        ')
+                                ->from('Medico')
+                                ->where(['like','Medico.nombre',$term])
+                                ->limit(15);                       //limito a 15, para mejorar performance
+            $command = $mainQuery->createCommand();
+            $rows = $command->queryAll();
+            $clean['results'] = array_values($rows);
         }
+        echo \yii\helpers\Json::encode($clean['results']);
+        exit();
+    }
+
 
 
 

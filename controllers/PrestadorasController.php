@@ -344,8 +344,7 @@ class PrestadorasController extends Controller
     }
 
     public function actionList($term = NULL)
-    { //die($term);
-        header('Content-type: application/json');
+    {   header('Content-type: application/json');
         $clean['more'] = false;
 
         $query = new \yii\db\Query;
@@ -354,9 +353,7 @@ class PrestadorasController extends Controller
                                         ,descripcion
                                         ')
                                 ->from('Prestadoras')
-                             //   ->innerJoin('Tipo_documento','Tipo_documento.id = Paciente.Tipo_documento_id')
                                 ->where(['like','Prestadoras.descripcion',$term])
-                            //    ->orWhere(['like','nro_documento',$term])
                                 ->limit(15);                       //limito a 15, para mejorar performance
             $command = $mainQuery->createCommand();
             $rows = $command->queryAll();
@@ -365,6 +362,28 @@ class PrestadorasController extends Controller
         echo \yii\helpers\Json::encode($clean['results']);
         exit();
     }
+
+    public function actionFacturar($term = NULL)
+    {   header('Content-type: application/json');
+        $clean['more'] = false;
+
+        $query = new \yii\db\Query;
+        if(!empty($term)) {
+            $mainQuery = $query->select('Prestadoras.id
+                                        ,descripcion
+                                        ')
+                                ->from('Prestadoras')
+                                ->where(['like','Prestadoras.descripcion',$term])
+                                ->andWhere(['like','Prestadoras.facturable',"S"])
+                                ->limit(15);                       //limito a 15, para mejorar performance
+            $command = $mainQuery->createCommand();
+            $rows = $command->queryAll();
+            $clean['results'] = array_values($rows);
+        }
+        echo \yii\helpers\Json::encode($clean['results']);
+        exit();
+    }
+
 
   
 

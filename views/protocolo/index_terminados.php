@@ -203,12 +203,13 @@ JS;
                                 'contentOptions' => ['style' => 'width:16%;'],
                                 'value'=> function ($model) {
                                             $data = $model['informe_id'];
+                                            $dataEstudio = $model['Estudio_id'];
                                             //urls acciones
-                                            $url = Url::to(['informe/entregar', 'accion' => 'mail', 'id' => $data]);
-                                            $urlPrint = Url::to(['informe/entregar', 'accion' => 'print', 'id' => $data]);
-                                            $urlPublicar = Url::to(['informe/entregar', 'accion' => 'publicar', 'id' => $data]);
-                                            $urlVer = Url::to(['informe/view',  'id' => $data]);
-                                            $urlEditar = Url::to(['informe/update', 'id' => $data]);
+                                            $url            = Url::to(['informe/entregar', 'accion' => 'mail', 'id' => $data]);
+                                            $urlPrint       = Url::to(['informe/entregar', 'accion' => 'print','estudio'=>$dataEstudio, 'id' => $data]);
+                                            $urlPublicar    = Url::to(['informe/entregar', 'accion' => 'publicar', 'id' => $data]);
+                                            $urlVer         = Url::to(['informe/view',  'id' => $data]);
+                                            $urlEditar      = Url::to(['informe/update', 'id' => $data]);
     
                                             return Html::a(" <span class='fa fa-print'></span>",$urlPrint,[
                                                 'title' => Yii::t('app', 'Descargar/imprimir'),

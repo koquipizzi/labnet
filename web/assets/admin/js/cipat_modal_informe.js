@@ -165,7 +165,7 @@
     $('.guardarTexto').click(function (e) {
             e.preventDefault(); 
             $('#modal').find('.modal-header').html('Nuevo Autotexto');
-            var $url = 'index.php?r=textos/create'; 
+            var url = 'index.php?r=textos/create';
             var forminforme = $("#form-informe-complete");    
             bootbox.dialog({
                 message: '¿Confirma que desea crear un nuevo autotexto a partir de este informe?',
@@ -177,7 +177,7 @@
                             className: 'btn-primary',
                             callback: function() {
                                 $.ajax({
-                                    url    : $url ,
+                                    url    : url ,
                                     type   : "post",
                                     data   : forminforme.serialize(),
                                     dataType: "JSON",
@@ -357,6 +357,7 @@
                 });
             return false;
         });
+        
 
         $('.deleteNomenclador').on('click', function (e) {
             var $id = $(this).attr('id');

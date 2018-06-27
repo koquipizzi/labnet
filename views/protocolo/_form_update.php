@@ -658,16 +658,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                                     'labelOptions' => [ 'class' => 'col-md-3 control-label' ]])->dropDownList( $dataEstudio, ['prompt' => ''])
                                                     ->error([ 'style' => ' float: left; margin-left: 28%;']); 
                                         ?>
-                                        <?= $form->field($modelInforme, "[{$index}]descripcion", ['template' => "{label}
-                                                    <div class='col-md-8'>{input}</div>
-                                                    {hint}{error}",
-                                                    'labelOptions' => [ 'class' => 'col-md-3 control-label' ]])
-                                        ?>
-                                        <?= $form->field($modelInforme, "[{$index}]observaciones",['template' => "{label}
-                                                    <div class='col-md-8'>{input}</div>
-                                                    {hint}{error}",
-                                                    'labelOptions' => [ 'class' => 'col-md-3 control-label' ]]) 
-                                        ?>
+                                     
                                     </div>
                                     <div class="col-md-6" style="text-align: right;">
                                         <?php

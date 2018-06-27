@@ -191,14 +191,13 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
 $this->registerJsFile('@web/assets/admin/js/cipat_modal_informe.js', ['depends' => [yii\web\AssetBundle::className()]]);
 
-
-/*    Modal::begin([
+   Modal::begin([
                     'id' => 'modal',    
                    // 'size'=>'modal-lg',
                     'options' => ['tabindex' => false ],
                 ]);
                 echo "<div id='modalContentAutotexto' ></div>";      
-    Modal::end();*/
+    Modal::end();
     
 
 ?>

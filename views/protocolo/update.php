@@ -4,19 +4,21 @@ use yii\helpers\Url;
 use xj\bootbox\BootboxAsset;
 /* @var $this yii\web\View */
 /* @var $model app\models\Protocolo */
-$codigo= $model->codigo;
-$this->title = Yii::t('app', 'Update {modelClass}: ', [
-    'modelClass' => 'Protocolo',
-]) . $codigo;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Protocolos'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$codigo = $model->codigo;
+if (empty($codigo)){
+    $codigo = '';
+}
+$this->title = Yii::t('app', 'Update {modelClass}: ', ['modelClass' => 'Protocolo']) . $codigo;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Protocolos'), 'url' => ['all']];
+$this->params['breadcrumbs'][] = ['label' => $codigo, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+
 $url = Url::to(['protocolo/delete',"id"=>$model->id]);  
 $urlIndex =Url::to(['protocolo/index']) ;
 BootboxAsset::register($this);
 $js2= " 
 $('#btn_delete').click(function()
-{ 
+{
     var pedido_id=$(this).val();
     bootbox.dialog
     ({ 
@@ -90,18 +92,12 @@ $this->registerJs($js2);
             <div class="protocolo-update">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title"><?= Html::encode($this->title) ?><code></code></h3>
+                        <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
                     </div>
                     <div class="pull-right">
-                                         
-                            <?php 
-                                echo  "<button data-toggle='tooltip' title='' id='btn_delete' class='btn btn-primary' value='{$model->id}' >".Yii::t('app', 'Delete')."</button>";         
-                            ?>      
-                            <?= Html::a('<i class="fa fa-arrow-left"></i> Volver', Yii::$app->request->referrer, ['class'=>'btn btn-primary']) ?>
-                            <?php //  echo "<input id='inputHiddenDelete' hidden type='text' value='{$visualizarDelete}'>" ?> 
-                          
-                        <button class="btn btn-sm" data-action="collapse" data-container="body" data-toggle="tooltip" data-placement="top" data-title="Collapse"><i class="fa fa-angle-up"></i></button>
-                        <button class="btn btn-sm" data-action="remove" data-container="body" data-toggle="tooltip" data-placement="top" data-title="Remove"><i class="fa fa-times"></i></button>
+                        <?php
+                            echo "<button data-toggle='tooltip' title='' id='btn_delete' class='btn btn-primary' value='{$model->id}' >".Yii::t('app', 'Delete')."</button>";
+                        ?>
                     </div>
                     <div class="clearfix"></div>
                 </div><!-- /.panel-heading -->                 

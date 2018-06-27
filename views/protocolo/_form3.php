@@ -123,9 +123,8 @@ $("#protocolo-nro_secuencia").keyup(function() {
 $this->registerJs($js);
 
 $this->title = 'Nuevo Protocolo: '. $paciente->nombre;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Informes'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Protocolo'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = Yii::t('app', 'Crear');
 ?>
 
 

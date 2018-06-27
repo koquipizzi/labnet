@@ -15,71 +15,87 @@ use app\models\Workflow;
 use kartik\editable\Editable;
 use kartik\popover\PopoverX;
 
-//Pjax::begin([
-//    'id' => 'pjax-container',
-//]);
+
 
 echo \yii::$app->request->get('page');
-
-//Pjax::end();
-/*
-$onSelect = new JsExpression(<<<JS
-function (undefined, item) {
-    if (item.href !== location.pathname) {
-        $.pjax({
-            container: '#pjax-tree',
-            url: item.href,
-            timeout: null
-        });
+    
+$js= new JsExpression(<<<JS
+$("body").on("submit", "form#create-autotexto-formPop", function (e) {
+    $("body").keydown(function(event){
+        if(event.keyCode == 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
+    
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    var form = $(this);
+    // return false if form still have some validation errors
+    if (form.find(".has-error").length)
+    {
+        return false;
     }
+    // submit form
+    $.ajax({
+                    url    : form.attr("action"),
+                    type   : "post",
+                    data   : form.serialize(),
+                    success: function (response)
+                    {
 
-    var otherTreeWidgetEl = $('.treeview.small').not($(this)),
-        otherTreeWidget = otherTreeWidgetEl.data('treeview'),
-        selectedEl = otherTreeWidgetEl.find('.node-selected');
-    if (selectedEl.length) {
-        otherTreeWidget.unselectNode(Number(selectedEl.attr('data-nodeid')));
+                        if (response.rdo == 'ko'){
+                            var n = noty({
+                                text: 'El código debe ser único',
+                                type: 'error',
+                                killer: true,
+                                class: 'animated pulse',
+                                layout: 'topRight',
+                                theme: 'relax',
+                                timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                force: false, // adds notification to the beginning of queue when set to true
+                                modal: false, // si pongo true me hace el efecto de pantalla gris
+                            });
+                            return false;
+                        }
+
+                        else {
+                            //   $.pjax.reload({container:'#pjax-tree'});
+                            $("#modal").modal("toggle");
+    
+                            //   $.pjax.reload({container:"#pacientes"}); //for pjax update
+                            var n = noty({
+                                   text: 'Autotexto generado con éxito!',
+                                   type: 'success',
+                                   class: 'animated pulse',
+                                   layout: 'topRight',
+                                   theme: 'relax',
+                                   killer: true,
+                                   timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                   force: false, // adds notification to the beginning of queue when set to true
+                                   modal: false, // si pongo true me hace el efecto de pantalla gris
+                            });
+                               $.pjax.reload({container:"#pjax-container"});
+                        }
+                    },
+                    error  : function () {
+        console.log("internal server error");
     }
-}
+            });
+        return false;
+});
+$( ".modal_close" ).click(function() {
+   $('#modal').modal('hide');
+});
+
+
+
+
+
 JS
-);
-$estudio = $model->estudio_id;
-$estudio = 2;
-$id = $model->id;
-$query = "SELECT * FROM Textos where `estudio_id` = '".$estudio."' ";
-
-$result = \app\models\Textos::findBySql($query)->all();
-//var_dump($result); die();
-$tree = new AutoTextTreeController();
-foreach ($result as $row){
-    $url = Url::to(['',  'id' => $id, 'idtexto'=> $row['id']]);
-    $tree->merge($row['codigo'], $url);
-}
-
-$items2 = $tree->getTree();
-
-$this->registerCss(".treeview {
-                                float:left;
-                                width:100%;
-                                overflow-y: auto;
-                                height: 200px;
-                            }             
-");
-
-echo execut\widget\TreeView::widget([
-    'data' => $items2,
-    'size' => TreeView::SIZE_SMALL,
-    'header'=> 'Seleccione Tipo de Estudio',
-    'searchOptions' => [
-        'inputOptions' => [
-            'placeholder' => 'Buscar Estudio...'
-        ],
-    ],
-    'clientOptions' => [
-        'onNodeSelected' => $onSelect,
-    ],
-]);
-
-*/
+    );
+    
+$this->registerJs($js);
 ?>
 <div class="panel-body no-padding">
 
@@ -89,7 +105,7 @@ echo execut\widget\TreeView::widget([
             'action' =>$url,
             'options' => [
                 'class' => 'form-horizontal mt-10',
-                'id' => 'create-autotexto-form',               
+                'id' => 'create-autotexto-formPop',
                 'enableAjaxValidation' => true,
                 'data-pjax' => '',
              ]
@@ -168,7 +184,8 @@ echo execut\widget\TreeView::widget([
         <div class="col-sm-offset-3">
             <div style="text-align: right;">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-primary enviar_autotexto' : 'btn btn-primary enviar_autotexto']) ?>
-             <button type="reset" class="btn btn-danger">Restablecer</button>
+             <button type="reset" class="btn btn-default">Restablecer</button>
+             <button type="reset" class="btn btn-danger  modal_close">Cerrar</button>
             </div>
 
         </div>

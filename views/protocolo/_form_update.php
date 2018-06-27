@@ -239,11 +239,6 @@ $("#protocolo-nro_secuencia").keyup(function() {
 ';
 
 $this->registerJs($js);
-
-
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Informes'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 
 
@@ -281,31 +276,27 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 <?= Html::csrfMetaTags() ?>
 
 
-<div class="box box-info">
-    <div class="box-header with-border">
-        
-    </div>
-
+<div class="box">
     <div class="box-body">
-        <?php $form = ActiveForm::begin([
+        <?php
+            $form = ActiveForm::begin([
                     'id'  => 'dynamic-form',
                     'options' => [
                         'class' => 'form-horizontal mt-10',
-                     //   'id' => 'form-protocolo',
                         'enableAjaxValidation' => true,
                         'data-pjax' => '',
                     ]
             ]);
-            echo   $form->field($model, 'id')->hiddenInput()->label(false);
-             ?>
-                <input type="hidden" name="tanda" value="<?php // $tanda ?>" id="tanda">
-
+            echo  $form->field($model, 'id')->hiddenInput()->label(false);
+        ?>
+        
+        <input type="hidden" name="tanda" value="<?php // $tanda ?>" id="tanda">
 
         <div class="col-md-6" style="text-align: right; margin-bottom:-10px">
-                <div class="col-md-4" style="text-align: right;">
-                    <h5><strong>Nro</strong></h5>
-                </div>
-                <div class="col-md-2">
+            <div class="col-md-4" style="text-align: right;">
+                <h5><strong>Nro</strong></h5>
+            </div>
+            <div class="col-md-2">
                 <?= $form->field($model, 'anio', ['template' => "
                                                 <div class=''>{input}</div>
                                                 {hint}
@@ -326,8 +317,8 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                         <div>{input}</div>
                                         {hint}
                                         {error}",
-              ])->textInput() ?>
-              </div>
+                ])->textInput() ?>
+            </div>
         </div>
         <div class="col-md-6" style="text-align: right;">
             <?= $form->field($model, 'numero_hospitalario',['template' => "{label}
@@ -335,7 +326,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                              {hint}
                                              {error}",
                                               'labelOptions' => [ 'class' => 'col-md-4 control-label' ]
-                 ])->textInput()->error([ 'style' => ' text-align: center;'])?>
+            ])->textInput()->error([ 'style' => ' text-align: center;'])?>
         </div>
         <div class="col-md-6" style="text-align: right;">
                  <?=$form->field($model, 'fecha_entrada',['template' => "{label}
@@ -400,11 +391,10 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                             'cache' => true
                                         ],
                                     ],
-                            ]);  
-                        
+                            ]);
                         ?>
-                      <?php /*yii\widgets\Pjax::begin(['id' => 'new_medico']);                         
-                           $dataMedico=ArrayHelper::map(Medico::find()->asArray()->all(), 'id', 'nombre');                         
+                        <?php /*yii\widgets\Pjax::begin(['id' => 'new_medico']);
+                           $dataMedico=ArrayHelper::map(Medico::find()->asArray()->all(), 'id', 'nombre');
                             echo $form->field($model, 'Medico_id',
                                     ['template' => "{label}
                                         <div class='col-md-6' >
@@ -427,49 +417,45 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         ?>
                         <?php //yii\widgets\Pjax::end() ?>
                     </div>
-                    <!--button type='button'  id='addMedico'  class=' col-md-1   btn btn-success btn-xs' 
-                            value='index.php?r=medico/createpop'><?php   echo Yii::t('app', 'Add');  ?>
-                    </button-->
             </div>
         </div>                
         <div class="col-md-6" style="text-align: right;">
-           
-              <div class="row">
-                    <div class="col-md-12">
-                      <?php /* yii\widgets\Pjax::begin(['id' => 'new_procedencia']);                         
-                            $dataProcedencia=ArrayHelper::map(Procedencia::find()->asArray()->all(), 'id', 'descripcion');  
-                        
-                            echo $form->field($model, 'Procedencia_id',
-                                    ['template' => "{label}
-                                    <div class='col-md-6' >
-                                        {input}  </div>
-                                        
-                                        {hint}{error}
-                                        "
-                                    ,'labelOptions' => [ 'class' => 'col-md-5  control-label' ],
-                                    ]
-                                    )->widget(Widget::className(), [
-                            'options' => [
-                                'multiple' => false,
-                                'placeholder' => 'Choose item'
-                            ],
-                                'items' => $dataProcedencia,
-                            'settings' => [
-                                'width' => '100%',
-                            ]
-                        ]);
-                        */
-                        ?>
-                        <?php 
-                            echo $form->field($model, 'Procedencia_id',
+            <div class="row">
+                <div class="col-md-12">
+                    <?php /* yii\widgets\Pjax::begin(['id' => 'new_procedencia']);
+                        $dataProcedencia=ArrayHelper::map(Procedencia::find()->asArray()->all(), 'id', 'descripcion');
+                    
+                        echo $form->field($model, 'Procedencia_id',
+                                ['template' => "{label}
+                                <div class='col-md-6' >
+                                    {input}  </div>
+                                    
+                                    {hint}{error}
+                                    "
+                                ,'labelOptions' => [ 'class' => 'col-md-5  control-label' ],
+                                ]
+                                )->widget(Widget::className(), [
+                        'options' => [
+                            'multiple' => false,
+                            'placeholder' => 'Choose item'
+                        ],
+                            'items' => $dataProcedencia,
+                        'settings' => [
+                            'width' => '100%',
+                        ]
+                    ]);
+                    */
+                    ?>
+                    <?php
+                    echo $form->field($model, 'Procedencia_id',
                                 ['template' => "{label}
                                                 <div class='col-md-7'>{input}</div>
                                                 {hint}{error}",
                                                 'labelOptions' => [ 'class' => 'col-md-4 control-label' ]]
-                                    )->widget(Select2::classname(), [
+                                )->widget(Select2::classname(), [
                                         'initValueText' => 'Procedencia',
                                         'options' => [  'placeholder' => 'Procedencia ...',
-                                        ],
+                                ],
                                         'pluginOptions' => [
                                         //'allowClear' => true,
                                             'minimumInputLength' => 1,
@@ -495,10 +481,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         ?>
                         <?php //yii\widgets\Pjax::end() ?>
                     </div>
-                        <!--button type='button'  id='addProcedencia'  
-                             class=' col-md-1  addProcedencia btn btn-success btn-xs' 
-                             value='index.php?r=procedencia/createpop'><?php    echo Yii::t('app', 'Add');  ?>
-                        </button-->
             </div>
         </div>    
         <div class="col-md-6" style="text-align: right;">
@@ -538,8 +520,12 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
             ?>
         </div>
         <div class="col-md-6" style="text-align: left;">
-            <?php               
-            echo $form->field($model, 'Paciente_prestadora_id',
+            <?php
+                $PacientePrestadoras = PacientePrestadora::find()->where(['id' => $model->Paciente_prestadora_id])->one();
+                
+                $Prestadoras = PacientePrestadora::find()->where(['Paciente_id' => $PacientePrestadoras->Paciente_id])->all();
+                
+                echo $form->field($model, 'Paciente_prestadora_id',
                             ['template' => "{label}
                                 <div class='col-md-7' >
                                 {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
@@ -550,23 +536,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                                     'options' => [  'placeholder' => 'Facturar a ...',
                                     ],
                                     
-                            ]);  
-
-             /*   echo $form->field($model, 'Paciente_prestadora_id',
-                        ['template' => "{label}
-                        <div class='col-md-7'>
-                        {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
-                        ]
-                        )->widget(Widget::className(), [
-                        'options' => [
-                            'multiple' => false,
-                            'placeholder' => 'Choose item'
-                        ],
-                        'items' => $PacientePrestadora,
-                        'settings' => [
-                            'width' => '100%',
-                        ]
-                ]);*/
+                            ]);
             ?>
         </div>        
         <div class="col-md-6" style="text-align: right;">

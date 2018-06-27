@@ -38,7 +38,7 @@ use kartik\typeahead\Typeahead;
     <tbody class="container-rooms">
     <?php foreach ($modelsNomenclador as $indexNom => $modelNomenclador): ?>
         <tr class="room-item">
-            <td class="vcenter">
+            <td class="text-center vcenter" >
                 <?php
                     // necessary for update action.
                     if (! $modelNomenclador->isNewRecord) {
@@ -46,7 +46,7 @@ use kartik\typeahead\Typeahead;
                     }
                 ?>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         <?php $nomenclador = new Nomenclador; ?>
                         <?= $form->field($modelNomenclador, "[{$indexEstudio}][{$indexNom}]id_nomenclador",
                                         ['template' => "{label}
@@ -54,16 +54,16 @@ use kartik\typeahead\Typeahead;
                                                 {hint}{error}",
                                                 'labelOptions' => [ 'class' => 'col-md-4 control-label' ]])->dropDownList($nomenclador->getdropNomenclador(), [ 'prompt' => 'Nomenclador' ])->label('Servicio') ;?>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <?= $form->field($modelNomenclador, "[{$indexEstudio}][{$indexNom}]cantidad",
                                         ['template' => "{label}
-                                                <div class='col-md-8'>{input}</div>
+                                                <div class='col-md-7'>{input}</div>
                                                 {hint}{error}",
                                                 'labelOptions' => [ 'class' => 'col-md-4 control-label' ]])->textInput(['maxlength' => true]) ?>
                     </div>
                  </div>
             </td>
-            <td class="text-center vcenter" style="width: 90px;">
+            <td class="text-center vcenter" style="width: 50px;">
                 <button type="button" class="remove-room btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span></button>
             </td>
         </tr>

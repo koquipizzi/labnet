@@ -451,35 +451,25 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
 
                         ?>
-                         <div class="col-md-6" style="text-align: right;">
+                         <div class="col-md-6" style="text-align: right; ">
 
-                        <?= $form->field($modelInforme, "[{$index}]Estudio_id",['template' => "{label}
+                            <?= $form->field($modelInforme, "[{$index}]Estudio_id",['template' => "{label}
                                              <div class='col-md-8'>{input}</div>
                                              {hint}{error}",
                                             'labelOptions' => [ 'class' => 'col-md-3 control-label' ]])->dropDownList( $dataEstudio, ['prompt' => ''])
-                                            ->error([ 'style' => ' float: left; margin-left: 28%;']); ?>
-
-                                <?= $form->field($modelInforme, "[{$index}]descripcion", ['template' => "{label}
-                                             <div class='col-md-8'>{input}</div>
-                                             {hint}{error}",
-                                            'labelOptions' => [ 'class' => 'col-md-3 control-label' ]]) ?>
-
-                                <?= $form->field($modelInforme, "[{$index}]observaciones",['template' => "{label}
-                                             <div class='col-md-8'>{input}</div>
-                                             {hint}{error}",
-                                            'labelOptions' => [ 'class' => 'col-md-3 control-label' ]]) ?>
+                                            ->error([ 'style' => ' float: left; margin-left: 28%;']);
+                            ?>
+                             
                         </div>
-                         <div class="col-md-6" style="text-align: right;">
-                         <?php
-                            echo $this->render('_form-nomencladores', [
-                                        'form' => $form,
-                                        'indexEstudio' => $index,
-                                        'modelsNomenclador' => $modelsNomenclador[$index],
-                                    ])
-                        ?>
-
-
-                         </div>
+                        <div class="col-md-6" style="text-align: right;">
+                                <?php
+                                    echo $this->render('_form-nomencladores', [
+                                                'form' => $form,
+                                                'indexEstudio' => $index,
+                                                'modelsNomenclador' => $modelsNomenclador[$index],
+                                            ])
+                                ?>
+                        </div>
                     </div>
                 </div>
             <?php endforeach; ?>

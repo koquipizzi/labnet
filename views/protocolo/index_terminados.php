@@ -42,28 +42,29 @@ JS;
                 $.get( ajaxurl , function( data ) {
                    
                     if (data.rta == 'ok'){
-                            var n = noty({
-                                    text: data.message,
-                                    type: 'success',
-                                    class: 'animated pulse',
-                                    layout: 'topRight',
-                                    theme: 'relax',
-                                    timeout: 3000, // delay for closing event. Set false for sticky notifications
-                                    force: false, // adds notification to the beginning of queue when set to true
-                                    modal: false, // si pongo true me hace el efecto de pantalla gris
-                                    killer : true,
-                            });
+                        var n = noty({
+                                text: data.message,
+                                type: 'success',
+                                class: 'animated pulse',
+                                layout: 'topRight',
+                                theme: 'relax',
+                                timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                force: false, // adds notification to the beginning of queue when set to true
+                                modal: false, // si pongo true me hace el efecto de pantalla gris
+                                killer : true,
+                        });
+                        $.pjax.reload({container:"#terminados"});
                     }else{
                           var n = noty({
-                                    text: data.message,
-                                    type: 'success',
-                                    class: 'animated pulse',
-                                    layout: 'topRight',
-                                    theme: 'relax',
-                                    timeout: 3000, // delay for closing event. Set false for sticky notifications
-                                    force: false, // adds notification to the beginning of queue when set to true
-                                    modal: false, // si pongo true me hace el efecto de pantalla gris
-                                    killer : true,
+                                text: data.message,
+                                type: 'success',
+                                class: 'animated pulse',
+                                layout: 'topRight',
+                                theme: 'relax',
+                                timeout: 3000, // delay for closing event. Set false for sticky notifications
+                                force: false, // adds notification to the beginning of queue when set to true
+                                modal: false, // si pongo true me hace el efecto de pantalla gris
+                                killer : true,
                             });
                     }
                 });

@@ -88,13 +88,57 @@ use yii\helpers\Html;
         </div>  
         <div class="pap_desc">
             <table class="pap_desc">
-                <tr><td class="pap_labels_cito">CALIDAD DE MUESTRA</td> <td  class="pap_desc_cito"><?php echo $model->calidad ? Leyenda::findOne(['codigo' => $model->calidad, 'categoria' => 'C' ])->texto : ""  ?></td></tr>
-                <tr><td class="pap_labels_cito">ASPECTO</td>            <td  class="pap_desc_cito"><?php echo $model->aspecto ? Leyenda::findOne(['codigo' => $model->aspecto , 'categoria' => 'A' ] )->texto : ""  ?></td></tr>
-                <tr><td class="pap_labels_cito">FLORA</td>              <td  class="pap_desc_cito"><?php echo $model->flora ? Leyenda::findOne(['codigo' => $model->flora, 'categoria' => 'F' ])->texto : ""  ?></td></tr>
-                <tr><td class="pap_labels_cito">LEUCOCITOS</td>         <td  class="pap_desc_cito"><?php echo $model->leucositos ? Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->leucositos])->texto : ""?></td></tr>
-                <tr><td class="pap_labels_cito">HEMATIES</td>           <td  class="pap_desc_cito"><?php echo $model->hematies ? Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->hematies])->texto : "" ?></td></tr>
-                <tr><td class="pap_labels_cito">OTROS ELEMENTOS</td>    <td  class="pap_desc_cito"><?php echo $model->otros ? Leyenda::findOne(['codigo' => $model->otros , 'categoria' => 'O' ])->texto : ""  ?></td></tr>
-                <tr><td class="pap_labels_cito">MICROORGANISMOS</td>    <td  class="pap_desc_cito"><?php echo $model->microorganismos ? Leyenda::findOne(['codigo' => $model->microorganismos, 'categoria' => 'M' ])->texto : ""  ?></td></tr>
+                <?php
+                    $calidad="";
+                    $aspecto="";
+                    $flora="";
+                    $leucositos="";
+                    $hematies="";
+                    $otros="";
+                    $microorganismos="";
+                    if($model->calidad){
+                        if(!empty( Leyenda::findOne(['codigo' => $model->calidad, 'categoria' => 'C' ]) ) ){
+                            $calidad= Leyenda::findOne(['codigo' => $model->calidad, 'categoria' => 'C' ])->texto;
+                        }
+                    }
+                    if($model->aspecto){
+                        if(!empty( Leyenda::findOne(['codigo' => $model->aspecto , 'categoria' => 'A' ] ))){
+                            $aspecto=Leyenda::findOne(['codigo' => $model->aspecto , 'categoria' => 'A' ] )->texto;
+                        }
+                    }
+                    if($model->flora){
+                        if(!empty( Leyenda::findOne(['codigo' => $model->flora, 'categoria' => 'F' ]) )){
+                            $flora=Leyenda::findOne(['codigo' => $model->flora, 'categoria' => 'F' ])->texto;
+                        }
+                    }
+                    if($model->leucositos){
+                        if(!empty(Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->leucositos]))){
+                            $leucositos=Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->leucositos])->texto;
+                        }
+                    }
+                    if($model->hematies){
+                        if(!empty(Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->hematies]))){
+                            $hematies=Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->hematies])->texto;
+                        }
+                    }
+                    if($model->otros){
+                        if(!empty(Leyenda::findOne(['codigo' => $model->otros , 'categoria' => 'O' ])) ){
+                            $otros=Leyenda::findOne(['codigo' => $model->otros , 'categoria' => 'O' ])->texto;
+                        }
+                    }
+                    if($model->microorganismos){
+                        if(!empty(Leyenda::findOne(['codigo' => $model->microorganismos, 'categoria' => 'M' ])->texto) ){
+                            $microorganismos=Leyenda::findOne(['codigo' => $model->microorganismos, 'categoria' => 'M' ])->texto;
+                        }
+                    }
+                ?>
+                <tr><td class="pap_labels_cito">CALIDAD DE MUESTRA</td> <td  class="pap_desc_cito"><?php echo $calidad          ?></td></tr>
+                <tr><td class="pap_labels_cito">ASPECTO</td>            <td  class="pap_desc_cito"><?php echo $aspecto          ?></td></tr>
+                <tr><td class="pap_labels_cito">FLORA</td>              <td  class="pap_desc_cito"><?php echo $flora            ?></td></tr>
+                <tr><td class="pap_labels_cito">LEUCOCITOS</td>         <td  class="pap_desc_cito"><?php echo $leucositos       ?></td></tr>
+                <tr><td class="pap_labels_cito">HEMATIES</td>           <td  class="pap_desc_cito"><?php echo $hematies         ?></td></tr>
+                <tr><td class="pap_labels_cito">OTROS ELEMENTOS</td>    <td  class="pap_desc_cito"><?php echo $otros            ?></td></tr>
+                <tr><td class="pap_labels_cito">MICROORGANISMOS</td>    <td  class="pap_desc_cito"><?php echo $microorganismos  ?></td></tr>
             </table>
             
         </div>

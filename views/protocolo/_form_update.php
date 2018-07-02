@@ -291,34 +291,74 @@ $this->registerJs($js);
         ?>
         
         <input type="hidden" name="tanda" value="<?php // $tanda ?>" id="tanda">
+        <div class="col-md-12" style="text-align: left;">
+            <?php
+                echo $form->field($model, 'Paciente_prestadora_id',
+                    [
+                            'template' => "{label} <div class='col-md-7'>{input}</div> {hint}{error}",
+                            'labelOptions' => [ 'class' => 'col-md-2 control-label' ]
+                    ]
+                )->widget(Select2::classname(), [
+                    'data' => $PacientePrestadora,
+                    'initValueText' => 'Prestadora',
+                    'options' => [
+                        'placeholder' => 'Facturar a ...',
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'minimumInputLength' => 1,
+                        'ajax' => [
+                            'url' => Url::to(['paciente/list-pac-prest']),
+                            'dataType' => 'json',
+                            'delay' => 250,
+                            'data' => new JsExpression('function(params) { return {term:params.term  }; }'),
+                            'processResults' => new JsExpression('function(data) {
+                                                return {
+                                                    results: $.map(data, function(item, index) {
+                                                        return {
+                                                        "id": item.pac_prest_id,
+                                                        "text": item.nro_documento + " ( " + item.nombre + " ) " + item.pestadora_descripcion + " " + item.pestadora_nro_afiliado + " "
+                                                        };
+                                                    })
+                                                    };
+                                                }'),
+                        
+                            'cache' => true
+                        ],
+                    ],
+            
+                ]);
+            ?>
+        </div>
 
         <div class="col-md-6" style="text-align: right; margin-bottom:-10px">
             <div class="col-md-4" style="text-align: right;">
-                <h5><strong>Nro</strong></h5>
+                <h5><strong style="font-weight: bold">Nro</strong></h5>
             </div>
-            <div class="col-md-2">
-                <?= $form->field($model, 'anio', ['template' => "
+            <div class="secuencia-numero">
+                <div class="col-md-2">
+                    <?= $form->field($model, 'anio', ['template' => "
                                                 <div class=''>{input}</div>
                                                 {hint}
                                                 {error}",
-                                            'labelOptions' => [ 'class' => 'col-md-1 ' ]
-                        ])->textInput(['maxlength' => false,'readonly' =>true]) ?>
+                    ])->textInput(['maxlength' => false,'readonly' =>true]) ?>
                 </div>
                 <div class="col-md-1">
-                        <?= $form->field($model, 'letra', ['template' => "
+                    <?= $form->field($model, 'letra', ['template' => "
                                                     <div class='' placeholder='Letra'>{input}</div>
                                                     {hint}
                                                     {error}",
-                                                    'labelOptions' => [ 'class' => 'col-md-2' ]
-                        ])->textInput(['maxlength' => false]) ?>
+                    ])->textInput(['maxlength' => false]) ?>
                 </div>
                 <div class="col-md-4">
                     <?= $form->field($model, 'nro_secuencia',['template' => "
                                         <div>{input}</div>
                                         {hint}
                                         {error}",
-                ])->textInput() ?>
+                    ])->textInput() ?>
+                </div>
             </div>
+            
         </div>
         <div class="col-md-6" style="text-align: right;">
             <?= $form->field($model, 'numero_hospitalario',['template' => "{label}
@@ -519,26 +559,7 @@ $this->registerJs($js);
                             ]);  
             ?>
         </div>
-        <div class="col-md-6" style="text-align: left;">
-            <?php
-                $PacientePrestadoras = PacientePrestadora::find()->where(['id' => $model->Paciente_prestadora_id])->one();
-                
-                $Prestadoras = PacientePrestadora::find()->where(['Paciente_id' => $PacientePrestadoras->Paciente_id])->all();
-                
-                echo $form->field($model, 'Paciente_prestadora_id',
-                            ['template' => "{label}
-                                <div class='col-md-7' >
-                                {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
-                                ]
-                                )->widget(Select2::classname(), [
-                                    'data' => $PacientePrestadora,
-                                    'initValueText' => 'Prestadora',
-                                    'options' => [  'placeholder' => 'Facturar a ...',
-                                    ],
-                                    
-                            ]);
-            ?>
-        </div>        
+        
         <div class="col-md-6" style="text-align: right;">
             <?php
                 echo $form->field($model, 'observaciones', ['template' => "{label}

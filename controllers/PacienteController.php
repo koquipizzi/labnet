@@ -94,7 +94,38 @@ class PacienteController extends Controller
         echo \yii\helpers\Json::encode($clean['results']);
         exit();
     }
-
+    
+    public function actionListPacPrest($term = NULL)
+    { 
+        header('Content-type: application/json');
+        $clean['more'] = false;
+        $query = new \yii\db\Query;
+        if(!empty($term)) {
+            $mainQuery = $query->select('Paciente.id
+                                        ,Paciente.nombre
+                                        ,Paciente.nro_documento
+                                        ,Tipo_documento.descripcion as tipo_documento
+                                        ,Prestadoras.descripcion as pestadora_descripcion
+                                        ,Paciente_prestadora.nro_afiliado as pestadora_nro_afiliado
+                                        ,Paciente_prestadora.id as pac_prest_id
+                                        ')
+                ->from('Paciente')
+                ->innerJoin('Tipo_documento','Tipo_documento.id = Paciente.Tipo_documento_id')
+                ->innerJoin('Paciente_prestadora','Paciente_prestadora.Paciente_id = Paciente.id')
+                ->innerJoin('Prestadoras','Prestadoras.id = Paciente_prestadora.Prestadoras_id')
+                ->where(['like','Paciente.nombre',$term])
+                ->orWhere(['like','Paciente.nro_documento',$term])
+                ->limit(15);                       //limito a 15, para mejorar performance
+            $command = $mainQuery->createCommand();
+            $rows = $command->queryAll();
+            $clean['results'] = array_values($rows);
+        }
+        
+        echo \yii\helpers\Json::encode($clean['results']);
+        exit();
+    }
+    
+    
     /**
      * Displays a single Paciente model.
      * @param integer $id

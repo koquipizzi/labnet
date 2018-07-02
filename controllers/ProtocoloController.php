@@ -610,21 +610,15 @@ class ProtocoloController extends Controller
 
         return $valid;
     }
-
-   /**
-
-     */
+    
     public  function addAtributo($models, $attributeNames, $val)
     {
         foreach ($models as $model) {
             $valid = $model->$attributeNames=$val;
-            }        
+        }
     }
 
-
-
-  public function actionUpdate($id)
-    {
+    public function actionUpdate($id){
         $error='';
         $mostrarMensajeViewnNroSecuencia='';
         $model = $this->findModel($id);
@@ -754,7 +748,7 @@ class ProtocoloController extends Controller
         $nomenclador= new Nomenclador();
         $searchModel = new InformeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $PacientePrestadora=$model->pacientePrestadoraArray;
+        $PacientePrestadora = $model->getPrestadorasPaciente();
         $modelsInformes=$model->informes;
         $model->scenario = Protocolo::SCENARIO_UPDATE; 
         return $this->render('update', [
@@ -766,6 +760,10 @@ class ProtocoloController extends Controller
             'PacientePrestadora'=>$PacientePrestadora
         ]);
 
+    }
+    
+    public function getPacientes(){
+        
     }
 
 

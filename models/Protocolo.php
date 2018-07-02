@@ -5,6 +5,8 @@ use Empathy\Validators\DateTimeCompareValidator;
 use Yii;
 use app\models\Informe;
 use app\models\PacientePrestadora;
+use app\models\Prestadoras;
+use app\models\Paciente;
 use \Datetime;
 use \Exception;
 use yii\db\Query;
@@ -342,8 +344,7 @@ class Protocolo extends \yii\db\ActiveRecord
 
         return $existe;
     }
-
-
+    
     public function existeNumeroSecuencia($anio =null,$letra = null,$nro_secuencia = null){
 
         $modelProtocolo= Protocolo::find()->where(["anio"=>$this->anio,"nro_secuencia"=>$this->nro_secuencia, "letra"=>$this->letra])->one();
@@ -353,6 +354,7 @@ class Protocolo extends \yii\db\ActiveRecord
         }
         return $existe;
     }
+    
     public static function existeNumeroSecuenciaParams($anio,$letra,$nro_secuencia){
         if( empty($anio) || empty($letra) || empty($nro_secuencia)){
               throw new \yii\base\Exception("Error, parametros falntantes"); 
@@ -363,8 +365,9 @@ class Protocolo extends \yii\db\ActiveRecord
             $existe=true;
         }
         return $existe;
-    }   
-   public static function existeNumeroSecuenciaParamsUpdate($anio,$letra,$nro_secuencia,$protocolo_id){
+    }
+    
+    public static function existeNumeroSecuenciaParamsUpdate($anio,$letra,$nro_secuencia,$protocolo_id){
         if( empty($anio) || empty($letra) || empty($nro_secuencia) || empty($protocolo_id)){
               throw new \yii\base\Exception("Error, parametros falntantes"); 
         }
@@ -456,26 +459,35 @@ class Protocolo extends \yii\db\ActiveRecord
             throw new Exception($e);
         }
         return $rta;          
-    }    
+    }
 
-    // public function tieneInformesEntregados(){
-    //     $modelInformes= Informe::find()->where(["Protocolo_id"=>$this->id])->all();
-    //     $rta=false;
-    //     $msj="";  
-    //     if(!empty($modelInformes) ) {          
-    //         foreach ($modelInformes as $modelInformesArray => $inf) {
-    //             if(Workflow::getTieneEstadoEntregado($inf->id)){
-    //                 $msj="No se puede eliminar el protocolo. Tiene informes entregados";
-    //                 $rta=true;
-    //             }              
-    //         }
-    //     }
-    //     return [$rta,$msj];
-          
-    // }
-
-
-
-
-
+    public function getPrestadorasPaciente(){
+        $Prestadoras_id = [];
+        
+        //Obtengo el id del paciente desde esta busqueda
+        $PacientePrestadoras = PacientePrestadora::find()->where(['id' => $this->Paciente_prestadora_id])->one();
+    
+        //Obtengo el detalle del paciente
+        $paciente = Paciente::find()->where(['id' =>  $PacientePrestadoras->Paciente_id ])->one();
+        
+        //Obtengo todas las prestadoras del paciente
+        $Prestadoras = PacientePrestadora::find()->where(['Paciente_id' => $PacientePrestadoras->Paciente_id])->all();
+        
+        //Por cada prestadora que tiene, guardo los id de las mismas
+        foreach ($Prestadoras as $prestadora) {
+            $Prestadoras_id[] = $prestadora->Prestadoras_id;
+        }
+        
+        //Obtengo los detalles de las prestadoras del paciente
+        $NombrePrestadoras = Prestadoras::find()->where(['in','id', $Prestadoras_id])->all();
+        
+        foreach ($NombrePrestadoras as $prestadora){
+            $linea = PacientePrestadora::find()->where(['Paciente_id' => $paciente->id, 'Prestadoras_id' => $prestadora->id ])->one();
+            $response[$linea->id] = "$paciente->nro_documento ($paciente->nombre) $prestadora->descripcion";
+        }
+        
+        return $response;
+    }
+    
+    
 }

@@ -291,12 +291,13 @@ $this->registerJs($js);
         ?>
         
         <input type="hidden" name="tanda" value="<?php // $tanda ?>" id="tanda">
+
         <div class="col-md-12" style="text-align: left;">
             <?php
                 echo $form->field($model, 'Paciente_prestadora_id',
                     [
-                            'template' => "{label} <div class='col-md-7'>{input}</div> {hint}{error}",
-                            'labelOptions' => [ 'class' => 'col-md-2 control-label' ]
+                        'template' => "{label} <div class='col-md-9'>{input}</div> {hint}{error}",
+                        'labelOptions' => [ 'class' => 'col-md-2 control-label' ]
                     ]
                 )->widget(Select2::classname(), [
                     'data' => $PacientePrestadora,
@@ -336,7 +337,7 @@ $this->registerJs($js);
                 <h5><strong style="font-weight: bold">Nro</strong></h5>
             </div>
             <div class="secuencia-numero">
-                <div class="col-md-2">
+                <div class="col-md-2" style="padding-left: 5%">
                     <?= $form->field($model, 'anio', ['template' => "
                                                 <div class=''>{input}</div>
                                                 {hint}
@@ -358,16 +359,17 @@ $this->registerJs($js);
                     ])->textInput() ?>
                 </div>
             </div>
-            
+
         </div>
         <div class="col-md-6" style="text-align: right;">
             <?= $form->field($model, 'numero_hospitalario',['template' => "{label}
                                              <div class='col-md-7'>{input}</div>
                                              {hint}
                                              {error}",
-                                              'labelOptions' => [ 'class' => 'col-md-4 control-label' ]
+                'labelOptions' => [ 'class' => 'col-md-4 control-label' ]
             ])->textInput()->error([ 'style' => ' text-align: center;'])?>
         </div>
+        
         <div class="col-md-6" style="text-align: right;">
                  <?=$form->field($model, 'fecha_entrada',['template' => "{label}
                             <div class='col-md-7' >

@@ -38,13 +38,9 @@ if (!$session->isActive)
 
 $js = '
 
-
-
-
  $(".dynamicform_wrapper").on("beforeDelete", function(e, item) {        
-        var informeId= $(item).find(".id_informe_hidden").val();
+        var informeId= $(item).find("input").val();
         var btn=$(item).find(".remove-item");
-         console.log(btn);
         var permitido;
         permitido=$( ".remove-item" ).hasClass( "permitidoBorrar" );
         if(permitido!=true){
@@ -56,12 +52,10 @@ $js = '
                         },
                 success: function (response)
                 {
-                    console.log(response);
-                    console.log(response.rta);
                     if(response.rta=="ok"){
                        var n = noty
                             ({
-                                text:   "El inofme no puede eliminarse debido a que el mismo ya ha sido modificado.",
+                                text:   "El inofme no puede eliminarse debido a que el mismo ya ha sido entregado.",
                                 type:   "error",
                                 class:  "animated pulse",
                                 layout: "topCenter",
@@ -111,9 +105,7 @@ $( document ).ready(function() {
     $("body").on("beforeSubmit", "form#dynamic-form", function () {
         var form = $(this);
         var permitido=false;
-        // console.log($(".field-protocolo-nro_secuencia").hasClass(".has-error"));
         if ($("#protocolo-id").hasClass("no-permitido-borrar")===false) {
-            console.log("entre permitido");
             permitido= true;
         } 
         if ($("#protocolo-id").hasClass("no-permitido-borrar")===true) {
@@ -347,7 +339,7 @@ $this->registerJs($js);
                 <div class="col-md-1">
                     <?= $form->field($model, 'letra', ['template' => "
                                                     <div class='' placeholder='Letra'>{input}</div>
-                                                    {hint}
+                                                    {hi
                                                     {error}",
                     ])->textInput(['maxlength' => false]) ?>
                 </div>

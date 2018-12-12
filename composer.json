@@ -32,7 +32,7 @@
         "kartik-v/yii2-popover-x": "*",
         "execut/yii2-widget-bootstraptreeview": "dev-master",
         "kartik-v/yii2-editable": "@dev",
-        "kartik-v/yii2-mpdf": "@dev",
+        "kartik-v/yii2-mpdf": "1.0.2",
         "kartik-v/yii2-grid": "@dev",
         "bubasuma/yii2-simplechat": "^2.0",
         "jino5577/yii2-date-range-picker": "*",

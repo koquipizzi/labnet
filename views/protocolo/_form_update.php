@@ -339,7 +339,7 @@ $this->registerJs($js);
                 <div class="col-md-1">
                     <?= $form->field($model, 'letra', ['template' => "
                                                     <div class='' placeholder='Letra'>{input}</div>
-                                                    {hi
+                                                    {hint}
                                                     {error}",
                     ])->textInput(['maxlength' => false]) ?>
                 </div>

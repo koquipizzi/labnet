@@ -9,16 +9,14 @@ use yii\helpers\Html;
     </div>  
     <div class="ContainerDataProtocolo">
         <div class="ContainerDataFecha">
-                <?php echo $modelp->fechaEntrega; ?>
+            <?php echo $modelp->fechaEntrega; ?>
         </div>   
         <div class="ContainerData">
             <div class="labelprotocoloCodigo"  >
                 Protocolo:
             </div>
-
             <div class="descriptionProtocoloCodigo"  >
                 <?php echo $modelp->codigo; ?>
-
             </div>
         </div>
         <div   class="ContainerDataPaciente">
@@ -26,15 +24,15 @@ use yii\helpers\Html;
                 Paciente:
             </div>
             <div class="descriptionProtocoloPaciente"  >
-                        <?php echo $modelp->pacienteTexto;  ?>
+                <?php echo $modelp->pacienteTexto;  ?>
             </div>
         </div>          
-        <div   class="ContainerDataEdad">
+        <div class="ContainerDataEdad">
             <div class="labelprotocoloEdad"  >
                 Edad:
             </div>
             <div class="descriptionProtocoloEdad"  >
-                        <?php echo $model->edad; ?>
+                <?php echo $model->edad; ?>
             </div>
         </div> 
         <div   class="ContainerData">
@@ -42,7 +40,7 @@ use yii\helpers\Html;
                 Médico:
             </div>
             <div class="descriptionProtocoloMedico"  >
-                        <?php  echo $modelp->medico->nombre;   ?>
+                <?php  echo $modelp->medico->nombre;   ?>
             </div>
         </div> 
     </div>
@@ -55,8 +53,7 @@ use yii\helpers\Html;
                 MATERIAL
             </div>    
             <div class="camposInforme">
-                <?php echo nl2br($model->material); ?>
-            
+                <?php echo nl2br($model->material); ?>            
             </div>
         </div> 
         <div class="contenedorInforme">   
@@ -110,7 +107,7 @@ use yii\helpers\Html;
             <?php echo nl2br($laboratorio->director_nombre); ?>
         </div>
         <div class="doctorTitulo">
-                <?php echo nl2br($laboratorio->director_titulo); ?>
+            <?php echo nl2br($laboratorio->director_titulo); ?>
         </div>
         <div class="doctorMatricula">
             <?php echo nl2br($laboratorio->director_matricula); ?>

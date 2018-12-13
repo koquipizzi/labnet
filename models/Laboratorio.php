@@ -71,8 +71,8 @@ class Laboratorio extends \yii\db\ActiveRecord
             'mail' => Yii::t('app', 'Mail'),
             'info_mail' => Yii::t('app', 'Info Mail'),
             'director_nombre' => Yii::t('app', 'Director Nombre'),
-            'director_titulo' => Yii::t('app', 'Director Titulo'),
-            'director_matricula' => Yii::t('app', 'Director Matricula'),
+            'director_titulo' => Yii::t('app', 'Director Título'),
+            'director_matricula' => Yii::t('app', 'Director Matrícula'),
             'leyenda_informe' => Yii::t('app', 'Leyenda para Informe'),
         ];
     }

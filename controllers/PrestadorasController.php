@@ -106,10 +106,9 @@ class PrestadorasController extends Controller
     public function actionCreateprepaga()
     {        
         $model = new Prestadoras();
-
         if ($model->load(Yii::$app->request->post())){
             $model->cobertura=1;
-                if($model->facturable==="1"){
+                if($model->facturable==="S" || $model->facturable==="1"){
                     $model->facturable='S';
                  }else{
                       $model->facturable='N';

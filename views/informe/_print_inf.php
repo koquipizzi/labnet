@@ -36,32 +36,32 @@ use yii\helpers\Html;
                 <td width="400px" style="padding-left: 20px; padding-top: 0px;float: left;">
                     <table class="header_pap">
                         <tr>
-                           <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PACIENTE </td><td><?php echo $modelp->pacienteTexto; ?> </td>
+                           <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PACIENTE </td><td style="font-size: 16px;" ><?php echo $modelp->pacienteTexto; ?> </td>
                         </tr>
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">DOCUMENTO </td><td><?php echo $modelp->pacienteDoc; ?> </td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">DOCUMENTO </td><td style="font-size: 16px;" ><?php echo $modelp->pacienteDoc; ?> </td>
                         </tr>
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">EDAD </td><td><?php echo $model->edad; ?> </td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">EDAD </td><td style="font-size: 16px;" ><?php echo $model->edad; ?> </td>
                         </tr>
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">COBERTURA </td><td><?php echo $modelp->cobertura; ?> </td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">COBERTURA </td><td style="font-size: 16px;" ><?php echo $modelp->cobertura; ?> </td>
                         </tr>
                     </table>
                 </td>
                 <td width="400px" style="padding-top: 0px; margin-left: 20px; float: right;">
                     <table class="header_pap">
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PROTOCOLO</td><td><?php echo $modelp->codigo; ?> </td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PROTOCOLO</td><td style="font-size: 16px;" ><?php echo $modelp->codigo; ?> </td>
                         </tr>
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">FECHA</td><td><?php echo $modelp->fechaEntrega;  ?> </td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">FECHA</td><td style="font-size: 16px;" ><?php echo $modelp->fechaEntrega;  ?> </td>
                         </tr>
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">MÉDICO </td><td><?php echo $modelp->medico->nombre; ?> </td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">MÉDICO </td><td style="font-size: 16px;" ><?php echo $modelp->medico->nombre; ?> </td>
                         </tr>
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PROCEDENCIA </td><td><?php echo $modelp->procedencia->descripcion; ?></td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PROCEDENCIA </td><td style="font-size: 16px;" ><?php echo $modelp->procedencia->descripcion; ?></td>
                         </tr>
                     </table>
                 </td>

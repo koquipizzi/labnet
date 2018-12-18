@@ -923,10 +923,10 @@ private function migrarPaciente($conn) {
     }
     
 
-    public function cantidadInformes($conn) {
+    public function actionCantidad($conn) {
         $validatorEmail = new EmailValidator();
         $protocolo = $conn->createCommand("
-            SELECT *
+            SELECT count(*)
             FROM mig_protocolo
             where Letra='F' or Letra='L'
         ")->queryAll();

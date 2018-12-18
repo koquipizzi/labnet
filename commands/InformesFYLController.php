@@ -418,7 +418,7 @@ private function migrarPaciente($conn) {
                 cast(Tecnica as TEXT),
                 cast(Micro as TEXT),
                 cast(Macro as TEXT),
-                cast(Diagnostico as TEXT),
+                cast(Diagnostico as TEXT)
             FROM mig_informe_citologia
         ")->queryAll();
 

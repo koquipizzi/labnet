@@ -923,9 +923,13 @@ private function migrarPaciente($conn) {
     }
     
 
-    public function actionCantidad($conn) {
+    public function actionCantidad() {
+        $connection = \Yii::$app->dbSqlServerEmpresa;
+        // $conecctionNewEsquema = \Yii::$app->dbMysqlServerDedicado;
+        $conecctionNewEsquema = \Yii::$app->db;
+
         $validatorEmail = new EmailValidator();
-        $protocolo = $conn->createCommand("
+        $protocolo = $connection->createCommand("
             SELECT count(*)
             FROM mig_protocolo
             where Letra='F' or Letra='L'

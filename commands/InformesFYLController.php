@@ -135,6 +135,7 @@ private function migrarPaciente($conn) {
         $protocolo = $conn->createCommand("
             SELECT *
             FROM mig_protocolo
+            where Letra='F' or Letra='L'
         ")->queryAll();
         foreach ($protocolo as $key => $value) {
             $modelProtocolo= new Protocolo();
@@ -922,22 +923,16 @@ private function migrarPaciente($conn) {
     }
     
 
+    public function cantidadInformes($conn) {
+        $validatorEmail = new EmailValidator();
+        $protocolo = $conn->createCommand("
+            SELECT *
+            FROM mig_protocolo
+            where Letra='F' or Letra='L'
+        ")->queryAll();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        var_dump($protocolo);
+    }
 
 
 

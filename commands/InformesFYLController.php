@@ -209,15 +209,15 @@ private function migrarPaciente($conn) {
         //$validatorEmail = new EmailValidator();
         $informes = $conn->createCommand("
             select 
-                cast(Comentario as TEXT),
-                cast(Material  as TEXT),
-                cast(Tecnica  as TEXT),
-                cast(Micro  as TEXT),
-                cast(Diagnostico  as TEXT),
-                cast(Otros  as TEXT),
-                cast(Flora  as TEXT),
-                cast(Aspecto  as TEXT),
-                cast(Calidad  as TEXT),
+                cast(Comentario as TEXT) as Comentario, 
+                cast(Material  as TEXT) as Material,
+                cast(Tecnica  as TEXT) as Tecnica,
+                cast(Micro  as TEXT) as Micro,
+                cast(Diagnostico  as TEXT) as Diagnostico, 
+                cast(Otros  as TEXT) as Otros,
+                cast(Flora  as TEXT) as Flora,
+                cast(Aspecto  as TEXT) as Aspecto,
+                cast(Calidad  as TEXT) as Calidad,
                 Protocolo,
                 Leucocitos,
                 Hematies,
@@ -331,12 +331,12 @@ private function migrarPaciente($conn) {
         $validatorEmail = new EmailValidator();
         $informes = $conn->createCommand("
             SELECT 
-                cast(Comentario as TEXT),
-                cast(Material  as TEXT),
-                cast(Tecnica  as TEXT),
-                cast(Micro  as TEXT),
-                cast(Diagnostico  as TEXT),
-                cast(Macro  as TEXT),
+                cast(Comentario as TEXT) as Comentario,
+                cast(Material  as TEXT) as Material,
+                cast(Tecnica  as TEXT) Tecnica,
+                cast(Micro  as TEXT) as Micro,
+                cast(Diagnostico  as TEXT) as  Diagnostico,
+                cast(Macro  as TEXT) as Macro,
                 Protocolo,
                 Estado
             FROM mig_informe_biopcia 
@@ -413,12 +413,12 @@ private function migrarPaciente($conn) {
             SELECT 
                 Protocolo,
                 Estado,
-                cast(Comentario as TEXT),
-                cast(Material as TEXT),
-                cast(Tecnica as TEXT),
-                cast(Micro as TEXT),
-                cast(Macro as TEXT),
-                cast(Diagnostico as TEXT)
+                cast(Comentario as TEXT) as Comentario,
+                cast(Material as TEXT) as Material,
+                cast(Tecnica as TEXT) as Tecnica,
+                cast(Micro as TEXT) as Micro,
+                cast(Macro as TEXT) as Macro,
+                cast(Diagnostico as TEXT) as Diagnostico
             FROM mig_informe_citologia
         ")->queryAll();
 
@@ -491,12 +491,12 @@ private function migrarPaciente($conn) {
         $validatorEmail = new EmailValidator();
         $informes = $conn->createCommand("
             SELECT 
-                cast(Comentario as TEXT),
-                cast(Material as TEXT),
-                cast(Tecnica as TEXT),
-                cast(Micro as TEXT),
-                cast(Macro as TEXT),
-                cast(Diagnostico as TEXT),
+                cast(Comentario as TEXT) as Comentario,
+                cast(Material as TEXT) as Material,
+                cast(Tecnica as TEXT) as Tecnica,
+                cast(Micro as TEXT) as Micro,
+                cast(Macro as TEXT) as Macro,
+                cast(Diagnostico as TEXT) as Diagnostico,
                 Protocolo,
                 Estado
             FROM mig_informe_ihq
@@ -569,12 +569,12 @@ private function migrarPaciente($conn) {
         $validatorEmail = new EmailValidator();
         $informes = $conn->createCommand("
             SELECT 
-                cast(Comentario as TEXT),
-                cast(Material as TEXT),
-                cast(Tecnica as TEXT),
-                cast(Micro as TEXT),
-                cast(Macro as TEXT),
-                cast(Diagnostico as TEXT),
+                cast(Comentario as TEXT) as Comentario,  
+                cast(Material as TEXT) as Material,
+                cast(Tecnica as TEXT) as Tecnica,
+                cast(Micro as TEXT) as Micro,
+                cast(Macro as TEXT) as Macro,
+                cast(Diagnostico as TEXT) as Diagnostico, 
                 Protocolo,
                 Estado
             FROM mig_informe_molecular

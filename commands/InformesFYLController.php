@@ -44,7 +44,7 @@ use yii\db\Exception;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class SyncProductionDatabaseController extends Controller
+class InformesFYLController extends Controller
 {
 
 private function migrarPaciente($conn) {

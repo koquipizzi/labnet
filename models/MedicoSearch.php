@@ -45,8 +45,8 @@ class MedicoSearch extends Medico
     public function search($params)                                                       
     {
         $query = Medico::find()
-                                ->join('INNER JOIN','Especialidad','Especialidad.id = Medico.especialidad_id')
-                                ->join('INNER JOIN','Localidad','Localidad.id = Medico.localidad_id');
+            ->join('INNER JOIN','Especialidad','Especialidad.id = Medico.especialidad_id')
+            ->join('INNER JOIN','Localidad','Localidad.id = Medico.localidad_id');
 
         // add conditions that should always apply here
 
@@ -81,7 +81,7 @@ class MedicoSearch extends Medico
             'Localidad_id' => $this->Localidad_id,
         ]);
 
-        $query->andFilterWhere(['like', 'nombre', $this->nombre])
+        $query->andFilterWhere(['like', 'Medico.nombre', $this->nombre])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'especialidad_id', $this->especialidad_id])
             ->andFilterWhere(['like', 'domicilio', $this->domicilio])

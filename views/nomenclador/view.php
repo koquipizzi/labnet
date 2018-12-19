@@ -4,9 +4,8 @@ use yii\widgets\DetailView;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Nomenclador */
-
-$this->title = substr($model->descripcion, 0, strlen($model->descripcion)/2).' ....';
+/* @var $model app\models\Nomenclador */ 
+$this->title = strlen($model->descripcion)<65 ? $model->descripcion : substr($model->descripcion,0, 65)." ....";
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Nomencladors'), 'url' => ['index']];
 $url = Url::to(['nomenclador/index']);

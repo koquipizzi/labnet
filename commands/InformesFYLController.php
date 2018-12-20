@@ -134,8 +134,7 @@ private function migrarPaciente($conn) {
 
         $protocolo = $conn->createCommand("
             SELECT *
-            FROM mig_protocolo
-            where Letra='F' or Letra='L'
+            FROM mig_protocolo_letra_l_f
         ")->queryAll();
         foreach ($protocolo as $key => $value) {
             $modelProtocolo= new Protocolo();

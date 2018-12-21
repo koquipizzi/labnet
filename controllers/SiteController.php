@@ -196,13 +196,11 @@ class SiteController extends Controller
         $selectPacientes =  $this->stringMatchingSearchPacientes($searchFeld,$limit);
         $selectMedicos =  $this->stringMatchingSearchMedicos($searchFeld,$limit);
         $selectInformes =  $this->stringMatchingSearchInformes($searchFeld,$limit,null,null);
-        
         $query = "
         SELECT t.*
         FROM ( ( {$selectPacientes}) UNION ({$selectMedicos}) UNION ({$selectInformes}) ) AS t
         ORDER by t.RANKING DESC
-        LIMIT {$limit}
-        OFFSET 1";
+        LIMIT {$limit}";
         
         $busqueda = $this->getQueryResultModels($query);
         

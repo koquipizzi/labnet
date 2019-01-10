@@ -8,9 +8,6 @@ use yii\helpers\Html;
         <?php echo $laboratorio->nombre; ?>
     </div>  
     <div class="ContainerDataProtocolo">
-        <div class="ContainerDataFecha">
-            <?php echo $modelp->fechaEntrega; ?>
-        </div>   
         <div class="ContainerData">
             <div class="labelprotocoloCodigo"  >
                 Protocolo:
@@ -18,7 +15,7 @@ use yii\helpers\Html;
             <div class="descriptionProtocoloCodigo"  >
                 <?php echo $modelp->codigo; ?>
             </div>
-        </div>
+        </div>            
         <div   class="ContainerDataPaciente">
             <div class="labelprotocoloPaciente"  >
                 Paciente:
@@ -26,16 +23,26 @@ use yii\helpers\Html;
             <div class="descriptionProtocoloPaciente"  >
                 <?php echo $modelp->pacienteTexto;  ?>
             </div>
-        </div>          
-        <div class="ContainerDataEdad">
-            <div class="labelprotocoloEdad"  >
-                Edad:
+        </div>  
+        <div class="ContainerDataDni">
+            <div class="labelprotocoloDni"  >
+                DNI:
             </div>
-            <div class="descriptionProtocoloEdad"  >
-                <?php echo $model->edad; ?>
+            <div class="descriptionProtocoloDni"  >
+                <?php echo $modelp->pacienteDoc; ?>
+            </div>
+        </div>                 
+    </div>
+    <div class="ContainerDataProtocolo">              
+        <div class="ContainerDataCobertura">
+            <div class="labelprotocoloCobertura"  >
+                Cobertura:
+            </div>
+            <div class="descriptionProtocoloCobertura"  >
+                <?php echo $modelp->cobertura; ?>
             </div>
         </div> 
-        <div   class="ContainerData">
+        <div   class="ContainerDataMedico">
             <div class="labelprotocoloMedico"  >
                 Médico:
             </div>
@@ -43,7 +50,7 @@ use yii\helpers\Html;
                 <?php  echo $modelp->medico->nombre;   ?>
             </div>
         </div> 
-    </div>
+    </div>    
     <div class="titulo">
         INFORME ANATOMOPATÓLOGICO
     </div>

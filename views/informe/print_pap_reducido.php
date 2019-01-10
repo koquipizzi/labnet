@@ -3,47 +3,54 @@ use app\models\Leyenda;
 use yii\helpers\Html;
 ?>
 <div class="pagina">
-   <div class="header_pap">     
-        <div class="ContainerLab">
-            <?php echo $laboratorio->nombre; ?>
-        </div>  
-        <div class="ContainerDataProtocolo">
-            <div class="ContainerDataFecha">
-                    <?php echo $modelp->fechaEntrega; ?>
-            </div>   
-            <div class="ContainerData">
-                <div class="labelprotocoloCodigo"  >
-                    Protocolo:
-                </div>
-                <div class="descriptionProtocoloCodigo"  >
-                    <?php echo $modelp->codigo; ?>
-                </div>
+    <div class="header_pap">
+    <div class="ContainerLab">
+        <?php echo $laboratorio->nombre; ?>
+    </div>  
+    <div class="ContainerDataProtocolo">
+        <div class="ContainerData">
+            <div class="labelprotocoloCodigo"  >
+                Protocolo:
             </div>
-            <div   class="ContainerDataPaciente">
-                <div class="labelprotocoloPaciente"  >
-                    Paciente:
-                </div>
-                <div class="descriptionProtocoloPaciente"  >
-                            <?php echo $modelp->pacienteTexto;  ?>
-                </div>
-            </div>          
-            <div   class="ContainerDataEdad">
-                <div class="labelprotocoloEdad"  >
-                    Edad:
-                </div>
-                <div class="descriptionProtocoloEdad"  >
-                            <?php echo $model->edad; ?>
-                </div>
-            </div> 
-            <div   class="ContainerData">
-                <div class="labelprotocoloMedico"  >
-                    Médico:
-                </div>
-                <div class="descriptionProtocoloMedico"  >
-                            <?php  echo $modelp->medico->nombre;   ?>
-                </div>
-            </div> 
-        </div>
+            <div class="descriptionProtocoloCodigo"  >
+                <?php echo $modelp->codigo; ?>
+            </div>
+        </div>            
+        <div   class="ContainerDataPaciente">
+            <div class="labelprotocoloPaciente"  >
+                Paciente:
+            </div>
+            <div class="descriptionProtocoloPaciente"  >
+                <?php echo $modelp->pacienteTexto;  ?>
+            </div>
+        </div>  
+        <div class="ContainerDataDni">
+            <div class="labelprotocoloDni"  >
+                DNI:
+            </div>
+            <div class="descriptionProtocoloDni"  >
+                <?php echo $modelp->pacienteDoc; ?>
+            </div>
+        </div>                 
+    </div>
+    <div class="ContainerDataProtocolo">              
+        <div class="ContainerDataCobertura">
+            <div class="labelprotocoloCobertura"  >
+                Cobertura:
+            </div>
+            <div class="descriptionProtocoloCobertura"  >
+                <?php echo $modelp->cobertura; ?>
+            </div>
+        </div> 
+        <div   class="ContainerDataMedico">
+            <div class="labelprotocoloMedico"  >
+                Médico:
+            </div>
+            <div class="descriptionProtocoloMedico"  >
+                <?php  echo $modelp->medico->nombre;   ?>
+            </div>
+        </div> 
+    </div>    
     <div class="titulo">
         <?php echo $model->titulo; ?>
     </div>

@@ -127,14 +127,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'width:4%;'],
                 'buttons' => [
                     //view button
-                    'edit' => function ($url, $model) {
-                        
-                        $estadoInforme = \app\models\Workflow::find()->where(['informe_id' => $model['id']])->orderBy('fecha_inicio DESC')->one();
-                        if (!empty($estadoInforme)){
-                            if ($estadoInforme->Estado_id == \app\models\Workflow::estadoFinalizado() || $estadoInforme->Estado_id == \app\models\Workflow::estadoEntregado()){
-                                return null;
-                            }
-                        }
+                    'edit' => function ($url, $model) {                        
+                        // $estadoInforme = \app\models\Workflow::find()->where(['informe_id' => $model['id']])->orderBy('fecha_inicio DESC')->one();
+                        // if (!empty($estadoInforme)){
+                        //     if ($estadoInforme->Estado_id == \app\models\Workflow::estadoFinalizado() || $estadoInforme->Estado_id == \app\models\Workflow::estadoEntregado()){
+                        //         return null;
+                        //     }
+                        // }
                         return Html::a('<span class="fa fa-pencil"></span>', $url, [
                                     'title' => Yii::t('app', 'edit'),  
                                     'class'=> 'btn-info btn-xs',

@@ -168,7 +168,7 @@ $this->registerJsFile('@web/assets/admin/js/cipat_modal_informe.js', ['depends' 
                             </li> 
                                  <li class="pull-right ">
                                 <a class="btn btn-default btn-sm  mostrarTree pull-right" title="Agregar texto"><i class="fa fa-edit"></i></a>
-                                <a class="btn btn-default btn-sm  guardarTexto pull-right" value="<?= Url::to(['textos/copy']) ?>"><i class="fa fa-copy"></i></a>
+                                <a class="btn btn-default btn-sm  guardarTexto pull-right"  title="Copiar texto" value="<?= Url::to(['textos/copy']) ?>"><i class="fa fa-copy"></i></a>
                         <?php
                              echo   Html::a("<i class='fa fa-list-alt'></i>",
                                     Url::to(['/informe/printreducido','id'=>$model->id, 'estudio' => $model->Estudio_id ]),

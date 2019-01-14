@@ -438,6 +438,9 @@ class Informe extends \yii\db\ActiveRecord
 
     public function getValor($data)
     {
+        if(empty($data)){
+            return  "-/++++";
+        }
         switch($data) {
             case (string)0:
                 return "-/++++";
@@ -466,7 +469,6 @@ class Informe extends \yii\db\ActiveRecord
             case "++++":
                 return "++++/++++";
                 break;
-
         }
     }
 

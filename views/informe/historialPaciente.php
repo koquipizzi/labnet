@@ -139,6 +139,12 @@ use kartik\popover\PopoverX;
                                                     }
                                                 } 
 
+                                            if (!empty($modelI->citologia)){                                            
+                                                $citologia = $modelI->citologia;
+                                            }else {
+                                                $citologia ='';
+                                            }                   
+
                                             if($modelI->Estudio_id===Estudio::getEstudioPap()){
                                                 $content= 
                                                 DetailView::widget([
@@ -176,7 +182,7 @@ use kartik\popover\PopoverX;
                                                     ],
                                                     [
                                                         'label'=>'Citología Oncológica',
-                                                        'value'=>$microorganismos,
+                                                        'value'=>$citologia,
                                                     ],
                                                  
                                                     'diagnostico',

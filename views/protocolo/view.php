@@ -11,7 +11,7 @@ use \app\models\Informe;
 /* @var $model app\models\Protocolo */
 //var_dump($model); die();
 
-$this->title = $model->PacienteText.' - '.  $model->Codigo;
+$this->title = $model->Codigo .' - '.$model->pacienteTexto;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Protocolos'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerJsFile('@web/assets/admin/js/cipat_modal_protocolo.js', ['depends' => [yii\web\AssetBundle::className()]]);

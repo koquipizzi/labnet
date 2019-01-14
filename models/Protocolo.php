@@ -87,7 +87,7 @@ class Protocolo extends \yii\db\ActiveRecord
             'letra' => Yii::t('app', 'Letra'),
             'nro_secuencia' => Yii::t('app', 'Nro. Secuencia'),
             'registro' => Yii::t('app', 'Registro'),
-            'observaciones' => Yii::t('app', 'Observaciones'),
+            'observaciones' => Yii::t('app', 'Observaciones Administrativas'),
             'Medico_id' => Yii::t('app', 'Médico'),
             'Procedencia_id' => Yii::t('app', 'Procedencia'),
             'Paciente_prestadora_id' => Yii::t('app', 'Paciente'),

@@ -71,6 +71,23 @@ class SiteController extends Controller
      */
     public function actionIndex(){
         
+        //corrobora si es administrador
+        $isAdmin = false;
+        $pathLogo = "";
+        $auth = \Yii::$app->authManager;
+        $rolAdmin= $auth->getRole('Administrador');
+        $userrols = \Yii::$app->authManager->getRolesByUser(\Yii::$app->user->getId ());
+        if(!empty($rolAdmin) && !empty($userrols) && is_array($userrols) ){
+            foreach($userrols as $rolAarray=>$rol){
+                if($rol->name == $rolAdmin->name){
+                    $isAdmin = true;
+                }else{
+                    $laboratorio = Laboratorio::find()->one();                   
+                    $pathLogo = $laboratorio->web_path;
+                }
+            }
+        }                  
+        
         $c = Paciente::find()->count();
         $infc = Informe::find()->count();
         $p = Informe::find()->where('Estudio_id = 1')->count();
@@ -120,7 +137,9 @@ class SiteController extends Controller
                         'in'=> $in,
                         'meses'=> $meses,
                         'cantidades'=> $cantidades,
-                        'propios'=> $propios
+                        'propios'=> $propios,
+                        "isAdmin"=>$isAdmin,
+                        "pathLogo"=>$pathLogo
         ]);
     }
 

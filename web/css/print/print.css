@@ -5735,6 +5735,7 @@ display: inline-block;
      width:87%;
      float: left;
      font-size: 9px;
+     font-style: italic;
      
 }
 
@@ -5755,7 +5756,9 @@ display: inline-block;
     display: inline-block;
     width:80%;
     float: left;
-    font-size: 9px;     
+    font-size: 9px; 
+    font-style: italic;
+
 }
 
 .contenedorInformePap{
@@ -5797,4 +5800,12 @@ display: inline-block;
 .firmaLab{
     width: 25%;
     float:left;
+}
+
+.pap_desc_combo {
+  padding-left:50px;
+  font-style: italic;
+}
+.pap_labels_combo{
+  font-style: normal;
 }

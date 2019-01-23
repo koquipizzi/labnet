@@ -279,7 +279,6 @@ if(isset($isAdmin) && $isAdmin===true ){
 <?php 
 }else{
 ?>
-src="<?= Yii::$app->getHomeUrl().'images/logo.jpg'
     <div style="text-align:center; " ><h3>Bienvenido.</h3></div>
     <?php
         if(!empty($pathLogo)){

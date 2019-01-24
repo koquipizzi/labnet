@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'label' => 'Entrada',
                     'attribute' => 'fecha_entrada',
-                    'contentOptions' => ['style' => 'width:8%;'],
+                    'contentOptions' => ['style' => 'width:7%;'],
                     'format' => ['date', 'php:d/m/Y'],
 
                     'filter' => DateRangePicker::widget([
@@ -74,12 +74,28 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Paciente',
                 'attribute'=>'nombre',
-                'contentOptions' => ['style' => 'width:25%;'],
+                'contentOptions' => ['style' => 'width:20%;'],
             ],
             [
                 'attribute'=>'nro_documento',
                 'contentOptions' => ['style' => 'width:5%;'],
             ],
+            [
+                'label' => 'Medico',
+                'attribute'=>'medico_nombre',
+                'contentOptions' => ['style' => 'width:20%;'],
+            ], 
+            [
+                'label' => 'Cobertura',
+                'attribute'=>'prestadoras_descripcion',
+                'contentOptions' => ['style' => 'width:13%;'],
+            ], 
+            [
+                'label' => 'Procedencia',
+                'attribute'=>'procedencia_descripcion',
+                'contentOptions' => ['style' => 'width:13%;'],
+            ],            
+
             [
                 'label' => 'Informes',
                 'format' => 'raw',
@@ -124,7 +140,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],            
             ['class' => 'yii\grid\ActionColumn',
                 'template' => '{edit}',
-                'contentOptions' => ['style' => 'width:4%;'],
+                'contentOptions' => ['style' => 'width:3%;'],
                 'buttons' => [
                     //view button
                     'edit' => function ($url, $model) {                        

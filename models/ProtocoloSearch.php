@@ -91,7 +91,36 @@ class ProtocoloSearch extends Protocolo
             $where = $this->addWhereSentence($where, "Paciente.nombre like :nombre");
         }
     }
-    
+
+    /**
+    * Filtro de nombre Medico
+    */
+    private function nombreMedicoFilter($params, &$where, &$queryParams) {
+        if($this->paramExists($params, 'medico_nombre')) {
+            $queryParams[':medico_nombre'] = "%".$params['medico_nombre']."%";
+            $where = $this->addWhereSentence($where, "Medico.nombre like :medico_nombre");
+        }
+    }
+
+    /**
+    * Filtro de descripcion Prestadoras
+    */
+    private function descripcionPrestadoraFilter($params, &$where, &$queryParams) {
+        if($this->paramExists($params, 'prestadoras_descripcion')) {
+            $queryParams[':prestadoras_descripcion'] = "%".$params['prestadoras_descripcion']."%";
+            $where = $this->addWhereSentence($where, "Prestadoras.descripcion like :prestadoras_descripcion");
+        }
+    }
+
+    /**
+    * Filtro de descripcion Procedencia
+    */
+    private function descripcionProcedenciaFilter($params, &$where, &$queryParams) {
+        if($this->paramExists($params, 'procedencia_descripcion')) {
+            $queryParams[':procedencia_descripcion'] = "%".$params['procedencia_descripcion']."%";
+            $where = $this->addWhereSentence($where, "Procedencia.descripcion like :procedencia_descripcion");
+        }
+    }
 
     /**
     * Filtro de numero de documento
@@ -402,7 +431,10 @@ class ProtocoloSearch extends Protocolo
                 Protocolo.fecha_entrada,
                 Protocolo.fecha_entrega,
                 Paciente.nombre,
-                Paciente.nro_documento			
+                Paciente.nro_documento,
+                Medico.nombre as medico_nombre,
+                Prestadoras.descripcion as prestadoras_descripcion,
+                Procedencia.descripcion procedencia_descripcion
         ';
         $fromTables = '
                 Protocolo
@@ -412,10 +444,16 @@ class ProtocoloSearch extends Protocolo
                 Paciente_prestadora ON Protocolo.Paciente_prestadora_id = Paciente_prestadora.id
                 LEFT JOIN
                 Paciente ON Paciente_prestadora.Paciente_id = Paciente.id
+                LEFT JOIN
+                Prestadoras ON Paciente_prestadora.Prestadoras_id = Prestadoras.id
                 JOIN
                 view_informe_ult_workflow ON Informe.id = view_informe_ult_workflow.Informe_id
                 JOIN
                 Workflow ON view_informe_ult_workflow.id = Workflow.id
+                LEFT JOIN 
+                Medico ON  Medico.id = Protocolo.Medico_id
+                LEFT JOIN
+                Procedencia ON  Procedencia.id = Protocolo.Procedencia_id
         ';
 
 
@@ -429,7 +467,11 @@ class ProtocoloSearch extends Protocolo
 
         $this->fechaEntregaFilter($formParams, $where, $queryParams);
 
-        
+        $this->descripcionProcedenciaFilter($formParams, $where, $queryParams);
+
+        $this->nombreMedicoFilter($formParams, $where, $queryParams);
+
+        $this->descripcionPrestadoraFilter($formParams, $where, $queryParams);       
 
         if(!empty($where)) {
             
@@ -458,10 +500,13 @@ class ProtocoloSearch extends Protocolo
              'sort' => [
                 'defaultOrder' => ['fecha_entrada' => SORT_DESC],
                 'attributes' => [
-                     'nombre',
-                     'fecha_entrada',
-                     'fecha_entrega',
-                     'codigo',
+                    'nombre',
+                    'fecha_entrada',
+                    'fecha_entrega',
+                    'codigo',
+                    'medico_nombre',
+                    'prestadoras_descripcion',
+                    'procedencia_descripcion',
                      
                     'nro_documento' => [
                         'asc' => ['Paciente.nro_documento' => SORT_ASC],

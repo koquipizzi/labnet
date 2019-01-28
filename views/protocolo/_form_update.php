@@ -4,7 +4,6 @@ use yii\widgets\ActiveForm;
 use wbraganca\dynamicform\DynamicFormWidget;
 
 use yii\bootstrap\Modal;
-//use yii\grid\GridView;
 use kartik\grid\GridView;
 //para crear los combos
 use yii\helpers\ArrayHelper;
@@ -13,9 +12,7 @@ use yii\helpers\Url;
 use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 use yii\widgets\Pjax;
-//yii fue sustituido por
 use kartik\select2\Select2;
-//use vova07\select2\Widget;
 use kartik\datecontrol\DateControl;
 //Models
 use app\models\Estudio;
@@ -33,12 +30,11 @@ use app\models\PacientePrestadora;
 
 $session = Yii::$app->session;
 if (!$session->isActive)
-                // open a session
+    // open a session
     $session->open();
 
 $js = '
-
- $(".dynamicform_wrapper").on("beforeDelete", function(e, item) {        
+    $(".dynamicform_wrapper").on("beforeDelete", function(e, item) {        
         var informeId= $(item).find("input").val();
         var btn=$(item).find(".remove-item");
         var permitido;
@@ -81,155 +77,143 @@ $js = '
          return false;
     });
 
-
-
-
-
-
-
-jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
-    jQuery(".dynamicform_wrapper .panel-title-address").each(function(index) {
-        jQuery(this).html("Estudio: " + (index + 1))
-    });
-});
-
-jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
-    jQuery(".dynamicform_wrapper .panel-title-address").each(function(index) {
-        jQuery(this).html("Estudio: " + (index + 1))
-    });
-});
-
-//obtiene dinamicamente el nro de secuencia segun la letra ingresada
-$( document ).ready(function() {
-
-    $("body").on("beforeSubmit", "form#dynamic-form", function () {
-        var form = $(this);
-        var permitido=false;
-        if ($("#protocolo-id").hasClass("no-permitido-borrar")===false) {
-            permitido= true;
-        } 
-        if ($("#protocolo-id").hasClass("no-permitido-borrar")===true) {
-            numeroSecuenciaLetraUpdate();
-        }
-        if(permitido===true){
-        return true;
-        }    
-
-        return false;
+    jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
+        jQuery(".dynamicform_wrapper .panel-title-address").each(function(index) {
+            jQuery(this).html("Estudio: " + (index + 1))
+        });
     });
 
-    //cambia la letra a mayusculas en protocolo-letra
-    $("#protocolo-letra").keyup(function(){
-        this.value = this.value.toUpperCase();
+    jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
+        jQuery(".dynamicform_wrapper .panel-title-address").each(function(index) {
+            jQuery(this).html("Estudio: " + (index + 1))
+        });
     });
 
-    //obtiene el numero de secuencia segun la letra ingresada
-    //si la letra no tiene nro de secuencia entonces retorna cero y un mensaje indicando esto
-     $("#protocolo-letra").change(function() {
-        var letra   = $("#protocolo-letra").val();
-        var anio    = $("#protocolo-anio").val();
+    //obtiene dinamicamente el nro de secuencia segun la letra ingresada
+    $( document ).ready(function() {
+        $("body").on("beforeSubmit", "form#dynamic-form", function () {
+            var form = $(this);
+            var permitido=false;
+            if ($("#protocolo-id").hasClass("no-permitido-borrar")===false) {
+                permitido= true;
+            } 
+            if ($("#protocolo-id").hasClass("no-permitido-borrar")===true) {
+                numeroSecuenciaLetraUpdate();
+            }
+            if(permitido===true){
+            return true;
+            }    
+            return false;
+        });
+
+        //cambia la letra a mayusculas en protocolo-letra
+        $("#protocolo-letra").keyup(function(){
+            this.value = this.value.toUpperCase();
+        });
+
+        //obtiene el numero de secuencia segun la letra ingresada
+        //si la letra no tiene nro de secuencia entonces retorna cero y un mensaje indicando esto
+        $("#protocolo-letra").change(function() {
+            var letra   = $("#protocolo-letra").val();
+            var anio    = $("#protocolo-anio").val();
+            var nro_sec         = $("#protocolo-nro_secuencia").val();
+            var protocolo_id    = $("#protocolo-id").val();
+            $.ajax({
+                url    : "index.php?r=protocolo/cambio-letra",
+                type   : "post",
+                data   : {
+                            letra:  letra,
+                            anio:   anio,
+                            nro_secuencia:  nro_sec,
+                            protocolo_id:   protocolo_id
+                        },
+                success: function (response) 
+                {                         
+                    if(response.rta===true){
+                        $("#dynamic-form").yiiActiveForm("updateAttribute", "protocolo-nro_secuencia","");
+                        $("#protocolo-nro_secuencia").val(response.nro_secuencia);
+                        if ($("#protocolo-id").hasClass("no-permitido-borrar")===true) {
+                            $("#protocolo-id").removeClass("no-permitido-borrar"); 
+                        }  
+                    }   
+                    if(response.rta===false){
+                        $("#protocolo-nro_secuencia").val(response.nro_secuencia);
+                        $("#dynamic-form").yiiActiveForm("updateMessages", {
+                            "protocolo-nro_secuencia": [response.mensaje]
+                        }, true);  
+                        $("#protocolo-id").addClass( "no-permitido-borrar" );
+                    }             
+                }               
+            });
+        }); 
+    });
+    $("#protocolo-nro_secuencia").change(function() {
+        numeroSecuenciaLetraUpdate();
+    }); 
+
+    function numeroSecuenciaLetraUpdate(){
+        var letra           = $("#protocolo-letra").val();
+        var anio            = $("#protocolo-anio").val();
         var nro_sec         = $("#protocolo-nro_secuencia").val();
         var protocolo_id    = $("#protocolo-id").val();
         $.ajax({
-            url    : "index.php?r=protocolo/cambio-letra",
+            url    : "index.php?r=protocolo/existe-nro-secuencia-letra-update",
             type   : "post",
             data   : {
-                        letra:  letra,
-                        anio:   anio,
+                        letra:          letra,
+                        anio:           anio,
                         nro_secuencia:  nro_sec,
                         protocolo_id:   protocolo_id
                     },
             success: function (response) 
             {                         
-                if(response.rta===true){
-                    $("#dynamic-form").yiiActiveForm("updateAttribute", "protocolo-nro_secuencia","");
-                    $("#protocolo-nro_secuencia").val(response.nro_secuencia);
+                if(response.rta===false){
+                    $("#dynamic-form").yiiActiveForm("updateAttribute", "protocolo-nro_secuencia","");           
                     if ($("#protocolo-id").hasClass("no-permitido-borrar")===true) {
                         $("#protocolo-id").removeClass("no-permitido-borrar"); 
-                    }  
+                    }          
                 }   
-                if(response.rta===false){
-                    $("#protocolo-nro_secuencia").val(response.nro_secuencia);
+                if(response.rta===true){                    
                     $("#dynamic-form").yiiActiveForm("updateMessages", {
                         "protocolo-nro_secuencia": [response.mensaje]
                     }, true);  
-                     $("#protocolo-id").addClass( "no-permitido-borrar" );
+                    $("#protocolo-id").addClass( "no-permitido-borrar" );
                 }             
             }               
         });
-    }); 
-
-});
-$("#protocolo-nro_secuencia").change(function() {
-    numeroSecuenciaLetraUpdate();
-}); 
-
-function numeroSecuenciaLetraUpdate(){
-    var letra           = $("#protocolo-letra").val();
-    var anio            = $("#protocolo-anio").val();
-    var nro_sec         = $("#protocolo-nro_secuencia").val();
-    var protocolo_id    = $("#protocolo-id").val();
-    $.ajax({
-        url    : "index.php?r=protocolo/existe-nro-secuencia-letra-update",
-        type   : "post",
-        data   : {
-                    letra:          letra,
-                    anio:           anio,
-                    nro_secuencia:  nro_sec,
-                    protocolo_id:   protocolo_id
-                },
-        success: function (response) 
-        {                         
-            if(response.rta===false){
-                $("#dynamic-form").yiiActiveForm("updateAttribute", "protocolo-nro_secuencia","");           
-                if ($("#protocolo-id").hasClass("no-permitido-borrar")===true) {
-                    $("#protocolo-id").removeClass("no-permitido-borrar"); 
-                }          
-            }   
-            if(response.rta===true){                    
-                $("#dynamic-form").yiiActiveForm("updateMessages", {
-                    "protocolo-nro_secuencia": [response.mensaje]
-                }, true);  
-                $("#protocolo-id").addClass( "no-permitido-borrar" );
-            }             
-        }               
-    });
- }   
+    }   
 
 
-$("#protocolo-nro_secuencia").keydown(function(e) {
-    if(!isNaN(this.value)){
-        var numeroSinCeros= parseInt(this.value,10);
-        var digitos = numeroSinCeros.toString().length;
-        if( (digitos>=7) && (e.keyCode != 8) ){
-            return false;
+    $("#protocolo-nro_secuencia").keydown(function(e) {
+        if(!isNaN(this.value)){
+            var numeroSinCeros= parseInt(this.value,10);
+            var digitos = numeroSinCeros.toString().length;
+            if( (digitos>=7) && (e.keyCode != 8) ){
+                return false;
+            }
         }
-    }
+        
+    });
+
+    $("#protocolo-nro_secuencia").keyup(function() {
     
-});
+        function pad(input, length, padding) {
+            var
+            str = input + "";
+            return (length <= str . length) ? str : pad(padding + str, length, padding);
+        }
+    if (!isNaN(this.value)){
+            var
+            numeroSinCeros = parseInt(this . value, 10);
+            var
+            digitos = numeroSinCeros . toString() . length;
+            $("#protocolo-nro_secuencia") . val(pad(numeroSinCeros, 7, 0));
+        }else{
+            $("#protocolo-nro_secuencia").val(pad(0, 7, 0));
+        }
 
-$("#protocolo-nro_secuencia").keyup(function() {
- 
-    function pad(input, length, padding) {
-        var
-        str = input + "";
-        return (length <= str . length) ? str : pad(padding + str, length, padding);
-    }
-   if (!isNaN(this.value)){
-        var
-        numeroSinCeros = parseInt(this . value, 10);
-        var
-        digitos = numeroSinCeros . toString() . length;
-        $("#protocolo-nro_secuencia") . val(pad(numeroSinCeros, 7, 0));
-    }else{
-        $("#protocolo-nro_secuencia").val(pad(0, 7, 0));
-    }
-
- });
-
-
+    });
 ';
-
 $this->registerJs($js);
 ?>
 
@@ -246,140 +230,152 @@ $this->registerJs($js);
 
 <?php
     Modal::begin([
-            'id' => 'modalNuevoMedico',
-           // 'size'=>'modal-lg',
-            'options' => ['tabindex' => false ],
-        ]);
-        echo "<div id='modalContent'></div>";
- Modal::end();
+        'id' => 'modalNuevoMedico',
+        // 'size'=>'modal-lg',
+        'options' => ['tabindex' => false ],
+    ]);
+    echo "<div id='modalContent'></div>";
+    Modal::end();
 ?>
 
 <?php
     Modal::begin([
-            'id' => 'modalNuevaProcedencia',
-           // 'size'=>'modal-lg',
-            'options' => ['tabindex' => false ],
-        ]);
-        echo "<div id='modalContentProcedencia'></div>";
- Modal::end();
+        'id' => 'modalNuevaProcedencia',
+        // 'size'=>'modal-lg',
+        'options' => ['tabindex' => false ],
+    ]);
+    echo "<div id='modalContentProcedencia'></div>";
+    Modal::end();
 ?>
-
-
 <?= Html::csrfMetaTags() ?>
-
-
 <div class="box">
     <div class="box-body">
         <?php
-            $form = ActiveForm::begin([
-                    'id'  => 'dynamic-form',
-                    'options' => [
-                        'class' => 'form-horizontal mt-10',
-                        'enableAjaxValidation' => true,
-                        'data-pjax' => '',
-                    ]
-            ]);
-            echo  $form->field($model, 'id')->hiddenInput()->label(false);
-        ?>
-        
+        $form = ActiveForm::begin([
+            'id'  => 'dynamic-form',
+            'options' => [
+                'class' => 'form-horizontal mt-10',
+                'enableAjaxValidation' => true,
+                'data-pjax' => '',
+            ]
+        ]);
+        echo  $form->field($model, 'id')->hiddenInput()->label(false);
+        ?>        
         <input type="hidden" name="tanda" value="<?php // $tanda ?>" id="tanda">
-
         <div class="col-md-12" style="text-align: left;">
             <?php
-                echo $form->field($model, 'Paciente_prestadora_id',
-                    [
-                        'template' => "{label} <div class='col-md-9'>{input}</div> {hint}{error}",
-                        'labelOptions' => [ 'class' => 'col-md-2 control-label' ]
-                    ]
-                )->widget(Select2::classname(), [
-                    'data' => $PacientePrestadora,
-                    'initValueText' => 'Prestadora',
-                    'options' => [
-                        'placeholder' => 'Facturar a ...',
-                    ],
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                        'minimumInputLength' => 1,
-                        'ajax' => [
-                            'url' => Url::to(['paciente/list-pac-prest']),
-                            'dataType' => 'json',
-                            'delay' => 250,
-                            'data' => new JsExpression('function(params) { return {term:params.term  }; }'),
-                            'processResults' => new JsExpression('function(data) {
-                                                return {
-                                                    results: $.map(data, function(item, index) {
-                                                        return {
-                                                        "id": item.pac_prest_id,
-                                                        "text": item.nro_documento + " ( " + item.nombre + " ) " + item.pestadora_descripcion + " " + item.pestadora_nro_afiliado + " "
-                                                        };
-                                                    })
+            echo $form->field($model, 'Paciente_prestadora_id',
+                [
+                    'template' => "{label} <div class='col-md-9'>{input}</div> {hint}{error}",
+                    'labelOptions' => [ 'class' => 'col-md-2 control-label' ]
+                ]
+            )->widget(Select2::classname(), [
+                'data' => $PacientePrestadora,
+                'initValueText' => 'Prestadora',
+                'options' => [
+                    'placeholder' => 'Facturar a ...',
+                ],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'minimumInputLength' => 1,
+                    'ajax' => [
+                        'url' => Url::to(['paciente/list-pac-prest']),
+                        'dataType' => 'json',
+                        'delay' => 250,
+                        'data' => new JsExpression('function(params) { return {term:params.term  }; }'),
+                        'processResults' => new JsExpression('function(data) {
+                                            return {
+                                                results: $.map(data, function(item, index) {
+                                                    return {
+                                                    "id": item.pac_prest_id,
+                                                    "text": item.nro_documento + " ( " + item.nombre + " ) " + item.pestadora_descripcion + " " + item.pestadora_nro_afiliado + " "
                                                     };
-                                                }'),
-                        
-                            'cache' => true
-                        ],
+                                                })
+                                                };
+                                            }'),
+                    
+                        'cache' => true
                     ],
-            
-                ]);
+                ],
+        
+            ]);
             ?>
         </div>
-
         <div class="col-md-6" style="text-align: right; margin-bottom:-10px">
             <div class="col-md-4" style="text-align: right;">
                 <h5><strong style="font-weight: bold">Nro</strong></h5>
             </div>
             <div class="secuencia-numero">
                 <div class="col-md-2" style="padding-left: 5%">
-                    <?= $form->field($model, 'anio', ['template' => "
-                                                <div class=''>{input}</div>
-                                                {hint}
-                                                {error}",
-                    ])->textInput(['maxlength' => false,'readonly' =>true]) ?>
+                    <?= 
+                    $form->field($model, 'anio', 
+                        ['template' => "
+                            <div class=''>{input}</div>
+                            {hint}
+                            {error}",
+                        ])->textInput(['maxlength' => false,'readonly' =>true]) 
+                    ?>
                 </div>
                 <div class="col-md-1">
-                    <?= $form->field($model, 'letra', ['template' => "
-                                                    <div class='' placeholder='Letra'>{input}</div>
-                                                    {hint}
-                                                    {error}",
-                    ])->textInput(['maxlength' => false]) ?>
+                    <?= $form->field($model, 'letra', 
+                    ['template' => "
+                        <div class='' placeholder='Letra'>{input}</div>
+                        {hint}
+                        {error}",
+                    ])->textInput(['maxlength' => false]) 
+                    ?>
                 </div>
                 <div class="col-md-4">
-                    <?= $form->field($model, 'nro_secuencia',['template' => "
-                                        <div>{input}</div>
-                                        {hint}
-                                        {error}",
-                    ])->textInput() ?>
+                    <?= $form->field($model, 'nro_secuencia',
+                    ['template' => "
+                        <div>{input}</div>
+                        {hint}
+                        {error}",
+                    ])->textInput()
+                    ?>
                 </div>
             </div>
 
         </div>
         <div class="col-md-6" style="text-align: right;">
-            <?= $form->field($model, 'numero_hospitalario',['template' => "{label}
-                                             <div class='col-md-7'>{input}</div>
-                                             {hint}
-                                             {error}",
-                'labelOptions' => [ 'class' => 'col-md-4 control-label' ]
-            ])->textInput()->error([ 'style' => ' text-align: center;'])?>
-        </div>
-        
+            <?= $form->field($model, 'numero_hospitalario',
+            ['template' => "{label}
+                <div class='col-md-7'>{input}</div>
+                {hint}
+                {error}",
+                'labelOptions' => 
+                ['class' => 
+                    'col-md-4 control-label' 
+                ]
+            ])->textInput()->error([ 'style' => ' text-align: center;'])
+            ?>
+        </div>        
         <div class="col-md-6" style="text-align: right;">
-                 <?=$form->field($model, 'fecha_entrada',['template' => "{label}
-                            <div class='col-md-7' >
-                            {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
-                            ])->widget(DateControl::classname(), [
-                                'type'=>DateControl::FORMAT_DATE,
-                                'options' => [
-                                    'pluginOptions' => [
-                                        'autoclose' => true
-                                    ]
-                                ]
-                ])->error([ 'style' => ' float: left; margin-left: 35%;']);?>
+                <?=$form->field($model, 'fecha_entrada',
+                ['template' => "{label}
+                    <div class='col-md-7' >
+                    {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
+                ])->widget(DateControl::classname(), [
+                    'type'=>DateControl::FORMAT_DATE,
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true
+                        ]
+                    ]
+                ])->error([ 'style' => ' float: left; margin-left: 35%;']);
+                ?>
         </div>
         <div class="col-md-6" style="text-align: left;">
                 <?php
-                echo $form->field($model, 'fecha_entrega',['template' => "{label}
-                <div class='col-md-7' >
-                {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
+                echo $form->field($model, 'fecha_entrega',
+                ['template' => 
+                    "{label}
+                    <div class='col-md-7' >
+                    {input}</div>{hint}{error}",
+                    'labelOptions' => 
+                    [ 'class' => 
+                        'col-md-4  control-label' 
+                    ],
                 ])->widget(DateControl::classname(), [
                     'type'=>DateControl::FORMAT_DATE,
                     'ajaxConversion'=>true,

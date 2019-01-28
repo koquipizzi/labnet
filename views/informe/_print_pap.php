@@ -114,12 +114,16 @@ use yii\helpers\Html;
                     if($model->leucositos){
                         if(!empty(Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->leucositos]))){
                             $leucositos=Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->leucositos])->texto;
-                        }
+                        } 
+                    }else{
+                        $leucositos = "No se observan.";
                     }
                     if($model->hematies){
                         if(!empty(Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->hematies]))){
                             $hematies=Leyenda::findOne(['categoria' => 'LH','codigo'=> $model->hematies])->texto;
                         }
+                    }else{
+                        $hematies = "No se observan.";
                     }
                     if($model->otros){
                         if(!empty(Leyenda::findOne(['codigo' => $model->otros , 'categoria' => 'O' ])) ){

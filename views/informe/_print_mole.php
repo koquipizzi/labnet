@@ -16,7 +16,7 @@ use yii\helpers\Html;
             <?php } ?>
         </td>
 
-        <td width="300px" style="float: left; padding-top: 40px">
+        <td width="400px" style="float: left; padding-top: 40px">
             <?php if (!empty($laboratorio->leyenda_informe)){ ?>
                 <div class="row"> <?php echo  $laboratorio->leyenda_informe ?></div>
             <?php } ?>

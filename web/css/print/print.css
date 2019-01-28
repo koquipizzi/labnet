@@ -5809,3 +5809,15 @@ display: inline-block;
 .pap_labels_combo{
   font-style: normal;
 }
+
+.pap_desc_cito {
+  padding-left:50px;
+  font-size: 14px;
+  font-style: italic;
+  font-style: normal;
+}
+.pap_labels_cito{
+  font-size: 14px;
+  font-style: italic;
+  font-style: normal;
+}

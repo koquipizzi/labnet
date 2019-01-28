@@ -214,7 +214,8 @@ use kartik\popover\PopoverX;
                                         'tipo',
                                         'material',
                                         'tecnica',
-                                        'descripcion',
+                                        'macroscopia', 
+                                        'microscopia',
                                         'diagnostico',
                                         'observaciones'
                                         ],

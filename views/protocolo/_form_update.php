@@ -392,165 +392,125 @@ $this->registerJs($js);
                 ?>
         </div>      
         <div class="col-md-6" style="text-align: right;">
-              <div class="row">
-                    <div class="col-md-12">
-                        <?php 
-                            echo $form->field($model, 'Medico_id',
-                            ['template' => "{label}
-                                <div class='col-md-7' >
-                                {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
-                                ]
-                                )->widget(Select2::classname(), [
-                                    'initValueText' => 'Ingrese Médico',
-                                    'options' => [  'placeholder' => 'Buscar Médico ...',
-                                    ],
-                                    'pluginOptions' => [
-                                  //      'allowClear' => true,
-                                        'minimumInputLength' => 1,
-                                        'ajax' => [
-                                            'url' => Url::to(['medico/list']),
-                                            'dataType' => 'json',
-                                            'delay' => 250,
-                                            'data' => new JsExpression('function(params) { return {term:params.term  }; }'),
-                                            'processResults' => new JsExpression('function(data) {
-                                                return {
-                                                    results: $.map(data, function(item, index) {
-                                                        return {
-                                                        "id": item.id,
-                                                        "text": item.nombre 
-                                                        };
-                                                    })
-                                                    };
-                                                }'),
-                                            'cache' => true
-                                        ],
-                                    ],
-                            ]);
-                        ?>
-                        <?php /*yii\widgets\Pjax::begin(['id' => 'new_medico']);
-                           $dataMedico=ArrayHelper::map(Medico::find()->asArray()->all(), 'id', 'nombre');
-                            echo $form->field($model, 'Medico_id',
-                                    ['template' => "{label}
-                                        <div class='col-md-6' >
-                                            {input}  </div>
-                                            
-                                            {hint}{error}
-                                            "
-                                        ,'labelOptions' => [ 'class' => 'col-md-5  control-label' ],
-                                    ])->widget(Widget::className(), [
-                                        'options' => [
-                                            'multiple' => false,
-                                            'placeholder' => 'Choose item'
-                                        ],
-                                            'items' => $dataMedico,
-                                        'settings' => [
-                                            'width' => '100%',
-                                        ]
-                                    ]);
-                        */
-                        ?>
-                        <?php //yii\widgets\Pjax::end() ?>
-                    </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <?php 
+                    $dataMedico = ArrayHelper::map(Medico::find()->where(["id"=>$model->Medico_id])->asArray()->all(), 'id', 'nombre');                
+                    echo $form->field($model, 'Medico_id',
+                    ['template' => "{label}
+                        <div class='col-md-7' >
+                        {input}</div>{hint}{error}",
+                        'labelOptions' => [
+                            'class' => 'col-md-4  control-label' 
+                        ],
+                    ]
+                    )->widget(Select2::classname(), [
+                        'options' => [  
+                            'placeholder' => 'Buscar Médico ...',
+                        ],
+                        'data'=>$dataMedico,
+                        'pluginOptions' => [ 
+                            'minimumInputLength' => 1,
+                            'ajax' => [
+                                'url' => Url::to(['medico/list']),
+                                'dataType' => 'json',
+                                'delay' => 250,
+                                'data' => new JsExpression('function(params) { return {term:params.term  }; }'),
+                                'processResults' => new JsExpression('function(data) {
+                                    return {
+                                        results: $.map(data, function(item, index) {
+                                            return {
+                                                "id": item.id,
+                                                "text": item.nombre 
+                                            };
+                                        })
+                                    };
+                                }'),
+                                'cache' => true
+                            ],
+                        ],
+                    ]);
+                    ?>
+                </div>
             </div>
         </div>                
         <div class="col-md-6" style="text-align: right;">
             <div class="row">
                 <div class="col-md-12">
-                    <?php /* yii\widgets\Pjax::begin(['id' => 'new_procedencia']);
-                        $dataProcedencia=ArrayHelper::map(Procedencia::find()->asArray()->all(), 'id', 'descripcion');
-                    
-                        echo $form->field($model, 'Procedencia_id',
-                                ['template' => "{label}
-                                <div class='col-md-6' >
-                                    {input}  </div>
-                                    
-                                    {hint}{error}
-                                    "
-                                ,'labelOptions' => [ 'class' => 'col-md-5  control-label' ],
-                                ]
-                                )->widget(Widget::className(), [
-                        'options' => [
-                            'multiple' => false,
-                            'placeholder' => 'Choose item'
-                        ],
-                            'items' => $dataProcedencia,
-                        'settings' => [
-                            'width' => '100%',
-                        ]
-                    ]);
-                    */
-                    ?>
                     <?php
+                    $dataProcedencia = ArrayHelper::map(Procedencia::find()->where(["id"=>$model->Procedencia_id])->asArray()->all(), 'id', 'descripcion');
                     echo $form->field($model, 'Procedencia_id',
-                                ['template' => "{label}
-                                                <div class='col-md-7'>{input}</div>
-                                                {hint}{error}",
-                                                'labelOptions' => [ 'class' => 'col-md-4 control-label' ]]
-                                )->widget(Select2::classname(), [
-                                        'initValueText' => 'Procedencia',
-                                        'options' => [  'placeholder' => 'Procedencia ...',
+                        ['template' =>                        
+                            "{label}
+                            <div class='col-md-7'>{input}</div>
+                            {hint}{error}",
+                            'labelOptions' => [ 'class' => 'col-md-4 control-label' ]]
+                        )->widget(Select2::classname(), [ 
+                            'options' => [  
+                                'placeholder' => 'Procedencia ...'
+                            ],
+                            'data'=> $dataProcedencia,
+                            'pluginOptions' => [ 
+                                'minimumInputLength' => 1,
+                                'ajax' => [
+                                    'url' => Url::to(['procedencia/list']),
+                                    'dataType' => 'json',
+                                    'delay' => 250,
+                                    'data' => new JsExpression('function(params) { return {term:params.term  }; }'),
+                                    'processResults' => new JsExpression('function(data) {
+                                        return {
+                                            results: $.map(data, function(item, index) {
+                                                return {
+                                                "id": item.id,
+                                                "text": item.descripcion 
+                                                };
+                                            })
+                                        };
+                                    }'),
+                                    'cache' => true
                                 ],
-                                        'pluginOptions' => [
-                                        //'allowClear' => true,
-                                            'minimumInputLength' => 1,
-                                            'ajax' => [
-                                                'url' => Url::to(['procedencia/list']),
-                                                'dataType' => 'json',
-                                                'delay' => 250,
-                                                'data' => new JsExpression('function(params) { return {term:params.term  }; }'),
-                                                'processResults' => new JsExpression('function(data) {
-                                                    return {
-                                                        results: $.map(data, function(item, index) {
-                                                            return {
-                                                            "id": item.id,
-                                                            "text": item.descripcion 
-                                                            };
-                                                        })
-                                                        };
-                                                    }'),
-                                                'cache' => true
-                                            ],
-                                        ],
-                                ]);  
-                        ?>
-                        <?php //yii\widgets\Pjax::end() ?>
-                    </div>
+                            ],
+                        ]);  
+                    ?>
+                </div>
             </div>
         </div>    
         <div class="col-md-6" style="text-align: right;">
             <?php
-                //$dataFacturar=ArrayHelper::map(Prestadoras::find()->where(['facturable' => 'S'])->asArray()->all(), 'id', 'descripcion');
-                echo $form->field($model, 'FacturarA_id',
-                            ['template' => "{label}
-                                <div class='col-md-7' >
-                                {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
-                                ]
-                                )->widget(Select2::classname(), [
-                                    'initValueText' => 'Facturar a',
-                                    'options' => [  'placeholder' => 'Facturar a ...',
-                                    ],
-                                    'pluginOptions' => [
-                                    //    'allowClear' => true,
-                                        'minimumInputLength' => 1,
-                                        'ajax' => [
-                                            'url' => Url::to(['prestadoras/facturar']),
-                                            'dataType' => 'json',
-                                            'delay' => 250,
-                                            'data' => new JsExpression('function(params) { return {term:params.term  }; }'),
-                                            'processResults' => new JsExpression('function(data) {
-                                                return {
-                                                    results: $.map(data, function(item, index) {
-                                                        return {
-                                                        "id": item.id,
-                                                        "text": item.descripcion 
-                                                        };
-                                                    })
-                                                    };
-                                                }'),
-                                            'cache' => true
-                                        ],
-                                    ],
-                            ]);  
+            $dataFacturar = ArrayHelper::map(Prestadoras::find()->where(['facturable' => 'S','id'=>$model->FacturarA_id])->asArray()->all(), 'id', 'descripcion');                   
+            echo $form->field($model,
+                'FacturarA_id',
+                [
+                    'template' => "{label}
+                    <div class='col-md-7' >
+                    {input}</div>{hint}{error}",'labelOptions' => [ 'class' => 'col-md-4  control-label' ],
+                ]
+                )->widget(Select2::classname(), [ 
+                    'options' => [
+                        'placeholder' => 'Facturar a ...'
+                    ],
+                    'data'=> $dataFacturar,
+                    'pluginOptions' => [
+                        'minimumInputLength' => 1,
+                        'ajax' => [
+                            'url' => Url::to(['prestadoras/facturar']),
+                            'dataType' => 'json',
+                            'delay' => 250,
+                            'data' => new JsExpression('function(params) { return {term:params.term  }; }'),
+                            'processResults' => new JsExpression('function(data) {
+                                return {
+                                    results: $.map(data, function(item, index) {
+                                        return {
+                                        "id": item.id,
+                                        "text": item.descripcion 
+                                        };
+                                    })
+                                    };
+                                }'),
+                            'cache' => true
+                        ],
+                    ],
+                ]);  
             ?>
         </div>
         
@@ -606,9 +566,6 @@ $this->registerJs($js);
                     'Estudio_id',
                     'descripcion',
                     'observaciones',
-            //     'city',
-            //     'state',
-                //    'postal_code',
                 ],
             ]); ?>
                 <div class="box box-primary">

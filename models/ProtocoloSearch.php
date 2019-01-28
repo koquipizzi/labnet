@@ -22,6 +22,9 @@ class ProtocoloSearch extends Protocolo
     public $ultimo_propietario;
     public $fecha_desde;
     public $fecha_hasta;
+    public $procedencia_descripcion;
+    public $prestadoras_descripcion;
+    public $medico_nombre;
     /**
      * @inheritdoc
      */
@@ -29,7 +32,7 @@ class ProtocoloSearch extends Protocolo
     {
         return [
             [['id', 'nro_secuencia', 'Medico_id' , 'Procedencia_id', 'Paciente_prestadora_id', 'FacturarA_id'], 'integer'],
-            [['fecha_entrada','fecha_entrega', 'anio', 'nombre_medico' , 'letra', 'registro', 'observaciones', 'nombre','nro_documento', 'codigo','ultimo_propietario'], 'safe'],
+            [['fecha_entrada','fecha_entrega', 'anio', 'nombre_medico' , 'letra', 'registro', 'observaciones', 'nombre','nro_documento', 'codigo','ultimo_propietario','prestadoras_descripcion','procedencia_descripcion','medico_nombre'], 'safe'],
         ];
     }
 
@@ -506,8 +509,7 @@ class ProtocoloSearch extends Protocolo
                     'codigo',
                     'medico_nombre',
                     'prestadoras_descripcion',
-                    'procedencia_descripcion',
-                     
+                    'procedencia_descripcion',                     
                     'nro_documento' => [
                         'asc' => ['Paciente.nro_documento' => SORT_ASC],
                         'desc' => ['Paciente.nro_documento' => SORT_DESC],

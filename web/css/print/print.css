@@ -5798,8 +5798,10 @@ display: inline-block;
     vertical-align: middle;
 }
 .firmaLab{
-    width: 25%;
-    float:left;
+  font-size:11px;
+  width: 25%;
+  float:left;
+  font-style: normal;
 }
 
 .pap_desc_combo {

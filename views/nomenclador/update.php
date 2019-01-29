@@ -4,7 +4,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Nomenclador */
 
-$this->title = substr($model->descripcion, 0, strlen($model->descripcion)/2).' ....';;
+$this->title = strlen($model->descripcion)<65 ? $model->descripcion : substr($model->descripcion,0, 65)." ....";
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Nomencladors'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->servicio, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');

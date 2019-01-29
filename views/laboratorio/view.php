@@ -26,13 +26,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attributes' => [                        
                         'nombre',
                         'descripcion',
-                        'admin',
-                       // 'path_logo',
+                        'admin', 
                         'direccion',
                         'web',
                         'telefono',
                         'mail',
                         'info_mail',
+                        'director_nombre',
+                        'director_titulo',
+                        'director_matricula',
+                        'leyenda_informe'
                     ],
                 ]) ?>
 

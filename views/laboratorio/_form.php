@@ -111,6 +111,28 @@ use yii\widgets\Pjax;
             'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
     ])->textInput(['maxlength' => true]) ?>  
     
+    <?= $form->field($model, 'director_nombre', ['template' => "{label}
+            <div class='col-md-7'>{input}</div>
+            {hint}
+            {error}",
+            'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
+    ])->textInput(['maxlength' => true]) ?>  
+
+    <?= $form->field($model, 'director_titulo', ['template' => "{label}
+            <div class='col-md-7'>{input}</div>
+            {hint}
+            {error}",
+            'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
+    ])->textInput(['maxlength' => true]) ?>  
+
+    <?= $form->field($model, 'director_matricula', ['template' => "{label}
+            <div class='col-md-7'>{input}</div>
+            {hint}
+            {error}",
+            'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
+    ])->textInput(['maxlength' => true]) ?>  
+
+    
     <div class="col-md-3  control-label"><p>Cabecera PDF</p></div>
     <div class="col-md-7  ">
         <?= $form->field($model, 'leyenda_informe')->widget(\yii\redactor\widgets\Redactor::className()) ?>

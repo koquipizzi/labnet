@@ -277,9 +277,16 @@ class ProtocoloController extends Controller
                             if ($flag === false) {
                                 break;
                             }
+                            $modelInforme->Protocolo_id = $mdlProtocolo->id;   
+                            //--------------------------------------------------------------------------------------
+                            //textos por default en pap
+                            $modelEstudioPap= Estudio::find()->where(["id"=>1, "descripcion"=>"PAP"])->one(); 
+                            if( !empty($modelEstudioPap) && $modelInforme->Estudio_id  == $modelEstudioPap->id){
+                                $modelInforme->material="Se recibe un frotis con aerosol (Spray).";
+                                $modelInforme->tecnica="TÉCNICA CITOLOGICA: fijación en alcohol 96°. Técnica de papanicolau mnodificada.";
 
-                            $modelInforme->Protocolo_id = $mdlProtocolo->id;
-
+                            }                                               
+                            //--------------------------------------------------------------------------------------
                             if (!($flag = $modelInforme->save(false))) {
                                 break;
                             }
@@ -331,7 +338,6 @@ class ProtocoloController extends Controller
         $pacientes = Paciente::find()->all();
         $listData = ArrayHelper::map($pacientes,'id', 'nombre');
         return $this->render('_form3', [
-    //    return $this->render('_nuevo_prot', [
                             'model' => $mdlProtocolo,
                             'modelsInformes'=>(empty($modelsInformes)) ? [new Informe] : $modelsInformes,
                             'modelsNomenclador'=>(empty($modelsNomenclador)) ? [new InformeNomenclador] : $modelsNomenclador,

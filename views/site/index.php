@@ -7,8 +7,9 @@ use yii\helpers\Html;
 use yii\widgets\Pjax;
 
 $this->title = 'LabNET - Administración de Informes Patológicos';
-
+if(isset($isAdmin) && $isAdmin===true ){
 ?>
+
       <!-- Info boxes -->
       <div class="row">
         <div class="col-md-3 col-sm-6">
@@ -275,3 +276,18 @@ $this->title = 'LabNET - Administración de Informes Patológicos';
 
 
     </div>
+<?php 
+}else{
+?>
+    <div style="text-align:center; " ><h3>Bienvenido.</h3></div>
+    <?php
+        if(!empty($pathLogo)){
+            $pathLogo = Yii::$app->getHomeUrl().substr($pathLogo,1);
+            echo "<div style='text-align:center;' ><img  style='width:30%;height:30%' src='$pathLogo' alt='Logo' /> </div> ";
+        }
+    ?>
+
+ 
+<?php 
+}
+?>

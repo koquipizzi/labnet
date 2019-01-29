@@ -5571,7 +5571,7 @@ button.close {
 
  .ContainerData{
     display: inline-block;
-    width:20%;
+    width:18%;
     height:5px;
     float:left;
     margin-right: 10px;
@@ -5616,30 +5616,22 @@ button.close {
 }
 
 
-.labelprotocoloMedico{
-     display: inline-block;
-     width:30%;
-    float:left;
-     
-}
-
 .ContainerDataPaciente{
-display: inline-block;
-    width:28%;
+    display: inline-block;
+    width:42%;
     height:5px;
-    float:left;
-   
+    float:left;   
 }
 .labelprotocoloPaciente{
-     display: inline-block;
-     width:25%;
+    display: inline-block;
+    width:17%;
     float:left;
      
 }
 
 .descriptionProtocoloPaciente{
     display: inline-block;
-    width:75%;  
+    width:82%;  
 }
 
 
@@ -5665,15 +5657,70 @@ display: inline-block;
     
 }
 
+.ContainerDataMedico{
+  display: inline-block;
+  width:40%;
+  height:5px;
+  float:left;
+}
+
+.labelprotocoloMedico{
+  display: inline-block;
+  width:15%;
+  float:left;
+  
+}
+
 .descriptionProtocoloMedico{
     display: inline-block;
-    width:70%;
+    width:85%;      
+/*    margin-right: 2px;*/
+    
+}
+
+.ContainerDataDni{
+      display: inline-block;
+      width:11%;
+      height:5px;
+      float:left;
+     
+  }
+  .labelprotocoloDni{
+       display: inline-block;
+       width:35%;
+      float:left;
+  }
+  
+  .descriptionProtocoloDni{
+      display: inline-block;
+      width:65%;
+  /*    margin-right: 2px;*/
       
+  }
+
+  .ContainerDataCobertura{
+    display: inline-block;
+    width:60%;
+    height:5px;
+    float:left;
+   
+}
+.labelprotocoloCobertura{
+     display: inline-block;
+     width:13%;
+    float:left;
+}
+
+.descriptionProtocoloCobertura{
+    display: inline-block;
+    width:85%;
 /*    margin-right: 2px;*/
     
 }
 
 
+
+  
 .labeInforme{
      display: inline-block;
      width:13%;
@@ -5688,6 +5735,7 @@ display: inline-block;
      width:87%;
      float: left;
      font-size: 9px;
+     font-style: italic;
      
 }
 
@@ -5708,7 +5756,9 @@ display: inline-block;
     display: inline-block;
     width:80%;
     float: left;
-    font-size: 9px;     
+    font-size: 9px; 
+    font-style: italic;
+
 }
 
 .contenedorInformePap{
@@ -5720,18 +5770,19 @@ display: inline-block;
 }
 
 .titulo {
-    font-size: 1.1em; 
-    text-decoration: underline; 
-    float: left; 
-    margin-left: 13%;
+  font-style: italic;
+  font-size: 1.3em;
+  text-align: center;
+  width: 100%;
 }
+
 
 .ContainerLab {
     font-style: italic;
     font-size: 1.3em;
     float: left;
-    display: inline-block;
-    width: 10%;
+    text-align: center;
+    width: 100%;
 }
 
 .footer{
@@ -5749,4 +5800,24 @@ display: inline-block;
 .firmaLab{
     width: 25%;
     float:left;
+}
+
+.pap_desc_combo {
+  padding-left:50px;
+  font-style: italic;
+}
+.pap_labels_combo{
+  font-style: normal;
+}
+
+.pap_desc_cito {
+  padding-left:50px;
+  font-size: 14px;
+  font-style: italic;
+  font-style: normal;
+}
+.pap_labels_cito{
+  font-size: 14px;
+  font-style: italic;
+  font-style: normal;
 }

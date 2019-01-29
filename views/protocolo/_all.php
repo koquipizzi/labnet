@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                     'label' => 'Entrada',
                     'attribute' => 'fecha_entrada',
-                    'contentOptions' => ['style' => 'width:8%;'],
+                    'contentOptions' => ['style' => 'width:7%;'],
                     'format' => ['date', 'php:d/m/Y'],
 
                     'filter' => DateRangePicker::widget([
@@ -74,12 +74,28 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Paciente',
                 'attribute'=>'nombre',
-                'contentOptions' => ['style' => 'width:25%;'],
+                'contentOptions' => ['style' => 'width:20%;'],
             ],
             [
                 'attribute'=>'nro_documento',
                 'contentOptions' => ['style' => 'width:5%;'],
             ],
+            [
+                'label' => 'Medico',
+                'attribute'=>'medico_nombre',
+                'contentOptions' => ['style' => 'width:20%;'],
+            ], 
+            [
+                'label' => 'Cobertura',
+                'attribute'=>'prestadoras_descripcion',
+                'contentOptions' => ['style' => 'width:13%;'],
+            ], 
+            [
+                'label' => 'Procedencia',
+                'attribute'=>'procedencia_descripcion',
+                'contentOptions' => ['style' => 'width:13%;'],
+            ],            
+
             [
                 'label' => 'Informes',
                 'format' => 'raw',
@@ -124,17 +140,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ],            
             ['class' => 'yii\grid\ActionColumn',
                 'template' => '{edit}',
-                'contentOptions' => ['style' => 'width:4%;'],
+                'contentOptions' => ['style' => 'width:3%;'],
                 'buttons' => [
                     //view button
-                    'edit' => function ($url, $model) {
-                        
-                        $estadoInforme = \app\models\Workflow::find()->where(['informe_id' => $model['id']])->orderBy('fecha_inicio DESC')->one();
-                        if (!empty($estadoInforme)){
-                            if ($estadoInforme->Estado_id == \app\models\Workflow::estadoFinalizado() || $estadoInforme->Estado_id == \app\models\Workflow::estadoEntregado()){
-                                return null;
-                            }
-                        }
+                    'edit' => function ($url, $model) {                        
+                        // $estadoInforme = \app\models\Workflow::find()->where(['informe_id' => $model['id']])->orderBy('fecha_inicio DESC')->one();
+                        // if (!empty($estadoInforme)){
+                        //     if ($estadoInforme->Estado_id == \app\models\Workflow::estadoFinalizado() || $estadoInforme->Estado_id == \app\models\Workflow::estadoEntregado()){
+                        //         return null;
+                        //     }
+                        // }
                         return Html::a('<span class="fa fa-pencil"></span>', $url, [
                                     'title' => Yii::t('app', 'edit'),  
                                     'class'=> 'btn-info btn-xs',

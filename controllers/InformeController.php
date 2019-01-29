@@ -648,7 +648,7 @@ class InformeController extends Controller {
 						->setTo($modelp->pacienteMail)
 						->setTextBody($laboratorio->nombre)
 						->setSubject('Envío de Resultados de Laboratorio CIPAT')
-						->setHtmlBody($laboratorio->nombre.'<b> le envía los resultados del análisis</b>')
+						->setHtmlBody($laboratorio->nombre.'<b> le informa que se adjunta como PDF el resultado de su estudio Patológico.</b>')
 						->attach(Yii::getAlias('@app/runtime/mpdf/').$titulo.'.pdf');
 					if ($ee->send()) 
 						return 1;

@@ -27,8 +27,13 @@ use kartik\popover\PopoverX;
             
             //var_dump($historialPaciente); die();
             foreach ($historialPaciente as $historial){
-                if( strlen($historial['diagnostico'])>0){
+                if(is_array($historial) && array_key_exists("id_informe",$historial) && !empty($historial['id_informe'])){
+                    $id_i=$historial['id_informe'];
+                    $modelI= Informe::find()->where(["id"=>$id_i])->one();
+                }
 
+                if( strlen($historial['diagnostico'])>0){
+                        
                         $diagnosticoAcortado=substr( $historial['diagnostico'],0,50)."...";
                         $diagnosticoCompleto= $historial['diagnostico'];
                 }else{
@@ -47,7 +52,6 @@ use kartik\popover\PopoverX;
                             <?php 
                                 $estudio_id= $historial['Estudio_id'];
                                 $estudio = Estudio::find()->where("id=$estudio_id")->one(); 
-                          
                             ?> 
                             
                                 <li>
@@ -69,18 +73,14 @@ use kartik\popover\PopoverX;
                                         <h3 class="timeline-header" ><a data-toggle="tooltip" title="<?= $diagnosticoCompleto ?>" ><?= $estudio->nombre;  ?></a>
                                         </h3>
                                         <div class="timeline-body">
-                                            <?= $diagnosticoAcortado ?>
-                                       
+                                        <?= (!empty($modelI->protocolo) && !empty($modelI->codigoProtocolo) ) ? "Protocolo: "."<a  href='index.php?r=protocolo/update&id= {$modelI->protocolo->id}'>{$modelI->codigoProtocolo}</a>" : "" ;?>                                       
                                         <?php
                                             $this->registerCss(".popover-lg {min-width:620px; font-size: .9em;};
-                                                                #popNomenclador {
-                                                                    max-width: 200px;
-                                                                    padding-right: 1px;
-                                                                }
-                                                                ");
-                                        
-                                            $id_i=$historial['id_informe'];
-                                            $modelI= Informe::find()->where(["id"=>$id_i])->one();
+                                                                    #popNomenclador {
+                                                                        max-width: 200px;
+                                                                        padding-right: 1px;
+                                                                    }
+                                                                ");                            
                                         
                                             if (empty($modelI->aspecto))
                                                 $aspecto2 = "Sin datos";
@@ -139,6 +139,12 @@ use kartik\popover\PopoverX;
                                                     }
                                                 } 
 
+                                            if (!empty($modelI->citologia)){                                            
+                                                $citologia = $modelI->citologia;
+                                            }else {
+                                                $citologia ='';
+                                            }                   
+
                                             if($modelI->Estudio_id===Estudio::getEstudioPap()){
                                                 $content= 
                                                 DetailView::widget([
@@ -174,6 +180,10 @@ use kartik\popover\PopoverX;
                                                         'label'=>'Microorganismos',
                                                         'value'=>$microorganismos,
                                                     ],
+                                                    [
+                                                        'label'=>'Citología Oncológica',
+                                                        'value'=>$citologia,
+                                                    ],
                                                  
                                                     'diagnostico',
                                                     'observaciones',
@@ -204,7 +214,8 @@ use kartik\popover\PopoverX;
                                         'tipo',
                                         'material',
                                         'tecnica',
-                                        'descripcion',
+                                        'macroscopia', 
+                                        'microscopia',
                                         'diagnostico',
                                         'observaciones'
                                         ],

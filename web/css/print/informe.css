@@ -1,12 +1,12 @@
 
 body{
     font-family: Arial;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .pap_labels{
     font-weight: bold;
-    padding-bottom: 10px;
+    padding-bottom: 14px;
 
 }
 .pap_desc{
@@ -18,9 +18,12 @@ body{
 
 .pap_desc_cito {
     padding-left:50px;
+    font-size: 14px;
+    font-style: italic; 
 }
 .pap_labels_cito{
-    font-style: normal;
+    font-size: 14px;
+    font-style: italic; 
 }
 
 table.pap_desc {
@@ -29,5 +32,5 @@ table.pap_desc {
 
 
 .header_pap{
-    font-size: 13px;
+    font-size: 14px;
 }

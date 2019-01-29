@@ -37,7 +37,9 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     <div class="col-md-3">
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">Protocolo N°: <b><?= $modelp->codigo ?></h3>
+                <div>
+                    <h3 class="box-title">Protocolo N°: <b><?php echo  empty($modelp->codigo) ? "": $modelp->codigo; echo empty($modelp->codigo) ?  "": " <a class='btn btn-primary' href='index.php?r=protocolo/update&id= {$modelp->id}'>editar</a>" ?></h3>
+                </div>
             </div>
             <div class="box-body no-padding">
                 <?= $this->render('//protocolo/view_informe', [

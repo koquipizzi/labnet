@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 {hint}
                                 {error}",
         'labelOptions' => [ 'class' => 'col-md-3  control-label' ]
-        ])->dropDownList(['1' => 'Si', '0' => 'No'],['prompt'=>'Seleccionar Opción']);
+        ])->dropDownList(['S' => 'Si', 'N' => 'No'],['prompt'=>'Seleccionar Opción']);
 ?>
 
 

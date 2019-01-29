@@ -15,7 +15,7 @@ use yii\helpers\Html;
             <?php } ?>
         </td>
 
-        <td width="300px" style="float: left; padding-top: 40px">
+        <td width="400px" style="float: left; padding-top: 40px">
             <?php if (!empty($laboratorio->leyenda_informe)){ ?>
                 <div class="row"> <?php echo  $laboratorio->leyenda_informe ?></div>
             <?php } ?>
@@ -36,32 +36,32 @@ use yii\helpers\Html;
                 <td width="400px" style="padding-left: 20px; padding-top: 0px;float: left;">
                     <table class="header_pap">
                         <tr>
-                           <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PACIENTE </td><td><?php echo $modelp->pacienteTexto; ?> </td>
+                           <td style="white-space:nowrap; width: 3cm; font-weight: bold; font-size: 16px;">PACIENTE </td><td style="font-size: 16px;" ><?php echo $modelp->pacienteTexto; ?> </td>
                         </tr>
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">DOCUMENTO </td><td><?php echo $modelp->pacienteDoc; ?> </td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold; font-size: 16px;">DOCUMENTO </td><td style="font-size: 16px;" ><?php echo $modelp->pacienteDoc; ?> </td>
                         </tr>
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">EDAD </td><td><?php echo $model->edad; ?> </td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold; font-size: 16px;">EDAD </td><td style="font-size: 16px;" ><?php echo $model->edad; ?> </td>
                         </tr>
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">COBERTURA </td><td><?php echo $modelp->cobertura; ?> </td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold; font-size: 16px;">COBERTURA </td><td style="font-size: 16px;" ><?php echo $modelp->cobertura; ?> </td>
                         </tr>
                     </table>
                 </td>
                 <td width="400px" style="padding-top: 0px; margin-left: 20px; float: right;">
                     <table class="header_pap">
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PROTOCOLO</td><td><?php echo $modelp->codigo; ?> </td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold; font-size: 16px;">PROTOCOLO</td><td style="font-size: 16px;" ><?php echo $modelp->codigo; ?> </td>
                         </tr>
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">FECHA</td><td><?php echo $modelp->fechaEntrega;  ?> </td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold; font-size: 16px;">FECHA</td><td style="font-size: 16px;" ><?php echo $modelp->fechaEntregaformateada;  ?> </td>
                         </tr>
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">MÉDICO </td><td><?php echo $modelp->medico->nombre; ?> </td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold; font-size: 16px;">MÉDICO </td><td style="font-size: 16px;" ><?php echo $modelp->medico->nombre; ?> </td>
                         </tr>
                         <tr>
-                            <td style="white-space:nowrap; width: 3cm; font-weight: bold;">PROCEDENCIA </td><td><?php echo $modelp->procedencia->descripcion; ?></td>
+                            <td style="white-space:nowrap; width: 3cm; font-weight: bold; font-size: 16px;">PROCEDENCIA </td><td style="font-size: 16px;" ><?php echo $modelp->procedencia->descripcion; ?></td>
                         </tr>
                     </table>
                 </td>

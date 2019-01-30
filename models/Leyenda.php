@@ -1,7 +1,7 @@
 <?php
 
 namespace app\models;
-
+use yii\db\Query;
 use Yii;
 
 /**
@@ -28,8 +28,8 @@ class Leyenda extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['codigo'], 'string'],
-            [['texto','categoria'], 'string', 'max' => 50],
+            [['texto','codigo','categoria'], 'required'], 
+            [['texto','codigo'], 'string', 'max' => 10],
         ];
     }
 
@@ -117,13 +117,28 @@ class Leyenda extends \yii\db\ActiveRecord
     	->all();
     }
     
-//     public function getCodigoTexto(){
-//     	$query= new Query();
-//     	$query->select()->from('leyenda')->where(['like', 'name', ['test', 'sample']]);
-//     	$this->find('codigo')->where(['like %codigo'],['like %texto'])->one();
-//     	return;
-//     }
-    
+    public static function existeCodigo($codigo,$categoriaId){
+        $existe=false;
+        $query = new Query;
+        $query	
+            ->select(['Leyenda.id'])  
+            ->from('Leyenda')                
+            ->join(	
+                'join', 
+                'Leyenda_categoria',
+                'Leyenda_categoria.id=Leyenda.categoria' 
+            )  
+            ->where([
+                'Leyenda.codigo' => $codigo,
+                'Leyenda.categoria'=> $categoriaId
+            ]);
+        $command = $query->createCommand();
+        $data = $command->queryAll(); 
+        if(!empty( $data) ){
+            $existe = true;
+        }
+        return $existe;
+    } 
     
     
 }

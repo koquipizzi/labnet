@@ -92,6 +92,7 @@ use mdm\admin\components\Helper;
                             ['label' => 'Procedencias', 'icon' => '', 'url' => ['/procedencia'],],
                             ['label' => 'AutoTextos', 'icon' => 'file-text', 'url' => ['/textos'],],
                             ['label' => 'Localidades', 'icon' => 'map-marker', 'url' => ['/localidad'],],
+                            ['label' => 'Leyendas', 'icon' => 'map-marker', 'url' => ['/leyenda'],],
                             ['label' => 'General', 'icon' => 'cogs', 'url' => $urlLab],
                         ],
                     ],

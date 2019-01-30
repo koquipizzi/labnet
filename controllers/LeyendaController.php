@@ -121,4 +121,31 @@ class LeyendaController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    public function actionExisteCodigo()
+    {
+        $rta = false;    
+        $message = "";
+        $messageUser = "";
+        if(is_array(Yii::$app->request->post()) && array_key_exists('codigo',Yii::$app->request->post())  && array_key_exists('categoria',Yii::$app->request->post())){
+            $codigo = Yii::$app->request->post()['codigo'];
+            $categoria = Yii::$app->request->post()['categoria'];
+            try{
+                if ( empty($codigo) || empty( $categoria) ) {
+                    throw new \yii\base\Exception("the especification request is wrong ");         
+                }                        
+                $rta = Leyenda::existeCodigo($codigo,$categoria);
+                if($rta){
+                    $messageUser = "EL código '{$codigo}' existe para la categoria '{$categoria}'";
+                }
+            }catch (\Exception $e) {
+                $rta = false; 
+                $message = "Error, al comprobar existencia de código.".$e->getMessage()();
+            }
+        }
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return ['rta'=> $rta, 'memessageExeption'=>$message,'messageUser'=>$messageUser];
+        
+    }
 }

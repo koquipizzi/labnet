@@ -85,9 +85,8 @@ use kartik\popover\PopoverX;
                                             if (empty($modelI->aspecto))
                                                 $aspecto2 = "Sin datos";
                                             else
-                                               {// $aspecto = Leyenda::find()->where(['=', 'id', $modelI->aspecto])->one(); 
-                                                $aspecto = Leyenda::find()->where("codigo='{$modelI->aspecto}'")->one();
-                                                   Leyenda::find()->where(['=', 'id', $modelI->calidad])->one();
+                                            {
+                                                $aspecto = Leyenda::find()->where(["codigo"=>$modelI->aspecto,'categoria'=>'A'])->one();
                                                    if(!empty($aspecto)){
                                                        $aspecto2 = $aspecto->texto;
                                                    }else {
@@ -98,7 +97,8 @@ use kartik\popover\PopoverX;
                                            if (empty($modelI->calidad))
                                                 $calidad = "Sin datos"; 
                                             else
-                                               {$c = Leyenda::find()->where("codigo='{$modelI->calidad}'")->one();
+                                               {
+                                                   $c = Leyenda::find()->where(["codigo"=>$modelI->calidad,'categoria'=>'C'])->one();
                                                    if(!empty($c)){
                                                        $calidad = $c->texto;
                                                    }else{
@@ -109,7 +109,7 @@ use kartik\popover\PopoverX;
                                             if (empty($modelI->flora))
                                                 $flora = "Sin datos"; 
                                             else
-                                               { $f = Leyenda::find()->where("codigo='{$modelI->flora}'")->one();
+                                               { $f = Leyenda::find()->where(["codigo"=>$modelI->flora,'categoria'=>'F'])->one();
                                                    if(!empty($f )){
                                                        $flora = $f->texto;
                                                    }else {
@@ -120,7 +120,7 @@ use kartik\popover\PopoverX;
                                             if (empty($modelI->otros))
                                                $otros = "Sin datos"; 
                                             else
-                                              { $o = Leyenda::find()->where("codigo='{$modelI->otros}'")->one();
+                                              { $o = Leyenda::find()->where(["codigo"=>$modelI->otros,'categoria'=>'O'])->one();
                                                   if(!empty($o)){
                                                       $otros = $o->texto;
                                                   }else {
@@ -131,7 +131,7 @@ use kartik\popover\PopoverX;
                                             if (empty($modelI->microorganismos))
                                               $microorganismos = "Sin datos"; 
                                             else
-                                                {   $m = Leyenda::find()->where("codigo='{$modelI->microorganismos}'")->one();
+                                                {   $m = Leyenda::find()->where(["codigo"=>$modelI->microorganismos,'categoria'=>'M'])->one();
                                                     if(!empty($m)){
                                                         $microorganismos = $m->texto;
                                                     }else {
@@ -229,7 +229,10 @@ use kartik\popover\PopoverX;
                                             'tipo',
                                             'material',
                                             'tecnica',
-                                            'descripcion',
+                                            [
+                                                'label'=>'Resultado',
+                                                'attribute'=>'microscopia',
+                                            ], 
                                             'diagnostico',
                                             'observaciones'
                                         ],
@@ -241,6 +244,7 @@ use kartik\popover\PopoverX;
                                         'attributes' =>
                                         [
                                             'material',
+                                            'tecnica',
                                             'macroscopia',
                                             'microscopia',
                                             'diagnostico',

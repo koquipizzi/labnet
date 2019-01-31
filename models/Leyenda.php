@@ -43,6 +43,7 @@ class Leyenda extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'codigo' => Yii::t('app', 'Código'),
             'texto' => Yii::t('app', 'Texto'),
+            'categoria' => Yii::t('app', 'Categoría'),
         ];
     }
 

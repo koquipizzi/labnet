@@ -29,7 +29,8 @@ class Leyenda extends \yii\db\ActiveRecord
     {
         return [
             [['texto','codigo','categoria'], 'required'], 
-            [['texto','codigo'], 'string', 'max' => 10],
+            [['texto'], 'string', 'max' => 249],
+            [['codigo'],'string', 'max' => 10],
         ];
     }
 

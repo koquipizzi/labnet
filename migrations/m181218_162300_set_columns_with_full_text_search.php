@@ -14,7 +14,7 @@ class m181218_162300_set_columns_with_full_text_search extends Migration
     {
         $this->execute(
             "
-            PACIENTE_INDEX on Paciente(nombre,email);
+            CREATE INDEX PACIENTE_INDEX on Paciente(nombre,email);
 
             CREATE fulltext index MEDICO_INDEX on Medico(nombre,email);
             

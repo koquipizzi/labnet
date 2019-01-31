@@ -229,7 +229,11 @@ use kartik\popover\PopoverX;
                                         [
                                             'titulo',
                                             'material',
-                                            'tecnica',
+                                            'tecnica', 
+                                            [
+                                                'label'=>'Método',
+                                                'attribute'=>'macroscopia',
+                                            ], 
                                             [
                                                 'label'=>'Resultado',
                                                 'attribute'=>'microscopia',

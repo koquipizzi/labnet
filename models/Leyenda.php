@@ -117,7 +117,7 @@ class Leyenda extends \yii\db\ActiveRecord
     	->all();
     }
     
-    public static function existeCodigo($codigo,$categoriaId){
+    public static function existeCodigo($codigo,$categoriaId,$leyendaId){
         $existe=false;
         $query = new Query;
         $query	
@@ -137,6 +137,34 @@ class Leyenda extends \yii\db\ActiveRecord
         if(!empty( $data) ){
             $existe = true;
         }
+
+
+        if(!empty($leyendaId) && $leyendaId!=-1 ){       
+            $query = new Query;    
+            $query	
+            ->select(['Leyenda.id'])  
+            ->from('Leyenda')                
+            ->join(	
+                'join', 
+                'Leyenda_categoria',
+                'Leyenda_categoria.id=Leyenda.categoria' 
+            )  
+            ->where([
+                'Leyenda.codigo' => $codigo,
+                'Leyenda.categoria'=> $categoriaId,
+                'Leyenda.id' => $leyendaId
+            ]);
+            $command = '';
+            $command = $query->createCommand();
+            $dataLeyenda = $command->queryAll(); 
+        }
+        //si existe quiere decir que es el nro_pedido del pedido, y puede volverse a usar para el mismo pedido
+        if(!empty( $dataLeyenda) ){
+            $existe = false;
+        }
+ 
+
+
         return $existe;
     } 
     

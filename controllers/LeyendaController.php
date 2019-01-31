@@ -100,10 +100,16 @@ class LeyendaController extends Controller
      * @return mixed
      */
     public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
+    {        
+        if ($this->findModel($id)->delete()){
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return ['rta'=>'true', 'message'=>''];die();
+        }
+        else {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return ['rta'=>'false', 'message'=>''];die();
 
-        return $this->redirect(['index']);
+        }
     }
 
     /**
@@ -127,14 +133,15 @@ class LeyendaController extends Controller
         $rta = false;    
         $message = "";
         $messageUser = "";
-        if(is_array(Yii::$app->request->post()) && array_key_exists('codigo',Yii::$app->request->post())  && array_key_exists('categoria',Yii::$app->request->post())){
+        if(is_array(Yii::$app->request->post()) && array_key_exists('codigo',Yii::$app->request->post())  && array_key_exists('categoria',Yii::$app->request->post()) && array_key_exists('leyendaId',Yii::$app->request->post())){
             $codigo = Yii::$app->request->post()['codigo'];
             $categoria = Yii::$app->request->post()['categoria'];
+            $leyendaId = Yii::$app->request->post()['leyendaId'];
             try{
                 if ( empty($codigo) || empty( $categoria) ) {
                     throw new \yii\base\Exception("the especification request is wrong ");         
                 }                        
-                $rta = Leyenda::existeCodigo($codigo,$categoria);
+                $rta = Leyenda::existeCodigo($codigo,$categoria,$leyendaId);
                 if($rta){
                     $messageUser = "EL código '{$codigo}' existe para la categoria '{$categoria}'";
                 }

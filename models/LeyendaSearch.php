@@ -18,8 +18,7 @@ class LeyendaSearch extends Leyenda
     public function rules()
     {
         return [
-            [['id', 'codigo'], 'integer'],
-            [['texto'], 'safe'],
+            [['texto','codigo','categoria'], 'safe'],
         ];
     }
 
@@ -59,11 +58,14 @@ class LeyendaSearch extends Leyenda
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+            'texto' => $this->texto,
             'codigo' => $this->codigo,
+            'categoria' => $this->categoria,
         ]);
 
         $query->andFilterWhere(['like', 'texto', $this->texto]);
+        $query->andFilterWhere(['like', 'categoria', $this->categoria]);
+        $query->andFilterWhere(['like', 'codigo', $this->categoria]);
 
         return $dataProvider;
     }

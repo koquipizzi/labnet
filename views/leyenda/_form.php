@@ -18,8 +18,8 @@ $("#leyenda-categoria").change(function(){
 }); 
 function existeCodigo(){
     var codigo = $("#leyenda-codigo").val();   
-    var leyenda_id = $("[name=leyenda_id]").val();   
-    console.log("let"+leyenda_id);
+    var leyendaId = $("[name=leyenda_id]").val();   
+    console.log("let"+leyendaId);
     var categoria = $("#leyenda-categoria").select2("data")[0].id;
     if(categoria!==undefined && categoria!=""){
         $.ajax({
@@ -28,7 +28,7 @@ function existeCodigo(){
             data   : {
                 codigo: codigo,
                 categoria: categoria,
-                leyenda_id: leyenda_id,
+                leyendaId: leyendaId,
             },
             success: function (response) 
             {                             

@@ -19,6 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="clearfix"></div>
     </div>
+    <?php Pjax::begin(['id'=>'leyendas']); ?>
     <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
@@ -49,47 +50,47 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 'delete' => function ($url, $model) {
                 return  Html::a('<span  class="fa fa-trash"></span>', $url,
-                        [
-                          'class'=>'btn btn-danger btn-xs',
-                          'onclick' => "bootbox.dialog({
-                              message: '¿Confirma que desea eliminar la Localidad?',
-                              title: 'Sistema LABnet',
-                              className: 'modal-info modal-center',
-                              buttons: {
-                                  success: {
-                                      label: 'Aceptar',
-                                      className: 'btn-primary',
-                                      callback: function() {
-                                        $.ajax('$url', {
-                                            type: 'POST',
-                                            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                                 alert('No se puede eliminar esa entidad.');
-                                            }
-                                        }).done(function(data) {
-                                            $.pjax.reload({container: '#localidad'});
-                                            var n = noty({
-                                                text: 'Entidad eliminada con éxito!',
-                                                type: 'success',
-                                                class: 'animated pulse',
-                                                layout      : 'topRight',
-                                                theme       : 'relax',
-                                                timeout: 2000, // delay for closing event. Set false for sticky notifications
-                                                force: false, // adds notification to the beginning of queue when set to true
-                                                modal: false, // si pongo true me hace el efecto de pantalla gris
-                                         //       maxVisible  : 10
-                                            });
+                    [
+                        'class'=>'btn btn-danger btn-xs',
+                        'onclick' => "bootbox.dialog({
+                            message: '¿Confirma que desea eliminar la Leyenda?. Tenga en cuenta que la leyenda puede estar asociada a multiples estudios.',
+                            title: 'Sistema LABnet',
+                            className: 'modal-info modal-center',
+                            buttons: {
+                                success: {
+                                    label: 'Aceptar',
+                                    className: 'btn-primary',
+                                    callback: function() {
+                                    $.ajax('$url', {
+                                        type: 'POST',
+                                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                                alert('No se puede eliminar la Leyenda.');
+                                        }
+                                    }).done(function(data) {
+                                        $.pjax.reload({container: '#leyendas'});
+                                        var n = noty({
+                                            text: 'Leyenda eliminada con éxito!',
+                                            type: 'success',
+                                            class: 'animated pulse',
+                                            layout      : 'topRight',
+                                            theme       : 'relax',
+                                            timeout: 2000, // delay for closing event. Set false for sticky notifications
+                                            force: false, // adds notification to the beginning of queue when set to true
+                                            modal: false, // si pongo true me hace el efecto de pantalla gris
+                                        //       maxVisible  : 10
                                         });
-                                      }
-                                  },
-                                  cancel: {
-                                      label: 'Cancelar',
-                                      className: 'btn-danger',
-                                  }
+                                    });
+                                    }
+                                },
+                                cancel: {
+                                    label: 'Cancelar',
+                                    className: 'btn-danger',
                                 }
-                            });
-                          return false;
-                          "
-                            ]);
+                            }
+                        });
+                        return false;
+                        "
+                    ]);
             }
 
         ],
@@ -111,6 +112,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ],
         ]); ?>
-
+    <?php Pjax::end(); ?>
     </div>
 </div>

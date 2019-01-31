@@ -151,6 +151,7 @@ use kartik\popover\PopoverX;
                                                     'model' => $modelI,
                                                     'attributes' =>
                                                     [
+                                                    'titulo',
                                                     'material',
                                                     [
                                                         'label'=>'Calidad', 
@@ -197,7 +198,7 @@ use kartik\popover\PopoverX;
                                                     'model' => $modelI,
                                                     'attributes' =>
                                                     [
-                                                    'tipo',
+                                                    'titulo',
                                                     'material',
                                                     'tecnica',
                                                     'descripcion',
@@ -211,7 +212,7 @@ use kartik\popover\PopoverX;
                                         'model' => $modelI,
                                         'attributes' =>
                                         [
-                                        'tipo',
+                                        'titulo',
                                         'material',
                                         'tecnica',
                                         'macroscopia', 
@@ -226,7 +227,7 @@ use kartik\popover\PopoverX;
                                         'model' => $modelI,
                                         'attributes' =>
                                         [
-                                            'tipo',
+                                            'titulo',
                                             'material',
                                             'tecnica',
                                             [
@@ -243,6 +244,7 @@ use kartik\popover\PopoverX;
                                         'model' => $modelI,
                                         'attributes' =>
                                         [
+                                            'titulo',
                                             'material',
                                             'tecnica',
                                             'macroscopia',

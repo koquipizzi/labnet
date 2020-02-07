@@ -18,14 +18,14 @@ use yii\grid\GridView;
 $this->title = Yii::t('app', 'Protocolos');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php 
+<?php
     $this->registerJsFile('@web/assets/admin/js/cipat_modal_protocolo.js', ['depends' => [yii\web\AssetBundle::className()]]);
   //  $this->registerJsFile('@web/assets/global/plugins/bower_components/peity/jquery.peity.min.js', ['depends' => [yii\web\AssetBundle::className()]]);
 //    $this->registerJsFile('@web/assets/admin/css/components/rating.css', ['depends' => [yii\web\AssetBundle::className()]]);
     ?>
 
     <div class="body-content animated fadeIn" />
-    <div class="protocolo-index">    
+    <div class="protocolo-index">
         <div class="panel_titulo">
             <div class="panel-heading">
                 <div class="pull-left">
@@ -33,11 +33,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="pull-right">
                     <?= Html::button('Nuevo Protocolo', ['value' => Url::to(['paciente/']), 'title' => 'Nuevo Protocolo', 'class' => 'loadMainContentProtocolo btn btn-success btn-sm']); ?>
-                </div>   
+                </div>
                 <div class="clearfix"></div>
             </div>
         </div>
-   
+
          <div class="row">
             <div class="col-md-12">
 
@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <span>Informes asignados a mi usuario</span>
                                     </div>
                                 </a>
-                            </li>  
+                            </li>
                             <li>
                                 <a href="#tab2-4" data-toggle="tab">
                                     <i class="fa fa-sign-out"></i>
@@ -94,13 +94,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <h4 style="clear:both;">Protocolos Pendientes</h4>
                                 <p>
                                 <div style="margin-top: 30px;">
-                                <?php Pjax::begin(['id' => 'pendientes']) ?> 
-                                <?php  
+                                <?php Pjax::begin(['id' => 'pendientes']) ?>
+                                <?php
                                 echo GridView::widget([
                                     'dataProvider' => $dataProvider,
                                     'options'=>array('class'=>'table table-striped table-lilac'),
-                                    'filterModel' => $searchModel,   
-                                    'columns' => [//'id', 
+                                    'filterModel' => $searchModel,
+                                    'columns' => [//'id',
                                          [
                                             'label' => 'Fecha Entrada',
                                             'attribute' => 'fecha_entrada',
@@ -113,7 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 'language' => 'es',
                                                 'dateFormat' => 'dd/MM/yyyy',
                                             ]),
-                                             
+
                                         ],
                                         [
                                             'label' => 'Fecha Entrega',
@@ -131,23 +131,23 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'label' => 'Nro Protocolo',
                                             'attribute' => 'codigo',
                                             'contentOptions' => ['style' => 'width:20%;'],
-                                        ],                                          
-                                                        
+                                        ],
+
                                         [
                                             'label' => 'Paciente',
-                                            'attribute'=>'nombre', 
+                                            'attribute'=>'nombre',
                                             'contentOptions' => ['style' => 'width:20%;'],
                                         ],
                                         [
                                             'label' => 'Documento',
-                                            'attribute'=>'nro_documento', 
+                                            'attribute'=>'nro_documento',
                                             'contentOptions' => ['style' => 'width:10%;'],
-                                        ],                                                    
-                                        [ 
+                                        ],
+                                        [
                                             'label' => 'Informes',
                                             'format' => 'raw',
                                             'contentOptions' => ['style' => 'width:30%;'],
-                                            'value'=>function ($model, $key, $index, $widget) { 
+                                            'value'=>function ($model, $key, $index, $widget) {
                                             $estados = array(
                                                             "1" => "danger",
                                                             "2" => "inverse",
@@ -156,12 +156,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                                             "5" => "primary",
                                                             "6" => "default",
                                                         );
-                                                $estadosLeyenda = array( 
-                                                    "1" => "INFORME PENDIENTE", 
-                                                    "2" => "INFORME DESCARTADO", 
+                                                $estadosLeyenda = array(
+                                                    "1" => "INFORME PENDIENTE",
+                                                    "2" => "INFORME DESCARTADO",
                                                     "3" => "EN PROCESO",
-                                                    "4" => "INFORME PAUSADO", 
-                                                    "5" => "FINALIZADO", 
+                                                    "4" => "INFORME PAUSADO",
+                                                    "5" => "FINALIZADO",
                                                     "6" => "ENTREGADO",
                                                 );
                                                 $val = "";
@@ -170,31 +170,31 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 //var_dump($model['id']); die();
                                                 foreach ($informes as $inf){
                                                     var_dump($inf); die();
-                                                    $estado = $inf->workflowLastState; 
+                                                    $estado = $inf->workflowLastState;
                                                     $clase = " label-".$estados[$estado];
                                                     $url ='index.php?r=informe/update&id='.$inf->id;
                                                     $val = $val. Html::a(Html::encode($inf->estudio->nombre),$url,[
                                                             'title' => "$estadosLeyenda[$estado]",
-                                                            'class'=>'label '. $clase.' rounded protoClass2', 
-                                                            'value'=> "$url",       
-                                                            'data-id'=> "$inf->id",  
-                                                            'data-protocolo'=> "$inf->Protocolo_id",  
+                                                            'class'=>'label '. $clase.' rounded protoClass2',
+                                                            'value'=> "$url",
+                                                            'data-id'=> "$inf->id",
+                                                            'data-protocolo'=> "$inf->Protocolo_id",
                                                 ]);
                                                 $val = $val."<span></span>";}
                                                 return $val;
                                             },
-                                        ],                   
-                                     ],         
-                                ]); 
+                                        ],
+                                     ],
+                                ]);
                                 ?>
                                 <?php Pjax::end() ?>
-                                      <?php 
+                                      <?php
                                         Pjax::begin(['id'=>'asignados','enablePushState'=>true]);
                                 echo GridView::widget([
 //                                    'id'=>'asignados',
                                     'dataProvider' => $dataProvider_asignados,
                                     'options'=>array('class'=>'table table-striped table-lilac'),
-                                    'filterModel' => $searchModelAsig,  
+                                    'filterModel' => $searchModelAsig,
 //                                    'pjax'=>true,
 //
 //                                    'pjaxSettings'=>[
@@ -203,9 +203,9 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                        'beforeGrid'=>'My fancy content before.',
 //                                        'afterGrid'=>'My fancy content after.',
 //                                        'enablePushState' => TRUE,
-//                                        'options'=> 
+//                                        'options'=>
 //                                    ],
-                                    'columns' => [//'id', 
+                                    'columns' => [//'id',
                                          [
                                             'label' => 'Fecha Entrada',
                                             'attribute' => 'fecha_entrada',
@@ -222,78 +222,78 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'label' => 'Nro Protocolo',
                                             'attribute' => 'codigo',
                                             'contentOptions' => ['style' => 'width:10%;'],
-                                        ],                                                    
+                                        ],
                                         [
                                             'label' => 'Paciente',
-                                            'attribute'=>'nombre', 
+                                            'attribute'=>'nombre',
                                             'contentOptions' => ['style' => 'width:20%;'],
                                         ],
                                         [
                                             'label' => 'Documento',
-                                            'attribute'=>'nro_documento', 
+                                            'attribute'=>'nro_documento',
                                             'contentOptions' => ['style' => 'width:10%;'],
-                                        ],                                                    
-                                        [ 
+                                        ],
+                                        [
                                             'label' => 'Informes',
                                             'format' => 'raw',
                                             'contentOptions' => ['style' => 'width:20%;'],
-                                            'value'=>function ($model, $key, $index, $widget) { 
-                                                $estados = array( 
-                                                    "1" => "danger", 
-                                                    "2" => "inverse", 
+                                            'value'=>function ($model, $key, $index, $widget) {
+                                                $estados = array(
+                                                    "1" => "danger",
+                                                    "2" => "inverse",
                                                     "3" => "success",
-                                                    "4" => "warning", 
-                                                    "5" => "primary", 
+                                                    "4" => "warning",
+                                                    "5" => "primary",
                                                     "6" => "teal",
                                                 );
-                                                $estadosLeyenda = array( 
-                                                    "1" => "INFORME PENDIENTE", 
-                                                    "2" => "INFORME DESCARTADO", 
+                                                $estadosLeyenda = array(
+                                                    "1" => "INFORME PENDIENTE",
+                                                    "2" => "INFORME DESCARTADO",
                                                     "3" => "EN PROCESO",
-                                                    "4" => "INFORME PAUSADO", 
-                                                    "5" => "FINALIZADO", 
+                                                    "4" => "INFORME PAUSADO",
+                                                    "5" => "FINALIZADO",
                                                     "6" => "ENTREGADO",
                                                 );
                                                 $val = "";
                                                 $idProtocolo = $model['id'];
-                                                $estado = $model['lastEstado']; 
+                                                $estado = $model['lastEstado'];
                                                 $clase = " label-".$estados[$estado];
                                                 $informes = app\models\Informe::find()->where(['=','Informe.Protocolo_id',$idProtocolo])->all();
                                                 //var_dump($model['id']); die();
                                                 $url ='index.php?r=informe/update&id='.$model['informe_id'];
                                                 $val = $val. Html::a(Html::encode($model['nombre_estudio']),$url,[
                                                             'title' => "$estadosLeyenda[$estado]",
-                                                            'class'=>'label '. $clase.' rounded protoClass2', 
-                                                            'value'=> "$url",       
-                                                            'data-id'=> $model['informe_id'],  
-                                                            'data-protocolo'=> $model['id'],  
+                                                            'class'=>'label '. $clase.' rounded protoClass2',
+                                                            'value'=> "$url",
+                                                            'data-id'=> $model['informe_id'],
+                                                            'data-protocolo'=> $model['id'],
                                                 ]);
                                                 $val = $val."<span></span>";
-                                                return $val;//                                              
+                                                return $val;//
                                             },
-                                        ],                  
-                                     ],         
+                                        ],
+                                     ],
 
-                                ]); 
+                                ]);
                                 ?>
-                                <?php Pjax::end() ?>   
-                                    
-                                   
-                                </div>  
+                                <?php Pjax::end() ?>
+
+
+                                </div>
                                  <?php //Pjax::end(); ?>
-                            </p>       
+                            </p>
                             </div>
                             <div class="tab-pane fade" id="tab2-3">
                                 <h4>Estudios asignados a mi</h4>
                                 <p>
                                     <div style="margin-top: 30px;">
-                                        <?php 
+                                        <?php
                                         Pjax::begin(['id'=>'asignados','enablePushState'=>true]);
                                 echo GridView::widget([
 //                                    'id'=>'asignados',
                                     'dataProvider' => $dataProvider_asignados,
                                     'options'=>array('class'=>'table table-striped table-lilac'),
-                                    'filterModel' => $searchModelAsig,  
+                                    'filterModel' => $searchModelAsig,
 //                                    'pjax'=>true,
 //
 //                                    'pjaxSettings'=>[
@@ -302,9 +302,9 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                        'beforeGrid'=>'My fancy content before.',
 //                                        'afterGrid'=>'My fancy content after.',
 //                                        'enablePushState' => TRUE,
-//                                        'options'=> 
+//                                        'options'=>
 //                                    ],
-                                    'columns' => [//'id', 
+                                    'columns' => [//'id',
                                          [
                                             'label' => 'Fecha Entrada',
                                             'attribute' => 'fecha_entrada',
@@ -321,74 +321,74 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'label' => 'Nro Protocolo',
                                             'attribute' => 'codigo',
                                             'contentOptions' => ['style' => 'width:20%;'],
-                                        ],                                                    
+                                        ],
                                         [
                                             'label' => 'Paciente',
-                                            'attribute'=>'nombre', 
+                                            'attribute'=>'nombre',
                                             'contentOptions' => ['style' => 'width:20%;'],
                                         ],
                                         [
                                             'label' => 'Documento',
-                                            'attribute'=>'nro_documento', 
+                                            'attribute'=>'nro_documento',
                                             'contentOptions' => ['style' => 'width:20%;'],
-                                        ],                                                    
-                                        [ 
+                                        ],
+                                        [
                                             'label' => 'Informes',
                                             'format' => 'raw',
                                             'contentOptions' => ['style' => 'width:30%;'],
-                                            'value'=>function ($model, $key, $index, $widget) { 
-                                                $estados = array( 
-                                                    "1" => "danger", 
-                                                    "2" => "inverse", 
+                                            'value'=>function ($model, $key, $index, $widget) {
+                                                $estados = array(
+                                                    "1" => "danger",
+                                                    "2" => "inverse",
                                                     "3" => "success",
-                                                    "4" => "warning", 
-                                                    "5" => "primary", 
+                                                    "4" => "warning",
+                                                    "5" => "primary",
                                                     "6" => "teal",
                                                 );
-                                                $estadosLeyenda = array( 
-                                                    "1" => "INFORME PENDIENTE", 
-                                                    "2" => "INFORME DESCARTADO", 
+                                                $estadosLeyenda = array(
+                                                    "1" => "INFORME PENDIENTE",
+                                                    "2" => "INFORME DESCARTADO",
                                                     "3" => "EN PROCESO",
-                                                    "4" => "INFORME PAUSADO", 
-                                                    "5" => "FINALIZADO", 
+                                                    "4" => "INFORME PAUSADO",
+                                                    "5" => "FINALIZADO",
                                                     "6" => "ENTREGADO",
                                                 );
                                                 $val = "";
                                                 $idProtocolo = $model['id'];
-                                                $estado = $model['lastEstado']; 
+                                                $estado = $model['lastEstado'];
                                                 $clase = " label-".$estados[$estado];
                                                 $informes = app\models\Informe::find()->where(['=','Informe.Protocolo_id',$idProtocolo])->all();
                                                 //var_dump($model['id']); die();
                                                 $url ='index.php?r=informe/update&id='.$model['informe_id'];
                                                 $val = $val. Html::a(Html::encode($model['nombre_estudio']),$url,[
                                                             'title' => "$estadosLeyenda[$estado]",
-                                                            'class'=>'label '. $clase.' rounded protoClass2', 
-                                                            'value'=> "$url",       
-                                                            'data-id'=> $model['informe_id'],  
-                                                            'data-protocolo'=> $model['id'],  
+                                                            'class'=>'label '. $clase.' rounded protoClass2',
+                                                            'value'=> "$url",
+                                                            'data-id'=> $model['informe_id'],
+                                                            'data-protocolo'=> $model['id'],
                                                 ]);
                                                 $val = $val."<span></span>";
                                                 return $val;
 //                                                foreach ($informes as $inf){
-//                                                    $estado = $inf->workflowLastState; 
+//                                                    $estado = $inf->workflowLastState;
 //                                                    $clase = " label-".$estados[$estado];
 //                                                    $url ='index.php?r=informe/update&id='.$inf->id;
 //                                                    $val = $val. Html::a(Html::encode($inf->estudio->nombre),$url,[
 //                                                            'title' => "$estadosLeyenda[$estado]",
-//                                                            'class'=>'label '. $clase.' rounded protoClass2', 
-//                                                            'value'=> "$url",       
-//                                                            'data-id'=> "$inf->id",  
-//                                                            'data-protocolo'=> "$inf->Protocolo_id",  
+//                                                            'class'=>'label '. $clase.' rounded protoClass2',
+//                                                            'value'=> "$url",
+//                                                            'data-id'=> "$inf->id",
+//                                                            'data-protocolo'=> "$inf->Protocolo_id",
 //                                                ]);
 //                                                $val = $val."<span></span>";}
 //                                                return $val;
                                             },
-                                        ],                  
-                                     ],         
+                                        ],
+                                     ],
 
-                                ]); 
+                                ]);
                                 ?>
-                                <?php Pjax::end() ?>    
+                                <?php Pjax::end() ?>
                                     </div>
                                 </p>
                             </div>
@@ -401,7 +401,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             echo GridView::widget([
                                             'dataProvider' => $dataProviderTerminados,
                                             'options'=>array('class'=>'table table-striped table-lilac'),
-                                         //   'filterModel' => $searchModel,    
+                                         //   'filterModel' => $searchModel,
                                             'columns' =>    [
                                                  //   'value'=>'estudio',
                                                  [
@@ -423,7 +423,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                          $secuencia = $data['anio']."-".$data['letra'];
                                                          return $secuencia;
                                                     }
-                                                ], 
+                                                ],
                                                 [
                                                     'label' => 'Protocolo',
                                                     'value'=> function ($data, $key, $index, $column) {
@@ -431,62 +431,62 @@ $this->params['breadcrumbs'][] = $this->title;
                                                          return $secuencia;
                                                     },
                                                     'contentOptions' => ['style' => 'width:15%;'],
-                                                ],      
+                                                ],
                                                 [
                                                     'label' => 'Paciente',
-                                                    'attribute'=>'nombre', 
+                                                    'attribute'=>'nombre',
                                                     'contentOptions' => ['style' => 'width:20%;'],
                                                 ],
                                                 [
-                                                    'attribute'=>'nro_documento', 
+                                                    'attribute'=>'nro_documento',
                                                     'contentOptions' => ['style' => 'width:20%;'],
                                                 ],
                                                 [
                                                     'label' => 'Informe',
                                                     'format' => 'raw',
                                                     'contentOptions' => ['style' => 'width:20%;'],
-                                                    'value'=> function ($model) { 
-                                                        return $model['nombre_estudio'];                                                        
+                                                    'value'=> function ($model) {
+                                                        return $model['nombre_estudio'];
                                                     }
                                                 ],
-                                                [ 
+                                                [
                                                     'label' => 'Acciones',
                                                     'format' => 'raw',
                                                     'contentOptions' => ['style' => 'width:30%;'],
-                                                    'value'=> function ($model) { 
+                                                    'value'=> function ($model) {
                                                     //llevatr esto al metodo
-                        
+
                                                                 $data = $model['informe_id'];
                                                                 //urls acciones
-                                                                $url ='index.php?r=informe/entregar&accion=mail&id='.$model['informe_id'];                                                
+                                                                $url ='index.php?r=informe/entregar&accion=mail&id='.$model['informe_id'];
                                                                 $urlPrint ='index.php?r=informe/entregar&accion=print&estudio='.$model['Estudio_id'].'&id='.$model['informe_id'];
-                                                                $urlPublicar ='index.php?r=informe/entregar&accion=publicar&id='.$model['informe_id'];
-                                                                
+                                                                $urlPublicar ='index.php?r=informe/entregar&accion=publicar&estudio='.$model['Estudio_id'].'&id='.$model['informe_id'];
+
                                                                 return Html::a("<i class='glyphicon glyphicon-print'></i>",$urlPrint,[
                                                                     'title' => Yii::t('app', 'Descargar/imprimir'),
-                                                                    'class'=>'label label-teal rounded ', 
-                                                                    'value'=> "$urlPrint",       
-                                                                    'data-id'=> "$data",  
+                                                                    'class'=>'label label-teal rounded ',
+                                                                    'value'=> "$urlPrint",
+                                                                    'data-id'=> "$data",
                                                                     'data-protocolo'=> "$data",
                                                                     'target'=>'_blank',
                                                                 ]). Html::a("<i class='glyphicon glyphicon-send'></i>",$url,[
                                                                     'title' => Yii::t('app', 'Enviar por Mail'),
-                                                                    'class'=>'label label-teal rounded ', 
-                                                                    'value'=> "$url",       
-                                                                    'data-id'=> "$data",  
-                                                                    'data-protocolo'=> "$data",  
+                                                                    'class'=>'label label-teal rounded ',
+                                                                    'value'=> "$url",
+                                                                    'data-id'=> "$data",
+                                                                    'data-protocolo'=> "$data",
                                                                 ])
-                                                                . Html::a("<i class='glyphicon glyphicon-cloud-upload'></i>",$url,[
+                                                                . Html::a("<i class='glyphicon glyphicon-cloud-upload'></i>",$urlPublicar,[
                                                                     'title' => Yii::t('app', 'Publicar en WEB'),
-                                                                    'class'=>'label label-teal rounded ', 
-                                                                    'value'=> "$urlPublicar",       
-                                                                    'data-id'=> "$data",  
-                                                                    'data-protocolo'=> "$data",  
+                                                                    'class'=>'label label-teal rounded ',
+                                                                    'value'=> "$urlPublicar",
+                                                                    'data-id'=> "$data",
+                                                                    'data-protocolo'=> "$data",
                                                                 ]);
-                                                      
-                                                
+
+
                                                     },
-                                                 ],     
+                                                 ],
                                                          ['class' => 'yii\grid\ActionColumn',
                                                         'template' => '{view}{edit}',
                                                         'buttons' => [
@@ -495,14 +495,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                                         'view' => function ($url, $model) {
                                                             return Html::a('<span class="fa fa-eye "></span>', FALSE, [
                                                                         'title' => Yii::t('app', 'View'),
-                                                                        'class'=>'btn btn-success ver btn-xs',    
+                                                                        'class'=>'btn btn-success ver btn-xs',
                                                                         'value'=> "$url",
                                                             ]);
                                                         },
                                                          'edit' => function ($url, $model) {
                                                             return Html::a('<span class="fa fa-pencil"></span>', FALSE, [
                                                                         'title' => Yii::t('app', 'Editar'),
-                                                                        'class'=>'btn btn-info btn-xs editar',    
+                                                                        'class'=>'btn btn-info btn-xs editar',
                                                                         'value'=> "$url",
                                                             ]);
                                                         },
@@ -519,15 +519,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                                             }
 
                                                         }
-                                                    ]                                                                                                    
+                                                    ]
                                                 ],
-                                        ]); 
+                                        ]);
                                     ?>
-                                    <?php //Pjax::end(); ?>   
+                                    <?php //Pjax::end(); ?>
                                     </div>
                                 </p>
                             </div>
-                            
+
                         </div>
                     </div><!-- /.panel-body -->
                     <!--/ End tabs content -->
@@ -550,16 +550,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </style>
 
-<?php if (isset($_GET['new'])) 
-    { 
+<?php if (isset($_GET['new']))
+    {
     $this->registerJs(
             "$('#modal').find('.modal-header').html('Nuevo Protocolo');".
             "$('#modal').find('#modalContent').load('".Url::to(['protocolo/create'])."');".
             "$('#modal').modal('show');");
      } ?>
-
-    
-    
-
-
-

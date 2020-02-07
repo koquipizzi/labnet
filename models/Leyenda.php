@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models;
+
 use yii\db\Query;
 use Yii;
 
@@ -28,9 +29,9 @@ class Leyenda extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['texto','codigo','categoria'], 'required'], 
+            [['texto', 'codigo', 'categoria'], 'required'],
             [['texto'], 'string', 'max' => 249],
-            [['codigo'],'string', 'max' => 10],
+            [['codigo'], 'string', 'max' => 10],
         ];
     }
 
@@ -55,120 +56,129 @@ class Leyenda extends \yii\db\ActiveRecord
     {
         return new LeyendaQuery(get_called_class());
     }
-    
-    public function getTexto(){
-    	return $this->codigo .''.$this->texto;
-    }
-    
-    public static function getTextoA(){
-    	return Leyenda::find()
-    	->select(['texto','id as id','codigo'])->distinct()->where(['categoria'=>'A'])
-    	->asArray()
-    	->all();
-    }
-  
-    public static function getTextoX(){
-    	return Leyenda::find()
-    	->select(['texto','id as id','codigo'])->distinct()->where(['categoria'=>'X'])
-    	->asArray()
-    	->all();
-    }
-    public static function getTextoC(){
-    	return Leyenda::find()
-    	->select(['texto','id as id','codigo'])->distinct()->where(['categoria'=>'C'])
-    	->asArray()
-    	->all();
-    }
-    public static function getTextoF(){
-    	return Leyenda::find()
-    	->select(['texto','id as id','codigo'])->distinct()->where(['categoria'=>'F'])
-    	->asArray()
-    	->all();
-    }
-    public static function getTextoO(){
-    	return Leyenda::find()
-    	->select(['texto','id as id','codigo'])->distinct()->where(['categoria'=>'O'])
-    	->asArray()
-    	->all();
-    }
-    public static function getTextoM(){
-    	return Leyenda::find()
-    	->select(['texto','id as id','codigo'])->distinct()->where(['categoria'=>'M'])
-    	->asArray()
-    	->all();
-    }
-    
-     public static function getMaterialPAP(){
-    	return Leyenda::find()
-    	->select(['texto','id as id','codigo'])->distinct()->where(['categoria'=>'PAP',"codigo"=>"Material"])
-    	->asArray()
-    	->all();
+
+    public function getTexto()
+    {
+        return $this->codigo . '' . $this->texto;
     }
 
-    public static function getMTecnicaPAP(){
-    	return Leyenda::find()
-    	  	->select(['texto','id as id','codigo'])->distinct()->where(['categoria'=>'PAP',"codigo"=>"Tecnica"])
-    	->asArray()
-    	->all();
+    public static function getTextoA()
+    {
+        return Leyenda::find()
+            ->select(['texto', 'id as id', 'codigo'])->distinct()->where(['categoria' => 'A'])
+            ->asArray()
+            ->all();
     }
-    
-    public static function getMLeucositosPAP(){
-    	return Leyenda::find()
-    	->select(['texto','id as id','codigo'])->distinct()->where(['categoria'=>'1',"codigo"=>"LH"])
-    	->asArray()
-    	->all();
+
+    public static function getTextoX()
+    {
+        return Leyenda::find()
+            ->select(['texto', 'id as id', 'codigo'])->distinct()->where(['categoria' => 'X'])
+            ->asArray()
+            ->all();
     }
-    
-    public static function existeCodigo($codigo,$categoriaId,$leyendaId){
-        $existe=false;
+    public static function getTextoC()
+    {
+        return Leyenda::find()
+            ->select(['texto', 'id as id', 'codigo'])->distinct()->where(['categoria' => 'C'])
+            ->asArray()
+            ->all();
+    }
+    public static function getTextoF()
+    {
+        return Leyenda::find()
+            ->select(['texto', 'id as id', 'codigo'])->distinct()->where(['categoria' => 'F'])
+            ->asArray()
+            ->all();
+    }
+    public static function getTextoO()
+    {
+        return Leyenda::find()
+            ->select(['texto', 'id as id', 'codigo'])->distinct()->where(['categoria' => 'O'])
+            ->asArray()
+            ->all();
+    }
+    public static function getTextoM()
+    {
+        return Leyenda::find()
+            ->select(['texto', 'id as id', 'codigo'])->distinct()->where(['categoria' => 'M'])
+            ->asArray()
+            ->all();
+    }
+
+    public static function getMaterialPAP()
+    {
+        return Leyenda::find()
+            ->select(['texto', 'id as id', 'codigo'])->distinct()->where(['categoria' => 'PAP', "codigo" => "Material"])
+            ->asArray()
+            ->all();
+    }
+
+    public static function getMTecnicaPAP()
+    {
+        return Leyenda::find()
+            ->select(['texto', 'id as id', 'codigo'])->distinct()->where(['categoria' => 'PAP', "codigo" => "Tecnica"])
+            ->asArray()
+            ->all();
+    }
+
+    public static function getMLeucositosPAP()
+    {
+        return Leyenda::find()
+            ->select(['texto', 'id as id', 'codigo'])->distinct()->where(['categoria' => '1', "codigo" => "LH"])
+            ->asArray()
+            ->all();
+    }
+
+    public static function existeCodigo($codigo, $categoriaId, $leyendaId)
+    {
+        $existe = false;
         $query = new Query;
-        $query	
-            ->select(['Leyenda.id'])  
-            ->from('Leyenda')                
-            ->join(	
-                'join', 
+        $query
+            ->select(['Leyenda.id'])
+            ->from('Leyenda')
+            ->join(
+                'join',
                 'Leyenda_categoria',
-                'Leyenda_categoria.id=Leyenda.categoria' 
-            )  
+                'Leyenda_categoria.id=Leyenda.categoria'
+            )
             ->where([
                 'Leyenda.codigo' => $codigo,
-                'Leyenda.categoria'=> $categoriaId
+                'Leyenda.categoria' => $categoriaId
             ]);
         $command = $query->createCommand();
-        $data = $command->queryAll(); 
-        if(!empty( $data) ){
+        $data = $command->queryAll();
+        if (!empty($data)) {
             $existe = true;
         }
 
 
-        if(!empty($leyendaId) && $leyendaId!=-1 ){       
-            $query = new Query;    
-            $query	
-            ->select(['Leyenda.id'])  
-            ->from('Leyenda')                
-            ->join(	
-                'join', 
-                'Leyenda_categoria',
-                'Leyenda_categoria.id=Leyenda.categoria' 
-            )  
-            ->where([
-                'Leyenda.codigo' => $codigo,
-                'Leyenda.categoria'=> $categoriaId,
-                'Leyenda.id' => $leyendaId
-            ]);
+        if (!empty($leyendaId) && $leyendaId != -1) {
+            $query = new Query;
+            $query
+                ->select(['Leyenda.id'])
+                ->from('Leyenda')
+                ->join(
+                    'join',
+                    'Leyenda_categoria',
+                    'Leyenda_categoria.id=Leyenda.categoria'
+                )
+                ->where([
+                    'Leyenda.codigo' => $codigo,
+                    'Leyenda.categoria' => $categoriaId,
+                    'Leyenda.id' => $leyendaId
+                ]);
             $command = '';
             $command = $query->createCommand();
-            $dataLeyenda = $command->queryAll(); 
+            $dataLeyenda = $command->queryAll();
         }
         //si existe quiere decir que es el nro_pedido del pedido, y puede volverse a usar para el mismo pedido
-        if(!empty( $dataLeyenda) ){
+        if (!empty($dataLeyenda)) {
             $existe = false;
         }
- 
+
 
 
         return $existe;
-    } 
-    
-    
+    }
 }

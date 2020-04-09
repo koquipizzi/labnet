@@ -19,7 +19,7 @@ class PrestadoraTemp extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'PrestadoraTemp';
+        return 'Prestadoratemp';
     }
 
     /**

@@ -31,7 +31,7 @@ class ViewPacientePrestadora extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'View_Paciente_Prestadora';
+        return 'view_paciente_prestadora';
     }
 
     /**

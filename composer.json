@@ -43,7 +43,8 @@
         "2amigos/yii2-chartjs-widget": "~2.0",
         "creocoder/yii2-taggable": "~2.0",
         "kint-php/kint": "^2.2",
-        "yiidoc/yii2-redactor": "*"
+        "yiidoc/yii2-redactor": "*",
+        "2amigos/yii2-flysystem-component": "^1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

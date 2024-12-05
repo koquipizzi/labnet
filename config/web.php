@@ -1,12 +1,13 @@
 <?php
+
 use kartik\datecontrol\Module; //se usa más abajo
 $params = require(__DIR__ . '/params.php');
 
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],//, 'audit'
-    'language'=>'es', // spanish
+    'bootstrap' => ['log'], //, 'audit'
+    'language' => 'es', // spanish
     'params' => $params,
     'modules' => [
         'simplechat' => [
@@ -17,7 +18,7 @@ $config = [
             // when admin can edit comments on frontend
             'enableInlineEdit' => true,
             'controllerMap' => [
-            //    'comments' => 'yii2mod\comments\controllers\ManageController',
+                //    'comments' => 'yii2mod\comments\controllers\ManageController',
                 // Also you can override some controller properties in following way:
                 'comments' => [
                     'class' => 'yii2mod\comments\controllers\ManageController',
@@ -28,11 +29,11 @@ $config = [
                     'indexView' => '@vendor/yii2mod/yii2-comments/views/manage/index',
                     'updateView' => '@vendor/yii2mod/yii2-comments/views/manage/update',
                 ],
-            ]  
+            ]
         ],
         'admin' => [
-           'class' => 'mdm\admin\Module',
-           'layout' => 'left-menu', // defaults to null, using the application's layout without the menu
+            'class' => 'mdm\admin\Module',
+            'layout' => 'left-menu', // defaults to null, using the application's layout without the menu
         ],
         'datecontrol' =>  [
             'class' => 'kartik\datecontrol\Module',
@@ -59,138 +60,151 @@ $config = [
 
             // use ajax conversion for processing dates from display format to save format.
             'ajaxConversion' => true,
-         ],
+        ],
         'redactor' => [
             'class' => 'yii\redactor\RedactorModule',
             'uploadDir' => '@webroot/uploads/redactor',
             'uploadUrl' => '@web/uploads/redactor',
-            'imageAllowExtensions'=>['jpg','png','gif']
+            'imageAllowExtensions' => ['jpg', 'png', 'gif']
         ],
     ],
     'components' => [
-          /*  'qr' => [
+        /*  'qr' => [
                 'class' => '\Da\QrCode\Component\QrCodeComponent',
             ],*/
-            'i18n' => [
-                'translations' => [
-                    'app*' => [
-                        'class' => 'yii\i18n\PhpMessageSource',
-                        'basePath' => '@app/common/messages',
-                        'sourceLanguage' => 'es-ES',
-                        'fileMap' => [
-                            'app' => 'app.php',
-                            'app/error' => 'error.php',
-                        ],
-                    ],
-                    'yii2mod.comments' => [
-                        'class' => 'yii\i18n\PhpMessageSource',
-                      //  'basePath' => '@yii2mod/comments/messages',
-                        'sourceLanguage' => 'es-ES',
-                        'basePath' => '@app/common/messages',
-                    ],
-                    'yii' => [
-                        'class' => 'yii\i18n\PhpMessageSource',
-                        'sourceLanguage' => 'es-ES',
-                        'basePath' => '@app/common/messages',
-                        'sourceLanguage' => 'es-ES',
-                        'fileMap' => [
-                            'yii' => 'yii.php',
-                            //'app/error' => 'error.php',
-                        ],
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/common/messages',
+                    'sourceLanguage' => 'es-ES',
+                    'fileMap' => [
+                        'app' => 'app.php',
+                        'app/error' => 'error.php',
                     ],
                 ],
-            ],
-            'authManager' => [
-                 'class' => 'yii\rbac\DbManager', // or use 'yii\rbac\PhpManager'
-            ],
-            'request' => [
-                // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-                'cookieValidationKey' => 'xJUEoJ6HdS8pQxuW4N-FaeVTqWWTjNEL',
-            ],
-            'cache' => [
-                'class' => 'yii\caching\FileCache',
-            ],
-            'user' => [
-                'identityClass' => 'app\models\User',
-                'enableAutoLogin' => true,
-            ],
-            'errorHandler' => [
-                'errorAction' => 'site/error',
-            ],
-            'assetManager' => [
-                'bundles' => [
-                    'wbraganca\dynamicform\DynamicFormAsset' => [
-                        'sourcePath' => '@app/web/js',
-                        'js' => [
-                            'yii2-dynamic-form.js'
-                        ],
-                    ],
+                'yii2mod.comments' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    //  'basePath' => '@yii2mod/comments/messages',
+                    'sourceLanguage' => 'es-ES',
+                    'basePath' => '@app/common/messages',
                 ],
-            ],
-            'mailer' => [
-                'class' => 'yii\swiftmailer\Mailer',
-                // send all mails to a file by default. You have to set
-                // 'useFileTransport' to false and configure a transport
-                // for the mailer to send real emails.
-             //   'useFileTransport' => true,
-              //  'viewPath' => '@app/mail',
-                'useFileTransport' => false,//set this property to false to send mails to real email addresses
-                //comment the following array to send mail using php's mail function
-                'transport' => [
-                    'class' => 'Swift_SmtpTransport',
-                    'host' => 'mail.qwavee.com',
-                    'username' => 'hola@qwavee.com',
-                    'password' => 'Hola!321',
-                    'port' => '26',
-                    'encryption' => 'tls',
-                     'streamOptions' => [
-                        'ssl' => [
-                            'allow_self_signed' => true,
-                            'verify_peer' => false,
-                            'verify_peer_name' => false,
-                        ],
+                'yii' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'sourceLanguage' => 'es-ES',
+                    'basePath' => '@app/common/messages',
+                    'sourceLanguage' => 'es-ES',
+                    'fileMap' => [
+                        'yii' => 'yii.php',
+                        //'app/error' => 'error.php',
                     ],
-                ],
-            ],
-            'log' => [
-                'traceLevel' => YII_DEBUG ? 3 : 0,
-                'targets' => [
-                    [
-                        'class' => 'yii\log\FileTarget',
-                        'levels' => ['error', 'warning'],
-                    ],
-                ],
-            ],
-            'db' => require(__DIR__ . '/db.php'),
-    
-            'urlManager' => [
-                //'enablePrettyUrl' => true,
-                'class' => 'yii\web\UrlManager',
-                'showScriptName' => false,
-                'rules' => [
-                        'class' => 'yii\rest\UrlRule', 'controller' => 'post',
-                        '<controller:\w+>/<id:\d+>' => '<controller>/view',
-                        '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-                        '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
-                        '<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
                 ],
             ],
         ],
-        'as access' => [
-            'class' => 'mdm\admin\components\AccessControl',
-            'allowActions' => [
-                'admin/*', // add or remove allowed actions to this list
-                'comment/*',
-             //   'audit/*',
-                'debug/*'
-            ]
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager', // or use 'yii\rbac\PhpManager'
         ],
-        'params' => $params,
-        'aliases'=>[
-            //'@asset'=> dirname(dirname(dirname(dirname(rtrim(dirname($_SERVER['PHP_SELF']), '\\/'))))).'/assets/'
-            '@asset'=> rtrim(dirname($_SERVER['PHP_SELF']), '\\/').'/assets/',
-       //     '@mdm/admin' => rtrim(dirname($_SERVER['PHP_SELF']), '\\/').'/vendor/mdmsoft/yii2-admin/',
+        'request' => [
+            // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
+            'cookieValidationKey' => 'xJUEoJ6HdS8pQxuW4N-FaeVTqWWTjNEL',
+        ],
+        'cache' => [
+            'class' => 'yii\caching\FileCache',
+        ],
+        'user' => [
+            'identityClass' => 'app\models\User',
+            'enableAutoLogin' => true,
+        ],
+        'errorHandler' => [
+            'errorAction' => 'site/error',
+        ],
+        'assetManager' => [
+            'bundles' => [
+                'wbraganca\dynamicform\DynamicFormAsset' => [
+                    'sourcePath' => '@app/web/js',
+                    'js' => [
+                        'yii2-dynamic-form.js'
+                    ],
+                ],
+            ],
+        ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            // send all mails to a file by default. You have to set
+            // 'useFileTransport' to false and configure a transport
+            // for the mailer to send real emails.
+            //   'useFileTransport' => true,
+            //  'viewPath' => '@app/mail',
+            'useFileTransport' => false, //set this property to false to send mails to real email addresses
+            //comment the following array to send mail using php's mail function
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'mail.qwavee.com',
+                'username' => 'hola@qwavee.com',
+                'password' => 'Hola!321',
+                'port' => '26',
+                'encryption' => 'tls',
+                'streamOptions' => [
+                    'ssl' => [
+                        'allow_self_signed' => true,
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                    ],
+                ],
+            ],
+        ],
+        'log' => [
+            'traceLevel' => YII_DEBUG ? 3 : 0,
+            'targets' => [
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['error', 'warning'],
+                ],
+            ],
+        ],
+        'db' => require(__DIR__ . '/db.php'),
+
+        'urlManager' => [
+            //'enablePrettyUrl' => true,
+            'class' => 'yii\web\UrlManager',
+            'showScriptName' => false,
+            'rules' => [
+                'class' => 'yii\rest\UrlRule', 'controller' => 'post',
+                '<controller:\w+>/<id:\d+>' => '<controller>/view',
+                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+                '<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
+            ],
+        ],
+        'ftpFs' => [
+            'class' => 'dosamigos\flysystem\FtpFsComponent',
+            'host' => '173.254.24.35',
+            'port' => 21,
+            'username' => 'informes@cipat.com.ar',
+            'password' => 'Informes303040.',
+            'root' => '/',
+            'timeout' => 30,
+            'passive' => false,
         ]
+    ],
+    'as access' => [
+        'class' => 'mdm\admin\components\AccessControl',
+        'allowActions' => [
+            'admin/*', // add or remove allowed actions to this list
+            'comment/*',
+            //   'audit/*',
+            'debug/*'
+        ]
+    ],
+    'params' => $params,
+    'aliases' => [
+        '@webroot' => '/web',
+        '@web' => '/web',
+        //'@asset'=> dirname(dirname(dirname(dirname(rtrim(dirname($_SERVER['PHP_SELF']), '\\/'))))).'/assets/'
+        '@asset' => rtrim(dirname($_SERVER['PHP_SELF']), '\\/') . '/assets/',
+        //     '@mdm/admin' => rtrim(dirname($_SERVER['PHP_SELF']), '\\/').'/vendor/mdmsoft/yii2-admin/',
+    ],
+
 ];
 
 if (YII_ENV_DEV) {

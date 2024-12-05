@@ -3,18 +3,18 @@ use app\models\Leyenda;
 use yii\helpers\Html;
 ?>
 <div class="pagina">
-    <div class="header_pap">       
+    <div class="header_pap">
         <table>
             <tr>
                 <td>
                     <!--
-                    si hay problemas con la visualización de imágenes 
+                    si hay problemas con la visualización de imágenes
                     sudo apt-get install php5-gd
                     sudo service apache2 restart
                     -->
                     <div style="width:100px; float:left; font-size: 14px; margin: 20px; ">
-                        <?php  echo Html::img( '@web' .$laboratorio->path_logo); ?>
-                    </div> 
+                     <?php  //echo Html::img( '@web' .$laboratorio->path_logo); ?> -->
+                    </div>
                 </td>
             </tr>
             <tr>
@@ -60,7 +60,7 @@ use yii\helpers\Html;
     <div class="informe">
         <div class="pap_labels">
             MATERIAL
-        </div>    
+        </div>
         <div class="pap_desc">
             <?php echo nl2br($model->material); ?>
             <br><br>
@@ -68,7 +68,7 @@ use yii\helpers\Html;
         </div>
         <div class="pap_labels">
             CITOLOGÍA HORMONAL
-        </div>   
+        </div>
         <div class="pap_desc">
             <table>
                 <tr><td style="white-space:nowrap; width: 4cm;">CALIDAD DE MUESTRA</td> <td style="font-style: italic;"><?php echo $model->calidad ? Leyenda::findOne(['id' => $model->calidad ])->texto : ""  ?></td></tr>
@@ -79,7 +79,7 @@ use yii\helpers\Html;
                 <tr><td style="white-space:nowrap; width: 4cm;">OTROS ELEMENTOS</td>    <td style="font-style: italic;"><?php echo $model->otros ? Leyenda::findOne(['id' => $model->otros ])->texto : ""  ?></td></tr>
                 <tr><td style="white-space:nowrap; width: 4cm;">MICROORGANISMOS</td>    <td style="font-style: italic;"><?php echo $model->microorganismos ? Leyenda::findOne(['id' => $model->microorganismos ])->texto : ""  ?></td></tr>
             </table>
-            
+
         </div>
         <div class="pap_labels">
             CITOLOGÍA ONCOLÓGICA
@@ -89,7 +89,7 @@ use yii\helpers\Html;
         </div>
         <div class="pap_labels">
             DIAGNÓSTICO
-        </div> 
+        </div>
         <div class="pap_desc">
             <?php echo nl2br($model->diagnostico);  ?>
         </div>
@@ -100,10 +100,9 @@ use yii\helpers\Html;
             <?php echo nl2br($model->observaciones); ?>
         </div>
     </div>
-    
+
 </div>
 
 <div class="footer" style="position: fixed; bottom: -5px; text-align: center; font-size: 11px; width:100%">
     INFORMACIÓN CONFIDENCIAL - SECRETO MÉDICO - ALCANCES DEL ARTÍCULO 156 DEL CÓDIGO PENAL
 </div>
-    
